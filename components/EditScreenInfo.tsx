@@ -4,8 +4,14 @@ import { StyleSheet, TouchableOpacity } from "react-native";
 import Colors from "../constants/Colors";
 import { MonoText } from "./StyledText";
 import { Text, View } from "./Themed";
+import * as web3 from "@solana/web3.js";
 
 export default function EditScreenInfo({ path }: { path: string }) {
+  let connection = new web3.Connection(
+    web3.clusterApiUrl("devnet"),
+    "confirmed"
+  );
+
   return (
     <View>
       <View style={styles.getStartedContainer}>
