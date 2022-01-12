@@ -15,12 +15,27 @@ const linking: LinkingOptions<RootStackParamList> = {
     screens: {
       Root: {
         screens: {
-          TabOne: {
+          Vault: {
             screens: {
               TabOneScreen: "one",
             },
           },
-          TabTwo: {
+          Dashboard: {
+            screens: {
+              TabTwoScreen: "two",
+            },
+          },
+          Members: {
+            screens: {
+              TabTwoScreen: "two",
+            },
+          },
+          Activity: {
+            screens: {
+              TabTwoScreen: "two",
+            },
+          },
+          Proposals: {
             screens: {
               TabTwoScreen: "two",
             },

@@ -15,7 +15,12 @@ import { ColorSchemeName, Pressable } from "react-native";
 
 import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
-import TabOneScreen from "../screens/TabOneScreen";
+import ActivityScreen from "../screens/ActivityScreen";
+import DashboardScreen from "../screens/DashboardScreen";
+import VaultScreen from "../screens/VaultScreen";
+import MembersScreen from "../screens/MembersScreen";
+import ProposalsScreen from "../screens/ProposalsScreen";
+
 import {
   RootStackParamList,
   RootTabParamList,
@@ -36,11 +41,11 @@ export default function Navigation({
       theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
     >
       <Drawer.Navigator initialRouteName="Dashboard">
-        <Drawer.Screen name="Dashboard" component={TabOneScreen} />
-        <Drawer.Screen name="Vault" component={TabOneScreen} />
-        <Drawer.Screen name="Members" component={TabOneScreen} />
-        <Drawer.Screen name="Proposals" component={TabOneScreen} />
-        <Drawer.Screen name="Activity" component={TabOneScreen} />
+        <Drawer.Screen name="Dashboard" component={DashboardScreen} />
+        <Drawer.Screen name="Vault" component={VaultScreen} />
+        <Drawer.Screen name="Members" component={MembersScreen} />
+        <Drawer.Screen name="Proposals" component={ProposalsScreen} />
+        <Drawer.Screen name="Activity" component={ActivityScreen} />
       </Drawer.Navigator>
     </NavigationContainer>
   );
