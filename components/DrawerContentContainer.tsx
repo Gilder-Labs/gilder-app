@@ -2,6 +2,7 @@ import {
   DrawerContentScrollView,
   DrawerItemList,
   DrawerItem,
+  DrawerContent,
 } from "@react-navigation/drawer";
 import { View } from "react-native";
 import styled from "styled-components/native";
@@ -22,7 +23,7 @@ const StyledHeaderText = styled.Text`
   font-weight: 900;
 `;
 
-export function DrawerContent(props: any) {
+export function DrawerContentContainer(props: any) {
   return (
     <DrawerContentScrollView {...props}>
       <StyledHeader>

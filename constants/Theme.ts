@@ -14,7 +14,7 @@ export const darkTheme = {
     800: "#92400e",
     900: "#78350f",
   },
-  secondary: {
+  blue: {
     50: "#f0f9ff",
     100: "#e0f2fe",
     200: "#bae6fd",
@@ -26,7 +26,7 @@ export const darkTheme = {
     800: "#075985",
     900: "#0c4a6e",
   },
-  cyan: {
+  secondary: {
     // tailwind cyan
     50: "#ECFEFF",
     100: "#CFFAFE",

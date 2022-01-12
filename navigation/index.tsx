@@ -3,7 +3,7 @@
  * https://reactnavigation.org/docs/getting-started
  *
  */
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome5 as FontAwesome } from "@expo/vector-icons";
 import { NavigationContainer, DarkTheme } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import * as React from "react";
@@ -11,7 +11,7 @@ import { Pressable } from "react-native";
 import { useTheme } from "styled-components";
 import Layout from "../constants/Layout";
 
-import { DrawerContent } from "../components/DrawerContent";
+import { DrawerContentContainer } from "../components/DrawerContentContainer";
 import ActivityScreen from "../screens/ActivityScreen";
 import DashboardScreen from "../screens/DashboardScreen";
 import VaultScreen from "../screens/VaultScreen";
@@ -41,16 +41,81 @@ export default function Navigation({}: {}) {
     <NavigationContainer linking={LinkingConfiguration} theme={NavigationTheme}>
       <Drawer.Navigator
         initialRouteName="Dashboard"
-        drawerContent={(props) => <DrawerContent {...props} />}
+        drawerContent={(props) => <DrawerContentContainer {...props} />}
         screenOptions={{
           drawerType: Layout.window.width >= 768 ? "permanent" : "front",
         }}
       >
-        <Drawer.Screen name="Dashboard" component={DashboardScreen} />
-        <Drawer.Screen name="Vault" component={VaultScreen} />
-        <Drawer.Screen name="Members" component={MembersScreen} />
-        <Drawer.Screen name="Proposals" component={ProposalsScreen} />
-        <Drawer.Screen name="Activity" component={ActivityScreen} />
+        <Drawer.Screen
+          name="Dashboard"
+          component={DashboardScreen}
+          options={{
+            drawerIcon: ({ focused, color, size }) => (
+              <FontAwesome
+                size={24}
+                style={{ marginRight: -10 }}
+                color={color}
+                name="home"
+              />
+            ),
+          }}
+        />
+        <Drawer.Screen
+          name="Vault"
+          component={VaultScreen}
+          options={{
+            drawerIcon: ({ focused, color, size }) => (
+              <FontAwesome
+                size={24}
+                style={{ marginRight: -10 }}
+                color={color}
+                name="university"
+              />
+            ),
+          }}
+        />
+        <Drawer.Screen
+          name="Members"
+          component={MembersScreen}
+          options={{
+            drawerIcon: ({ focused, color, size }) => (
+              <FontAwesome
+                size={24}
+                style={{ marginRight: -10 }}
+                color={color}
+                name="user-friends"
+              />
+            ),
+          }}
+        />
+        <Drawer.Screen
+          name="Proposals"
+          component={ProposalsScreen}
+          options={{
+            drawerIcon: ({ focused, color, size }) => (
+              <FontAwesome
+                size={24}
+                style={{ marginRight: -10, marginLeft: 3 }}
+                color={color}
+                name="poll"
+              />
+            ),
+          }}
+        />
+        <Drawer.Screen
+          name="Activity"
+          component={ActivityScreen}
+          options={{
+            drawerIcon: ({ focused, color, size }) => (
+              <FontAwesome
+                size={24}
+                style={{ marginRight: -10, marginLeft: 3 }}
+                color={color}
+                name="list"
+              />
+            ),
+          }}
+        />
       </Drawer.Navigator>
     </NavigationContainer>
   );
