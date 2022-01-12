@@ -77,9 +77,9 @@ export const darkTheme = {
     900: "#7f1d1d",
   },
   spacing: {
-    1: "2px",
-    2: "4px",
-    3: "8px",
+    1: "4px",
+    2: "8px",
+    3: "12px",
     4: "16px",
     5: "24px",
     6: "40px",

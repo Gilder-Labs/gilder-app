@@ -28,7 +28,7 @@ export default function Navigation({}: {}) {
   const NavigationTheme = {
     dark: false,
     colors: {
-      primary: theme.secondary[500],
+      primary: theme.gray[400],
       background: theme.gray[900],
       card: theme.gray[900],
       text: theme.gray[200],
