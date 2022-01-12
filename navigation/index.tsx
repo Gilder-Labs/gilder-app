@@ -40,7 +40,7 @@ export default function Navigation({}: {}) {
   return (
     <NavigationContainer linking={LinkingConfiguration} theme={NavigationTheme}>
       <Drawer.Navigator
-        initialRouteName="Dashboard"
+        initialRouteName="Activity" // Dashboard
         drawerContent={(props) => <DrawerContentContainer {...props} />}
         screenOptions={{
           drawerType: Layout.window.width >= 768 ? "permanent" : "front",
