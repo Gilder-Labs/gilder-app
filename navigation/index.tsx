@@ -4,42 +4,39 @@
  *
  */
 import { FontAwesome } from "@expo/vector-icons";
-import {
-  NavigationContainer,
-  DefaultTheme,
-  DarkTheme,
-} from "@react-navigation/native";
+import { NavigationContainer, DarkTheme } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import * as React from "react";
-import { ColorSchemeName, Pressable } from "react-native";
+import { Pressable } from "react-native";
+import { useTheme } from "styled-components";
 
-import ModalScreen from "../screens/ModalScreen";
-import NotFoundScreen from "../screens/NotFoundScreen";
 import ActivityScreen from "../screens/ActivityScreen";
 import DashboardScreen from "../screens/DashboardScreen";
 import VaultScreen from "../screens/VaultScreen";
 import MembersScreen from "../screens/MembersScreen";
 import ProposalsScreen from "../screens/ProposalsScreen";
 
-import {
-  RootStackParamList,
-  RootTabParamList,
-  RootTabScreenProps,
-} from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
 
 const Drawer = createDrawerNavigator();
 
-export default function Navigation({
-  colorScheme,
-}: {
-  colorScheme: ColorSchemeName;
-}) {
+export default function Navigation({}: {}) {
+  const theme = useTheme();
+
+  const NavigationTheme = {
+    dark: false,
+    colors: {
+      primary: theme.secondary[500],
+      background: theme.gray[800],
+      card: theme.gray[900],
+      text: theme.gray[200],
+      border: theme.gray[900],
+      notification: theme.primary[700],
+    },
+  };
+
   return (
-    <NavigationContainer
-      linking={LinkingConfiguration}
-      theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-    >
+    <NavigationContainer linking={LinkingConfiguration} theme={NavigationTheme}>
       <Drawer.Navigator initialRouteName="Dashboard">
         <Drawer.Screen name="Dashboard" component={DashboardScreen} />
         <Drawer.Screen name="Vault" component={VaultScreen} />

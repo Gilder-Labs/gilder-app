@@ -1,6 +1,8 @@
 import "react-native-url-polyfill/auto";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { ThemeProvider } from "styled-components/native";
+import { darkTheme } from "./constants/Theme";
 
 import useCachedResources from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
@@ -15,8 +17,10 @@ export default function App() {
   } else {
     return (
       <SafeAreaProvider>
-        <Navigation colorScheme={colorScheme} />
-        <StatusBar />
+        <ThemeProvider theme={darkTheme}>
+          <Navigation />
+          <StatusBar />
+        </ThemeProvider>
       </SafeAreaProvider>
     );
   }
