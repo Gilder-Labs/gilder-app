@@ -9,7 +9,9 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import * as React from "react";
 import { Pressable } from "react-native";
 import { useTheme } from "styled-components";
+import Layout from "../constants/Layout";
 
+import { DrawerContent } from "../components/DrawerContent";
 import ActivityScreen from "../screens/ActivityScreen";
 import DashboardScreen from "../screens/DashboardScreen";
 import VaultScreen from "../screens/VaultScreen";
@@ -27,7 +29,7 @@ export default function Navigation({}: {}) {
     dark: false,
     colors: {
       primary: theme.secondary[500],
-      background: theme.gray[800],
+      background: theme.gray[900],
       card: theme.gray[900],
       text: theme.gray[200],
       border: theme.gray[900],
@@ -37,7 +39,13 @@ export default function Navigation({}: {}) {
 
   return (
     <NavigationContainer linking={LinkingConfiguration} theme={NavigationTheme}>
-      <Drawer.Navigator initialRouteName="Dashboard">
+      <Drawer.Navigator
+        initialRouteName="Dashboard"
+        drawerContent={(props) => <DrawerContent {...props} />}
+        screenOptions={{
+          drawerType: Layout.window.width >= 768 ? "permanent" : "front",
+        }}
+      >
         <Drawer.Screen name="Dashboard" component={DashboardScreen} />
         <Drawer.Screen name="Vault" component={VaultScreen} />
         <Drawer.Screen name="Members" component={MembersScreen} />
