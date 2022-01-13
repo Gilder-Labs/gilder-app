@@ -25,8 +25,7 @@ export default function Navigation({}: {}) {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(fetchRealms());
-    console.log("running effect");
+    // dispatch(fetchRealms(""));
   }, []);
 
   const NavigationTheme = {

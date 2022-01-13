@@ -4,28 +4,11 @@ import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import styled from "styled-components/native";
 import { ThemeProvider } from "@react-navigation/native";
-import * as web3 from "@solana/web3.js";
-import { getRealms } from "@solana/spl-governance";
-
-let connection = new web3.Connection(web3.clusterApiUrl("devnet"), "confirmed");
+import { useAppSelector } from "../hooks/redux";
 
 export default function ActivityScreen({
   navigation,
 }: RootTabScreenProps<"Activity">) {
-  // const fetchRealms = async () => {
-  //   const programId = new web3.PublicKey(
-  //     "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw"
-  //   );
-  //   const rpcEndpoint = "https://api.mainnet-beta.solana.com";
-
-  //   const realms = await getRealms(rpcEndpoint, programId);
-  //   console.log("Realms", realms);
-  // };
-
-  useEffect(() => {
-    // fetchRealms();
-  }, []);
-
   return (
     <StyledContainer>
       <Text>Activity</Text>
