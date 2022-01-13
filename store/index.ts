@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import solanaReducer from "./solanaSlice";
+import realmReducer from "./realmSlice";
 
 export const store = configureStore({
   reducer: {
     solana: solanaReducer,
+    realms: realmReducer,
   },
 });
 

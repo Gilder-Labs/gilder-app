@@ -3526,6 +3526,11 @@ expo-splash-screen@~0.14.0:
     "@expo/configure-splash-screen" "^0.6.0"
     "@expo/prebuild-config" "^3.0.15"
 
+expo-standard-web-crypto@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/expo-standard-web-crypto/-/expo-standard-web-crypto-1.2.0.tgz#a1ba57ef5e001b65013a0fcd5e2aa390a78f7e4d"
+  integrity sha512-ZAVOockekqtnHRtJjGLB079MGXwVe1tDdEpsrW5/Hz3S8nAqkzC8wCef/EKea6UeEDhUFehfcjKIebmqN9gtCw==
+
 expo-status-bar@~1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/expo-status-bar/-/expo-status-bar-1.2.0.tgz#16e73205da563f9536f562e439081e30e318a82e"

@@ -28,7 +28,7 @@ export default function ActivityScreen({
 
   return (
     <StyledContainer>
-      <Text style={styles.title}>Activity</Text>
+      <Text>Activity</Text>
       <View
         style={styles.separator}
         lightColor="#eee"
@@ -46,10 +46,6 @@ const StyledContainer = styled.View`
 `;
 
 const styles = StyleSheet.create({
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
   separator: {
     marginVertical: 30,
     height: 1,

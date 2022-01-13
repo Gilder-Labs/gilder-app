@@ -1,8 +1,4 @@
-/**
- * If you are not familiar with React Navigation, refer to the "Fundamentals" guide:
- * https://reactnavigation.org/docs/getting-started
- *
- */
+import { useEffect } from "react";
 import { FontAwesome5 as FontAwesome } from "@expo/vector-icons";
 import { NavigationContainer, DarkTheme } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
@@ -10,6 +6,8 @@ import * as React from "react";
 import { Pressable } from "react-native";
 import { useTheme } from "styled-components";
 import Layout from "../constants/Layout";
+import { useAppDispatch } from "../hooks/redux";
+import { fetchRealms } from "../store/realmSlice";
 
 import { DrawerContentContainer } from "../components/DrawerContentContainer";
 import ActivityScreen from "../screens/ActivityScreen";
@@ -24,6 +22,12 @@ const Drawer = createDrawerNavigator();
 
 export default function Navigation({}: {}) {
   const theme = useTheme();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchRealms());
+    console.log("running effect");
+  }, []);
 
   const NavigationTheme = {
     dark: false,

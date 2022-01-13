@@ -7,6 +7,19 @@ import {
 import { View } from "react-native";
 import styled from "styled-components/native";
 
+export function DrawerContentContainer(props: any) {
+  return (
+    <DrawerContentScrollView {...props} scrollEnabled={false}>
+      <StyledHeader>
+        <StyledHeaderText>Realm Name </StyledHeaderText>
+      </StyledHeader>
+      <StyledContainer>
+        <DrawerItemList {...props} />
+      </StyledContainer>
+    </DrawerContentScrollView>
+  );
+}
+
 const StyledHeader = styled.View`
   background-color: ${(props) => props.theme.gray[900]};
   flex: 1;
@@ -23,13 +36,4 @@ const StyledHeaderText = styled.Text`
   font-weight: 900;
 `;
 
-export function DrawerContentContainer(props: any) {
-  return (
-    <DrawerContentScrollView {...props}>
-      <StyledHeader>
-        <StyledHeaderText>Realm Name </StyledHeaderText>
-      </StyledHeader>
-      <DrawerItemList {...props} />
-    </DrawerContentScrollView>
-  );
-}
+const StyledContainer = styled.View``;
