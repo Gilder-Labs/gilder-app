@@ -22,7 +22,7 @@ export default function App() {
         <Provider store={store}>
           <ThemeProvider theme={darkTheme}>
             <Navigation />
-            <StatusBar />
+            <StatusBar style="light" />
           </ThemeProvider>
         </Provider>
       </SafeAreaProvider>

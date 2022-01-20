@@ -1,34 +1,36 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { SPL_PUBLIC_KEY } from "../constants/Solana";
+import { clusterApiUrl, Connection } from "@solana/web3.js";
 
-export interface Web3State {
-  value: number;
+export interface SolanaState {
+  // tokens: Array<any>;
+  connection?: any;
+  network: string;
 }
 
-const initialState: Web3State = {
-  value: 0,
+const initialState: SolanaState = {
+  // tokens: [],
+  network: clusterApiUrl("mainnet-beta"),
+  // connection: new Connection(clusterApiUrl("mainnet-beta"), "confirmed"),
 };
 
 export const web3Slice = createSlice({
-  name: "counter",
+  name: "solana",
   initialState,
   reducers: {
-    increment: (state) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-      state.value += 1;
-    },
-    decrement: (state) => {
-      state.value -= 1;
-    },
-    incrementByAmount: (state, action: PayloadAction<number>) => {
-      state.value += action.payload;
+    changeNetwork: (
+      state,
+      action: PayloadAction<"devnet" | "testnet" | "mainnet-beta">
+    ) => {
+      state.connection = new Connection(
+        clusterApiUrl(action.payload),
+        "confirmed"
+      );
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { increment, decrement, incrementByAmount } = web3Slice.actions;
+export const { changeNetwork } = web3Slice.actions;
 
 export default web3Slice.reducer;
