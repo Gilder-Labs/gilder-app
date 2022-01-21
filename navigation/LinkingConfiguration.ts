@@ -20,22 +20,7 @@ const linking: LinkingOptions<RootStackParamList> = {
               TabOneScreen: "one",
             },
           },
-          Dashboard: {
-            screens: {
-              TabTwoScreen: "two",
-            },
-          },
           Members: {
-            screens: {
-              TabTwoScreen: "two",
-            },
-          },
-          Activity: {
-            screens: {
-              TabTwoScreen: "two",
-            },
-          },
-          Proposals: {
             screens: {
               TabTwoScreen: "two",
             },
