@@ -7,7 +7,7 @@ import { Pressable } from "react-native";
 import { useTheme } from "styled-components";
 import Layout from "../constants/Layout";
 import { useAppDispatch } from "../hooks/redux";
-import { fetchTokens } from "../store/realmSlice";
+import { fetchRealmTokens, fetchRealms } from "../store/realmSlice";
 
 import { DrawerContentContainer } from "../components/DrawerContentContainer";
 import ActivityScreen from "../screens/ActivityScreen";
@@ -26,7 +26,7 @@ export default function Navigation({}: {}) {
 
   useEffect(() => {
     // dispatch(fetchRealms());
-    dispatch(fetchTokens());
+    // dispatch(fetchRealmTokens());
   }, []);
 
   const NavigationTheme = {
