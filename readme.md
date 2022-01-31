@@ -1,12 +1,19 @@
 Gilder App
 
+### Installation and start
+
+```
+yarn install
+expo start --dev-client
+```
+
+### Debugging
+
+- https://blog.expo.dev/developing-react-native-with-expo-and-flipper-8c426bdf995a
+
+Running Flipper
+
 `expo -r -c`
-
-Debugging
-`open "rndebugger://set-debugger-loc?host=localhost&port=19000"`
-Run app at the same port or change port in rndebugger command
-
-Other things to try to get a fresh start
 
 ```
 rd %localappdata%\Temp\metro-cache /s /q
