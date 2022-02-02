@@ -40,15 +40,18 @@ export const TokenList = ({ tokens }: TokenCardProps) => {
   return (
     <Container>
       {tokens.map((token) => (
-        <CoinCard>
+        <CoinCard key={token.mint}>
           <CoinIcon
             source={{
               uri: tokenMap.get(token.mint)?.logoURI,
             }}
           />
-          <CoinTitle>
-            {tokenMap.get(token.mint)?.name || "Unknown Token"}
-          </CoinTitle>
+          <CoinTitleContainer>
+            <CoinTitle>
+              {tokenMap.get(token.mint)?.name || "Unknown Token"}
+            </CoinTitle>
+            <CoinSubtitle>{token.tokenAmount.uiAmountString}</CoinSubtitle>
+          </CoinTitleContainer>
         </CoinCard>
       ))}
     </Container>
@@ -63,15 +66,23 @@ const CoinTitle = styled.Text`
   color: ${(props: any) => props.theme.gray[200]};
 `;
 
-const CoinIcon = styled.Image`
-  width: 32px;
-  height: 32px;
+const CoinSubtitle = styled.Text`
+  color: ${(props: any) => props.theme.gray[400]};
 `;
 
+const CoinIcon = styled.Image`
+  width: 40px;
+  height: 40px;
+  margin-right: ${(props: any) => props.theme.spacing[3]};
+`;
 const CoinCard = styled.View`
-  height: 80;
+  height: 64px;
   background: ${(props: any) => props.theme.gray[700]};
   margin-top: 8px;
   padding: 8px;
   border-radius: 4px;
+  flex-direction: row;
+  align-items: center;
 `;
+
+const CoinTitleContainer = styled.View``;

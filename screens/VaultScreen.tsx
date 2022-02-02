@@ -21,16 +21,14 @@ export default function VaultScreen({
 
   return (
     <Container>
-      <Title>{selectedRealm?.name}</Title>
-
       <TokenList tokens={realmTokens} />
-      <View lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
     </Container>
   );
 }
 
 const Title = styled.Text`
   color: ${(props: any) => props.theme.gray[100]};
+  font-size: 40px;
 `;
 
 const Container = styled.View`

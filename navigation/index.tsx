@@ -2,12 +2,13 @@ import { useEffect } from "react";
 import { FontAwesome5 as FontAwesome } from "@expo/vector-icons";
 import { NavigationContainer, DarkTheme } from "@react-navigation/native";
 import * as React from "react";
-import { Button, View } from "react-native";
+import { Button, View, Text } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useTheme } from "styled-components";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { fetchRealms, fetchRealmTokens, fetchRealm } from "../store/realmSlice";
 import { SvgUri } from "react-native-svg";
+import styled from "styled-components/native";
 
 import ActivityScreen from "../screens/ActivityScreen";
 import DashboardScreen from "../screens/DashboardScreen";
@@ -21,18 +22,19 @@ const Tab = createBottomTabNavigator();
 
 export const HeaderLeft = ({ realm }: any) => {
   return (
-    <View>
+    <HeaderTitle>
       <SvgUri
         width="32"
         height="32"
-        style={{ marginLeft: 8 }}
+        style={{ marginLeft: 12, marginRight: 12 }}
         uri={
           realm
             ? `https://avatars.dicebear.com/api/jdenticon/${realm?.pubKey}.svg`
             : ""
         }
       />
-    </View>
+      <HeaderTitleText>{realm?.name}</HeaderTitleText>
+    </HeaderTitle>
   );
 };
 
@@ -123,3 +125,14 @@ function TabBarIcon(props: {
 }) {
   return <FontAwesome size={24} style={{ marginBottom: -3 }} {...props} />;
 }
+
+const HeaderTitle = styled.View`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+
+const HeaderTitleText = styled.Text`
+  color: ${(props: any) => props.theme.gray[100]};
+  font-weight: bold;
+`;
