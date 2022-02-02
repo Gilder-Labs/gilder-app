@@ -6,7 +6,7 @@ import { Button, View } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useTheme } from "styled-components";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { fetchRealms } from "../store/realmSlice";
+import { fetchRealms, fetchRealmTokens } from "../store/realmSlice";
 import { SvgUri } from "react-native-svg";
 
 import ActivityScreen from "../screens/ActivityScreen";
@@ -26,8 +26,11 @@ export default function Navigation({}: {}) {
 
   useEffect(() => {
     dispatch(fetchRealms());
-    // dispatch(fetchRealmTokens());
   }, []);
+
+  useEffect(() => {
+    dispatch(fetchRealmTokens());
+  }, [selectedRealm]);
 
   const NavigationTheme = {
     dark: false,
@@ -56,7 +59,7 @@ export default function Navigation({}: {}) {
           name="Vault"
           component={VaultScreen}
           options={{
-            title: "Vault",
+            title: `Vault`,
             tabBarIcon: ({ color }) => (
               <TabBarIcon name="university" color={color} />
             ),
