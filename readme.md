@@ -7,13 +7,14 @@ yarn install
 expo start --dev-client
 ```
 
+Reset Cache
+`expo r -c`
+
 ### Debugging
 
 - https://blog.expo.dev/developing-react-native-with-expo-and-flipper-8c426bdf995a
 
 Running Flipper
-
-`expo -r -c`
 
 ```
 rd %localappdata%\Temp\metro-cache /s /q

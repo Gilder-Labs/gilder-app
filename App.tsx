@@ -10,9 +10,13 @@ import { Provider } from "react-redux";
 import useCachedResources from "./hooks/useCachedResources";
 import Navigation from "./navigation";
 
-import { Logs } from "expo";
-
-Logs.enableExpoCliLogging();
+import { connectToDevTools } from "react-devtools-core";
+if (__DEV__) {
+  connectToDevTools({
+    host: "localhost",
+    port: 8097,
+  });
+}
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
@@ -23,8 +27,8 @@ export default function App() {
       <SafeAreaProvider>
         <Provider store={store}>
           <ThemeProvider theme={darkTheme}>
-            <Navigation />
             <StatusBar style="light" />
+            <Navigation />
           </ThemeProvider>
         </Provider>
       </SafeAreaProvider>
