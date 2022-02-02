@@ -5,17 +5,20 @@ import { getRealms, getRealm } from "@solana/spl-governance";
 import * as web3 from "@solana/web3.js";
 import { SPL_PUBLIC_KEY } from "../constants/Solana";
 import axios from "axios";
+import { cleanRealmData } from "../utils";
 
 export interface realmState {
   realms: Array<any>;
   selectedRealm: any;
   realmTokens: Array<any>;
+  realmsData: any;
 }
 
 const initialState: realmState = {
   realms: [],
   selectedRealm: null,
   realmTokens: [],
+  realmsData: cleanRealmData(),
 };
 
 //TODO:  Running into issues with buffer. Figure out issues with deserialization and buffer.
@@ -55,8 +58,6 @@ export const fetchRealm = createAsyncThunk("realms/fetchRealm", async () => {
   );
 
   const rawRealm = await getRealm(connection, mangoRealmPkey);
-  console.log("raw realm", rawRealm);
-  let realm = {};
 
   return { name: rawRealm.account.name, pubKey: rawRealm.pubkey.toString() };
 });

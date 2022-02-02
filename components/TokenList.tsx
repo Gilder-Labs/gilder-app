@@ -18,6 +18,7 @@ const ENV = {
 export const TokenList = ({ tokens }: TokenCardProps) => {
   const [tokenMap, setTokenMap] = useState<Map<string, TokenInfo>>(new Map());
 
+  // Move this to solanaSlice and save in store
   useEffect(() => {
     new TokenListProvider().resolve().then((tokens) => {
       const tokenList = tokens.filterByChainId(ENV.MainnetBeta).getList();
@@ -30,12 +31,6 @@ export const TokenList = ({ tokens }: TokenCardProps) => {
       );
     });
   }, [setTokenMap]);
-
-  console.log("Token Map", tokenMap);
-  console.log(
-    "Mango token?",
-    tokenMap.get("MangoCzJ36AjZyKwVj3VnYU4GTonjfVEnJmvvWaxLac")
-  );
 
   return (
     <Container>

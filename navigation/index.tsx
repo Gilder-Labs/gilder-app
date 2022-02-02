@@ -4,7 +4,7 @@ import { NavigationContainer, DarkTheme } from "@react-navigation/native";
 import * as React from "react";
 import { Button, View, Text } from "react-native";
 // import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-// import { DrawerContentContainer } from "../components/DrawerContentContainer";
+import { DrawerContentContainer } from "../components/DrawerContentContainer";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 
 import { useTheme } from "styled-components";
@@ -74,12 +74,12 @@ export default function Navigation({}: {}) {
     <NavigationContainer linking={LinkingConfiguration} theme={NavigationTheme}>
       <Drawer.Navigator
         initialRouteName="Vault" // Dashboard
-        // drawerContent={(props) => <DrawerContentContainer {...props} />}
+        drawerContent={(props) => <DrawerContentContainer {...props} />}
         // screenOptions={{
         //   drawerType: Layout.window.width >= 768 ? "permanent" : "front",
         // }}
       >
-        <Drawer.Screen
+        {/* <Drawer.Screen
           name="Dashboard"
           component={DashboardScreen}
           options={{
@@ -92,7 +92,7 @@ export default function Navigation({}: {}) {
               />
             ),
           }}
-        />
+        /> */}
         <Drawer.Screen
           name="Vault"
           component={VaultScreen}
@@ -100,7 +100,7 @@ export default function Navigation({}: {}) {
             drawerIcon: ({ focused, color, size }) => (
               <FontAwesome
                 size={32}
-                style={{ marginRight: -12, marginLeft: 3 }}
+                style={{ minWidth: 40 }}
                 color={color}
                 name="university"
               />
@@ -114,7 +114,7 @@ export default function Navigation({}: {}) {
             drawerIcon: ({ focused, color, size }) => (
               <FontAwesome
                 size={32}
-                style={{ marginRight: -14 }}
+                style={{ minWidth: 40 }}
                 color={color}
                 name="user-friends"
               />
@@ -128,9 +128,9 @@ export default function Navigation({}: {}) {
             drawerIcon: ({ focused, color, size }) => (
               <FontAwesome
                 size={32}
-                style={{ marginRight: -8, marginLeft: 3 }}
+                style={{ minWidth: 40 }}
                 color={color}
-                name="poll"
+                name="vote-yea"
               />
             ),
           }}
@@ -142,7 +142,7 @@ export default function Navigation({}: {}) {
             drawerIcon: ({ focused, color, size }) => (
               <FontAwesome
                 size={32}
-                style={{ marginRight: -10, marginLeft: 3 }}
+                style={{ minWidth: 40 }}
                 color={color}
                 name="list"
               />
