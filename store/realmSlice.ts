@@ -43,39 +43,41 @@ export const fetchRealms = createAsyncThunk("realms/fetchRealms", async () => {
       pubKey: realm.pubkey.toString(),
     };
   });
-  console.log("Realm", realmsRaw[0]);
+  // TODO change this to selected dao
   return { realms: realms, selectedRealm: realms[0] };
 });
 
+// TODO set up to be selectable
 export const fetchRealm = createAsyncThunk("realms/fetchRealm", async () => {
   let connection = new web3.Connection(
     web3.clusterApiUrl(rpcNetwork),
     "recent"
   );
 
-  const realm = await getRealm(connection, mangoRealmPkey);
-  return realm;
+  const rawRealm = await getRealm(connection, mangoRealmPkey);
+  console.log("raw realm", rawRealm);
+  let realm = {};
+
+  return { name: rawRealm.account.name, pubKey: rawRealm.pubkey.toString() };
 });
 
 // TODO needs to be optimized
 export const fetchRealmTokens = createAsyncThunk(
   "realms/fetchRealmTokens",
-  async () => {
+  async (pubKey: string) => {
     let connection = new web3.Connection(
       web3.clusterApiUrl(rpcNetwork),
       "confirmed"
     );
 
     const rawTokensResponse = await connection.getParsedTokenAccountsByOwner(
-      // mangoRealmPkey,
-      monkeDaoPkey,
+      new PublicKey(pubKey),
       {
         programId: SPL_PUBLIC_KEY,
       }
     );
     const rawTokens = rawTokensResponse.value;
 
-    console.log("raw tokens", rawTokens);
     let tokens = rawTokens.map((token) => {
       return {
         mint: token.account.data.parsed.info.mint,

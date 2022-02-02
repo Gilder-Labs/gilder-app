@@ -5,7 +5,7 @@ import { RootTabScreenProps } from "../types";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { fetchRealmTokens } from "../store/realmSlice";
-import { TokenCard } from "../components";
+import { TokenList } from "../components";
 import styled from "styled-components/native";
 // 1. Fetch selected realms tokens
 // 2. Render token list - with monetary value
@@ -19,20 +19,22 @@ export default function VaultScreen({
   );
   const dispatch = useAppDispatch();
 
-  console.log("realm tokens", realmTokens);
   return (
     <Container>
-      <Text>{selectedRealm?.name}</Text>
+      <Title>{selectedRealm?.name}</Title>
 
-      {realmTokens.map((token) => (
-        <TokenCard key={token.mint} name={token.mint} />
-      ))}
+      <TokenList tokens={realmTokens} />
       <View lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
     </Container>
   );
 }
 
+const Title = styled.Text`
+  color: ${(props: any) => props.theme.gray[100]};
+`;
+
 const Container = styled.View`
   flex: 1;
   background: ${(props: any) => props.theme.gray[800]};
+  padding: ${(props: any) => props.theme.spacing[3]};
 `;

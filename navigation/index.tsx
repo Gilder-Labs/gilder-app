@@ -6,7 +6,7 @@ import { Button, View } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useTheme } from "styled-components";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { fetchRealms, fetchRealmTokens } from "../store/realmSlice";
+import { fetchRealms, fetchRealmTokens, fetchRealm } from "../store/realmSlice";
 import { SvgUri } from "react-native-svg";
 
 import ActivityScreen from "../screens/ActivityScreen";
@@ -19,17 +19,37 @@ import LinkingConfiguration from "./LinkingConfiguration";
 
 const Tab = createBottomTabNavigator();
 
+export const HeaderLeft = ({ realm }: any) => {
+  return (
+    <View>
+      <SvgUri
+        width="32"
+        height="32"
+        style={{ marginLeft: 8 }}
+        uri={
+          realm
+            ? `https://avatars.dicebear.com/api/jdenticon/${realm?.pubKey}.svg`
+            : ""
+        }
+      />
+    </View>
+  );
+};
+
 export default function Navigation({}: {}) {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const { selectedRealm } = useAppSelector((state) => state.realms);
 
   useEffect(() => {
-    dispatch(fetchRealms());
+    // dispatch(fetchRealms());
+    dispatch(fetchRealm());
   }, []);
 
   useEffect(() => {
-    dispatch(fetchRealmTokens());
+    if (selectedRealm?.pubKey) {
+      dispatch(fetchRealmTokens(selectedRealm.pubKey));
+    }
   }, [selectedRealm]);
 
   const NavigationTheme = {
@@ -48,14 +68,6 @@ export default function Navigation({}: {}) {
     <NavigationContainer linking={LinkingConfiguration} theme={NavigationTheme}>
       <Tab.Navigator initialRouteName="Vault">
         <Tab.Screen
-          name="Dashboard"
-          component={DashboardScreen}
-          options={{
-            title: "Dashboard",
-            tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
-          }}
-        />
-        <Tab.Screen
           name="Vault"
           component={VaultScreen}
           options={{
@@ -63,20 +75,7 @@ export default function Navigation({}: {}) {
             tabBarIcon: ({ color }) => (
               <TabBarIcon name="university" color={color} />
             ),
-            headerLeft: () => (
-              <View>
-                <SvgUri
-                  width="32"
-                  height="32"
-                  style={{ marginLeft: 8 }}
-                  uri={
-                    selectedRealm
-                      ? `https://avatars.dicebear.com/api/jdenticon/${selectedRealm.pubKey}.svg`
-                      : ""
-                  }
-                />
-              </View>
-            ),
+            headerLeft: () => <HeaderLeft realm={selectedRealm} />,
           }}
         />
         <Tab.Screen
@@ -87,6 +86,7 @@ export default function Navigation({}: {}) {
             tabBarIcon: ({ color }) => (
               <TabBarIcon name="vote-yea" color={color} />
             ),
+            headerLeft: () => <HeaderLeft realm={selectedRealm} />,
           }}
         />
         <Tab.Screen
@@ -97,6 +97,7 @@ export default function Navigation({}: {}) {
             tabBarIcon: ({ color }) => (
               <TabBarIcon name="users" color={color} />
             ),
+            headerLeft: () => <HeaderLeft realm={selectedRealm} />,
           }}
         />
         <Tab.Screen
@@ -105,6 +106,7 @@ export default function Navigation({}: {}) {
           options={{
             title: "Activity",
             tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />,
+            headerLeft: () => <HeaderLeft realm={selectedRealm} />,
           }}
         />
       </Tab.Navigator>
