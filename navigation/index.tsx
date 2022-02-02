@@ -3,7 +3,10 @@ import { FontAwesome5 as FontAwesome } from "@expo/vector-icons";
 import { NavigationContainer, DarkTheme } from "@react-navigation/native";
 import * as React from "react";
 import { Button, View, Text } from "react-native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+// import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+// import { DrawerContentContainer } from "../components/DrawerContentContainer";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+
 import { useTheme } from "styled-components";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { fetchRealms, fetchRealmTokens, fetchRealm } from "../store/realmSlice";
@@ -18,7 +21,8 @@ import ProposalsScreen from "../screens/ProposalsScreen";
 
 import LinkingConfiguration from "./LinkingConfiguration";
 
-const Tab = createBottomTabNavigator();
+// const Tab = createBottomTabNavigator();
+const Drawer = createDrawerNavigator();
 
 export const HeaderLeft = ({ realm }: any) => {
   return (
@@ -68,7 +72,85 @@ export default function Navigation({}: {}) {
 
   return (
     <NavigationContainer linking={LinkingConfiguration} theme={NavigationTheme}>
-      <Tab.Navigator initialRouteName="Vault">
+      <Drawer.Navigator
+        initialRouteName="Vault" // Dashboard
+        // drawerContent={(props) => <DrawerContentContainer {...props} />}
+        // screenOptions={{
+        //   drawerType: Layout.window.width >= 768 ? "permanent" : "front",
+        // }}
+      >
+        <Drawer.Screen
+          name="Dashboard"
+          component={DashboardScreen}
+          options={{
+            drawerIcon: ({ focused, color, size }) => (
+              <FontAwesome
+                size={32}
+                style={{ marginRight: -10 }}
+                color={color}
+                name="home"
+              />
+            ),
+          }}
+        />
+        <Drawer.Screen
+          name="Vault"
+          component={VaultScreen}
+          options={{
+            drawerIcon: ({ focused, color, size }) => (
+              <FontAwesome
+                size={32}
+                style={{ marginRight: -12, marginLeft: 3 }}
+                color={color}
+                name="university"
+              />
+            ),
+          }}
+        />
+        <Drawer.Screen
+          name="Members"
+          component={MembersScreen}
+          options={{
+            drawerIcon: ({ focused, color, size }) => (
+              <FontAwesome
+                size={32}
+                style={{ marginRight: -14 }}
+                color={color}
+                name="user-friends"
+              />
+            ),
+          }}
+        />
+        <Drawer.Screen
+          name="Proposals"
+          component={ProposalsScreen}
+          options={{
+            drawerIcon: ({ focused, color, size }) => (
+              <FontAwesome
+                size={32}
+                style={{ marginRight: -8, marginLeft: 3 }}
+                color={color}
+                name="poll"
+              />
+            ),
+          }}
+        />
+        <Drawer.Screen
+          name="Activity"
+          component={ActivityScreen}
+          options={{
+            drawerIcon: ({ focused, color, size }) => (
+              <FontAwesome
+                size={32}
+                style={{ marginRight: -10, marginLeft: 3 }}
+                color={color}
+                name="list"
+              />
+            ),
+          }}
+        />
+      </Drawer.Navigator>
+      {/* <Tab.Navigator initialRouteName="Vault">
         <Tab.Screen
           name="Vault"
           component={VaultScreen}
@@ -111,7 +193,7 @@ export default function Navigation({}: {}) {
             headerLeft: () => <HeaderLeft realm={selectedRealm} />,
           }}
         />
-      </Tab.Navigator>
+      </Tab.Navigator> */}
     </NavigationContainer>
   );
 }
