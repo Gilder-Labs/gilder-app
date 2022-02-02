@@ -57,26 +57,34 @@ export const fetchRealm = createAsyncThunk("realms/fetchRealm", async () => {
   return realm;
 });
 
+// TODO needs to be optimized
 export const fetchRealmTokens = createAsyncThunk(
   "realms/fetchRealmTokens",
   async () => {
-    console.log("starting fetch");
     let connection = new web3.Connection(
-      web3.clusterApiUrl("mainnet-beta"),
+      web3.clusterApiUrl(rpcNetwork),
       "confirmed"
     );
 
-    const rawTokenAccountResult =
-      await connection.getParsedTokenAccountsByOwner(
-        // mangoRealmPkey,
-        monkeDaoPkey,
-        {
-          programId: SPL_PUBLIC_KEY,
-        }
-      );
-    console.log("raw tokens", rawTokenAccountResult);
+    const rawTokensResponse = await connection.getParsedTokenAccountsByOwner(
+      // mangoRealmPkey,
+      monkeDaoPkey,
+      {
+        programId: SPL_PUBLIC_KEY,
+      }
+    );
+    const rawTokens = rawTokensResponse.value;
 
-    return [];
+    console.log("raw tokens", rawTokens);
+    let tokens = rawTokens.map((token) => {
+      return {
+        mint: token.account.data.parsed.info.mint,
+        tokenAmount: token.account.data.parsed.info.tokenAmount,
+        pubKey: token.pubkey.toString(),
+      };
+    });
+
+    return tokens;
   }
 );
 

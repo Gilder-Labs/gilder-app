@@ -5,9 +5,8 @@ import * as React from "react";
 import { Button, View } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useTheme } from "styled-components";
-import { useAppDispatch } from "../hooks/redux";
+import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { fetchRealms } from "../store/realmSlice";
-import { useAppSelector } from "../hooks/redux";
 import { SvgUri } from "react-native-svg";
 
 import ActivityScreen from "../screens/ActivityScreen";
