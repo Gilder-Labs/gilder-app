@@ -1738,10 +1738,10 @@
     bs58 "^4.0.1"
     superstruct "^0.15.2"
 
-"@solana/spl-token-registry@^0.2.1641":
-  version "0.2.1641"
-  resolved "https://registry.yarnpkg.com/@solana/spl-token-registry/-/spl-token-registry-0.2.1641.tgz#c7fb761e5960f6bba556091dcf8039b90f1478f1"
-  integrity sha512-kaP0myRPuAMPU11iPmocX3r0eXSYAHoYkYuyrc5ek9pgA+UptlDEe0hfpEIJt6ICSTzm/WOKhAir8LJ70DuaGg==
+"@solana/spl-token-registry@^0.2.1949":
+  version "0.2.1949"
+  resolved "https://registry.yarnpkg.com/@solana/spl-token-registry/-/spl-token-registry-0.2.1949.tgz#f7a4cc66ab7cec2e74f5fd6dd6713f5ab36ebe0d"
+  integrity sha512-ftROBExYdHPD8LvEzyiVsB0ouoCLdlxT4L/PH69rRRz77TZmoDoUbK9iWrnfV9hkb5/HDt9tjj6sknsqYeg4/A==
   dependencies:
     cross-fetch "3.0.6"
 
@@ -6546,7 +6546,7 @@ react-native-svg-transformer@^1.0.0:
     "@svgr/plugin-svgo" "^6.1.2"
     path-dirname "^1.0.2"
 
-react-native-svg@^12.1.1:
+react-native-svg@12.1.1:
   version "12.1.1"
   resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-12.1.1.tgz#5f292410b8bcc07bbc52b2da7ceb22caf5bcaaee"
   integrity sha512-NIAJ8jCnXGCqGWXkkJ1GTzO4a3Md5at5sagYV8Vh4MXYnL4z5Rh428Wahjhh+LIjx40EE5xM5YtwyJBqOIba2Q==

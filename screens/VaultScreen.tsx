@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 
 import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
-
+import { useAppSelector } from "../hooks/redux";
 // 1. Fetch selected realms tokens
 // 2. Render token list - with monetary value
 // At top display total value
@@ -10,9 +10,11 @@ import { RootTabScreenProps } from "../types";
 export default function VaultScreen({
   navigation,
 }: RootTabScreenProps<"Vault">) {
+  const { selectedRealm } = useAppSelector((state) => state.realms);
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Vault</Text>
+      <Text style={styles.title}>{selectedRealm?.name}</Text>
       <View
         style={styles.separator}
         lightColor="#eee"

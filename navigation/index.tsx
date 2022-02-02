@@ -2,12 +2,13 @@ import { useEffect } from "react";
 import { FontAwesome5 as FontAwesome } from "@expo/vector-icons";
 import { NavigationContainer, DarkTheme } from "@react-navigation/native";
 import * as React from "react";
-import { Pressable } from "react-native";
+import { Button, View } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useTheme } from "styled-components";
-import Layout from "../constants/Layout";
 import { useAppDispatch } from "../hooks/redux";
-import { fetchRealmTokens, fetchRealms } from "../store/realmSlice";
+import { fetchRealms } from "../store/realmSlice";
+import { useAppSelector } from "../hooks/redux";
+import { SvgUri } from "react-native-svg";
 
 import ActivityScreen from "../screens/ActivityScreen";
 import DashboardScreen from "../screens/DashboardScreen";
@@ -22,6 +23,7 @@ const Tab = createBottomTabNavigator();
 export default function Navigation({}: {}) {
   const theme = useTheme();
   const dispatch = useAppDispatch();
+  const { selectedRealm } = useAppSelector((state) => state.realms);
 
   useEffect(() => {
     dispatch(fetchRealms());
@@ -31,7 +33,7 @@ export default function Navigation({}: {}) {
   const NavigationTheme = {
     dark: false,
     colors: {
-      primary: theme?.gray[400],
+      primary: theme?.primary[500],
       background: theme?.gray[900],
       card: theme?.gray[900],
       text: theme?.gray[200],
@@ -42,7 +44,7 @@ export default function Navigation({}: {}) {
 
   return (
     <NavigationContainer linking={LinkingConfiguration} theme={NavigationTheme}>
-      <Tab.Navigator initialRouteName="Activity">
+      <Tab.Navigator initialRouteName="Vault">
         <Tab.Screen
           name="Dashboard"
           component={DashboardScreen}
@@ -58,6 +60,20 @@ export default function Navigation({}: {}) {
             title: "Vault",
             tabBarIcon: ({ color }) => (
               <TabBarIcon name="university" color={color} />
+            ),
+            headerLeft: () => (
+              <View>
+                <SvgUri
+                  width="32"
+                  height="32"
+                  style={{ marginLeft: 8 }}
+                  uri={
+                    selectedRealm
+                      ? `https://avatars.dicebear.com/api/jdenticon/${selectedRealm.pubKey}.svg`
+                      : ""
+                  }
+                />
+              </View>
             ),
           }}
         />

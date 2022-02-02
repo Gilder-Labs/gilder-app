@@ -43,8 +43,7 @@ export const fetchRealms = createAsyncThunk("realms/fetchRealms", async () => {
       pubKey: realm.pubkey.toString(),
     };
   });
-  console.log("raw realms", realmsRaw);
-  console.log("realms", realms);
+  console.log("Realm", realmsRaw[0]);
   return { realms: realms, selectedRealm: realms[0] };
 });
 
