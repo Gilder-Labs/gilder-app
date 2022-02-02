@@ -24,7 +24,7 @@ export default function Navigation({}: {}) {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    // dispatch(fetchRealms());
+    dispatch(fetchRealms());
     // dispatch(fetchRealmTokens());
   }, []);
 

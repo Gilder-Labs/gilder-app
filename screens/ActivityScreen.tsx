@@ -9,13 +9,11 @@ import { useAppSelector } from "../hooks/redux";
 export default function ActivityScreen({
   navigation,
 }: RootTabScreenProps<"Activity">) {
-  const { realms } = useAppSelector((state) => state.realms);
-
-  console.log("realms in activity", realms);
+  const { selectedRealm } = useAppSelector((state) => state.realms);
 
   return (
     <StyledContainer>
-      <Text>{realms && realms[0] ? realms[0].account.name : "Activity"}</Text>
+      <Text>{selectedRealm ? selectedRealm?.name : "Activity"}</Text>
       <View
         style={styles.separator}
         lightColor="#eee"
@@ -26,7 +24,6 @@ export default function ActivityScreen({
 }
 
 const StyledContainer = styled.View`
-  background: ${(props) => props.theme.gray[800]};
   flex: 1;
   align-items: center;
   justify-content: center;

@@ -35,11 +35,17 @@ export const fetchRealms = createAsyncThunk("realms/fetchRealms", async () => {
     web3.clusterApiUrl(rpcNetwork),
     "recent"
   );
-  console.log("fetching realms?");
-  // const realms = await getRealms(connection, REALM_GOVERNANCE_PKEY);
-  // console.log("realms", realms);
-  // return realms;
-  return [];
+  let realms;
+  const realmsRaw = await getRealms(connection, REALM_GOVERNANCE_PKEY);
+  realms = realmsRaw.map((realm) => {
+    return {
+      name: realm.account.name,
+      pubKey: realm.pubkey.toString(),
+    };
+  });
+  console.log("raw realms", realmsRaw);
+  console.log("realms", realms);
+  return { realms: realms, selectedRealm: realms[0] };
 });
 
 export const fetchRealm = createAsyncThunk("realms/fetchRealm", async () => {
@@ -84,7 +90,8 @@ export const realmSlice = createSlice({
       .addCase(fetchRealms.pending, (state) => {})
       .addCase(fetchRealms.rejected, (state) => {})
       .addCase(fetchRealms.fulfilled, (state, action: any) => {
-        state.realms = action.payload;
+        state.realms = action.payload.realms;
+        state.selectedRealm = action.payload.selectedRealm;
       })
       .addCase(fetchRealm.pending, (state) => {})
       .addCase(fetchRealm.rejected, (state) => {})
