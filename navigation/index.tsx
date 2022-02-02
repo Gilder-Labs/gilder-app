@@ -42,39 +42,57 @@ export default function Navigation({}: {}) {
 
   return (
     <NavigationContainer linking={LinkingConfiguration} theme={NavigationTheme}>
-      <Tab.Navigator initialRouteName="Dashboard">
-        <Tab.Screen name="Dashboard" component={DashboardScreen} />
-        <Tab.Screen name="Activity" component={ActivityScreen} />
+      <Tab.Navigator initialRouteName="Activity">
+        <Tab.Screen
+          name="Dashboard"
+          component={DashboardScreen}
+          options={{
+            title: "Dashboard",
+            tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
+          }}
+        />
+        <Tab.Screen
+          name="Vault"
+          component={VaultScreen}
+          options={{
+            title: "Vault",
+            tabBarIcon: ({ color }) => (
+              <TabBarIcon name="university" color={color} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Proposals"
+          component={ProposalsScreen}
+          options={{
+            title: "Proposals",
+            tabBarIcon: ({ color }) => (
+              <TabBarIcon name="vote-yea" color={color} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Members"
+          component={MembersScreen}
+          options={{
+            title: "Members",
+            tabBarIcon: ({ color }) => (
+              <TabBarIcon name="users" color={color} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Activity"
+          component={ActivityScreen}
+          options={{
+            title: "Activity",
+            tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />,
+          }}
+        />
       </Tab.Navigator>
     </NavigationContainer>
   );
 }
-
-/**
- * A root stack navigator is often used for displaying modals on top of all other content.
- * https://reactnavigation.org/docs/modal
- */
-// const Stack = createNativeStackNavigator<RootStackParamList>();
-
-// function RootNavigator() {
-//   return (
-//     <Stack.Navigator>
-//       <Stack.Screen
-//         name="Root"
-//         component={BottomTabNavigator}
-//         options={{ headerShown: false }}
-//       />
-//       <Stack.Screen
-//         name="NotFound"
-//         component={NotFoundScreen}
-//         options={{ title: "Oops!" }}
-//       />
-//       <Stack.Group screenOptions={{ presentation: "modal" }}>
-//         <Stack.Screen name="Modal" component={ModalScreen} />
-//       </Stack.Group>
-//     </Stack.Navigator>
-//   );
-// }
 
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
@@ -83,5 +101,5 @@ function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];
   color: string;
 }) {
-  return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
+  return <FontAwesome size={24} style={{ marginBottom: -3 }} {...props} />;
 }
