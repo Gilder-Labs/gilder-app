@@ -11,6 +11,7 @@ export const RealmIcon = ({ realmId }: RealmIconProps) => {
   const { realmsData } = useAppSelector((state) => state.realms);
   let isSvgImage = true;
 
+  // tries to handle all the edge cases in governance-ui realms image list
   let realmIconUrl =
     realmsData && realmsData[`${realmId}`].ogImage
       ? realmsData[realmId].ogImage
@@ -21,6 +22,9 @@ export const RealmIcon = ({ realmId }: RealmIconProps) => {
   }
 
   if (realmIconUrl.slice(0, 5) !== "https") {
+    // if (realmIconUrl.slice(-3) === "svg") {
+    //   isSvgImage = true;
+    // }
     realmIconUrl = `https://realms.today${realmIconUrl}`;
   }
 

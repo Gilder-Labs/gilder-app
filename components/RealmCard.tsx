@@ -7,9 +7,10 @@ import { RealmIcon } from ".";
 
 interface RealmCardProps {
   realmId: string;
+  onClick: any;
 }
 
-export const RealmCard = ({ realmId }: RealmCardProps) => {
+export const RealmCard = ({ realmId, onClick }: RealmCardProps) => {
   const { realmsData, realmWatchlist } = useAppSelector(
     (state) => state.realms
   );
@@ -17,6 +18,7 @@ export const RealmCard = ({ realmId }: RealmCardProps) => {
 
   const handleRealmClick = () => {
     // dispatch(fetchRealm(realmId));
+    onClick();
     console.log("realm", realmId);
   };
 
@@ -49,7 +51,7 @@ const ContainerButton = styled.TouchableOpacity`
 const RealmName = styled.Text`
   margin-top: ${(props: any) => props.theme.spacing[3]}
   color: ${(props: any) => props.theme.gray[100]};
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
   text-align: center;
 `;

@@ -14,6 +14,8 @@ Reset Cache
 
 - https://blog.expo.dev/developing-react-native-with-expo-and-flipper-8c426bdf995a
 
+open "rndebugger://set-debugger-loc?host=localhost&port=19000"
+
 Running Flipper
 
 ```

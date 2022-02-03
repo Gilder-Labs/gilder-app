@@ -24,6 +24,10 @@ export const RealmSelectModal = ({
     return <View />;
   }
 
+  const handleRealmClick = () => {
+    handleOnClose();
+  };
+
   return (
     <Modal
       animationType="slide"
@@ -45,7 +49,11 @@ export const RealmSelectModal = ({
       <Container>
         <RealmContainer>
           {Object.keys(realmsData).map((realmId) => (
-            <RealmCard realmId={realmId} key={realmId} />
+            <RealmCard
+              realmId={realmId}
+              key={realmId}
+              onClick={() => handleRealmClick()}
+            />
           ))}
         </RealmContainer>
       </Container>
@@ -92,7 +100,7 @@ const Header = styled.View`
 `;
 
 const HeaderTitle = styled.Text`
-  font-size: 18;
+  font-size: 18px;
   font-weight: bold;
   color: ${(props) => props.theme.gray[50]};
 `;
