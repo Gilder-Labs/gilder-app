@@ -1,16 +1,20 @@
 import {
   DrawerContentScrollView,
   DrawerItemList,
-  DrawerItem,
   DrawerContent,
 } from "@react-navigation/drawer";
-import { View } from "react-native";
+import { View, Modal, Text } from "react-native";
 import styled from "styled-components/native";
+import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { SvgUri } from "react-native-svg";
-import { RealmIconButton } from ".";
+import { RealmIconButton, RealmSelectModal } from ".";
+import { FontAwesome5 as FontAwesome } from "@expo/vector-icons";
+import { useTheme } from "styled-components";
 
 export function DrawerContentContainer(props: any) {
+  const theme = useTheme();
+  const [realmSelectisOpen, setRealmSelectIsOpen] = useState(false);
+
   const { selectedRealm, realmsData, realmWatchlist } = useAppSelector(
     (state) => state.realms
   );
@@ -37,11 +41,27 @@ export function DrawerContentContainer(props: any) {
           {realmWatchlist.map((realmId) => (
             <RealmIconButton realmId={realmId} key={realmId} />
           ))}
+          <Divider />
+          <AddRealmButtonContainer
+            onPress={() => setRealmSelectIsOpen(true)}
+            activeOpacity={0.4}
+          >
+            <FontAwesome
+              size={16}
+              style={{}}
+              name="plus"
+              color={theme.gray[400]}
+            />
+          </AddRealmButtonContainer>
         </RealmScrollContainer>
         <DrawerContainerContainer>
           <DrawerItemList {...props} />
         </DrawerContainerContainer>
       </StyledContainer>
+      <RealmSelectModal
+        open={realmSelectisOpen}
+        handleOnClose={() => setRealmSelectIsOpen(false)}
+      />
     </DrawerContentScrollView>
   );
 }
@@ -80,4 +100,21 @@ const RealmScrollContainer = styled.ScrollView`
 
 const DrawerContainerContainer = styled.View`
   flex: 1;
+`;
+
+const AddRealmButtonContainer = styled.TouchableOpacity`
+  width: 44px;
+  height: 44px;
+  border-radius: 100px;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed ${(props) => props.theme.gray[600]};
+`;
+
+const Divider = styled.View`
+  flex: 1;
+  width: 48px;
+  height: 2px;
+  background-color: ${(props) => props.theme.gray[600]};
+  margin-bottom: ${(props) => props.theme.spacing[4]};
 `;

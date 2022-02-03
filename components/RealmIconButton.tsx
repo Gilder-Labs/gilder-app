@@ -31,7 +31,11 @@ export const RealmIconButton = ({ realmId }: RealmIconButtonProps) => {
   }
 
   return (
-    <ContainerButton onPress={handleRealmIconClick} key={realmId}>
+    <ContainerButton
+      onPress={handleRealmIconClick}
+      key={realmId}
+      activeOpacity={0.4}
+    >
       <Container>
         {selectedRealm?.pubKey === realmId && <RealmSelectedIndicator />}
         {isSvgImage ? (
@@ -57,7 +61,7 @@ export const RealmIconButton = ({ realmId }: RealmIconButtonProps) => {
   );
 };
 
-const ContainerButton = styled.TouchableHighlight`
+const ContainerButton = styled.TouchableOpacity`
   height: 44px;
   margin-bottom: ${(props: any) => props.theme.spacing[3]};
   border-radius: 4px;
