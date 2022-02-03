@@ -48,8 +48,9 @@ export default function Navigation({}: {}) {
   const { selectedRealm } = useAppSelector((state) => state.realms);
 
   useEffect(() => {
-    // dispatch(fetchRealms());
-    dispatch(fetchRealm());
+    dispatch(fetchRealms());
+    // mango key for now
+    dispatch(fetchRealm("DPiH3H3c7t47BMxqTxLsuPQpEC6Kne8GA9VXbxpnZxFE"));
   }, []);
 
   useEffect(() => {
@@ -75,6 +76,11 @@ export default function Navigation({}: {}) {
       <Drawer.Navigator
         initialRouteName="Vault" // Dashboard
         drawerContent={(props) => <DrawerContentContainer {...props} />}
+        screenOptions={{
+          drawerStyle: {
+            width: 320,
+          },
+        }}
         // screenOptions={{
         //   drawerType: Layout.window.width >= 768 ? "permanent" : "front",
         // }}

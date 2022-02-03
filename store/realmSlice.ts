@@ -12,6 +12,7 @@ export interface realmState {
   selectedRealm: any;
   realmTokens: Array<any>;
   realmsData: any;
+  realmWatchlist: Array<string>;
 }
 
 const initialState: realmState = {
@@ -19,6 +20,10 @@ const initialState: realmState = {
   selectedRealm: null,
   realmTokens: [],
   realmsData: cleanRealmData(),
+  realmWatchlist: [
+    "DPiH3H3c7t47BMxqTxLsuPQpEC6Kne8GA9VXbxpnZxFE",
+    "759qyfKDMMuo9v36tW7fbGanL63mZFPNbhU7zjPrkuGK",
+  ],
 };
 
 //TODO:  Running into issues with buffer. Figure out issues with deserialization and buffer.
@@ -47,20 +52,23 @@ export const fetchRealms = createAsyncThunk("realms/fetchRealms", async () => {
     };
   });
   // TODO change this to selected dao
-  return { realms: realms, selectedRealm: realms[0] };
+  return { realms: realms };
 });
 
 // TODO set up to be selectable
-export const fetchRealm = createAsyncThunk("realms/fetchRealm", async () => {
-  let connection = new web3.Connection(
-    web3.clusterApiUrl(rpcNetwork),
-    "recent"
-  );
+export const fetchRealm = createAsyncThunk(
+  "realms/fetchRealm",
+  async (realmId: string) => {
+    let connection = new web3.Connection(
+      web3.clusterApiUrl(rpcNetwork),
+      "recent"
+    );
 
-  const rawRealm = await getRealm(connection, mangoRealmPkey);
+    const rawRealm = await getRealm(connection, new PublicKey(realmId));
 
-  return { name: rawRealm.account.name, pubKey: rawRealm.pubkey.toString() };
-});
+    return { name: rawRealm.account.name, pubKey: rawRealm.pubkey.toString() };
+  }
+);
 
 // TODO needs to be optimized
 export const fetchRealmTokens = createAsyncThunk(
@@ -101,7 +109,7 @@ export const realmSlice = createSlice({
       .addCase(fetchRealms.rejected, (state) => {})
       .addCase(fetchRealms.fulfilled, (state, action: any) => {
         state.realms = action.payload.realms;
-        state.selectedRealm = action.payload.selectedRealm;
+        // state.selectedRealm = action.payload.selectedRealm;
       })
       .addCase(fetchRealm.pending, (state) => {})
       .addCase(fetchRealm.rejected, (state) => {})
