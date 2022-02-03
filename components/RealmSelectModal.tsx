@@ -65,12 +65,13 @@ const styles = StyleSheet.create({
 });
 
 const Container = styled.ScrollView`
-  background-color: ${(props) => props.theme.gray[800]};
+  background-color: ${(props) => props.theme.gray[900]};
   flex: 1;
+  padding-top: ${(props) => props.theme.spacing[2]};
 `;
 
 const RealmContainer = styled.View`
-  background-color: ${(props) => props.theme.gray[800]};
+  background-color: ${(props) => props.theme.gray[900]};
   flex: 1;
   padding: ${(props) => props.theme.spacing[2]};
   flex-wrap: wrap;
@@ -82,7 +83,7 @@ const RealmContainer = styled.View`
 
 const Header = styled.View`
   height: 64px;
-  background-color: ${(props) => props.theme.gray[700]};
+  background-color: ${(props) => props.theme.gray[800]};
   justify-content: space-between;
   align-items: center;
   flex-direction: row;

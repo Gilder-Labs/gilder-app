@@ -20,14 +20,18 @@ export const RealmCard = ({ realmId }: RealmCardProps) => {
     console.log("realm", realmId);
   };
 
+  const realmInfo = realmsData[realmId];
+
   return (
     <ContainerButton
       onPress={handleRealmClick}
       key={realmId}
       activeOpacity={0.4}
     >
-      <RealmIcon realmId={realmId} />
-      <RealmName>{realmsData[realmId].name}</RealmName>
+      <Container>
+        <RealmIcon realmId={realmId} />
+        <RealmName>{realmInfo.displayName || realmInfo.symbol}</RealmName>
+      </Container>
     </ContainerButton>
   );
 };
@@ -37,7 +41,21 @@ const ContainerButton = styled.TouchableOpacity`
   width: 45%;
   margin-bottom: ${(props: any) => props.theme.spacing[3]};
   border-radius: 4px;
-  background: ${(props: any) => props.theme.gray[600]};
+  background: ${(props: any) => props.theme.gray[800]};
+  padding-left: ${(props: any) => props.theme.spacing[3]};
+  padding-right: ${(props: any) => props.theme.spacing[3]};
 `;
 
-const RealmName = styled.Text``;
+const RealmName = styled.Text`
+  margin-top: ${(props: any) => props.theme.spacing[3]}
+  color: ${(props: any) => props.theme.gray[100]};
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+`;
+
+const Container = styled.View`
+  justify-content: center;
+  align-items: center;
+  height: 140px;
+`;
