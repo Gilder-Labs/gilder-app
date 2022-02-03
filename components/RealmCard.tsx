@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { SvgUri } from "react-native-svg";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { fetchRealm } from "../store/realmSlice";
+import { fetchRealm, addRealmToWatchlist } from "../store/realmSlice";
 import { RealmIcon } from ".";
 
 interface RealmCardProps {
@@ -17,9 +17,8 @@ export const RealmCard = ({ realmId, onClick }: RealmCardProps) => {
   const dispatch = useAppDispatch();
 
   const handleRealmClick = () => {
-    // dispatch(fetchRealm(realmId));
+    dispatch(addRealmToWatchlist(realmId));
     onClick();
-    console.log("realm", realmId);
   };
 
   const realmInfo = realmsData[realmId];

@@ -107,7 +107,12 @@ export const fetchRealmTokens = createAsyncThunk(
 export const realmSlice = createSlice({
   name: "realms",
   initialState,
-  reducers: {},
+  reducers: {
+    addRealmToWatchlist: (state, action) => {
+      console.log("action is", action);
+      state.realmWatchlist.push(action.payload);
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchRealms.pending, (state) => {})
@@ -130,6 +135,6 @@ export const realmSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const {} = realmSlice.actions;
+export const { addRealmToWatchlist } = realmSlice.actions;
 
 export default realmSlice.reducer;
