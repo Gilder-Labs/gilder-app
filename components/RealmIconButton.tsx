@@ -8,44 +8,50 @@ interface RealmIconButtonProps {
   realmId: string;
 }
 
-{
-  /* <RealmIcon
-          source={{
-            uri: realmsData[selectedRealm.pubKey].ogImage,
-          }}
-        /> */
-}
-
 export const RealmIconButton = ({ realmId }: RealmIconButtonProps) => {
   const { realmsData, selectedRealm } = useAppSelector((state) => state.realms);
   const dispatch = useAppDispatch();
+  let isSvgImage = true;
 
   const handleRealmIconClick = () => {
     dispatch(fetchRealm(realmId));
   };
 
-  const realmIconImage = `https://avatars.dicebear.com/api/jdenticon/${realmId}.svg`;
+  let realmIconUrl =
+    realmsData && realmsData[`${realmId}`].ogImage
+      ? realmsData[realmId].ogImage
+      : `https://avatars.dicebear.com/api/jdenticon/${realmId}.svg`;
+
+  if (realmIconUrl.slice(-3) === "png") {
+    isSvgImage = false;
+  }
+
+  if (realmIconUrl.slice(0, 5) !== "https") {
+    realmIconUrl = `https://realms.today${realmIconUrl}`;
+  }
 
   return (
-    <ContainerButton onPress={handleRealmIconClick}>
+    <ContainerButton onPress={handleRealmIconClick} key={realmId}>
       <Container>
-        {selectedRealm.pubKey === realmId && <RealmSelectedIndicator />}
-        <SvgUri
-          key={realmId}
-          width="44"
-          height="44"
-          style={{ marginBottom: 12 }}
-          uri={
-            realmIconImage // change this to if the
-          }
-        />
-        {/* <SvgUri
-        key={realmId}
-        width="48"
-        height="48"
-        style={{ marginBottom: 12 }}
-        uri={`https://avatars.dicebear.com/api/jdenticon/${realmId}.svg`}
-      /> */}
+        {selectedRealm?.pubKey === realmId && <RealmSelectedIndicator />}
+        {isSvgImage ? (
+          <SvgUri
+            key={realmId}
+            width="44"
+            height="44"
+            style={{ marginBottom: 12 }}
+            uri={
+              realmIconUrl // change this to if the
+            }
+          />
+        ) : (
+          <RealmIcon
+            key={realmId}
+            source={{
+              uri: realmIconUrl,
+            }}
+          />
+        )}
       </Container>
     </ContainerButton>
   );
@@ -62,7 +68,9 @@ const Container = styled.View``;
 const RealmIcon = styled.Image`
   width: 44px;
   height: 44px;
-  margin-right: ${(props: any) => props.theme.spacing[3]};
+  margin-bottom: 12px;
+  justify-content: center;
+  align-self: center;
 `;
 
 const RealmSelectedIndicator = styled.View`

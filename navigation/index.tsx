@@ -80,6 +80,7 @@ export default function Navigation({}: {}) {
           drawerStyle: {
             width: 320,
           },
+          headerTintColor: "#f4f4f5", //Set Header text color
         }}
         // screenOptions={{
         //   drawerType: Layout.window.width >= 768 ? "permanent" : "front",

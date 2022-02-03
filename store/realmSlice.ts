@@ -23,6 +23,8 @@ const initialState: realmState = {
   realmWatchlist: [
     "DPiH3H3c7t47BMxqTxLsuPQpEC6Kne8GA9VXbxpnZxFE",
     "759qyfKDMMuo9v36tW7fbGanL63mZFPNbhU7zjPrkuGK",
+    "8eUUtRpBCg7sJ5FXfPUMiwSQNqC3FjFLkmS2oFPKoiBi",
+    "39aX7mDZ1VLpZcPWstBhQBoqwNkhf5f1KDACguvrryi6",
   ],
 };
 

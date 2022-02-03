@@ -15,7 +15,6 @@ export function DrawerContentContainer(props: any) {
     (state) => state.realms
   );
 
-  const realmIcon = realmsData[selectedRealm?.pubKey]?.ogImage;
   const realmDisplayName = realmsData[selectedRealm?.pubKey]?.displayName;
   return (
     <DrawerContentScrollView
