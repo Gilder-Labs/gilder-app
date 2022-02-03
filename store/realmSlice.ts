@@ -47,10 +47,13 @@ export const fetchRealms = createAsyncThunk("realms/fetchRealms", async () => {
   );
   let realms;
   const realmsRaw = await getRealms(connection, REALM_GOVERNANCE_PKEY);
+  console.log("realmsRaw", realmsRaw);
   realms = realmsRaw.map((realm) => {
     return {
       name: realm.account.name,
       pubKey: realm.pubkey.toString(),
+      communityMint: realm.account.communityMint.toString(),
+      councilMint: realm.account?.config?.councilMint?.toString(),
     };
   });
   // TODO change this to selected dao

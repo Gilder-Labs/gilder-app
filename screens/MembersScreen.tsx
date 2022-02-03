@@ -6,6 +6,13 @@ import { RootTabScreenProps } from "../types";
 export default function MembersScreen({
   navigation,
 }: RootTabScreenProps<"Members">) {
+  // Get members of DAO
+  // need to fetch by both councilMint and communityMint
+
+  // const tokenAccounts = await getTokenAccountsByMint(
+  //   connection.current,
+  //   realm.account.config.councilMint.toBase58()
+  // )
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Members</Text>
