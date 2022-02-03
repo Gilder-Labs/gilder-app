@@ -30,7 +30,9 @@ export const web3Slice = createSlice({
   },
 });
 
-// Action creators are generated for each case reducer function
+// Get token price data
+// https://public-api.solscan.io/docs/#/Token/get_token_list
+
 export const { changeNetwork } = web3Slice.actions;
 
 export default web3Slice.reducer;

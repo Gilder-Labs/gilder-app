@@ -4,6 +4,7 @@ import styled from "styled-components/native";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { FontAwesome5 as FontAwesome } from "@expo/vector-icons";
 import { useTheme } from "styled-components";
+import { RealmCard } from ".";
 
 interface RealmSelectModalProps {
   open: boolean;
@@ -19,6 +20,10 @@ export const RealmSelectModal = ({
     (state) => state.realms
   );
 
+  if (!realmsData) {
+    return <View />;
+  }
+
   return (
     <Modal
       animationType="slide"
@@ -27,15 +32,22 @@ export const RealmSelectModal = ({
       presentationStyle="pageSheet"
     >
       {/* Header - Title + close */}
+      <Header>
+        <View style={{ width: 48, height: 48 }} />
+        <HeaderTitle> Add Realm</HeaderTitle>
+        <CloseIconButton onPress={handleOnClose} activeOpacity={0.5}>
+          <FontAwesome size={20} name="times" color={theme.gray[200]} />
+        </CloseIconButton>
+      </Header>
+
       {/* Input to filter by name or public key */}
-      {/* List Realms + icon */}
+
       <Container>
-        <Pressable
-          style={[styles.button, styles.buttonClose]}
-          onPress={handleOnClose}
-        >
-          <Text>Hide Modal</Text>
-        </Pressable>
+        <RealmContainer>
+          {Object.keys(realmsData).map((realmId) => (
+            <RealmCard realmId={realmId} key={realmId} />
+          ))}
+        </RealmContainer>
       </Container>
     </Modal>
   );
@@ -52,7 +64,41 @@ const styles = StyleSheet.create({
   },
 });
 
-const Container = styled.View`
+const Container = styled.ScrollView`
   background-color: ${(props) => props.theme.gray[800]};
   flex: 1;
+`;
+
+const RealmContainer = styled.View`
+  background-color: ${(props) => props.theme.gray[800]};
+  flex: 1;
+  padding: ${(props) => props.theme.spacing[2]};
+  flex-wrap: wrap;
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: stretch;
+`;
+
+const Header = styled.View`
+  height: 64px;
+  background-color: ${(props) => props.theme.gray[700]};
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+  padding-left: ${(props) => props.theme.spacing[2]};
+  padding-right: ${(props) => props.theme.spacing[2]};
+`;
+
+const HeaderTitle = styled.Text`
+  font-size: 18;
+  font-weight: bold;
+  color: ${(props) => props.theme.gray[50]};
+`;
+
+const CloseIconButton = styled.TouchableOpacity`
+  width: 48px;
+  height: 48px;
+  justify-content: center;
+  align-items: center;
 `;

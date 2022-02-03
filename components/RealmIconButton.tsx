@@ -1,61 +1,35 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components/native";
-import { SvgUri } from "react-native-svg";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { fetchRealm } from "../store/realmSlice";
+import { RealmIcon } from ".";
 
 interface RealmIconButtonProps {
   realmId: string;
+  isDisabled?: boolean;
 }
 
-export const RealmIconButton = ({ realmId }: RealmIconButtonProps) => {
+export const RealmIconButton = ({
+  realmId,
+  isDisabled = false,
+}: RealmIconButtonProps) => {
   const { realmsData, selectedRealm } = useAppSelector((state) => state.realms);
   const dispatch = useAppDispatch();
-  let isSvgImage = true;
 
   const handleRealmIconClick = () => {
     dispatch(fetchRealm(realmId));
   };
-
-  let realmIconUrl =
-    realmsData && realmsData[`${realmId}`].ogImage
-      ? realmsData[realmId].ogImage
-      : `https://avatars.dicebear.com/api/jdenticon/${realmId}.svg`;
-
-  if (realmIconUrl.slice(-3) === "png") {
-    isSvgImage = false;
-  }
-
-  if (realmIconUrl.slice(0, 5) !== "https") {
-    realmIconUrl = `https://realms.today${realmIconUrl}`;
-  }
 
   return (
     <ContainerButton
       onPress={handleRealmIconClick}
       key={realmId}
       activeOpacity={0.4}
+      disabled={isDisabled}
     >
       <Container>
         {selectedRealm?.pubKey === realmId && <RealmSelectedIndicator />}
-        {isSvgImage ? (
-          <SvgUri
-            key={realmId}
-            width="44"
-            height="44"
-            style={{ marginBottom: 12 }}
-            uri={
-              realmIconUrl // change this to if the
-            }
-          />
-        ) : (
-          <RealmIcon
-            key={realmId}
-            source={{
-              uri: realmIconUrl,
-            }}
-          />
-        )}
+        <RealmIcon realmId={realmId} />
       </Container>
     </ContainerButton>
   );
@@ -68,14 +42,6 @@ const ContainerButton = styled.TouchableOpacity`
 `;
 
 const Container = styled.View``;
-
-const RealmIcon = styled.Image`
-  width: 44px;
-  height: 44px;
-  margin-bottom: 12px;
-  justify-content: center;
-  align-self: center;
-`;
 
 const RealmSelectedIndicator = styled.View`
   width: 6px;
