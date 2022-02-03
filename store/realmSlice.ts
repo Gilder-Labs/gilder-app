@@ -47,7 +47,7 @@ export const fetchRealms = createAsyncThunk("realms/fetchRealms", async () => {
   );
   let realms;
   const realmsRaw = await getRealms(connection, REALM_GOVERNANCE_PKEY);
-  console.log("realmsRaw", realmsRaw);
+  // console.log("realmsRaw", realmsRaw);
   realms = realmsRaw.map((realm) => {
     return {
       name: realm.account.name,
