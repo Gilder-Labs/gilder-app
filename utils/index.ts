@@ -1,1 +1,1 @@
-export * from "./cleanRealmData";
+export * from "./cleanData";

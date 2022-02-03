@@ -35,7 +35,7 @@ export function DrawerContentContainer(props: any) {
           }}
         >
           {realmWatchlist.map((realmId) => (
-            <RealmIconButton realmId={realmId} />
+            <RealmIconButton realmId={realmId} key={realmId} />
           ))}
         </RealmScrollContainer>
         <DrawerContainerContainer>
