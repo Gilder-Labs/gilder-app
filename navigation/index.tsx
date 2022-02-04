@@ -9,7 +9,12 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 
 import { useTheme } from "styled-components";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { fetchRealms, fetchRealmTokens, fetchRealm } from "../store/realmSlice";
+import {
+  fetchRealms,
+  fetchRealmTokens,
+  fetchRealm,
+  fetchRealmActivity,
+} from "../store/realmSlice";
 import { SvgUri } from "react-native-svg";
 import styled from "styled-components/native";
 
@@ -58,6 +63,7 @@ export default function Navigation({}: {}) {
   useEffect(() => {
     if (selectedRealm?.pubKey) {
       dispatch(fetchRealmTokens(selectedRealm.pubKey));
+      dispatch(fetchRealmActivity(selectedRealm.pubKey));
     }
   }, [selectedRealm]);
 

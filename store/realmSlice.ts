@@ -13,6 +13,7 @@ export interface realmState {
   realmsData: any;
   realmWatchlist: Array<string>;
   realmMembers: Array<any>;
+  realmActivity: Array<any>;
 }
 
 const initialState: realmState = {
@@ -28,6 +29,7 @@ const initialState: realmState = {
     "8eUUtRpBCg7sJ5FXfPUMiwSQNqC3FjFLkmS2oFPKoiBi",
     "39aX7mDZ1VLpZcPWstBhQBoqwNkhf5f1KDACguvrryi6",
   ],
+  realmActivity: [],
 };
 
 //TODO:  Running into issues with buffer. Figure out issues with deserialization and buffer.
@@ -98,7 +100,6 @@ export const fetchRealmTokens = createAsyncThunk(
       }
     );
     const rawTokens = rawTokensResponse.value;
-    console.log("rawtokens", rawTokens);
 
     let tokens = rawTokens.map((token) => {
       return {
@@ -112,12 +113,38 @@ export const fetchRealmTokens = createAsyncThunk(
   }
 );
 
+export const fetchRealmActivity = createAsyncThunk(
+  "realms/fetchRealmActivity",
+  async (pubKey: string) => {
+    let connection = new web3.Connection(
+      web3.clusterApiUrl(rpcNetwork),
+      "confirmed"
+    );
+
+    const transactions = await connection.getConfirmedSignaturesForAddress2(
+      new PublicKey("EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i"),
+      { limit: 20 }
+    );
+
+    // let signatures = transactions.map((transaction) => {
+    //   return transaction.signature;
+    // });
+
+    // TODO: This gets more contextual info about our transactions
+    // const rawTransactionsFilled =
+    //   await connection.getParsedConfirmedTransactions(signatures);
+
+    // console.log("rawTransactions filled?", rawTransactionsFilled);
+
+    return transactions;
+  }
+);
+
 export const realmSlice = createSlice({
   name: "realms",
   initialState,
   reducers: {
     addRealmToWatchlist: (state, action) => {
-      console.log("action is", action);
       state.realmWatchlist.push(action.payload);
     },
   },
@@ -134,6 +161,11 @@ export const realmSlice = createSlice({
       .addCase(fetchRealm.fulfilled, (state, action: any) => {
         state.selectedRealm = action.payload;
       })
+      .addCase(fetchRealmActivity.pending, (state) => {})
+      .addCase(fetchRealmActivity.rejected, (state) => {})
+      .addCase(fetchRealmActivity.fulfilled, (state, action: any) => {
+        state.realmActivity = action.payload;
+      })
       .addCase(fetchRealmTokens.pending, (state) => {})
       .addCase(fetchRealmTokens.rejected, (state) => {})
       .addCase(fetchRealmTokens.fulfilled, (state, action: any) => {
@@ -142,7 +174,6 @@ export const realmSlice = createSlice({
   },
 });
 
-// Action creators are generated for each case reducer function
 export const { addRealmToWatchlist } = realmSlice.actions;
 
 export default realmSlice.reducer;
