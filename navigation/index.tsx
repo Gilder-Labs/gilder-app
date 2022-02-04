@@ -21,12 +21,12 @@ import { SvgUri } from "react-native-svg";
 import styled from "styled-components/native";
 
 import ActivityScreen from "../screens/ActivityScreen";
-import DashboardScreen from "../screens/DashboardScreen";
 import VaultScreen from "../screens/VaultScreen";
 import MembersScreen from "../screens/MembersScreen";
 import ProposalsScreen from "../screens/ProposalsScreen";
 
 import LinkingConfiguration from "./LinkingConfiguration";
+// import { setupWalletConnect } from "../utils";
 
 // const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -60,6 +60,8 @@ export default function Navigation({}: {}) {
     // mango key: DPiH3H3c7t47BMxqTxLsuPQpEC6Kne8GA9VXbxpnZxFE
     // monkedao: 39aX7mDZ1VLpZcPWstBhQBoqwNkhf5f1KDACguvrryi6
     dispatch(fetchRealm("DPiH3H3c7t47BMxqTxLsuPQpEC6Kne8GA9VXbxpnZxFE"));
+    // TODO: connect to solana wallet
+    // setupWalletConnect();
   }, []);
 
   useEffect(() => {

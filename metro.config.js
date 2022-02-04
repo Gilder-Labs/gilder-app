@@ -7,5 +7,6 @@ module.exports = {
   resolver: {
     ...defaultConfig.resolver,
     sourceExts: [...defaultConfig.resolver.sourceExts, "cjs"],
+    extraNodeModules: require("expo-crypto-polyfills"),
   },
 };
