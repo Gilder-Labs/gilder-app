@@ -115,7 +115,7 @@ export default function Navigation({}: {}) {
             drawerIcon: ({ focused, color, size }) => (
               <FontAwesome
                 size={24}
-                style={{ minWidth: 40 }}
+                style={{ minWidth: 30 }}
                 color={color}
                 name="university"
               />
@@ -129,7 +129,7 @@ export default function Navigation({}: {}) {
             drawerIcon: ({ focused, color, size }) => (
               <FontAwesome
                 size={24}
-                style={{ minWidth: 40 }}
+                style={{ minWidth: 30 }}
                 color={color}
                 name="user-friends"
               />
@@ -143,7 +143,7 @@ export default function Navigation({}: {}) {
             drawerIcon: ({ focused, color, size }) => (
               <FontAwesome
                 size={24}
-                style={{ minWidth: 40 }}
+                style={{ minWidth: 30 }}
                 color={color}
                 name="vote-yea"
               />
@@ -157,7 +157,7 @@ export default function Navigation({}: {}) {
             drawerIcon: ({ focused, color, size }) => (
               <FontAwesome
                 size={24}
-                style={{ minWidth: 40 }}
+                style={{ minWidth: 30 }}
                 color={color}
                 name="list"
               />
