@@ -4,7 +4,6 @@ import { PublicKey } from "@solana/web3.js";
 import { getRealms, getRealm } from "@solana/spl-governance";
 import * as web3 from "@solana/web3.js";
 import { SPL_PUBLIC_KEY } from "../constants/Solana";
-import axios from "axios";
 import { cleanRealmData } from "../utils";
 
 export interface realmState {
@@ -13,6 +12,7 @@ export interface realmState {
   realmTokens: Array<any>;
   realmsData: any;
   realmWatchlist: Array<string>;
+  realmMembers: Array<any>;
 }
 
 const initialState: realmState = {
@@ -20,6 +20,8 @@ const initialState: realmState = {
   selectedRealm: null,
   realmTokens: [],
   realmsData: cleanRealmData(),
+  realmMembers: [],
+  // TODO: eventually store in local storage
   realmWatchlist: [
     "DPiH3H3c7t47BMxqTxLsuPQpEC6Kne8GA9VXbxpnZxFE",
     "759qyfKDMMuo9v36tW7fbGanL63mZFPNbhU7zjPrkuGK",
@@ -71,7 +73,12 @@ export const fetchRealm = createAsyncThunk(
 
     const rawRealm = await getRealm(connection, new PublicKey(realmId));
 
-    return { name: rawRealm.account.name, pubKey: rawRealm.pubkey.toString() };
+    return {
+      name: rawRealm.account.name,
+      pubKey: rawRealm.pubkey.toString(),
+      communityMint: rawRealm.account.communityMint.toString(),
+      councilMint: rawRealm.account?.config?.councilMint?.toString(),
+    };
   }
 );
 
@@ -91,6 +98,7 @@ export const fetchRealmTokens = createAsyncThunk(
       }
     );
     const rawTokens = rawTokensResponse.value;
+    console.log("rawtokens", rawTokens);
 
     let tokens = rawTokens.map((token) => {
       return {

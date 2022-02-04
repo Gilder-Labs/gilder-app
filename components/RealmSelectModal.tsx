@@ -45,6 +45,7 @@ export const RealmSelectModal = ({
       </Header>
 
       {/* Input to filter by name or public key */}
+      {/* <SearchBar /> */}
 
       <Container>
         <RealmContainer>
@@ -60,17 +61,6 @@ export const RealmSelectModal = ({
     </Modal>
   );
 };
-
-const styles = StyleSheet.create({
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  buttonClose: {
-    backgroundColor: "#2196F3",
-  },
-});
 
 const Container = styled.ScrollView`
   background-color: ${(props) => props.theme.gray[900]};
@@ -111,3 +101,5 @@ const CloseIconButton = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
 `;
+
+const SearchBar = styled.TextInput``;

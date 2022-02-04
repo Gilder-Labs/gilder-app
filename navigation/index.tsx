@@ -49,7 +49,9 @@ export default function Navigation({}: {}) {
 
   useEffect(() => {
     dispatch(fetchRealms());
-    // mango key for now
+    // TODO: Replace this with modal popping up and letting user select a DAO on initial load
+    // mango key: DPiH3H3c7t47BMxqTxLsuPQpEC6Kne8GA9VXbxpnZxFE
+    // monkedao: 39aX7mDZ1VLpZcPWstBhQBoqwNkhf5f1KDACguvrryi6
     dispatch(fetchRealm("DPiH3H3c7t47BMxqTxLsuPQpEC6Kne8GA9VXbxpnZxFE"));
   }, []);
 
@@ -106,7 +108,7 @@ export default function Navigation({}: {}) {
           options={{
             drawerIcon: ({ focused, color, size }) => (
               <FontAwesome
-                size={32}
+                size={24}
                 style={{ minWidth: 40 }}
                 color={color}
                 name="university"
@@ -120,7 +122,7 @@ export default function Navigation({}: {}) {
           options={{
             drawerIcon: ({ focused, color, size }) => (
               <FontAwesome
-                size={32}
+                size={24}
                 style={{ minWidth: 40 }}
                 color={color}
                 name="user-friends"
@@ -134,7 +136,7 @@ export default function Navigation({}: {}) {
           options={{
             drawerIcon: ({ focused, color, size }) => (
               <FontAwesome
-                size={32}
+                size={24}
                 style={{ minWidth: 40 }}
                 color={color}
                 name="vote-yea"
@@ -148,7 +150,7 @@ export default function Navigation({}: {}) {
           options={{
             drawerIcon: ({ focused, color, size }) => (
               <FontAwesome
-                size={32}
+                size={24}
                 style={{ minWidth: 40 }}
                 color={color}
                 name="list"
