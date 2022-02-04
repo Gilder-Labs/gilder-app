@@ -18,6 +18,7 @@ export default function ActivityScreen({
           <ActivityCard
             signature={activity.signature}
             blockTime={activity.blockTime}
+            key={activity.signature}
           />
         ))}
       </Container>

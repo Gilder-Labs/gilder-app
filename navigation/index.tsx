@@ -14,6 +14,8 @@ import {
   fetchRealmTokens,
   fetchRealm,
   fetchRealmActivity,
+  fetchRealmMembers,
+  fetchRealmProposals,
 } from "../store/realmSlice";
 import { SvgUri } from "react-native-svg";
 import styled from "styled-components/native";
@@ -64,6 +66,8 @@ export default function Navigation({}: {}) {
     if (selectedRealm?.pubKey) {
       dispatch(fetchRealmTokens(selectedRealm.pubKey));
       dispatch(fetchRealmActivity(selectedRealm.pubKey));
+      // dispatch(fetchRealmProposals());
+      // dispatch(fetchRealmMembers(selectedRealm.communityMint));
     }
   }, [selectedRealm]);
 
@@ -82,7 +86,7 @@ export default function Navigation({}: {}) {
   return (
     <NavigationContainer linking={LinkingConfiguration} theme={NavigationTheme}>
       <Drawer.Navigator
-        initialRouteName="Activity" // Dashboard
+        initialRouteName="Members" // Dashboard
         drawerContent={(props) => <DrawerContentContainer {...props} />}
         screenOptions={{
           drawerStyle: {

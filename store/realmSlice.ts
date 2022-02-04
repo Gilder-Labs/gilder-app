@@ -1,7 +1,11 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { REALM_GOVERNANCE_PKEY } from "../constants/Solana";
 import { PublicKey, ConfirmedSignatureInfo } from "@solana/web3.js";
-import { getRealms, getRealm } from "@solana/spl-governance";
+import {
+  getRealms,
+  getRealm,
+  getTokenOwnerRecordsByOwner,
+} from "@solana/spl-governance";
 import * as web3 from "@solana/web3.js";
 import { SPL_PUBLIC_KEY } from "../constants/Solana";
 import { cleanRealmData } from "../utils";
@@ -13,6 +17,7 @@ export interface realmState {
   realmsData: any;
   realmWatchlist: Array<string>;
   realmMembers: Array<any>;
+  realmProposals: Array<any>;
   realmActivity: Array<ConfirmedSignatureInfo>;
 }
 
@@ -22,6 +27,7 @@ const initialState: realmState = {
   realmTokens: [],
   realmsData: cleanRealmData(),
   realmMembers: [],
+  realmProposals: [],
   // TODO: eventually store in local storage
   realmWatchlist: [
     "DPiH3H3c7t47BMxqTxLsuPQpEC6Kne8GA9VXbxpnZxFE",
@@ -80,6 +86,7 @@ export const fetchRealm = createAsyncThunk(
       pubKey: rawRealm.pubkey.toString(),
       communityMint: rawRealm.account.communityMint.toString(),
       councilMint: rawRealm.account?.config?.councilMint?.toString(),
+      governanceId: rawRealm?.owner.toString(),
     };
   }
 );
@@ -140,6 +147,32 @@ export const fetchRealmActivity = createAsyncThunk(
   }
 );
 
+export const fetchRealmMembers = createAsyncThunk(
+  "realms/fetchRealmMembers",
+  async (communityMint: string) => {
+    // TODO: handle councilMint tokens
+    let connection = new web3.Connection(
+      web3.clusterApiUrl(rpcNetwork),
+      "confirmed"
+    );
+
+    return [];
+  }
+);
+
+export const fetchRealmProposals = createAsyncThunk(
+  "realms/fetchRealmProposals",
+  async () => {
+    // TODO: handle councilMint tokens
+    let connection = new web3.Connection(
+      web3.clusterApiUrl(rpcNetwork),
+      "confirmed"
+    );
+
+    return [];
+  }
+);
+
 export const realmSlice = createSlice({
   name: "realms",
   initialState,
@@ -165,6 +198,16 @@ export const realmSlice = createSlice({
       .addCase(fetchRealmActivity.rejected, (state) => {})
       .addCase(fetchRealmActivity.fulfilled, (state, action: any) => {
         state.realmActivity = action.payload;
+      })
+      .addCase(fetchRealmMembers.pending, (state) => {})
+      .addCase(fetchRealmMembers.rejected, (state) => {})
+      .addCase(fetchRealmMembers.fulfilled, (state, action: any) => {
+        state.realmMembers = action.payload;
+      })
+      .addCase(fetchRealmProposals.pending, (state) => {})
+      .addCase(fetchRealmProposals.rejected, (state) => {})
+      .addCase(fetchRealmProposals.fulfilled, (state, action: any) => {
+        state.realmProposals = action.payload;
       })
       .addCase(fetchRealmTokens.pending, (state) => {})
       .addCase(fetchRealmTokens.rejected, (state) => {})
