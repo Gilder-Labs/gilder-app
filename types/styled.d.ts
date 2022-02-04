@@ -29,4 +29,5 @@ interface Color {
   700: string;
   800: string;
   900: string;
+  1000?: string;
 }

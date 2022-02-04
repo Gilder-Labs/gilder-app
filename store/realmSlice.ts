@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { REALM_GOVERNANCE_PKEY } from "../constants/Solana";
-import { PublicKey } from "@solana/web3.js";
+import { PublicKey, ConfirmedSignatureInfo } from "@solana/web3.js";
 import { getRealms, getRealm } from "@solana/spl-governance";
 import * as web3 from "@solana/web3.js";
 import { SPL_PUBLIC_KEY } from "../constants/Solana";
@@ -13,7 +13,7 @@ export interface realmState {
   realmsData: any;
   realmWatchlist: Array<string>;
   realmMembers: Array<any>;
-  realmActivity: Array<any>;
+  realmActivity: Array<ConfirmedSignatureInfo>;
 }
 
 const initialState: realmState = {
@@ -26,13 +26,12 @@ const initialState: realmState = {
   realmWatchlist: [
     "DPiH3H3c7t47BMxqTxLsuPQpEC6Kne8GA9VXbxpnZxFE",
     "759qyfKDMMuo9v36tW7fbGanL63mZFPNbhU7zjPrkuGK",
-    "8eUUtRpBCg7sJ5FXfPUMiwSQNqC3FjFLkmS2oFPKoiBi",
+    "GBXLYo4ycRNfzuzYeudu6y2ng4afNeW14WcpM2E4JJSL",
     "39aX7mDZ1VLpZcPWstBhQBoqwNkhf5f1KDACguvrryi6",
   ],
   realmActivity: [],
 };
 
-//TODO:  Running into issues with buffer. Figure out issues with deserialization and buffer.
 // Testing with mango key till dao selector is built.
 const mangoRealmPkey = new PublicKey(
   "DPiH3H3c7t47BMxqTxLsuPQpEC6Kne8GA9VXbxpnZxFE"
@@ -42,6 +41,7 @@ const monkeDaoPkey = new PublicKey(
   "B1CxhV1khhj7n5mi5hebbivesqH9mvXr5Hfh2nD2UCh6"
 );
 
+// 'devnet' | 'testnet' | 'mainnet-beta';
 const rpcNetwork = "mainnet-beta";
 
 export const fetchRealms = createAsyncThunk("realms/fetchRealms", async () => {
@@ -51,7 +51,7 @@ export const fetchRealms = createAsyncThunk("realms/fetchRealms", async () => {
   );
   let realms;
   const realmsRaw = await getRealms(connection, REALM_GOVERNANCE_PKEY);
-  // console.log("realmsRaw", realmsRaw);
+  console.log("realmsRaw", realmsRaw);
   realms = realmsRaw.map((realm) => {
     return {
       name: realm.account.name,
@@ -122,7 +122,7 @@ export const fetchRealmActivity = createAsyncThunk(
     );
 
     const transactions = await connection.getConfirmedSignaturesForAddress2(
-      new PublicKey("EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i"),
+      new PublicKey(pubKey),
       { limit: 20 }
     );
 

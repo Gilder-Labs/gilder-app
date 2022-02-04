@@ -25,6 +25,7 @@ export function DrawerContentContainer(props: any) {
       {...props}
       scrollEnabled={false}
       contentContainerStyle={{ alignItems: "stretch", flexGrow: "1" }}
+      style={{ backgroundColor: "#131313" }}
     >
       <StyledHeader>
         <StyledHeaderText>
@@ -67,7 +68,7 @@ export function DrawerContentContainer(props: any) {
 }
 
 const StyledHeader = styled.View`
-  background-color: ${(props) => props.theme.gray[900]};
+  background-color: ${(props) => props.theme.gray[1000]};
   flex: 1;
   align-items: center;
   padding: ${(props) => props.theme.spacing[4]};
@@ -88,6 +89,7 @@ const StyledContainer = styled.View`
   flex-direction: row;
   align-content: stretch;
   align-self: stretch;
+  background-color: ${(props) => props.theme.gray[900]};
 `;
 
 const RealmScrollContainer = styled.ScrollView`
@@ -108,13 +110,13 @@ const AddRealmButtonContainer = styled.TouchableOpacity`
   border-radius: 100px;
   align-items: center;
   justify-content: center;
-  border: 1px dashed ${(props) => props.theme.gray[600]};
+  border: 1px dashed ${(props) => props.theme.gray[400]};
 `;
 
 const Divider = styled.View`
   flex: 1;
   width: 48px;
   height: 2px;
-  background-color: ${(props) => props.theme.gray[600]};
+  background-color: ${(props) => props.theme.gray[500]};
   margin-bottom: ${(props) => props.theme.spacing[4]};
 `;

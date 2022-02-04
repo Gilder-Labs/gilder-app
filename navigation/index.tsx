@@ -82,7 +82,7 @@ export default function Navigation({}: {}) {
   return (
     <NavigationContainer linking={LinkingConfiguration} theme={NavigationTheme}>
       <Drawer.Navigator
-        initialRouteName="Vault" // Dashboard
+        initialRouteName="Activity" // Dashboard
         drawerContent={(props) => <DrawerContentContainer {...props} />}
         screenOptions={{
           drawerStyle: {

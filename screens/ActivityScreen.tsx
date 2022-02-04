@@ -5,34 +5,39 @@ import { RootTabScreenProps } from "../types";
 import styled from "styled-components/native";
 import { ThemeProvider } from "@react-navigation/native";
 import { useAppSelector } from "../hooks/redux";
-
+import { ActivityCard } from "../components";
 export default function ActivityScreen({
   navigation,
 }: RootTabScreenProps<"Activity">) {
-  const { selectedRealm } = useAppSelector((state) => state.realms);
+  const { realmActivity } = useAppSelector((state) => state.realms);
 
   return (
-    <StyledContainer>
-      <Text>{selectedRealm ? selectedRealm?.name : "Activity"}</Text>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
-    </StyledContainer>
+    <ScrollableContainer>
+      <Container>
+        {realmActivity.map((activity) => (
+          <ActivityCard
+            signature={activity.signature}
+            blockTime={activity.blockTime}
+          />
+        ))}
+      </Container>
+    </ScrollableContainer>
   );
 }
 
-const StyledContainer = styled.View`
+const ScrollableContainer = styled.ScrollView`
+  background-color: ${(props) => props.theme.gray[900]};
   flex: 1;
-  align-items: center;
-  justify-content: center;
+  padding-top: ${(props) => props.theme.spacing[2]};
 `;
 
-const styles = StyleSheet.create({
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
-  },
-});
+const Container = styled.View`
+  background-color: ${(props) => props.theme.gray[900]};
+  flex: 1;
+  padding: ${(props) => props.theme.spacing[2]};
+  flex-wrap: wrap;
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: stretch;
+`;
