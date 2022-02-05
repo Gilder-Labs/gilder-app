@@ -59,7 +59,7 @@ export default function Navigation({}: {}) {
     // TODO: Replace this with modal popping up and letting user select a DAO on initial load
     // mango key: DPiH3H3c7t47BMxqTxLsuPQpEC6Kne8GA9VXbxpnZxFE
     // monkedao: 39aX7mDZ1VLpZcPWstBhQBoqwNkhf5f1KDACguvrryi6
-    dispatch(fetchRealm("DPiH3H3c7t47BMxqTxLsuPQpEC6Kne8GA9VXbxpnZxFE"));
+    dispatch(fetchRealm("39aX7mDZ1VLpZcPWstBhQBoqwNkhf5f1KDACguvrryi6"));
     // TODO: connect to solana wallet
     // setupWalletConnect();
   }, []);
@@ -68,8 +68,8 @@ export default function Navigation({}: {}) {
     if (selectedRealm?.pubKey) {
       dispatch(fetchRealmTokens(selectedRealm.pubKey));
       dispatch(fetchRealmActivity(selectedRealm.pubKey));
-      // dispatch(fetchRealmProposals());
-      // dispatch(fetchRealmMembers(selectedRealm.communityMint));
+      dispatch(fetchRealmProposals(selectedRealm));
+      dispatch(fetchRealmMembers(selectedRealm));
     }
   }, [selectedRealm]);
 

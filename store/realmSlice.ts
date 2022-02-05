@@ -1,13 +1,17 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { REALM_GOVERNANCE_PKEY } from "../constants/Solana";
 import { PublicKey, ConfirmedSignatureInfo } from "@solana/web3.js";
 import {
   getRealms,
   getRealm,
   getTokenOwnerRecordsByOwner,
+  TokenOwnerRecord,
+  getGovernanceAccounts,
+  pubkeyFilter,
+  getAllGovernances,
+  Proposal,
 } from "@solana/spl-governance";
 import * as web3 from "@solana/web3.js";
-import { SPL_PUBLIC_KEY } from "../constants/Solana";
+import { SPL_PUBLIC_KEY, REALM_GOVERNANCE_PKEY } from "../constants/Solana";
 import { cleanRealmData } from "../utils";
 
 export interface realmState {
@@ -19,6 +23,14 @@ export interface realmState {
   realmMembers: Array<any>;
   realmProposals: Array<any>;
   realmActivity: Array<ConfirmedSignatureInfo>;
+}
+
+interface realmType {
+  name: string;
+  pubKey: string;
+  communityMint: string;
+  councilMint: string;
+  governanceId: string;
 }
 
 const initialState: realmState = {
@@ -34,6 +46,8 @@ const initialState: realmState = {
     "759qyfKDMMuo9v36tW7fbGanL63mZFPNbhU7zjPrkuGK",
     "GBXLYo4ycRNfzuzYeudu6y2ng4afNeW14WcpM2E4JJSL",
     "39aX7mDZ1VLpZcPWstBhQBoqwNkhf5f1KDACguvrryi6",
+    "B1CxhV1khhj7n5mi5hebbivesqH9mvXr5Hfh2nD2UCh6", // other monke dao
+    "DGnx2hbyT16bBMQFsVuHJJnnoRSucdreyG5egVJXqk8z", // woof
   ],
   realmActivity: [],
 };
@@ -47,14 +61,17 @@ const monkeDaoPkey = new PublicKey(
   "B1CxhV1khhj7n5mi5hebbivesqH9mvXr5Hfh2nD2UCh6"
 );
 
-// 'devnet' | 'testnet' | 'mainnet-beta';
-const rpcNetwork = "mainnet-beta";
+/* 
+  main: https://ssc-dao.genesysgo.net/  
+  devnet: https://psytrbhymqlkfrhudd.dev.genesysgo.net:8899/
+  devent: wss://psytrbhymqlkfrhudd.dev.genesysgo.net:8900/
+*/
+
+const mainRpc = "https://ssc-dao.genesysgo.net/";
+
+let connection = new web3.Connection(mainRpc, "recent");
 
 export const fetchRealms = createAsyncThunk("realms/fetchRealms", async () => {
-  let connection = new web3.Connection(
-    web3.clusterApiUrl(rpcNetwork),
-    "recent"
-  );
   let realms;
   const realmsRaw = await getRealms(connection, REALM_GOVERNANCE_PKEY);
   // console.log("realmsRaw", realmsRaw);
@@ -64,6 +81,7 @@ export const fetchRealms = createAsyncThunk("realms/fetchRealms", async () => {
       pubKey: realm.pubkey.toString(),
       communityMint: realm.account.communityMint.toString(),
       councilMint: realm.account?.config?.councilMint?.toString(),
+      overnanceId: realm?.owner.toString(),
     };
   });
   // TODO change this to selected dao
@@ -74,11 +92,6 @@ export const fetchRealms = createAsyncThunk("realms/fetchRealms", async () => {
 export const fetchRealm = createAsyncThunk(
   "realms/fetchRealm",
   async (realmId: string) => {
-    let connection = new web3.Connection(
-      web3.clusterApiUrl(rpcNetwork),
-      "recent"
-    );
-
     const rawRealm = await getRealm(connection, new PublicKey(realmId));
 
     return {
@@ -95,11 +108,6 @@ export const fetchRealm = createAsyncThunk(
 export const fetchRealmTokens = createAsyncThunk(
   "realms/fetchRealmTokens",
   async (pubKey: string) => {
-    let connection = new web3.Connection(
-      web3.clusterApiUrl(rpcNetwork),
-      "confirmed"
-    );
-
     const rawTokensResponse = await connection.getParsedTokenAccountsByOwner(
       new PublicKey(pubKey),
       {
@@ -123,11 +131,6 @@ export const fetchRealmTokens = createAsyncThunk(
 export const fetchRealmActivity = createAsyncThunk(
   "realms/fetchRealmActivity",
   async (pubKey: string) => {
-    let connection = new web3.Connection(
-      web3.clusterApiUrl(rpcNetwork),
-      "confirmed"
-    );
-
     const transactions = await connection.getConfirmedSignaturesForAddress2(
       new PublicKey(pubKey),
       { limit: 20 }
@@ -147,29 +150,104 @@ export const fetchRealmActivity = createAsyncThunk(
   }
 );
 
+// Temp till spl-governance gets updated
+async function getAllTokenOwnerRecords(
+  connection: any,
+  programId: PublicKey,
+  realmPk: PublicKey
+) {
+  return getGovernanceAccounts(connection, programId, TokenOwnerRecord, [
+    pubkeyFilter(1, realmPk)!,
+  ]);
+}
+
 export const fetchRealmMembers = createAsyncThunk(
   "realms/fetchRealmMembers",
-  async (communityMint: string) => {
+  async (realm: realmType) => {
     // TODO: handle councilMint tokens
-    let connection = new web3.Connection(
-      web3.clusterApiUrl(rpcNetwork),
-      "confirmed"
-    );
 
-    return [];
+    let rawTokenOwnerRecords;
+
+    try {
+      rawTokenOwnerRecords = await getAllTokenOwnerRecords(
+        connection,
+        REALM_GOVERNANCE_PKEY,
+        new PublicKey(realm.pubKey)
+      );
+      console.log("token mems?", rawTokenOwnerRecords);
+    } catch (error) {
+      console.log("error", error);
+    }
+
+    const members = rawTokenOwnerRecords?.map((member) => {
+      return {
+        publicKey: member.pubkey.toString(),
+        owner: member.owner.toString(),
+        totalVotesCount: member.account.totalVotesCount,
+        outstandingProposalCount: member.account.outstandingProposalCount,
+        governingTokenOwner: member.account.governingTokenOwner.toString(),
+        governingTokenMint: member.account.governingTokenMint.toString(),
+        depositAmount: member.account.governingTokenDepositAmount.toString(),
+      };
+    });
+
+    return members;
   }
 );
 
+export async function getAllProposals(
+  connection: any,
+  programId: PublicKey,
+  realmPk: PublicKey
+) {
+  return getAllGovernances(connection, programId, realmPk).then((gs) =>
+    Promise.all(
+      gs.map((g) => getProposalsByGovernance(connection, programId, g.pubkey))
+    )
+  );
+}
+
+export async function getProposalsByGovernance(
+  connection: any,
+  programId: PublicKey,
+  governancePk: PublicKey
+) {
+  return getGovernanceAccounts(connection, programId, Proposal, [
+    pubkeyFilter(1, governancePk)!,
+  ]);
+}
+
 export const fetchRealmProposals = createAsyncThunk(
   "realms/fetchRealmProposals",
-  async () => {
+  async (realm: any) => {
     // TODO: handle councilMint tokens
-    let connection = new web3.Connection(
-      web3.clusterApiUrl(rpcNetwork),
-      "confirmed"
-    );
 
-    return [];
+    let rawProposals;
+
+    try {
+      rawProposals = await getAllProposals(
+        connection,
+        REALM_GOVERNANCE_PKEY,
+        new PublicKey(realm.pubKey)
+      );
+      console.log("proposals?", rawProposals);
+    } catch (error) {
+      console.log("error", error);
+    }
+
+    const proposals = rawProposals?.map((proposal) => {
+      return {
+        // publicKey: proposal.pubkey.toString(),
+        // owner: member.owner.toString(),
+        // totalVotesCount: member.account.totalVotesCount,
+        // outstandingProposalCount: member.account.outstandingProposalCount,
+        // governingTokenOwner: member.account.governingTokenOwner.toString(),
+        // governingTokenMint: member.account.governingTokenMint.toString(),
+        // depositAmount: member.account.governingTokenDepositAmount.toString(),
+      };
+    });
+
+    return proposals;
   }
 );
 
