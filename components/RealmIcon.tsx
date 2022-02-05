@@ -32,14 +32,7 @@ export const RealmIcon = ({ realmId }: RealmIconProps) => {
       realmIconUrl = `https://realms.today${realmIconUrl}`;
     } else if (isSvgImage) {
       // if is svg + has a full url to svg
-      return (
-        <SvgUri
-          width="44"
-          height="44"
-          style={{ marginLeft: 12, marginRight: 12 }}
-          uri={realmIconUrl}
-        />
-      );
+      return <SvgUri width="44" height="44" uri={realmIconUrl} />;
     }
 
     iconImage = isSvgImage ? (

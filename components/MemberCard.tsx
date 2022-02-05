@@ -21,16 +21,17 @@ export const MemberCard = ({ member }: MemberCardProps) => {
 
   return (
     <Container>
-      <TextContainer>
-        <IconContainer>
-          <SvgXml xml={jdenticonSvg} width="44px" height="44px" />
-        </IconContainer>
-        <MemberName>{`${member.governingTokenOwner.slice(
-          0,
-          5
-        )}...${member.governingTokenOwner.slice(0, 5)}`}</MemberName>
-        <MemberName>{member.totalVotesCount}</MemberName>
-      </TextContainer>
+      <IconContainer>
+        <SvgXml xml={jdenticonSvg} width="36px" height="36px" />
+        <TextContainer>
+          <VotesCast>Total Votes Cast: {member.totalVotesCount}</VotesCast>
+          <VotesCast>Vote weight: {member.depositAmount}</VotesCast>
+        </TextContainer>
+      </IconContainer>
+      <MemberName>{`${member.governingTokenOwner.slice(
+        0,
+        4
+      )}...${member.governingTokenOwner.slice(0, 4)}`}</MemberName>
     </Container>
   );
 };
@@ -51,10 +52,19 @@ const Container = styled.View`
 const MemberName = styled.Text`
   color: ${(props: any) => props.theme.gray[100]}
   font-weight: bold;
+
 `;
 
-const TextContainer = styled.View``;
+const TextContainer = styled.View`
+  margin-left: ${(props: any) => props.theme.spacing[2]};
+`;
+
+const VotesCast = styled.Text`
+  color: ${(props: any) => props.theme.gray[300]};
+`;
 
 const IconContainer = styled.View`
   /* border-radius: 100px, */
+  flex-direction: row;
+  align-items: center;
 `;
