@@ -1,11 +1,8 @@
-import { StyleSheet } from "react-native";
-import { useEffect } from "react";
-import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import styled from "styled-components/native";
-import { ThemeProvider } from "@react-navigation/native";
 import { useAppSelector } from "../hooks/redux";
 import { ActivityCard } from "../components";
+
 export default function ActivityScreen({
   navigation,
 }: RootTabScreenProps<"Activity">) {

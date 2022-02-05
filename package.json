@@ -14,6 +14,8 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "@dicebear/avatars": "^4.10.2",
+    "@dicebear/avatars-jdenticon-sprites": "^4.10.2",
     "@expo/vector-icons": "^12.0.0",
     "@react-native-async-storage/async-storage": "^1.15.17",
     "@react-navigation/bottom-tabs": "^6.1.0",

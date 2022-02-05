@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
-import { SvgUri } from "react-native-svg";
 import { useAppSelector } from "../hooks/redux";
+import { SvgXml } from "react-native-svg";
+import { createAvatar } from "@dicebear/avatars";
+import * as style from "@dicebear/avatars-jdenticon-sprites";
 
 interface RealmIconProps {
   realmId: string;
@@ -11,34 +13,34 @@ export const RealmIcon = ({ realmId }: RealmIconProps) => {
   const { realmsData } = useAppSelector((state) => state.realms);
   let isSvgImage = true;
 
+  let jdenticonSvg = createAvatar(style, {
+    seed: realmId,
+    // ... and other options
+  });
+
   // tries to handle all the edge cases in governance-ui realms image list
   let realmIconUrl =
     realmsData && realmsData[`${realmId}`].ogImage
       ? realmsData[realmId].ogImage
-      : `https://avatars.dicebear.com/api/jdenticon/${realmId}.svg`;
+      : "";
 
   if (realmIconUrl.slice(-3) === "png") {
     isSvgImage = false;
   }
 
   if (realmIconUrl.slice(0, 5) !== "https") {
-    // if (realmIconUrl.slice(-3) === "svg") {
-    //   isSvgImage = true;
-    // }
     realmIconUrl = `https://realms.today${realmIconUrl}`;
   }
 
   return (
     <Container>
       {isSvgImage ? (
-        <SvgUri
+        <SvgXml
           key={realmId}
           width="44"
           height="44"
           style={{ marginBottom: 12 }}
-          uri={
-            realmIconUrl // change this to if the
-          }
+          xml={jdenticonSvg}
         />
       ) : (
         <RealmIconImage

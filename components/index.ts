@@ -4,3 +4,4 @@ export * from "./RealmSelectModal";
 export * from "./RealmCard";
 export * from "./RealmIcon";
 export * from "./ActivityCard";
+export * from "./MemberCard";

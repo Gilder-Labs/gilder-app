@@ -1,37 +1,37 @@
-import { StyleSheet } from "react-native";
-
-import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
+import styled from "styled-components/native";
+import { useAppSelector } from "../hooks/redux";
+import { MemberCard } from "../components";
 
-export default function MembersScreen({
+export default function ActivityScreen({
   navigation,
-}: RootTabScreenProps<"Members">) {
-  // Get members of DAO
+}: RootTabScreenProps<"Activity">) {
+  const { realmMembers } = useAppSelector((state) => state.realms);
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Members</Text>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
-    </View>
+    <ScrollableContainer>
+      <Container>
+        {realmMembers.map((member) => (
+          <MemberCard key={member.governingTokenOwner} member={member} />
+        ))}
+      </Container>
+    </ScrollableContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
-  },
-});
+const ScrollableContainer = styled.ScrollView`
+  background-color: ${(props) => props.theme.gray[900]};
+  flex: 1;
+  padding-top: ${(props) => props.theme.spacing[2]};
+`;
+
+const Container = styled.View`
+  background-color: ${(props) => props.theme.gray[900]};
+  flex: 1;
+  padding: ${(props) => props.theme.spacing[2]};
+  flex-wrap: wrap;
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: stretch;
+`;
