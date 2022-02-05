@@ -33,48 +33,39 @@ interface realmType {
   governanceId: string;
 }
 
+const cleanedRealmData = cleanRealmData();
+
 const initialState: realmState = {
   realms: [],
   selectedRealm: null,
   realmTokens: [],
-  realmsData: cleanRealmData(),
+  realmsData: cleanedRealmData,
   realmMembers: [],
   realmProposals: [],
   // TODO: eventually store in local storage
   realmWatchlist: [
-    "DPiH3H3c7t47BMxqTxLsuPQpEC6Kne8GA9VXbxpnZxFE",
-    "759qyfKDMMuo9v36tW7fbGanL63mZFPNbhU7zjPrkuGK",
-    "GBXLYo4ycRNfzuzYeudu6y2ng4afNeW14WcpM2E4JJSL",
-    "39aX7mDZ1VLpZcPWstBhQBoqwNkhf5f1KDACguvrryi6",
+    "DPiH3H3c7t47BMxqTxLsuPQpEC6Kne8GA9VXbxpnZxFE", // mango
+    "759qyfKDMMuo9v36tW7fbGanL63mZFPNbhU7zjPrkuGK", // socean
+    "GBXLYo4ycRNfzuzYeudu6y2ng4afNeW14WcpM2E4JJSL", // uxd
+    "39aX7mDZ1VLpZcPWstBhQBoqwNkhf5f1KDACguvrryi6", // monke dao
     "B1CxhV1khhj7n5mi5hebbivesqH9mvXr5Hfh2nD2UCh6", // other monke dao
     "DGnx2hbyT16bBMQFsVuHJJnnoRSucdreyG5egVJXqk8z", // woof
   ],
   realmActivity: [],
 };
 
-// Testing with mango key till dao selector is built.
-const mangoRealmPkey = new PublicKey(
-  "DPiH3H3c7t47BMxqTxLsuPQpEC6Kne8GA9VXbxpnZxFE"
-);
-
-const monkeDaoPkey = new PublicKey(
-  "B1CxhV1khhj7n5mi5hebbivesqH9mvXr5Hfh2nD2UCh6"
-);
-
 /* 
   main: https://ssc-dao.genesysgo.net/  
   devnet: https://psytrbhymqlkfrhudd.dev.genesysgo.net:8899/
   devent: wss://psytrbhymqlkfrhudd.dev.genesysgo.net:8900/
 */
+const rpcConnection = "https://ssc-dao.genesysgo.net/";
 
-const mainRpc = "https://ssc-dao.genesysgo.net/";
-
-let connection = new web3.Connection(mainRpc, "recent");
+let connection = new web3.Connection(rpcConnection, "confirmed");
 
 export const fetchRealms = createAsyncThunk("realms/fetchRealms", async () => {
   let realms;
   const realmsRaw = await getRealms(connection, REALM_GOVERNANCE_PKEY);
-  // console.log("realmsRaw", realmsRaw);
   realms = realmsRaw.map((realm) => {
     return {
       name: realm.account.name,
@@ -84,11 +75,9 @@ export const fetchRealms = createAsyncThunk("realms/fetchRealms", async () => {
       overnanceId: realm?.owner.toString(),
     };
   });
-  // TODO change this to selected dao
   return { realms: realms };
 });
 
-// TODO set up to be selectable
 export const fetchRealm = createAsyncThunk(
   "realms/fetchRealm",
   async (realmId: string) => {
@@ -107,9 +96,9 @@ export const fetchRealm = createAsyncThunk(
 // TODO needs to be optimized
 export const fetchRealmTokens = createAsyncThunk(
   "realms/fetchRealmTokens",
-  async (pubKey: string) => {
+  async (realm: any) => {
     const rawTokensResponse = await connection.getParsedTokenAccountsByOwner(
-      new PublicKey(pubKey),
+      new PublicKey(realm.pubKey),
       {
         programId: SPL_PUBLIC_KEY,
       }
@@ -130,11 +119,17 @@ export const fetchRealmTokens = createAsyncThunk(
 
 export const fetchRealmActivity = createAsyncThunk(
   "realms/fetchRealmActivity",
-  async (pubKey: string) => {
-    const transactions = await connection.getConfirmedSignaturesForAddress2(
-      new PublicKey(pubKey),
-      { limit: 20 }
-    );
+  async (realm: any) => {
+    let transactions;
+
+    try {
+      transactions = await connection.getConfirmedSignaturesForAddress2(
+        new PublicKey(realm?.pubKey),
+        { limit: 20 }
+      );
+    } catch (error) {
+      console.log("transaction error", error);
+    }
 
     // let signatures = transactions.map((transaction) => {
     //   return transaction.signature;
@@ -171,7 +166,7 @@ export const fetchRealmMembers = createAsyncThunk(
     try {
       rawTokenOwnerRecords = await getAllTokenOwnerRecords(
         connection,
-        REALM_GOVERNANCE_PKEY,
+        new PublicKey(realm.governanceId),
         new PublicKey(realm.pubKey)
       );
       console.log("token mems?", rawTokenOwnerRecords);
@@ -182,10 +177,10 @@ export const fetchRealmMembers = createAsyncThunk(
     const members = rawTokenOwnerRecords?.map((member) => {
       return {
         publicKey: member.pubkey.toString(),
-        owner: member.owner.toString(),
-        totalVotesCount: member.account.totalVotesCount,
+        owner: member.owner.toString(), // RealmId
+        totalVotesCount: member.account.totalVotesCount, // How many votes they have
         outstandingProposalCount: member.account.outstandingProposalCount,
-        governingTokenOwner: member.account.governingTokenOwner.toString(),
+        governingTokenOwner: member.account.governingTokenOwner.toString(), // Wallet address of owner of dao token
         governingTokenMint: member.account.governingTokenMint.toString(),
         depositAmount: member.account.governingTokenDepositAmount.toString(),
       };
@@ -195,6 +190,7 @@ export const fetchRealmMembers = createAsyncThunk(
   }
 );
 
+// TODO: remove this once SPL-goverancen updates
 export async function getAllProposals(
   connection: any,
   programId: PublicKey,
@@ -220,17 +216,15 @@ export async function getProposalsByGovernance(
 export const fetchRealmProposals = createAsyncThunk(
   "realms/fetchRealmProposals",
   async (realm: any) => {
-    // TODO: handle councilMint tokens
-
     let rawProposals;
 
     try {
       rawProposals = await getAllProposals(
         connection,
-        REALM_GOVERNANCE_PKEY,
+        new PublicKey(realm.governanceId),
         new PublicKey(realm.pubKey)
       );
-      console.log("proposals?", rawProposals);
+      // console.log("proposals?", rawProposals);
     } catch (error) {
       console.log("error", error);
     }

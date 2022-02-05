@@ -59,15 +59,15 @@ export default function Navigation({}: {}) {
     // TODO: Replace this with modal popping up and letting user select a DAO on initial load
     // mango key: DPiH3H3c7t47BMxqTxLsuPQpEC6Kne8GA9VXbxpnZxFE
     // monkedao: 39aX7mDZ1VLpZcPWstBhQBoqwNkhf5f1KDACguvrryi6
-    dispatch(fetchRealm("39aX7mDZ1VLpZcPWstBhQBoqwNkhf5f1KDACguvrryi6"));
+    dispatch(fetchRealm("B1CxhV1khhj7n5mi5hebbivesqH9mvXr5Hfh2nD2UCh6"));
     // TODO: connect to solana wallet
     // setupWalletConnect();
   }, []);
 
   useEffect(() => {
     if (selectedRealm?.pubKey) {
-      dispatch(fetchRealmTokens(selectedRealm.pubKey));
-      dispatch(fetchRealmActivity(selectedRealm.pubKey));
+      dispatch(fetchRealmTokens(selectedRealm));
+      dispatch(fetchRealmActivity(selectedRealm));
       dispatch(fetchRealmProposals(selectedRealm));
       dispatch(fetchRealmMembers(selectedRealm));
     }
