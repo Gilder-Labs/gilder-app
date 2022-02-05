@@ -25,6 +25,7 @@ export default function ActivityScreen({
         data={realmActivity}
         renderItem={renderActivity}
         keyExtractor={(item) => item.signature}
+        style={{ padding: 8 }}
       />
     </Container>
   );
@@ -33,5 +34,4 @@ export default function ActivityScreen({
 const Container = styled.View`
   background-color: ${(props) => props.theme.gray[900]};
   flex: 1;
-  padding: ${(props) => props.theme.spacing[3]};
 `;

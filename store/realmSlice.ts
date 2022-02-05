@@ -168,7 +168,7 @@ export const fetchRealmMembers = createAsyncThunk(
         new PublicKey(realm.governanceId),
         new PublicKey(realm.pubKey)
       );
-      console.log("token mems?", rawTokenOwnerRecords);
+      // console.log("token mems?", rawTokenOwnerRecords);
     } catch (error) {
       console.log("error", error);
     }
@@ -223,20 +223,17 @@ export const fetchRealmProposals = createAsyncThunk(
         new PublicKey(realm.governanceId),
         new PublicKey(realm.pubKey)
       );
-      // console.log("proposals?", rawProposals);
+      rawProposals = rawProposals.flat();
+      console.log("proposals?", rawProposals);
     } catch (error) {
       console.log("error", error);
     }
 
-    const proposals = rawProposals?.map((proposal) => {
+    const proposals = rawProposals?.map((proposal: any) => {
       return {
-        // publicKey: proposal.pubkey.toString(),
-        // owner: member.owner.toString(),
-        // totalVotesCount: member.account.totalVotesCount,
-        // outstandingProposalCount: member.account.outstandingProposalCount,
-        // governingTokenOwner: member.account.governingTokenOwner.toString(),
-        // governingTokenMint: member.account.governingTokenMint.toString(),
-        // depositAmount: member.account.governingTokenDepositAmount.toString(),
+        description: proposal?.account?.descriptionLink,
+        name: proposal?.account?.name,
+        proposalId: proposal.pubkey.toString(),
       };
     });
 

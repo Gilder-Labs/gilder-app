@@ -1,36 +1,31 @@
-import { StyleSheet } from "react-native";
-
-import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
+import styled from "styled-components/native";
+import { useAppSelector } from "../hooks/redux";
+import { ProposalCard } from "../components";
+import { FlatList } from "react-native";
 
-export default function ProposalsScreen({
+export default function ProposalScreen({
   navigation,
 }: RootTabScreenProps<"Proposals">) {
+  const { realmProposals } = useAppSelector((state) => state.realms);
+
+  const renderProposal = ({ item }: any) => {
+    return <ProposalCard proposal={item} />;
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Proposals</Text>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
+    <Container>
+      <FlatList
+        data={realmProposals}
+        renderItem={renderProposal}
+        keyExtractor={(item) => item.proposalId}
+        style={{ padding: 8 }}
       />
-    </View>
+    </Container>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
-  },
-});
+const Container = styled.View`
+  background-color: ${(props) => props.theme.gray[900]};
+  flex: 1;
+`;

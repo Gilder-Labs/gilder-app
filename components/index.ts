@@ -5,3 +5,4 @@ export * from "./RealmCard";
 export * from "./RealmIcon";
 export * from "./ActivityCard";
 export * from "./MemberCard";
+export * from "./ProposalCard";
