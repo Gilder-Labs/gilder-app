@@ -23,12 +23,12 @@ export const RealmIcon = ({ realmId }: RealmIconProps) => {
     let realmIconUrl = realmsData[realmId]?.ogImage;
 
     // image is a png, render regular image component
-    if (realmIconUrl.slice(-3) === "png") {
+    if (realmIconUrl?.slice(-3) === "png") {
       isSvgImage = false;
     }
 
     // image url has a relative path
-    if (realmIconUrl.slice(0, 5) !== "https") {
+    if (realmIconUrl?.slice(0, 5) !== "https") {
       realmIconUrl = `https://realms.today${realmIconUrl}`;
     } else if (isSvgImage) {
       // if is svg + has a full url to svg
