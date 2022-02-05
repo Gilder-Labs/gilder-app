@@ -1,10 +1,10 @@
-Gilder App
+# Gilder App
 
 ### Installation and start
 
 ```
 yarn install
-expo start --dev-client
+yarn start
 ```
 
 Reset Cache
@@ -12,11 +12,15 @@ Reset Cache
 
 ### Debugging
 
+## Not set up currently
+
 - https://blog.expo.dev/developing-react-native-with-expo-and-flipper-8c426bdf995a
 
-open "rndebugger://set-debugger-loc?host=localhost&port=19000"
+## React native debugger
 
-Running Flipper
+`open "rndebugger://set-debugger-loc?host=localhost&port=19000"`
+
+### Things to try if all else fails
 
 ```
 rd %localappdata%\Temp\metro-cache /s /q
