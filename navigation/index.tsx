@@ -31,24 +31,6 @@ import LinkingConfiguration from "./LinkingConfiguration";
 // const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 
-export const HeaderLeft = ({ realm }: any) => {
-  return (
-    <HeaderTitle>
-      <SvgUri
-        width="32"
-        height="32"
-        style={{ marginLeft: 12, marginRight: 12 }}
-        uri={
-          realm
-            ? `https://avatars.dicebear.com/api/jdenticon/${realm?.pubKey}.svg`
-            : ""
-        }
-      />
-      <HeaderTitleText>{realm?.name}</HeaderTitleText>
-    </HeaderTitle>
-  );
-};
-
 export default function Navigation({}: {}) {
   const theme = useTheme();
   const dispatch = useAppDispatch();
