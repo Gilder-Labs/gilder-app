@@ -47,8 +47,7 @@ const initialState: realmState = {
     "DPiH3H3c7t47BMxqTxLsuPQpEC6Kne8GA9VXbxpnZxFE", // mango
     "759qyfKDMMuo9v36tW7fbGanL63mZFPNbhU7zjPrkuGK", // socean
     "GBXLYo4ycRNfzuzYeudu6y2ng4afNeW14WcpM2E4JJSL", // uxd
-    "39aX7mDZ1VLpZcPWstBhQBoqwNkhf5f1KDACguvrryi6", // monke dao
-    "B1CxhV1khhj7n5mi5hebbivesqH9mvXr5Hfh2nD2UCh6", // other monke dao
+    "B1CxhV1khhj7n5mi5hebbivesqH9mvXr5Hfh2nD2UCh6", // real monke dao
     "DGnx2hbyT16bBMQFsVuHJJnnoRSucdreyG5egVJXqk8z", // woof
   ],
   realmActivity: [],

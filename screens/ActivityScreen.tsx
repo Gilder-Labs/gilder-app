@@ -2,40 +2,36 @@ import { RootTabScreenProps } from "../types";
 import styled from "styled-components/native";
 import { useAppSelector } from "../hooks/redux";
 import { ActivityCard } from "../components";
+import { FlatList } from "react-native";
 
 export default function ActivityScreen({
   navigation,
 }: RootTabScreenProps<"Activity">) {
   const { realmActivity } = useAppSelector((state) => state.realms);
 
+  const renderActivity = ({ item }: any) => {
+    return (
+      <ActivityCard
+        signature={item.signature}
+        blockTime={item.blockTime}
+        key={item.signature}
+      />
+    );
+  };
+
   return (
-    <ScrollableContainer>
-      <Container>
-        {realmActivity.map((activity) => (
-          <ActivityCard
-            signature={activity.signature}
-            blockTime={activity.blockTime}
-            key={activity.signature}
-          />
-        ))}
-      </Container>
-    </ScrollableContainer>
+    <Container>
+      <FlatList
+        data={realmActivity}
+        renderItem={renderActivity}
+        keyExtractor={(item) => item.signature}
+      />
+    </Container>
   );
 }
-
-const ScrollableContainer = styled.ScrollView`
-  background-color: ${(props) => props.theme.gray[900]};
-  flex: 1;
-  padding-top: ${(props) => props.theme.spacing[2]};
-`;
 
 const Container = styled.View`
   background-color: ${(props) => props.theme.gray[900]};
   flex: 1;
-  padding: ${(props) => props.theme.spacing[2]};
-  flex-wrap: wrap;
-  width: 100%;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: stretch;
+  padding: ${(props) => props.theme.spacing[3]};
 `;

@@ -32,5 +32,5 @@ export default function ActivityScreen({
 const Container = styled.View`
   background-color: ${(props) => props.theme.gray[900]};
   flex: 1;
-  padding-top: ${(props) => props.theme.spacing[2]};
+  padding: ${(props) => props.theme.spacing[3]};
 `;
