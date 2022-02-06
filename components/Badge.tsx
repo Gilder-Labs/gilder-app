@@ -8,15 +8,15 @@ interface BadgeProps {
 
 export const Badge = ({ title, type }: BadgeProps) => {
   return (
-    <TestContainer>
+    <BadgeFlexContainer>
       <BadgeContainer type={type}>
         <BadgeText type={type}> {title} </BadgeText>
       </BadgeContainer>
-    </TestContainer>
+    </BadgeFlexContainer>
   );
 };
 
-const TestContainer = styled.View`
+const BadgeFlexContainer = styled.View`
   align-items: flex-start;
   margin-bottom: ${(props: any) => props.theme.spacing[2]};
 `;
