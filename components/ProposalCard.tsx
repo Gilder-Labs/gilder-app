@@ -60,8 +60,6 @@ const Container = styled.View`
 
 const BadgeRow = styled.View`
   flex-direction: row;
-  flex: 1;
-  width: auto;
   justify-content: space-between;
 `;
 
