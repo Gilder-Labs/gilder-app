@@ -77,7 +77,7 @@ const StyledHeader = styled.View`
   flex: 1;
   align-items: center;
   padding: ${(props) => props.theme.spacing[4]};
-  border-bottom-color: ${(props) => props.theme.gray[800]};
+  /* border-bottom-color: ${(props) => props.theme.gray[800]}; */
   border-bottom-width: 1px;
   flex-direction: row;
   max-height: 64px;
@@ -90,8 +90,8 @@ const StyledRealmName = styled.Text`
 `;
 
 const RealmNameContainer = styled.View`
-  padding-left: ${(props) => props.theme.spacing[4]};
-  padding-right: ${(props) => props.theme.spacing[4]};
+  margin-left: ${(props) => props.theme.spacing[4]};
+  margin-right: ${(props) => props.theme.spacing[4]};
   padding-top: ${(props) => props.theme.spacing[3]};
   padding-bottom: ${(props) => props.theme.spacing[3]};
 
@@ -104,7 +104,7 @@ const StyledContainer = styled.View`
   flex-direction: row;
   align-content: stretch;
   align-self: stretch;
-  background-color: ${(props) => props.theme.gray[800]};
+  background-color: ${(props) => props.theme.gray[900]};
 `;
 
 const RealmScrollContainer = styled.ScrollView`
@@ -112,7 +112,7 @@ const RealmScrollContainer = styled.ScrollView`
   flex: 1;
   flex-grow: 1;
   padding: 8px;
-  background: ${(props) => props.theme.gray[900]};
+  background: ${(props) => props.theme.gray[800]};
 `;
 
 const DrawerContainerContainer = styled.View`

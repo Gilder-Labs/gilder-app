@@ -223,6 +223,6 @@ function TabBarIcon(props: {
 
 const DrawerTabText = styled.Text<{ color: string; focused: boolean }>`
   color: ${(props) => props.color};
-  font-size: 16;
+  font-size: 16px;
   font-weight: ${(props) => (props.focused ? "bold" : "normal")};
 `;
