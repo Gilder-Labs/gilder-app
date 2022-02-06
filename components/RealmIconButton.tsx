@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components/native";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { fetchRealm } from "../store/realmSlice";
-import { RealmIcon } from ".";
+import { RealmIcon } from "./RealmIcon";
 
 interface RealmIconButtonProps {
   realmId: string;

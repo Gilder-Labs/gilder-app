@@ -10,7 +10,7 @@ export const Badge = ({ title, type }: BadgeProps) => {
   return (
     <BadgeFlexContainer>
       <BadgeContainer type={type}>
-        <BadgeText type={type}> {title} </BadgeText>
+        <BadgeText type={type}>{title || "Title"}</BadgeText>
       </BadgeContainer>
     </BadgeFlexContainer>
   );
@@ -47,7 +47,11 @@ ${(props: any) => {
 }}
 
   border-radius: 8px;
-  padding: ${(props: any) => props.theme.spacing[1]}
+  padding-top: ${(props: any) => props.theme.spacing[1]}
+  padding-bottom: ${(props: any) => props.theme.spacing[1]}
+  padding-left: ${(props: any) => props.theme.spacing[2]}
+  padding-right: ${(props: any) => props.theme.spacing[2]}
+
   align-items: center;
 `;
 

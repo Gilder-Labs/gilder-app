@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { fetchRealm, addRealmToWatchlist } from "../store/realmSlice";
-import { RealmIcon } from ".";
+import { addRealmToWatchlist } from "../store/realmSlice";
+import { RealmIcon } from "./RealmIcon";
 
 interface RealmCardProps {
   realmId: string;

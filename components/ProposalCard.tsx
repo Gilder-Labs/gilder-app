@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
-import { Badge } from ".";
+import { Badge } from "./Badge";
 import { format } from "date-fns";
 
 interface ProposalCardProps {
@@ -28,12 +28,8 @@ export const ProposalCard = ({ proposal }: ProposalCardProps) => {
     getYesVoteCount,
     getNoVoteCount,
   } = proposal;
-  const transactionDate = getStateTimestamp
-    ? format(getStateTimestamp * 1000, "LLL cc, yyyy")
-    : "";
 
   // @ts-ignore
-  const badgeStatus = proposalStatusKey[status];
 
   return (
     <Container>
@@ -41,8 +37,9 @@ export const ProposalCard = ({ proposal }: ProposalCardProps) => {
         <ProposalTitle>{name}</ProposalTitle>
       </TextContainer>
       <BadgeRow>
-        <DateText>{transactionDate}</DateText>
-        <Badge title={status} type={badgeStatus} />
+        <DateText>{format(getStateTimestamp * 1000, "LLL cc, yyyy")}</DateText>
+        {/* @ts-ignore */}
+        <Badge title={status} type={proposalStatusKey[status]} />
       </BadgeRow>
       <Description>{description}</Description>
       <Description>{`Votes Yes ${getYesVoteCount}`}</Description>

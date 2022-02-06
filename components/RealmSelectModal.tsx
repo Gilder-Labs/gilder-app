@@ -4,7 +4,7 @@ import styled from "styled-components/native";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { FontAwesome5 as FontAwesome } from "@expo/vector-icons";
 import { useTheme } from "styled-components";
-import { RealmCard } from ".";
+import { RealmCard } from "./RealmCard";
 
 interface RealmSelectModalProps {
   open: boolean;

@@ -7,7 +7,8 @@ import { View, Modal, Text } from "react-native";
 import styled from "styled-components/native";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { RealmIconButton, RealmSelectModal } from ".";
+import { RealmIconButton } from "./RealmIconButton";
+import { RealmSelectModal } from "./RealmSelectModal";
 import { FontAwesome5 as FontAwesome } from "@expo/vector-icons";
 import { useTheme } from "styled-components";
 
