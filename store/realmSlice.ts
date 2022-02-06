@@ -226,7 +226,6 @@ export const fetchRealmProposals = createAsyncThunk(
       );
       rawProposals = rawProposals.flat();
       console.log("proposals?", rawProposals);
-      console.log(rawProposals.length);
     } catch (error) {
       console.log("error", error);
     }

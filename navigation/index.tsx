@@ -58,7 +58,7 @@ export default function Navigation({}: {}) {
   const NavigationTheme = {
     dark: false,
     colors: {
-      primary: theme?.primary[500],
+      primary: theme?.primary[400],
       background: theme?.gray[900],
       card: theme?.gray[900],
       text: theme?.gray[200],
@@ -73,6 +73,9 @@ export default function Navigation({}: {}) {
         initialRouteName="Proposals" // Dashboard
         drawerContent={(props) => <DrawerContentContainer {...props} />}
         screenOptions={{
+          drawerActiveBackgroundColor: theme?.gray[700],
+          drawerActiveTintColor: theme?.gray[100],
+          drawerInactiveTintColor: theme?.gray[400],
           drawerStyle: {
             width: 320,
           },
@@ -83,24 +86,15 @@ export default function Navigation({}: {}) {
         //   drawerType: Layout.window.width >= 768 ? "permanent" : "front",
         // }}
       >
-        {/* <Drawer.Screen
-          name="Dashboard"
-          component={DashboardScreen}
-          options={{
-            drawerIcon: ({ focused, color, size }) => (
-              <FontAwesome
-                size={32}
-                style={{ marginRight: -10 }}
-                color={color}
-                name="home"
-              />
-            ),
-          }}
-        /> */}
         <Drawer.Screen
           name="Vault"
           component={VaultScreen}
           options={{
+            drawerLabel: ({ focused, color }) => (
+              <DrawerTabText color={color} focused={focused}>
+                Vault
+              </DrawerTabText>
+            ),
             drawerIcon: ({ focused, color, size }) => (
               <FontAwesome
                 size={24}
@@ -115,6 +109,11 @@ export default function Navigation({}: {}) {
           name="Members"
           component={MembersScreen}
           options={{
+            drawerLabel: ({ focused, color }) => (
+              <DrawerTabText color={color} focused={focused}>
+                Members
+              </DrawerTabText>
+            ),
             drawerIcon: ({ focused, color, size }) => (
               <FontAwesome
                 size={24}
@@ -129,6 +128,11 @@ export default function Navigation({}: {}) {
           name="Proposals"
           component={ProposalsScreen}
           options={{
+            drawerLabel: ({ focused, color }) => (
+              <DrawerTabText color={color} focused={focused}>
+                Proposals
+              </DrawerTabText>
+            ),
             drawerIcon: ({ focused, color, size }) => (
               <FontAwesome
                 size={24}
@@ -143,6 +147,11 @@ export default function Navigation({}: {}) {
           name="Activity"
           component={ActivityScreen}
           options={{
+            drawerLabel: ({ focused, color }) => (
+              <DrawerTabText color={color} focused={focused}>
+                Activity
+              </DrawerTabText>
+            ),
             drawerIcon: ({ focused, color, size }) => (
               <FontAwesome
                 size={24}
@@ -212,13 +221,8 @@ function TabBarIcon(props: {
   return <FontAwesome size={24} style={{ marginBottom: -3 }} {...props} />;
 }
 
-const HeaderTitle = styled.View`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`;
-
-const HeaderTitleText = styled.Text`
-  color: ${(props: any) => props.theme.gray[100]};
-  font-weight: bold;
+const DrawerTabText = styled.Text<{ color: string; focused: boolean }>`
+  color: ${(props) => props.color};
+  font-size: 16;
+  font-weight: ${(props) => (props.focused ? "bold" : "normal")};
 `;
