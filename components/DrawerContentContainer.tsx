@@ -11,6 +11,7 @@ import { RealmIconButton } from "./RealmIconButton";
 import { RealmSelectModal } from "./RealmSelectModal";
 import { FontAwesome5 as FontAwesome } from "@expo/vector-icons";
 import { useTheme } from "styled-components";
+import Logo from "../assets/images/GilderLogo.png";
 
 export function DrawerContentContainer(props: any) {
   const theme = useTheme();
@@ -29,9 +30,7 @@ export function DrawerContentContainer(props: any) {
       style={{ backgroundColor: "#131313" }}
     >
       <StyledHeader>
-        <StyledHeaderText>
-          {realmDisplayName ? realmDisplayName : selectedRealm?.name}{" "}
-        </StyledHeaderText>
+        <GilderLogo source={Logo} />
       </StyledHeader>
       <StyledContainer>
         <RealmScrollContainer
@@ -56,9 +55,14 @@ export function DrawerContentContainer(props: any) {
             />
           </AddRealmButtonContainer>
         </RealmScrollContainer>
-        <DrawerContainerContainer>
+        <DrawerContentContainerWrapper>
+          <RealmNameContainer>
+            <StyledRealmName>
+              {realmDisplayName ? realmDisplayName : selectedRealm?.name}
+            </StyledRealmName>
+          </RealmNameContainer>
           <DrawerItemList {...props} />
-        </DrawerContainerContainer>
+        </DrawerContentContainerWrapper>
       </StyledContainer>
       <RealmSelectModal
         open={realmSelectisOpen}
@@ -79,10 +83,20 @@ const StyledHeader = styled.View`
   max-height: 64px;
 `;
 
-const StyledHeaderText = styled.Text`
+const StyledRealmName = styled.Text`
   color: ${(props) => props.theme.gray[200]};
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 900;
+`;
+
+const RealmNameContainer = styled.View`
+  padding-left: ${(props) => props.theme.spacing[4]};
+  padding-right: ${(props) => props.theme.spacing[4]};
+  padding-top: ${(props) => props.theme.spacing[3]};
+  padding-bottom: ${(props) => props.theme.spacing[3]};
+
+  border-bottom-color: ${(props) => props.theme.gray[700]};
+  border-bottom-width: 1px;
 `;
 
 const StyledContainer = styled.View`
@@ -90,7 +104,7 @@ const StyledContainer = styled.View`
   flex-direction: row;
   align-content: stretch;
   align-self: stretch;
-  background-color: ${(props) => props.theme.gray[900]};
+  background-color: ${(props) => props.theme.gray[800]};
 `;
 
 const RealmScrollContainer = styled.ScrollView`
@@ -98,7 +112,7 @@ const RealmScrollContainer = styled.ScrollView`
   flex: 1;
   flex-grow: 1;
   padding: 8px;
-  background: ${(props) => props.theme.gray[800]};
+  background: ${(props) => props.theme.gray[900]};
 `;
 
 const DrawerContainerContainer = styled.View`
@@ -120,4 +134,13 @@ const Divider = styled.View`
   height: 2px;
   background-color: ${(props) => props.theme.gray[500]};
   margin-bottom: ${(props) => props.theme.spacing[4]};
+`;
+
+const DrawerContentContainerWrapper = styled.View`
+  flex: 1;
+`;
+
+const GilderLogo = styled.Image`
+  height: 36px;
+  width: 120px;
 `;

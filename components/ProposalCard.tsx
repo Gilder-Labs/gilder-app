@@ -42,8 +42,11 @@ export const ProposalCard = ({ proposal }: ProposalCardProps) => {
         <Badge title={status} type={proposalStatusKey[status]} />
       </BadgeRow>
       <Description>{description}</Description>
-      <Description>{`Votes Yes ${getYesVoteCount}`}</Description>
-      <Description>{`Votes Yes ${getNoVoteCount}`}</Description>
+
+      <VoteContainer>
+        <Description>{`Votes Yes ${getYesVoteCount}`}</Description>
+        <Description>{`Votes No ${getNoVoteCount}`}</Description>
+      </VoteContainer>
     </Container>
   );
 };
@@ -85,4 +88,9 @@ const TextContainer = styled.View`
 
 const Description = styled.Text`
   color: ${(props: any) => props.theme.gray[200]};
+  margin-bottom: ${(props: any) => props.theme.spacing[2]};
+`;
+
+const VoteContainer = styled.View`
+  flex-direction: row;
 `;
