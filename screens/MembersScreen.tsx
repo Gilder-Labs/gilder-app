@@ -24,7 +24,7 @@ export default function ActivityScreen({
         data={realmMembers}
         renderItem={renderMember}
         keyExtractor={(item) => item.governingTokenOwner}
-        style={{ padding: 8 }}
+        style={{ padding: 16 }}
       />
     </Container>
   );

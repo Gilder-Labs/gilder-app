@@ -3,12 +3,12 @@ import { PublicKey, ConfirmedSignatureInfo } from "@solana/web3.js";
 import {
   getRealms,
   getRealm,
-  getTokenOwnerRecordsByOwner,
   TokenOwnerRecord,
   getGovernanceAccounts,
   pubkeyFilter,
   getAllGovernances,
   Proposal,
+  ProposalState,
 } from "@solana/spl-governance";
 import * as web3 from "@solana/web3.js";
 import { SPL_PUBLIC_KEY, REALM_GOVERNANCE_PKEY } from "../constants/Solana";
@@ -216,15 +216,17 @@ export const fetchRealmProposals = createAsyncThunk(
   "realms/fetchRealmProposals",
   async (realm: any) => {
     let rawProposals;
+    const governanceId = new PublicKey(realm.governanceId);
 
     try {
       rawProposals = await getAllProposals(
         connection,
-        new PublicKey(realm.governanceId),
+        governanceId,
         new PublicKey(realm.pubKey)
       );
       rawProposals = rawProposals.flat();
       console.log("proposals?", rawProposals);
+      console.log(rawProposals.length);
     } catch (error) {
       console.log("error", error);
     }
@@ -234,6 +236,17 @@ export const fetchRealmProposals = createAsyncThunk(
         description: proposal?.account?.descriptionLink,
         name: proposal?.account?.name,
         proposalId: proposal.pubkey.toString(),
+        status: ProposalState[proposal?.account?.state],
+        isVoteFinalized: proposal.account.isVoteFinalized(),
+        isFinalState: proposal.account.isFinalState(),
+        getStateTimestamp: proposal.account.getStateTimestamp(),
+        getStateSortRank: proposal.account.getStateSortRank(),
+        isPreVotingState: proposal.account.isPreVotingState(),
+        // getYesVoteOption: proposal.account.getYesVoteOption(),
+        getYesVoteCount: proposal.account.getYesVoteCount().toString(),
+        getNoVoteCount: proposal.account.getNoVoteCount().toString(),
+        // getTimeToVoteEnd: proposal.account.getTimeToVoteEnd(governanceId),
+        // hasVoteTimeEnded: proposal.account.hasVoteTimeEnded(governanceId),
       };
     });
 

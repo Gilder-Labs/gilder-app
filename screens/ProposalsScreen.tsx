@@ -19,7 +19,7 @@ export default function ProposalScreen({
         data={realmProposals}
         renderItem={renderProposal}
         keyExtractor={(item) => item.proposalId}
-        style={{ padding: 8 }}
+        style={{ padding: 16 }}
       />
     </Container>
   );

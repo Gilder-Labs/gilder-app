@@ -34,5 +34,5 @@ const Title = styled.Text`
 const Container = styled.View`
   flex: 1;
   background: ${(props: any) => props.theme.gray[800]};
-  padding: ${(props: any) => props.theme.spacing[3]};
+  padding: ${(props: any) => props.theme.spacing[4]};
 `;

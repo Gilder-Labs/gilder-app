@@ -70,13 +70,14 @@ export default function Navigation({}: {}) {
   return (
     <NavigationContainer linking={LinkingConfiguration} theme={NavigationTheme}>
       <Drawer.Navigator
-        initialRouteName="Members" // Dashboard
+        initialRouteName="Proposals" // Dashboard
         drawerContent={(props) => <DrawerContentContainer {...props} />}
         screenOptions={{
           drawerStyle: {
             width: 320,
           },
           headerTintColor: "#f4f4f5", //Set Header text color
+          swipeEdgeWidth: 500, // Allows user to open drawer swiping left with on any part of screen
         }}
         // screenOptions={{
         //   drawerType: Layout.window.width >= 768 ? "permanent" : "front",

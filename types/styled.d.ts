@@ -7,6 +7,7 @@ declare module "styled-components" {
     gray: Color;
     success: Color;
     error: Color;
+    warning: Color;
     spacing: {
       1: string;
       2: string;

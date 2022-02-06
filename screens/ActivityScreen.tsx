@@ -25,7 +25,7 @@ export default function ActivityScreen({
         data={realmActivity}
         renderItem={renderActivity}
         keyExtractor={(item) => item.signature}
-        style={{ padding: 8 }}
+        style={{ padding: 16 }}
       />
     </Container>
   );
