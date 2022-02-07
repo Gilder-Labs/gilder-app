@@ -9,9 +9,9 @@ import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { RealmIconButton } from "./RealmIconButton";
 import { RealmSelectModal } from "./RealmSelectModal";
-import { FontAwesome5 as FontAwesome } from "@expo/vector-icons";
 import { useTheme } from "styled-components";
 import Logo from "../assets/images/GilderLogo.png";
+import * as Unicons from "@iconscout/react-native-unicons";
 
 export function DrawerContentContainer(props: any) {
   const theme = useTheme();
@@ -47,12 +47,7 @@ export function DrawerContentContainer(props: any) {
             onPress={() => setRealmSelectIsOpen(true)}
             activeOpacity={0.4}
           >
-            <FontAwesome
-              size={16}
-              style={{}}
-              name="plus"
-              color={theme.gray[400]}
-            />
+            <Unicons.UilPlus size="20" color={theme.gray[400]} />
           </AddRealmButtonContainer>
         </RealmScrollContainer>
         <DrawerContentContainerWrapper>
@@ -95,7 +90,7 @@ const RealmNameContainer = styled.View`
   padding-top: ${(props) => props.theme.spacing[3]};
   padding-bottom: ${(props) => props.theme.spacing[3]};
 
-  border-bottom-color: ${(props) => props.theme.gray[700]};
+  border-bottom-color: ${(props) => props.theme.gray[800]};
   border-bottom-width: 1px;
 `;
 
@@ -122,14 +117,14 @@ const AddRealmButtonContainer = styled.TouchableOpacity`
   border-radius: 100px;
   align-items: center;
   justify-content: center;
-  border: 1px dashed ${(props) => props.theme.gray[400]};
+  border: 2px dashed ${(props) => props.theme.gray[500]};
 `;
 
 const Divider = styled.View`
   flex: 1;
   width: 48px;
   height: 2px;
-  background-color: ${(props) => props.theme.gray[500]};
+  background-color: ${(props) => props.theme.gray[600]};
   margin-bottom: ${(props) => props.theme.spacing[4]};
 `;
 

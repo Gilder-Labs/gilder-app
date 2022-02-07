@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { SvgXml } from "react-native-svg";
 
-import { FontAwesome5 as FontAwesome } from "@expo/vector-icons";
 import { useTheme } from "styled-components";
 import { createAvatar } from "@dicebear/avatars";
 import * as style from "@dicebear/avatars-jdenticon-sprites";

@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { Linking } from "react-native";
 import { format } from "date-fns";
-import { FontAwesome5 as FontAwesome } from "@expo/vector-icons";
 import { useTheme } from "styled-components";
+import * as Unicons from "@iconscout/react-native-unicons";
 
 interface ActivityCardProps {
   signature: string;
@@ -30,11 +30,7 @@ export const ActivityCard = ({ signature, blockTime }: ActivityCardProps) => {
         <ActivityDate>{transactionDate}</ActivityDate>
       </TextContainer>
       <IconButton onPress={handleActivityClick} activeOpacity={0.5}>
-        <FontAwesome
-          size={16}
-          name="external-link-alt"
-          color={theme.gray[400]}
-        />
+        <Unicons.UilExternalLinkAlt size="20" color={theme.gray[400]} />
       </IconButton>
     </Container>
   );

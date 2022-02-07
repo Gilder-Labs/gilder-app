@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { StyleSheet, Modal, Text, Pressable, View } from "react-native";
 import styled from "styled-components/native";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { FontAwesome5 as FontAwesome } from "@expo/vector-icons";
+import * as Unicons from "@iconscout/react-native-unicons";
+
 import { useTheme } from "styled-components";
 import { RealmCard } from "./RealmCard";
 
@@ -40,7 +41,7 @@ export const RealmSelectModal = ({
         <View style={{ width: 48, height: 48 }} />
         <HeaderTitle> Add Realm</HeaderTitle>
         <CloseIconButton onPress={handleOnClose} activeOpacity={0.5}>
-          <FontAwesome size={20} name="times" color={theme.gray[200]} />
+          <Unicons.UilTimes size="20" color={theme.gray[200]} />
         </CloseIconButton>
       </Header>
 
