@@ -37,6 +37,7 @@ export default function Navigation({}: {}) {
   const { selectedRealm } = useAppSelector((state) => state.realms);
 
   // TODO: connect to solana wallet
+  // https://github.com/WalletConnect/walletconnect-monorepo/commit/36d8520bf269f2f36efb06e57ca376931837cfde
   // useEffect(() => {
   //   setupWalletConnect();
   // }, []);

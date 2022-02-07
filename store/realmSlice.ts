@@ -230,6 +230,8 @@ export const fetchRealmProposals = createAsyncThunk(
       console.log("error", error);
     }
 
+    // votingAt, signingOffAt, votingCompletedAt, draftAt, executingAt
+    // format(getStateTimestamp * 1000, "LLL cc, yyyy"
     const proposals = rawProposals?.map((proposal: any) => {
       return {
         description: proposal?.account?.descriptionLink,
@@ -238,7 +240,6 @@ export const fetchRealmProposals = createAsyncThunk(
         status: ProposalState[proposal?.account?.state],
         isVoteFinalized: proposal.account.isVoteFinalized(),
         isFinalState: proposal.account.isFinalState(),
-        getStateTimestamp: proposal.account.getStateTimestamp(),
         getStateSortRank: proposal.account.getStateSortRank(),
         isPreVotingState: proposal.account.isPreVotingState(),
         // getYesVoteOption: proposal.account.getYesVoteOption(),
@@ -246,6 +247,14 @@ export const fetchRealmProposals = createAsyncThunk(
         getNoVoteCount: proposal.account.getNoVoteCount().toString(),
         // getTimeToVoteEnd: proposal.account.getTimeToVoteEnd(governanceId),
         // hasVoteTimeEnded: proposal.account.hasVoteTimeEnded(governanceId),
+
+        // Dates
+        getStateTimestamp: proposal.account.getStateTimestamp().toString(), // date/time it hit currents state
+        votingAt: proposal.account?.votingAt?.toString(),
+        signingOffAt: proposal.account?.signingOffAt?.toString(),
+        votingCompletedAt: proposal.account?.votingCompletedAt?.toString(),
+        draftAt: proposal.account?.draftAt?.toString(),
+        executingAt: proposal.account?.executingAt?.toString(),
       };
     });
 
