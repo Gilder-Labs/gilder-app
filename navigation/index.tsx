@@ -154,5 +154,6 @@ export default function Navigation({}: {}) {
 const DrawerTabText = styled.Text<{ color: string; focused: boolean }>`
   color: ${(props) => props.color};
   font-size: 16px;
+  margin-left: -16px;
   font-weight: ${(props) => (props.focused ? "bold" : "normal")};
 `;
