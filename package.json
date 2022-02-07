@@ -48,6 +48,7 @@
     "expo-status-bar": "~1.2.0",
     "expo-web-browser": "~10.1.0",
     "lodash": "^4.17.21",
+    "numeral": "^2.0.6",
     "react": "17.0.1",
     "react-devtools": "^4.22.1",
     "react-devtools-core": "^4.23.0",
@@ -69,6 +70,7 @@
   "devDependencies": {
     "@babel/core": "^7.12.9",
     "@types/jest": "^27.0.3",
+    "@types/numeral": "^2.0.2",
     "@types/react": "~17.0.21",
     "@types/react-native": "~0.64.12",
     "jest-expo": "~44.0.1",

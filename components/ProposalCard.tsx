@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { Badge } from "./Badge";
 import { format } from "date-fns";
+import numeral from "numeral";
 
 interface ProposalCardProps {
   proposal: any;
@@ -30,6 +31,16 @@ export const ProposalCard = ({ proposal }: ProposalCardProps) => {
   } = proposal;
 
   // @ts-ignore
+  const yesVotes = Number(getYesVoteCount);
+  const noVotes = Number(getNoVoteCount);
+
+  const totalVotes = yesVotes + noVotes;
+
+  const yesPercentage = yesVotes
+    ? Math.round((yesVotes / totalVotes) * 100)
+    : 0;
+  const noPercentage = noVotes ? Math.round((noVotes / totalVotes) * 100) : 0;
+  // console.log("yes votes", yesPercentage);
 
   return (
     <Container>
@@ -42,10 +53,17 @@ export const ProposalCard = ({ proposal }: ProposalCardProps) => {
         <Badge title={status} type={proposalStatusKey[status]} />
       </BadgeRow>
       <Description>{description}</Description>
-
+      <VoteCountRow>
+        <VoteText>
+          YES - {numeral(yesVotes).format("0.00a")} ({yesPercentage}%)
+        </VoteText>
+        <VoteText>
+          NO - {numeral(noVotes).format("0.00a")} ({noPercentage}%)
+        </VoteText>
+      </VoteCountRow>
       <VoteContainer>
-        <Description>{`Votes Yes ${getYesVoteCount}`}</Description>
-        <Description>{`Votes No ${getNoVoteCount}`}</Description>
+        <VoteYes percent={yesPercentage} />
+        <VoteNo percent={noPercentage} />
       </VoteContainer>
     </Container>
   );
@@ -93,4 +111,32 @@ const Description = styled.Text`
 
 const VoteContainer = styled.View`
   flex-direction: row;
+  background: ${(props: any) => props.theme.gray[600]};
+  border-radius: 2px;
+`;
+
+const VoteNo = styled.View<{ percent: any }>`
+  width: ${(props) => props.percent}%;
+  height: 8px;
+  background: ${(props) => props.theme.error[700]};
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+`;
+const VoteYes = styled.View<{ percent: any }>`
+  width: ${(props) => props.percent}%;
+  height: 8px;
+  background: ${(props) => props.theme.success[500]};
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+`;
+
+const VoteCountRow = styled.View`
+  justify-content: space-between;
+  flex-direction: row;
+`;
+
+const VoteText = styled.Text`
+  color: ${(props: any) => props.theme.gray[400]};
+  margin-bottom: ${(props: any) => props.theme.spacing[2]};
+  font-size: 12px;
 `;
