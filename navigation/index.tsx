@@ -59,10 +59,10 @@ export default function Navigation({}: {}) {
     dark: false,
     colors: {
       primary: theme?.primary[400],
-      background: theme?.gray[900],
-      card: theme?.gray[900],
+      background: theme?.gray[1000],
+      card: theme?.gray[1000],
       text: theme?.gray[200],
-      border: theme?.gray[900],
+      border: theme?.gray[1000],
       notification: theme?.primary[700],
     },
   };
