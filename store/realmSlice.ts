@@ -126,6 +126,11 @@ export const fetchRealmActivity = createAsyncThunk(
         new PublicKey(realm?.pubKey),
         { limit: 20 }
       );
+
+      transactions = transactions?.sort(
+        // @ts-ignore
+        (a, b) => b?.blockTime - a?.blockTime
+      );
     } catch (error) {
       console.log("transaction error", error);
     }
@@ -225,14 +230,13 @@ export const fetchRealmProposals = createAsyncThunk(
         new PublicKey(realm.pubKey)
       );
       rawProposals = rawProposals.flat();
-      console.log("proposals?", rawProposals);
     } catch (error) {
       console.log("error", error);
     }
 
     // votingAt, signingOffAt, votingCompletedAt, draftAt, executingAt
     // format(getStateTimestamp * 1000, "LLL cc, yyyy"
-    const proposals = rawProposals?.map((proposal: any) => {
+    let proposals = rawProposals?.map((proposal: any) => {
       return {
         description: proposal?.account?.descriptionLink,
         name: proposal?.account?.name,
@@ -249,14 +253,19 @@ export const fetchRealmProposals = createAsyncThunk(
         // hasVoteTimeEnded: proposal.account.hasVoteTimeEnded(governanceId),
 
         // Dates
-        getStateTimestamp: proposal.account.getStateTimestamp().toString(), // date/time it hit currents state
-        votingAt: proposal.account?.votingAt?.toString(),
-        signingOffAt: proposal.account?.signingOffAt?.toString(),
-        votingCompletedAt: proposal.account?.votingCompletedAt?.toString(),
-        draftAt: proposal.account?.draftAt?.toString(),
-        executingAt: proposal.account?.executingAt?.toString(),
+        getStateTimestamp: proposal.account.getStateTimestamp(), // date/time it hit currents state
+        // votingAt: proposal.account?.votingAt?.toNumber(),
+        // signingOffAt: proposal.account?.signingOffAt?.toNumber(),
+        // votingCompletedAt: proposal.account?.votingCompletedAt?.toNumber(),
+        // draftAt: proposal.account?.draftAt?.toNumber(),
+        // executingAt: proposal.account?.executingAt?.toNumber(),
       };
     });
+
+    // sorts in most recent first.
+    proposals = proposals?.sort(
+      (a, b) => b.getStateTimestamp - a.getStateTimestamp
+    );
 
     return proposals;
   }
