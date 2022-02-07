@@ -82,6 +82,8 @@ const Container = styled.View`
 const BadgeRow = styled.View`
   flex-direction: row;
   justify-content: space-between;
+  /* align-items: center; */
+  margin-bottom: ${(props: any) => props.theme.spacing[2]};
 `;
 
 const ProposalTitle = styled.Text`
@@ -98,15 +100,14 @@ const DateText = styled.Text`
 
 const TextContainer = styled.View`
   padding-bottom: ${(props: any) => props.theme.spacing[2]};
-  margin-bottom: ${(props: any) => props.theme.spacing[2]};
-
-  border-bottom-color: ${(props) => props.theme.gray[500]};
-  border-bottom-width: 1px;
+  /* margin-bottom: ${(props: any) => props.theme.spacing[2]}; */
 `;
 
 const Description = styled.Text`
   color: ${(props: any) => props.theme.gray[200]};
   margin-bottom: ${(props: any) => props.theme.spacing[2]};
+  line-height: 20px;
+  font-size: 14px;
 `;
 
 const VoteContainer = styled.View`
@@ -118,14 +119,15 @@ const VoteContainer = styled.View`
 const VoteNo = styled.View<{ percent: any }>`
   width: ${(props) => props.percent}%;
   height: 8px;
-  background: ${(props) => props.theme.error[700]};
+  background: ${(props) => props.theme.error[300]};
+
   border-top-right-radius: 2px;
   border-bottom-right-radius: 2px;
 `;
 const VoteYes = styled.View<{ percent: any }>`
   width: ${(props) => props.percent}%;
   height: 8px;
-  background: ${(props) => props.theme.success[500]};
+  background: ${(props) => props.theme.success[300]};
   border-top-left-radius: 2px;
   border-bottom-left-radius: 2px;
 `;
@@ -136,7 +138,7 @@ const VoteCountRow = styled.View`
 `;
 
 const VoteText = styled.Text`
-  color: ${(props: any) => props.theme.gray[400]};
+  color: ${(props: any) => props.theme.gray[300]};
   margin-bottom: ${(props: any) => props.theme.spacing[2]};
   font-size: 12px;
 `;

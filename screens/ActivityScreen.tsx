@@ -19,6 +19,13 @@ export default function ActivityScreen({
     );
   };
 
+  // const renderSeparator = ({ leadingItem }: any) => {
+  //   console.log("sep data", leadingItem);
+  //   previousDate = leadingItem.blockTime;
+  //   // console.log("date", previousDate);
+  //   return <DateSeparator />;
+  // };
+
   return (
     <Container>
       <FlatList
@@ -26,6 +33,7 @@ export default function ActivityScreen({
         renderItem={renderActivity}
         keyExtractor={(item) => item.signature}
         style={{ padding: 16 }}
+        // ItemSeparatorComponent={renderSeparator}
       />
     </Container>
   );
@@ -34,4 +42,9 @@ export default function ActivityScreen({
 const Container = styled.View`
   background-color: ${(props) => props.theme.gray[900]};
   flex: 1;
+`;
+
+const DateSeparator = styled.View`
+  background: green;
+  height: 20px;
 `;

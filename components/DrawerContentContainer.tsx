@@ -112,11 +112,8 @@ const RealmScrollContainer = styled.ScrollView`
   flex: 1;
   flex-grow: 1;
   padding: 8px;
+  padding-top: 16px;
   background: ${(props) => props.theme.gray[800]};
-`;
-
-const DrawerContainerContainer = styled.View`
-  flex: 1;
 `;
 
 const AddRealmButtonContainer = styled.TouchableOpacity`
