@@ -9,9 +9,10 @@ import {
   getAllTokenOwnerRecords, // returns all members of a realm
   GovernanceAccountType, // Map that has all types of governance
 } from "@solana/spl-governance";
+
 import * as web3 from "@solana/web3.js";
 import { SPL_PUBLIC_KEY, REALM_GOVERNANCE_PKEY } from "../constants/Solana";
-import { cleanRealmData } from "../utils";
+import { cleanRealmData, getTokensInfo } from "../utils";
 
 export interface realmState {
   realms: Array<any>;
@@ -51,7 +52,6 @@ const initialState: realmState = {
   ],
   realmActivity: [],
 };
-
 /* 
   main: https://ssc-dao.genesysgo.net/  
   devnet: https://psytrbhymqlkfrhudd.dev.genesysgo.net:8899/
@@ -60,6 +60,7 @@ const initialState: realmState = {
 const rpcConnection = "https://ssc-dao.genesysgo.net/";
 
 let connection = new web3.Connection(rpcConnection, "confirmed");
+const TokensInfo = getTokensInfo();
 
 export const fetchRealms = createAsyncThunk("realms/fetchRealms", async () => {
   let realms;
@@ -122,12 +123,16 @@ export const fetchRealmVaults = createAsyncThunk(
       )
     );
 
+    const tokensData = await TokensInfo;
+
     let vaultsParsed = vaultsWithTokensRaw.map((vault, index) => {
       return {
         pubKey: vaultsInfo[index].pubKey,
         vaultId: vaultsInfo[index].vaultId,
         tokens: vault.value.map((token) => {
+          let tokenInfo = tokensData.get(token.account.data.parsed.info.mint);
           return {
+            ...tokenInfo,
             mint: token.account.data.parsed.info.mint,
             owner: token.account.data.parsed.info.owner.toString(),
             tokenAmount: token.account.data.parsed.info.tokenAmount,
