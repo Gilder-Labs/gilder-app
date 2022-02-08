@@ -47,7 +47,7 @@ const initialState: realmState = {
     "759qyfKDMMuo9v36tW7fbGanL63mZFPNbhU7zjPrkuGK", // socean
     // "GBXLYo4ycRNfzuzYeudu6y2ng4afNeW14WcpM2E4JJSL", // uxd
     "B1CxhV1khhj7n5mi5hebbivesqH9mvXr5Hfh2nD2UCh6", // real monke dao
-    "DGnx2hbyT16bBMQFsVuHJJnnoRSucdreyG5egVJXqk8z", // woof
+    "By2sVGZXwfQq6rAiAM3rNPJ9iQfb5e2QhnF4YjJ4Bip", // grape
   ],
   realmActivity: [],
 };
@@ -107,12 +107,10 @@ export const fetchRealmVaults = createAsyncThunk(
         gov.account.accountType === GovernanceAccountType.TokenGovernanceV2
     );
 
-    console.log(rawFilteredVaults);
-
     const vaultsInfo = rawFilteredVaults.map((governance) => {
       return {
-        pubKey: governance.pubkey.toString(), // program that controls vault
-        vaultId: governance.account?.governedAccount.toString(), // vault
+        pubKey: governance.pubkey.toString(), // program that controls vault/token account
+        vaultId: governance.account?.governedAccount.toString(), // vault/token account where tokens are held
       };
     });
 
@@ -124,13 +122,16 @@ export const fetchRealmVaults = createAsyncThunk(
       )
     );
 
-    let vaultsParsed = vaultsWithTokensRaw.map((vault) => {
+    let vaultsParsed = vaultsWithTokensRaw.map((vault, index) => {
       return {
+        pubKey: vaultsInfo[index].pubKey,
+        vaultId: vaultsInfo[index].vaultId,
         tokens: vault.value.map((token) => {
           return {
             mint: token.account.data.parsed.info.mint,
+            owner: token.account.data.parsed.info.owner.toString(),
             tokenAmount: token.account.data.parsed.info.tokenAmount,
-            pubKey: token.pubkey.toString(),
+            vaultId: token.pubkey.toString(),
           };
         }),
       };

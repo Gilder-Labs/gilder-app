@@ -121,7 +121,7 @@ const VoteContainer = styled.View`
 const VoteNo = styled.View<{ percent: any }>`
   width: ${(props) => props.percent}%;
   height: 8px;
-  background: ${(props) => props.theme.error[300]};
+  background: ${(props) => props.theme.error[600]};
 
   border-top-right-radius: 2px;
   border-bottom-right-radius: 2px;
@@ -129,7 +129,7 @@ const VoteNo = styled.View<{ percent: any }>`
 const VoteYes = styled.View<{ percent: any }>`
   width: ${(props) => props.percent}%;
   height: 8px;
-  background: ${(props) => props.theme.success[300]};
+  background: ${(props) => props.theme.success[500]};
   border-top-left-radius: 2px;
   border-bottom-left-radius: 2px;
 `;

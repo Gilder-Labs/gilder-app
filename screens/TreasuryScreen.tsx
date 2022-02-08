@@ -1,6 +1,5 @@
 import { StyleSheet } from "react-native";
 
-import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
@@ -17,9 +16,17 @@ export default function TreasuryScreen({
     (state) => state.realms
   );
 
+  // * list vaults - use public key for name?
+  // * onclick vault list tokens in stack?
+  // * get token prices
+  // * get total treasury prices
+
   return (
     <Container>
-      <TokenList tokens={realmVaults[0].tokens} />
+      {/* {realmVaults.map((vault, index) => (
+        <TokenList tokens={vault.tokens} key={index} />
+      ))} */}
+      <Title> Test</Title>
     </Container>
   );
 }
