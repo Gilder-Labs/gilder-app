@@ -56,6 +56,7 @@ export const TokenCard = ({ token }: TokenCardProps) => {
 const CoinTitle = styled.Text`
   color: ${(props: any) => props.theme.gray[200]};
   font-weight: bold;
+  margin-bottom: ${(props: any) => props.theme.spacing[1]};
 `;
 
 const CoinSubtitle = styled.Text`
@@ -91,6 +92,7 @@ const CoinPriceText = styled.Text`
   text-align: right;
   color: ${(props: any) => props.theme.gray[200]};
   font-weight: bold;
+  margin-bottom: ${(props: any) => props.theme.spacing[1]};
 `;
 
 const CoinPercentText = styled.Text<{ isNegative: boolean }>`

@@ -47,7 +47,7 @@ const Container = styled.View`
 `;
 
 const VaultTitle = styled.Text`
-  color: ${(props: any) => props.theme.gray[300]}
+  color: ${(props: any) => props.theme.gray[400]}
   font-weight: bold;
   font-size: 14px;
 `;

@@ -8,6 +8,8 @@ import {
   getAllProposals,
   getAllTokenOwnerRecords, // returns all members of a realm
   GovernanceAccountType, // Map that has all types of governance
+  GovernanceInstruction,
+  getGovernance,
 } from "@solana/spl-governance";
 import axios from "axios";
 
@@ -172,33 +174,43 @@ export const fetchRealmVaults = createAsyncThunk(
 export const fetchRealmActivity = createAsyncThunk(
   "realms/fetchRealmActivity",
   async (realm: any) => {
-    let transactions;
+    let rawTransactionsFilled;
+    let activitiesParsed = [];
 
     try {
-      transactions = await connection.getConfirmedSignaturesForAddress2(
-        new PublicKey(realm?.pubKey),
-        { limit: 20 }
+      let transactions = await connection.getConfirmedSignaturesForAddress2(
+        new PublicKey(realm?.governanceId),
+        { limit: 25 }
       );
 
       transactions = transactions?.sort(
         // @ts-ignore
         (a, b) => b?.blockTime - a?.blockTime
       );
+
+      let signatures = transactions.map((transaction) => {
+        return transaction.signature;
+      });
+
+      rawTransactionsFilled = await connection.getParsedConfirmedTransactions(
+        signatures
+      );
+
+      console.log("rawTransactionsFilled", rawTransactionsFilled);
+
+      activitiesParsed = rawTransactionsFilled?.map((transaction, index) => {
+        return {
+          signature: transactions[index].signature,
+          blockTime: transaction?.blockTime,
+          status: transaction?.meta?.status,
+          logs: transaction?.meta?.logMessages,
+        };
+      });
+      return activitiesParsed;
     } catch (error) {
       console.log("transaction error", error);
     }
-
-    // let signatures = transactions.map((transaction) => {
-    //   return transaction.signature;
-    // });
-
-    // TODO: This gets more contextual info about our transactions
-    // const rawTransactionsFilled =
-    //   await connection.getParsedConfirmedTransactions(signatures);
-
-    // console.log("rawTransactions filled?", rawTransactionsFilled);
-
-    return transactions;
+    return [];
   }
 );
 
