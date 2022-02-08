@@ -329,8 +329,15 @@ export const realmSlice = createSlice({
       .addCase(fetchRealmVaults.pending, (state) => {})
       .addCase(fetchRealmVaults.rejected, (state) => {})
       .addCase(fetchRealmVaults.fulfilled, (state, action: any) => {
+        let tokenPriceObject = {};
+        // @ts-ignore
+        action.payload.tokenPriceData.forEach((token) => {
+          // @ts-ignore
+          tokenPriceObject[token.id] = token;
+        });
+
         state.realmVaults = action.payload.vaults;
-        state.tokenPriceData = action.payload.tokenPriceData;
+        state.tokenPriceData = tokenPriceObject;
       });
   },
 });

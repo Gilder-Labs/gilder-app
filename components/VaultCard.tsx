@@ -11,18 +11,16 @@ interface VaultCardProps {
 export const VaultCard = ({ vaultId, tokens }: VaultCardProps) => {
   return (
     <Container>
-      <VaultContainer>
-        <VaultTitle>
-          {vaultId.slice(0, 4)}...{vaultId.slice(-4)}
-        </VaultTitle>
-        <TokenList tokens={tokens} />
-      </VaultContainer>
+      <VaultTitle>
+        {vaultId.slice(0, 4)}...{vaultId.slice(-4)}
+      </VaultTitle>
+      <TokenList tokens={tokens} />
     </Container>
   );
 };
 
 const Container = styled.View`
-  /* height: 80px; */
+  min-height: 80px;
   width: 100%%;
   margin-bottom: ${(props: any) => props.theme.spacing[3]};
   border-radius: 4px;
@@ -36,5 +34,3 @@ const VaultTitle = styled.Text`
   font-weight: bold;
   font-size: 16px;
 `;
-
-const VaultContainer = styled.View``;

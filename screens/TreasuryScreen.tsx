@@ -1,4 +1,4 @@
-import { StyleSheet, FlatList } from "react-native";
+import { StyleSheet, SectionList, FlatList } from "react-native";
 import { RootTabScreenProps } from "../types";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import styled from "styled-components/native";
@@ -34,6 +34,13 @@ export default function TreasuryScreen({
         keyExtractor={(item) => item.vaultId}
         style={{ padding: 16 }}
       />
+      {/* {realmVaults.map((vault) => (
+        <VaultCard
+          vaultId={vault.vaultId}
+          tokens={vault.tokens}
+          key={vault.vaultId}
+        />
+      ))} */}
     </Container>
   );
 }
