@@ -20,6 +20,8 @@ export const RealmIconButton = ({
     dispatch(fetchRealm(realmId));
   };
 
+  const isSelected = selectedRealm?.pubKey === realmId;
+
   return (
     <ContainerButton
       onPress={handleRealmIconClick}
@@ -28,7 +30,7 @@ export const RealmIconButton = ({
       disabled={isDisabled}
     >
       <Container>
-        {selectedRealm?.pubKey === realmId && <RealmSelectedIndicator />}
+        {isSelected && <RealmSelectedIndicator />}
         <RealmIcon realmId={realmId} />
       </Container>
     </ContainerButton>

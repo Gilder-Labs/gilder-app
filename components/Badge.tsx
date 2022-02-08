@@ -27,7 +27,7 @@ const BadgeContainer = styled.View<{ type: "success" | "pending" | "error" }>`
       return `background:  ${props.theme.success[800]}44`;
     }
     if (props.type === "pending") {
-      return `background:  ${props.theme.warning[800]}44`;
+      return `background:  ${props.theme.secondary[800]}44`;
     }
     if (props.type === "error") {
       return `background:  ${props.theme.error[800]}44;`;
@@ -39,7 +39,7 @@ ${(props: any) => {
     return `border:  ${props.theme.success[300]}`;
   }
   if (props.type === "pending") {
-    return `border:  ${props.theme.warning[300]}`;
+    return `border:  ${props.theme.secondary[300]}`;
   }
   if (props.type === "error") {
     return `border:  ${props.theme.error[300]};`;
@@ -62,7 +62,7 @@ const BadgeText = styled.Text<{ type: "success" | "pending" | "error" }>`
       return `color:  ${props.theme.success[300]}`;
     }
     if (props.type === "pending") {
-      return `color:  ${props.theme.warning[300]}`;
+      return `color:  ${props.theme.secondary[300]}`;
     }
     if (props.type === "error") {
       return `color:  ${props.theme.error[300]};`;
