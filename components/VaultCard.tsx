@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
-import numeral from "numeral";
 import { TokenList } from "./TokenList";
+import { useAppDispatch, useAppSelector } from "../hooks/redux";
+import numeral from "numeral";
 
 interface VaultCardProps {
   vaultId: string;
@@ -9,11 +10,27 @@ interface VaultCardProps {
 }
 
 export const VaultCard = ({ vaultId, tokens }: VaultCardProps) => {
+  const { tokenPriceData } = useAppSelector((state) => state.realms);
+
+  const getVaultTotalValue = () => {
+    let totalValue = 0;
+    tokens.forEach((token) => {
+      const coinGeckoId = token?.extensions?.coingeckoId;
+      totalValue +=
+        tokenPriceData[coinGeckoId]?.current_price *
+          token.tokenAmount.uiAmount || 0;
+    });
+    return numeral(totalValue).format("$0,0");
+  };
+
   return (
     <Container>
-      <VaultTitle>
-        {vaultId.slice(0, 4)}...{vaultId.slice(-4)}
-      </VaultTitle>
+      <TitleContainer>
+        <VaultTitle>
+          {vaultId.slice(0, 4)}...{vaultId.slice(-4)}
+        </VaultTitle>
+        <VaultValue>{getVaultTotalValue()}</VaultValue>
+      </TitleContainer>
       <TokenList tokens={tokens} />
     </Container>
   );
@@ -30,7 +47,20 @@ const Container = styled.View`
 `;
 
 const VaultTitle = styled.Text`
-  color: ${(props: any) => props.theme.gray[100]}
+  color: ${(props: any) => props.theme.gray[300]}
   font-weight: bold;
-  font-size: 16px;
+  font-size: 14px;
+`;
+
+const VaultValue = styled.Text`
+color: ${(props: any) => props.theme.gray[100]}
+  font-weight: bold;
+  font-size: 24px;
+`;
+
+const TitleContainer = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: ${(props: any) => props.theme.spacing[4]};
 `;

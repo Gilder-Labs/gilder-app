@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components/native";
 import numeral from "numeral";
-
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 
 interface TokenCardProps {
@@ -30,11 +29,10 @@ export const TokenCard = ({ token }: TokenCardProps) => {
         <CoinPriceContainer>
           {coinGeckoId && (
             <CoinPriceText>
-              $
               {numeral(
                 tokenPriceData[coinGeckoId].current_price *
                   token.tokenAmount.uiAmount
-              ).format("0.00a")}
+              ).format("$0.00a")}
             </CoinPriceText>
           )}
           {coinGeckoId && (
