@@ -1,13 +1,8 @@
-import { StyleSheet } from "react-native";
-
+import { StyleSheet, FlatList } from "react-native";
 import { RootTabScreenProps } from "../types";
-import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { TokenList } from "../components";
 import styled from "styled-components/native";
-// 1. Fetch selected realms tokens
-// 2. Render token list - with monetary value
-// At top display total value
+import { VaultCard } from "../components";
 
 export default function TreasuryScreen({
   navigation,
@@ -21,12 +16,24 @@ export default function TreasuryScreen({
   // * get token prices
   // * get total treasury prices
 
+  const renderVault = ({ item }: any) => {
+    return (
+      <VaultCard
+        vaultId={item.vaultId}
+        tokens={item.tokens}
+        key={item.vaultId}
+      />
+    );
+  };
+
   return (
     <Container>
-      {/* {realmVaults.map((vault, index) => (
-        <TokenList tokens={vault.tokens} key={index} />
-      ))} */}
-      <Title> Test</Title>
+      <FlatList
+        data={realmVaults}
+        renderItem={renderVault}
+        keyExtractor={(item) => item.vaultId}
+        style={{ padding: 16 }}
+      />
     </Container>
   );
 }
@@ -38,6 +45,5 @@ const Title = styled.Text`
 
 const Container = styled.View`
   flex: 1;
-  background: ${(props: any) => props.theme.gray[800]};
-  padding: ${(props: any) => props.theme.spacing[4]};
+  background: ${(props: any) => props.theme.gray[900]};
 `;
