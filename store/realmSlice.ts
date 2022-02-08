@@ -9,6 +9,7 @@ import {
   getAllTokenOwnerRecords, // returns all members of a realm
   GovernanceAccountType, // Map that has all types of governance
 } from "@solana/spl-governance";
+import axios from "axios";
 
 import * as web3 from "@solana/web3.js";
 import { SPL_PUBLIC_KEY, REALM_GOVERNANCE_PKEY } from "../constants/Solana";
@@ -23,6 +24,7 @@ export interface realmState {
   realmMembers: Array<any>;
   realmProposals: Array<any>;
   realmActivity: Array<ConfirmedSignatureInfo>;
+  tokenPriceData: any;
 }
 
 interface realmType {
@@ -42,6 +44,7 @@ const initialState: realmState = {
   realmsData: cleanedRealmData,
   realmMembers: [],
   realmProposals: [],
+  tokenPriceData: null,
   // TODO: eventually store in local storage
   realmWatchlist: [
     "DPiH3H3c7t47BMxqTxLsuPQpEC6Kne8GA9VXbxpnZxFE", // mango
@@ -81,7 +84,7 @@ export const fetchRealm = createAsyncThunk(
   "realms/fetchRealm",
   async (realmId: string) => {
     const rawRealm = await getRealm(connection, new PublicKey(realmId));
-    console.log("rawrealm", rawRealm);
+    // console.log("rawrealm", rawRealm);
     return {
       name: rawRealm.account.name,
       pubKey: rawRealm.pubkey.toString(),
@@ -92,7 +95,6 @@ export const fetchRealm = createAsyncThunk(
   }
 );
 
-// TODO needs to be optimized
 export const fetchRealmVaults = createAsyncThunk(
   "realms/fetchRealmVaults",
   async (realm: any) => {
@@ -124,6 +126,18 @@ export const fetchRealmVaults = createAsyncThunk(
     );
 
     const tokensData = await TokensInfo;
+    const coinGeckoUrl = "https://api.coingecko.com/api/v3/coins/markets";
+    let tokenIds = new Set();
+    // const tokenPriceData = await axios.get(coinGeckoUrl, {
+    //   params: {
+    //     ids: "usd-coin,terra-luna,solana",
+    //     vs_currency: "usd",
+    //   },
+    // });
+    // console.log("price data from coingecko", tokenPriceData);
+
+    // fetch token prices here.
+    //
 
     let vaultsParsed = vaultsWithTokensRaw.map((vault, index) => {
       return {
@@ -131,6 +145,7 @@ export const fetchRealmVaults = createAsyncThunk(
         vaultId: vaultsInfo[index].vaultId,
         tokens: vault.value.map((token) => {
           let tokenInfo = tokensData.get(token.account.data.parsed.info.mint);
+          tokenIds.add(tokenInfo?.extensions?.coingeckoId);
           return {
             ...tokenInfo,
             mint: token.account.data.parsed.info.mint,
@@ -142,7 +157,15 @@ export const fetchRealmVaults = createAsyncThunk(
       };
     });
 
-    return vaultsParsed;
+    const tokenIdsString = Array.from(tokenIds).join();
+    const tokenPriceResponse = await axios.get(coinGeckoUrl, {
+      params: {
+        ids: tokenIdsString,
+        vs_currency: "usd",
+      },
+    });
+
+    return { vaults: vaultsParsed, tokenPriceData: tokenPriceResponse.data };
   }
 );
 
@@ -306,7 +329,8 @@ export const realmSlice = createSlice({
       .addCase(fetchRealmVaults.pending, (state) => {})
       .addCase(fetchRealmVaults.rejected, (state) => {})
       .addCase(fetchRealmVaults.fulfilled, (state, action: any) => {
-        state.realmVaults = action.payload;
+        state.realmVaults = action.payload.vaults;
+        state.tokenPriceData = action.payload.tokenPriceData;
       });
   },
 });

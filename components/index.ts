@@ -8,3 +8,4 @@ export * from "./MemberCard";
 export * from "./ProposalCard";
 export * from "./Badge";
 export * from "./VaultCard";
+export * from "./TokenCard";
