@@ -74,10 +74,10 @@ export default function Navigation({}: {}) {
   return (
     <NavigationContainer linking={LinkingConfiguration} theme={NavigationTheme}>
       <Drawer.Navigator
-        initialRouteName="Members" // Dashboard
+        initialRouteName="Treasury" // Dashboard
         drawerContent={(props) => <DrawerContentContainer {...props} />}
         screenOptions={{
-          drawerActiveBackgroundColor: theme?.gray[700],
+          drawerActiveBackgroundColor: theme?.gray[800],
           drawerActiveTintColor: theme?.primary[400],
           drawerInactiveTintColor: theme?.gray[400],
           drawerStyle: {

@@ -81,14 +81,15 @@ const StyledHeader = styled.View`
 const StyledRealmName = styled.Text`
   color: ${(props) => props.theme.gray[200]};
   font-size: 20px;
-  font-weight: 900;
+  font-weight: 700;
 `;
 
 const RealmNameContainer = styled.View`
   margin-left: ${(props) => props.theme.spacing[4]};
   margin-right: ${(props) => props.theme.spacing[4]};
   padding-top: ${(props) => props.theme.spacing[3]};
-  padding-bottom: ${(props) => props.theme.spacing[3]};
+  padding-bottom: ${(props) => props.theme.spacing[2]};
+  margin-bottom: ${(props) => props.theme.spacing[2]};
 
   border-bottom-color: ${(props) => props.theme.gray[800]};
   border-bottom-width: 1px;

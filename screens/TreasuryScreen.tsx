@@ -11,9 +11,9 @@ import styled from "styled-components/native";
 // 2. Render token list - with monetary value
 // At top display total value
 
-export default function VaultScreen({
+export default function TreasuryScreen({
   navigation,
-}: RootTabScreenProps<"Vault">) {
+}: RootTabScreenProps<"Treasury">) {
   const { selectedRealm, realmTokens } = useAppSelector(
     (state) => state.realms
   );
