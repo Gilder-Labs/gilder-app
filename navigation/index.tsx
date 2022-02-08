@@ -21,7 +21,7 @@ import { SvgUri } from "react-native-svg";
 import styled from "styled-components/native";
 
 import ActivityScreen from "../screens/ActivityScreen";
-import VaultScreen from "../screens/VaultScreen";
+import TreasuryScreen from "../screens/TreasuryScreen";
 import MembersScreen from "../screens/MembersScreen";
 import ProposalsScreen from "../screens/ProposalsScreen";
 
@@ -78,7 +78,7 @@ export default function Navigation({}: {}) {
         drawerContent={(props) => <DrawerContentContainer {...props} />}
         screenOptions={{
           drawerActiveBackgroundColor: theme?.gray[700],
-          drawerActiveTintColor: theme?.gray[100],
+          drawerActiveTintColor: theme?.primary[400],
           drawerInactiveTintColor: theme?.gray[400],
           drawerStyle: {
             width: 320,
@@ -91,12 +91,12 @@ export default function Navigation({}: {}) {
         // }}
       >
         <Drawer.Screen
-          name="Vault"
-          component={VaultScreen}
+          name="Treasury"
+          component={TreasuryScreen}
           options={{
             drawerLabel: ({ focused, color }) => (
               <DrawerTabText color={color} focused={focused}>
-                Vault
+                Treasury
               </DrawerTabText>
             ),
             drawerIcon: ({ focused, color, size }) => (
