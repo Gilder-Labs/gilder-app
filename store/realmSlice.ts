@@ -9,6 +9,8 @@ import {
   getAllGovernances,
   Proposal,
   ProposalState,
+  getAllProposals,
+  getAllTokenOwnerRecords,
 } from "@solana/spl-governance";
 import * as web3 from "@solana/web3.js";
 import { SPL_PUBLIC_KEY, REALM_GOVERNANCE_PKEY } from "../constants/Solana";
@@ -149,17 +151,6 @@ export const fetchRealmActivity = createAsyncThunk(
   }
 );
 
-// Temp till spl-governance gets updated
-async function getAllTokenOwnerRecords(
-  connection: any,
-  programId: PublicKey,
-  realmPk: PublicKey
-) {
-  return getGovernanceAccounts(connection, programId, TokenOwnerRecord, [
-    pubkeyFilter(1, realmPk)!,
-  ]);
-}
-
 export const fetchRealmMembers = createAsyncThunk(
   "realms/fetchRealmMembers",
   async (realm: realmType) => {
@@ -193,29 +184,6 @@ export const fetchRealmMembers = createAsyncThunk(
     return members;
   }
 );
-
-// TODO: remove this once SPL-goverancen updates
-export async function getAllProposals(
-  connection: any,
-  programId: PublicKey,
-  realmPk: PublicKey
-) {
-  return getAllGovernances(connection, programId, realmPk).then((gs) =>
-    Promise.all(
-      gs.map((g) => getProposalsByGovernance(connection, programId, g.pubkey))
-    )
-  );
-}
-
-export async function getProposalsByGovernance(
-  connection: any,
-  programId: PublicKey,
-  governancePk: PublicKey
-) {
-  return getGovernanceAccounts(connection, programId, Proposal, [
-    pubkeyFilter(1, governancePk)!,
-  ]);
-}
 
 export const fetchRealmProposals = createAsyncThunk(
   "realms/fetchRealmProposals",
@@ -254,11 +222,11 @@ export const fetchRealmProposals = createAsyncThunk(
 
         // Dates
         getStateTimestamp: proposal.account.getStateTimestamp(), // date/time it hit currents state
-        // votingAt: proposal.account?.votingAt?.toNumber(),
-        // signingOffAt: proposal.account?.signingOffAt?.toNumber(),
-        // votingCompletedAt: proposal.account?.votingCompletedAt?.toNumber(),
-        // draftAt: proposal.account?.draftAt?.toNumber(),
-        // executingAt: proposal.account?.executingAt?.toNumber(),
+        votingAt: proposal.account?.votingAt?.toNumber(),
+        signingOffAt: proposal.account?.signingOffAt?.toNumber(),
+        votingCompletedAt: proposal.account?.votingCompletedAt?.toNumber(),
+        draftAt: proposal.account?.draftAt?.toNumber(),
+        executingAt: proposal.account?.executingAt?.toNumber(),
       };
     });
 

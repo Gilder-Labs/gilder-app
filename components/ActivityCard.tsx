@@ -14,7 +14,7 @@ export const ActivityCard = ({ signature, blockTime }: ActivityCardProps) => {
   const theme = useTheme();
 
   const transactionDate = blockTime
-    ? format(blockTime * 1000, "LLL cc, yyyy")
+    ? format(blockTime * 1000, "LLL d, yyyy - p")
     : "";
 
   const handleActivityClick = () => {

@@ -24,7 +24,7 @@
     "@react-navigation/native": "^6.0.7",
     "@react-navigation/native-stack": "^6.4.1",
     "@reduxjs/toolkit": "^1.7.1",
-    "@solana/spl-governance": "^0.0.26",
+    "@solana/spl-governance": "^0.0.27",
     "@solana/spl-token": "^0.1.8",
     "@solana/spl-token-registry": "^0.2.2006",
     "@solana/web3.js": "^1.32.2",

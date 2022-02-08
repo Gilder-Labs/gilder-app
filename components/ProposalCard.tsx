@@ -42,13 +42,15 @@ export const ProposalCard = ({ proposal }: ProposalCardProps) => {
   const noPercentage = noVotes ? Math.round((noVotes / totalVotes) * 100) : 0;
   // console.log("yes votes", yesPercentage);
 
+  const dateTimestamp = proposal?.votingCompletedAt || getStateTimestamp;
+
   return (
     <Container>
       <TextContainer>
         <ProposalTitle>{name}</ProposalTitle>
       </TextContainer>
       <BadgeRow>
-        <DateText>{format(getStateTimestamp * 1000, "LLL cc, yyyy")}</DateText>
+        <DateText>{format(dateTimestamp * 1000, "MMM d, yyyy - p")}</DateText>
         {/* @ts-ignore */}
         <Badge title={status} type={proposalStatusKey[status]} />
       </BadgeRow>

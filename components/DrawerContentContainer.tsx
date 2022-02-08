@@ -71,11 +71,12 @@ const StyledHeader = styled.View`
   background-color: ${(props) => props.theme.gray[1000]};
   flex: 1;
   align-items: center;
-  padding: ${(props) => props.theme.spacing[4]};
+  padding-bottom: ${(props) => props.theme.spacing[4]};
+  padding-left: ${(props) => props.theme.spacing[4]};
   /* border-bottom-color: ${(props) => props.theme.gray[800]}; */
   border-bottom-width: 1px;
   flex-direction: row;
-  max-height: 64px;
+  max-height: 40px;
 `;
 
 const StyledRealmName = styled.Text`
