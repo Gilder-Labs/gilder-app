@@ -3,14 +3,11 @@ import { PublicKey, ConfirmedSignatureInfo } from "@solana/web3.js";
 import {
   getRealms,
   getRealm,
-  TokenOwnerRecord,
-  getGovernanceAccounts,
-  pubkeyFilter,
-  getAllGovernances,
-  Proposal,
+  getAllGovernances, // all governances of a realm
   ProposalState,
   getAllProposals,
-  getAllTokenOwnerRecords,
+  getAllTokenOwnerRecords, // returns all members of a realm
+  GovernanceAccountType, // Map that has all types of governance
 } from "@solana/spl-governance";
 import * as web3 from "@solana/web3.js";
 import { SPL_PUBLIC_KEY, REALM_GOVERNANCE_PKEY } from "../constants/Solana";
@@ -19,7 +16,7 @@ import { cleanRealmData } from "../utils";
 export interface realmState {
   realms: Array<any>;
   selectedRealm: any;
-  realmTokens: Array<any>;
+  realmVaults: Array<any>;
   realmsData: any;
   realmWatchlist: Array<string>;
   realmMembers: Array<any>;
@@ -40,7 +37,7 @@ const cleanedRealmData = cleanRealmData();
 const initialState: realmState = {
   realms: [],
   selectedRealm: null,
-  realmTokens: [],
+  realmVaults: [],
   realmsData: cleanedRealmData,
   realmMembers: [],
   realmProposals: [],
@@ -83,7 +80,7 @@ export const fetchRealm = createAsyncThunk(
   "realms/fetchRealm",
   async (realmId: string) => {
     const rawRealm = await getRealm(connection, new PublicKey(realmId));
-
+    console.log("rawrealm", rawRealm);
     return {
       name: rawRealm.account.name,
       pubKey: rawRealm.pubkey.toString(),
@@ -95,26 +92,51 @@ export const fetchRealm = createAsyncThunk(
 );
 
 // TODO needs to be optimized
-export const fetchRealmTokens = createAsyncThunk(
-  "realms/fetchRealmTokens",
+export const fetchRealmVaults = createAsyncThunk(
+  "realms/fetchRealmVaults",
   async (realm: any) => {
-    const rawTokensResponse = await connection.getParsedTokenAccountsByOwner(
-      new PublicKey(realm.pubKey),
-      {
-        programId: SPL_PUBLIC_KEY,
-      }
+    const rawGovernances = await getAllGovernances(
+      connection,
+      new PublicKey(realm.governanceId),
+      new PublicKey(realm.pubKey)
     );
-    const rawTokens = rawTokensResponse.value;
 
-    let tokens = rawTokens.map((token) => {
+    const rawFilteredVaults = rawGovernances.filter(
+      (gov) =>
+        gov.account.accountType === GovernanceAccountType.TokenGovernanceV1 ||
+        gov.account.accountType === GovernanceAccountType.TokenGovernanceV2
+    );
+
+    console.log(rawFilteredVaults);
+
+    const vaultsInfo = rawFilteredVaults.map((governance) => {
       return {
-        mint: token.account.data.parsed.info.mint,
-        tokenAmount: token.account.data.parsed.info.tokenAmount,
-        pubKey: token.pubkey.toString(),
+        pubKey: governance.pubkey.toString(), // program that controls vault
+        vaultId: governance.account?.governedAccount.toString(), // vault
       };
     });
 
-    return tokens;
+    const vaultsWithTokensRaw = await Promise.all(
+      vaultsInfo.map((vault) =>
+        connection.getParsedTokenAccountsByOwner(new PublicKey(vault.pubKey), {
+          programId: SPL_PUBLIC_KEY,
+        })
+      )
+    );
+
+    let vaultsParsed = vaultsWithTokensRaw.map((vault) => {
+      return {
+        tokens: vault.value.map((token) => {
+          return {
+            mint: token.account.data.parsed.info.mint,
+            tokenAmount: token.account.data.parsed.info.tokenAmount,
+            pubKey: token.pubkey.toString(),
+          };
+        }),
+      };
+    });
+
+    return vaultsParsed;
   }
 );
 
@@ -275,10 +297,10 @@ export const realmSlice = createSlice({
       .addCase(fetchRealmProposals.fulfilled, (state, action: any) => {
         state.realmProposals = action.payload;
       })
-      .addCase(fetchRealmTokens.pending, (state) => {})
-      .addCase(fetchRealmTokens.rejected, (state) => {})
-      .addCase(fetchRealmTokens.fulfilled, (state, action: any) => {
-        state.realmTokens = action.payload;
+      .addCase(fetchRealmVaults.pending, (state) => {})
+      .addCase(fetchRealmVaults.rejected, (state) => {})
+      .addCase(fetchRealmVaults.fulfilled, (state, action: any) => {
+        state.realmVaults = action.payload;
       });
   },
 });

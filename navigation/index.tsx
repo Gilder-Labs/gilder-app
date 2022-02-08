@@ -11,7 +11,7 @@ import { useTheme } from "styled-components";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import {
   fetchRealms,
-  fetchRealmTokens,
+  fetchRealmVaults,
   fetchRealm,
   fetchRealmActivity,
   fetchRealmMembers,
@@ -52,7 +52,7 @@ export default function Navigation({}: {}) {
 
   useEffect(() => {
     if (selectedRealm?.pubKey) {
-      dispatch(fetchRealmTokens(selectedRealm));
+      dispatch(fetchRealmVaults(selectedRealm));
       dispatch(fetchRealmActivity(selectedRealm));
       dispatch(fetchRealmProposals(selectedRealm));
       dispatch(fetchRealmMembers(selectedRealm));

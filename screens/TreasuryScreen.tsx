@@ -4,7 +4,6 @@ import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { fetchRealmTokens } from "../store/realmSlice";
 import { TokenList } from "../components";
 import styled from "styled-components/native";
 // 1. Fetch selected realms tokens
@@ -14,14 +13,13 @@ import styled from "styled-components/native";
 export default function TreasuryScreen({
   navigation,
 }: RootTabScreenProps<"Treasury">) {
-  const { selectedRealm, realmTokens } = useAppSelector(
+  const { selectedRealm, realmVaults } = useAppSelector(
     (state) => state.realms
   );
-  const dispatch = useAppDispatch();
 
   return (
     <Container>
-      <TokenList tokens={realmTokens} />
+      <TokenList tokens={realmVaults[0].tokens} />
     </Container>
   );
 }

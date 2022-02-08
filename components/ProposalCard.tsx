@@ -57,10 +57,10 @@ export const ProposalCard = ({ proposal }: ProposalCardProps) => {
       <Description>{description}</Description>
       <VoteCountRow>
         <VoteText>
-          YES - {numeral(yesVotes).format("0.00a")} ({yesPercentage}%)
+          Approve - {numeral(yesVotes).format("0a")} ({yesPercentage}%)
         </VoteText>
         <VoteText>
-          NO - {numeral(noVotes).format("0.00a")} ({noPercentage}%)
+          Deny - {numeral(noVotes).format("0a")} ({noPercentage}%)
         </VoteText>
       </VoteCountRow>
       <VoteContainer>
