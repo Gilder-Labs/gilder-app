@@ -67,4 +67,5 @@ const RealmIconImage = styled.Image`
   margin-bottom: 12px;
   justify-content: center;
   align-self: center;
+  overflow: hidden;
 `;

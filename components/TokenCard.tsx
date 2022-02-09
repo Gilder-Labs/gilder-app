@@ -19,20 +19,22 @@ export const TokenCard = ({ token }: TokenCardProps) => {
 
   return (
     <CoinCard key={token.mint + token.owner}>
-      {token.logoURI ? (
-        <CoinIcon
-          source={{
-            uri: token.logoURI,
-          }}
-        />
-      ) : (
-        <SvgXml
-          width="40"
-          height="40"
-          style={{ marginRight: 12 }}
-          xml={jdenticonSvg}
-        />
-      )}
+      <CoinImageContainer>
+        {token.logoURI ? (
+          <CoinIcon
+            source={{
+              uri: token.logoURI,
+            }}
+          />
+        ) : (
+          <SvgXml
+            width="40"
+            height="40"
+            style={{ overflow: "hidden" }}
+            xml={jdenticonSvg}
+          />
+        )}
+      </CoinImageContainer>
       <CoinTextContainer>
         <CoinTitleContainer>
           <CoinTitle>
@@ -85,7 +87,7 @@ const CoinSubtitle = styled.Text`
 const CoinIcon = styled.Image`
   width: 40px;
   height: 40px;
-  margin-right: ${(props: any) => props.theme.spacing[3]};
+  overflow: hidden;
 `;
 const CoinCard = styled.View`
   height: 64px;
@@ -102,6 +104,13 @@ const CoinTextContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
   flex: 1;
+`;
+
+const CoinImageContainer = styled.View`
+  /* border: 1px solid red; */
+  border-radius: 100px;
+  overflow: hidden;
+  margin-right: ${(props: any) => props.theme.spacing[3]};
 `;
 
 const CoinTitleContainer = styled.View``;
