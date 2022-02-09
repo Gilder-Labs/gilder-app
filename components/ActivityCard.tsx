@@ -42,6 +42,15 @@ export const ActivityCard = ({ activity }: ActivityCardProps) => {
       case InstructionToText.CastVote:
         return (
           <IconContainer isSuccessful={isSuccessful} color={theme.success[400]}>
+            <Unicons.UilEnvelopeEdit
+              size="22"
+              color={isSuccessful ? theme.success[400] : theme.error[400]}
+            />
+          </IconContainer>
+        );
+      case InstructionToText.FinalizeVote:
+        return (
+          <IconContainer isSuccessful={isSuccessful} color={theme.success[400]}>
             <Unicons.UilEnvelopeCheck
               size="22"
               color={isSuccessful ? theme.success[400] : theme.error[400]}
@@ -91,6 +100,15 @@ export const ActivityCard = ({ activity }: ActivityCardProps) => {
         return (
           <IconContainer isSuccessful={isSuccessful} color={theme.aqua[400]}>
             <Unicons.UilMoneyWithdraw
+              size="20"
+              color={isSuccessful ? theme.aqua[400] : theme.error[400]}
+            />
+          </IconContainer>
+        );
+      case InstructionToText.WithdrawGoverningTokens:
+        return (
+          <IconContainer isSuccessful={isSuccessful} color={theme.aqua[400]}>
+            <Unicons.UilMoneyInsert
               size="20"
               color={isSuccessful ? theme.aqua[400] : theme.error[400]}
             />
@@ -168,7 +186,7 @@ const ActivityTitle = styled.Text`
 `;
 
 const ErrorText = styled.Text`
-  color: ${(props: any) => props.theme.gray[100]};
+  color: ${(props: any) => props.theme.error[400]};
   font-size: 14px;
   line-height: 20px;
   margin-bottom: ${(props: any) => props.theme.spacing[2]};
