@@ -180,7 +180,7 @@ export const fetchRealmActivity = createAsyncThunk(
     try {
       let transactions = await connection.getConfirmedSignaturesForAddress2(
         new PublicKey(realm?.pubKey),
-        { limit: 50 }
+        { limit: 20 }
       );
 
       transactions = transactions?.sort(
@@ -308,6 +308,9 @@ export const realmSlice = createSlice({
   reducers: {
     addRealmToWatchlist: (state, action) => {
       state.realmWatchlist.push(action.payload);
+    },
+    selectRealm: (state, action) => {
+      state.selectedRealm = action.payload;
     },
   },
   extraReducers: (builder) => {

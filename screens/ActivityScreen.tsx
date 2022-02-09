@@ -22,13 +22,7 @@ export default function ActivityScreen({
   let dateTracker = realmActivity[1]?.blockTime * 1000;
 
   const renderActivity = ({ item }: any) => {
-    return (
-      <ActivityCard
-        signature={item.signature}
-        blockTime={item.blockTime}
-        key={item.signature}
-      />
-    );
+    return <ActivityCard activity={item} key={item.signature} />;
   };
 
   const renderSeparator = (props: any) => {
@@ -54,17 +48,17 @@ export default function ActivityScreen({
         renderItem={renderActivity}
         keyExtractor={(item) => item.signature}
         style={{ padding: 16 }}
-        ItemSeparatorComponent={renderSeparator}
-        ListHeaderComponent={
-          <DateSeparator>
-            {realmActivity[0] &&
-              format(
-                // @ts-ignore
-                realmActivity[0]?.blockTime * 1000,
-                "LLL d, yyyy - p"
-              )}
-          </DateSeparator>
-        }
+        // ItemSeparatorComponent={renderSeparator}
+        // ListHeaderComponent={
+        //   <DateSeparator>
+        //     {realmActivity[0] &&
+        //       format(
+        //         // @ts-ignore
+        //         realmActivity[0]?.blockTime * 1000,
+        //         "LLL d, yyyy - p"
+        //       )}
+        //   </DateSeparator>
+        // }
       />
     </Container>
   );

@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
+import { View } from "react-native";
 import { Linking } from "react-native";
 import { format } from "date-fns";
 import { useTheme } from "styled-components";
 import * as Unicons from "@iconscout/react-native-unicons";
+// success: check or check-circle
+// error: exclaimation-octagon
 
 interface ActivityCardProps {
-  signature: string;
-  blockTime: number | null | undefined;
+  activity: any;
 }
 
-export const ActivityCard = ({ signature, blockTime }: ActivityCardProps) => {
+export const ActivityCard = ({ activity }: ActivityCardProps) => {
   const theme = useTheme();
+  const { signature, blockTime } = activity;
 
   const transactionDate = blockTime
     ? format(blockTime * 1000, "LLL d, yyyy - p")
@@ -21,8 +24,35 @@ export const ActivityCard = ({ signature, blockTime }: ActivityCardProps) => {
     Linking.openURL(`https://solscan.io/tx/${signature}`);
   };
 
+  const renderActivityIcon = () => {
+    const successStatus = "Ok" in activity.status;
+    const errorStatus = "Err" in activity.status;
+
+    if (successStatus) {
+      return (
+        <IconContainer type="success">
+          <Unicons.UilCheck size="24" color={theme.success[400]} />
+        </IconContainer>
+      );
+    }
+
+    if (errorStatus) {
+      console.log("error activity", activity);
+      return (
+        <IconContainer type="error">
+          <Unicons.UilExclamation size="28" color={theme.error[400]} />
+        </IconContainer>
+      );
+    }
+
+    console.log("unknown activity", activity);
+
+    return <View />;
+  };
+
   return (
     <Container>
+      <TextContainer>{renderActivityIcon()}</TextContainer>
       <TextContainer>
         <ActivityTitle>
           {`${signature.slice(0, 4)}...${signature.slice(-4)}`}
@@ -73,3 +103,15 @@ const IconButton = styled.TouchableOpacity`
 `;
 
 const TextContainer = styled.View``;
+
+const IconContainer = styled.View<{ type: "success" | "error" }>`
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 100px;
+  background: ${(props: any) =>
+    props.type === "success"
+      ? props.theme.success[400]
+      : props.theme.error[400]}88;
+`;
