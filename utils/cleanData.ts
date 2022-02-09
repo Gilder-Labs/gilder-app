@@ -1,5 +1,7 @@
 import realmsMainnet from "../constants/realms/mainnet-beta.json";
 import { TokenListProvider, TokenInfo } from "@solana/spl-token-registry";
+import { GovernanceInstruction } from "@solana/spl-governance";
+
 // For tokens spl-token-registry
 const ENV = {
   MainnetBeta: 101,
@@ -31,4 +33,31 @@ export const getTokensInfo = async () => {
   }, new Map());
 
   return tokensInfo;
+};
+
+export const extractLogInfo = (informationLogs: any) => {
+  let errorLog = "";
+  const instructionLogs = [];
+
+  informationLogs.forEach((log: string) => {
+    if (log.includes("GOVERNANCE-ERROR")) {
+      console.log("FOUND AN ERROR", log);
+      const errorString = log.split("Program log: GOVERNANCE-ERROR: ")[1];
+      errorLog = errorString;
+    }
+    if (log.includes("GOVERNANCE-INSTRUCTION")) {
+      const instructionString = log.split(
+        "Program log: GOVERNANCE-INSTRUCTION: "
+      )[1];
+      // sometimes, logs have more info after the instruction keyword
+      const actualInstruction = instructionString.split(" ")[0];
+      instructionLogs.push(actualInstruction);
+    }
+  });
+
+  const uniqueInstructionLogs = new Set(instructionLogs);
+  const uniqueInstructionLogsArray = Array.from(uniqueInstructionLogs);
+
+  // clean instruction logs to only get unique values
+  return { errorLog: errorLog, instructionLogs: uniqueInstructionLogsArray };
 };

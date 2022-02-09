@@ -15,7 +15,7 @@ import axios from "axios";
 
 import * as web3 from "@solana/web3.js";
 import { SPL_PUBLIC_KEY, REALM_GOVERNANCE_PKEY } from "../constants/Solana";
-import { cleanRealmData, getTokensInfo } from "../utils";
+import { cleanRealmData, getTokensInfo, extractLogInfo } from "../utils";
 
 export interface realmState {
   realms: Array<any>;
@@ -192,7 +192,7 @@ export const fetchRealmActivity = createAsyncThunk(
         return transaction.signature;
       });
 
-      rawTransactionsFilled = await connection.getParsedConfirmedTransactions(
+      rawTransactionsFilled = await connection.getParsedTransactions(
         signatures
       );
 
@@ -202,10 +202,13 @@ export const fetchRealmActivity = createAsyncThunk(
         return {
           signature: transactions[index].signature,
           blockTime: transaction?.blockTime,
+          // @ts-ignore
           status: transaction?.meta?.status,
           logs: transaction?.meta?.logMessages,
+          logsParsed: extractLogInfo(transaction?.meta?.logMessages),
         };
       });
+
       return activitiesParsed;
     } catch (error) {
       console.log("transaction error", error);

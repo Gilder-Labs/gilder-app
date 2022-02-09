@@ -51,12 +51,24 @@ export function DrawerContentContainer(props: any) {
           </AddRealmButtonContainer>
         </RealmScrollContainer>
         <DrawerContentContainerWrapper>
-          <RealmNameContainer>
-            <StyledRealmName>
-              {realmDisplayName ? realmDisplayName : selectedRealm?.name}
-            </StyledRealmName>
-          </RealmNameContainer>
-          <DrawerItemList {...props} />
+          <Content>
+            <RealmNameContainer>
+              <StyledRealmName>
+                {realmDisplayName ? realmDisplayName : selectedRealm?.name}
+              </StyledRealmName>
+            </RealmNameContainer>
+            <DrawerItemList {...props} />
+          </Content>
+          <ConnectWalletContainer>
+            <ConnectWalletButton>
+              <Unicons.UilWallet
+                size="20"
+                color={theme.gray[400]}
+                style={{ marginRight: 8 }}
+              />
+              <WalletConnectText>Connect Wallet</WalletConnectText>
+            </ConnectWalletButton>
+          </ConnectWalletContainer>
         </DrawerContentContainerWrapper>
       </StyledContainer>
       <RealmSelectModal
@@ -132,9 +144,40 @@ const Divider = styled.View`
 
 const DrawerContentContainerWrapper = styled.View`
   flex: 1;
+  justify-content: space-between;
 `;
 
 const GilderLogo = styled.Image`
   height: 36px;
   width: 120px;
+`;
+
+const ConnectWalletContainer = styled.View`
+  background: ${(props) => props.theme.gray[1000]};
+  /* height: 64px; */
+  padding: ${(props) => props.theme.spacing[3]};
+  padding-bottom: ${(props) => props.theme.spacing[5]};
+
+  border-top-width: 1px;
+  border-color: ${(props) => props.theme.gray[900]};
+`;
+
+const Content = styled.View`
+  flex: 1;
+`;
+
+const WalletConnectText = styled.Text`
+  color: ${(props) => props.theme.gray[400]};
+`;
+
+const ConnectWalletButton = styled.TouchableOpacity`
+  flex: 1;
+  flex-direction: row;
+
+  height: 48px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+
+  background: ${(props) => props.theme.gray[800]};
 `;

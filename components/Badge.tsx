@@ -3,10 +3,11 @@ import styled from "styled-components/native";
 
 interface BadgeProps {
   title: string;
-  type: "success" | "pending" | "error";
+  type: "success" | "pending" | "error" | "gray";
+  size?: "default" | "small";
 }
 
-export const Badge = ({ title, type }: BadgeProps) => {
+export const Badge = ({ title, type, size = "default" }: BadgeProps) => {
   return (
     <BadgeFlexContainer>
       <BadgeContainer type={type}>
@@ -18,10 +19,11 @@ export const Badge = ({ title, type }: BadgeProps) => {
 
 const BadgeFlexContainer = styled.View`
   align-items: flex-start;
-  margin-bottom: ${(props: any) => props.theme.spacing[2]};
 `;
 
-const BadgeContainer = styled.View<{ type: "success" | "pending" | "error" }>`
+const BadgeContainer = styled.View<{
+  type: "success" | "pending" | "error" | "gray";
+}>`
   ${(props: any) => {
     if (props.type === "success") {
       return `background:  ${props.theme.success[800]}44`;
@@ -31,6 +33,9 @@ const BadgeContainer = styled.View<{ type: "success" | "pending" | "error" }>`
     }
     if (props.type === "error") {
       return `background:  ${props.theme.error[800]}44;`;
+    }
+    if (props.type === "gray") {
+      return `background:  ${props.theme.gray[800]}44;`;
     }
   }}
 
@@ -44,6 +49,9 @@ ${(props: any) => {
   if (props.type === "error") {
     return `border:  ${props.theme.error[300]};`;
   }
+  if (props.type === "gray") {
+    return `border:  ${props.theme.gray[300]};`;
+  }
 }}
 
   border-radius: 8px;
@@ -55,8 +63,12 @@ ${(props: any) => {
   align-items: center;
 `;
 
-const BadgeText = styled.Text<{ type: "success" | "pending" | "error" }>`
+const BadgeText = styled.Text<{
+  type: "success" | "pending" | "error" | "gray";
+  size: string;
+}>`
   font-size: 14px;
+
   ${(props: any) => {
     if (props.type === "success") {
       return `color:  ${props.theme.success[300]}`;
@@ -66,6 +78,9 @@ const BadgeText = styled.Text<{ type: "success" | "pending" | "error" }>`
     }
     if (props.type === "error") {
       return `color:  ${props.theme.error[300]};`;
+    }
+    if (props.type === "gray") {
+      return `color:  ${props.theme.gray[300]};`;
     }
   }}
 `;
