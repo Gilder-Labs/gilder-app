@@ -179,8 +179,8 @@ export const fetchRealmActivity = createAsyncThunk(
 
     try {
       let transactions = await connection.getConfirmedSignaturesForAddress2(
-        new PublicKey(realm?.governanceId),
-        { limit: 25 }
+        new PublicKey(realm?.pubKey),
+        { limit: 50 }
       );
 
       transactions = transactions?.sort(
