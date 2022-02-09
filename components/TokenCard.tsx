@@ -2,6 +2,9 @@ import React from "react";
 import styled from "styled-components/native";
 import numeral from "numeral";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
+import { createAvatar } from "@dicebear/avatars";
+import * as style from "@dicebear/avatars-jdenticon-sprites";
+import { SvgXml } from "react-native-svg";
 
 interface TokenCardProps {
   token: any;
@@ -9,19 +12,35 @@ interface TokenCardProps {
 
 export const TokenCard = ({ token }: TokenCardProps) => {
   const { tokenPriceData } = useAppSelector((state) => state.realms);
-
+  let jdenticonSvg = createAvatar(style, {
+    seed: token.mint,
+  });
   const coinGeckoId = token?.extensions?.coingeckoId;
 
   return (
     <CoinCard key={token.mint + token.owner}>
-      <CoinIcon
-        source={{
-          uri: token.logoURI,
-        }}
-      />
+      {token.logoURI ? (
+        <CoinIcon
+          source={{
+            uri: token.logoURI,
+          }}
+        />
+      ) : (
+        <SvgXml
+          width="40"
+          height="40"
+          style={{ marginRight: 12 }}
+          xml={jdenticonSvg}
+        />
+      )}
       <CoinTextContainer>
         <CoinTitleContainer>
-          <CoinTitle>{token.name || "Unknown Token"}</CoinTitle>
+          <CoinTitle>
+            {token.name ||
+              `Unknown Token (${token.mint.slice(0, 3)}...${token.mint.slice(
+                -3
+              )})`}
+          </CoinTitle>
           <CoinSubtitle>
             {numeral(token.tokenAmount.uiAmount).format("0.00a")} {token.symbol}
           </CoinSubtitle>
