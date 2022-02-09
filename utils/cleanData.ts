@@ -35,13 +35,42 @@ export const getTokensInfo = async () => {
   return tokensInfo;
 };
 
+export const InstructionToText = {
+  CastVote: "Vote Cast",
+  PostMessage: "Message Posted",
+  DepositGoverningTokens: "Gov. Tokens Deposited",
+  WithdrawGoverningTokens: "Gov. Tokens Withdrawn",
+  RelinquishVote: "Vote Relinquished",
+  CreateRealm: "Create Realm",
+  SetGovernanceDelegate: "Gonvernance Delegate Set",
+  CreateGovernance: "Governance Created",
+  CreateProgramGovernance: "Governance Program Created",
+  CreateProposal: "Proposal Created",
+  AddSignatory: "Signatory Added",
+  RemoveSignatory: "Signatory Removed",
+  CancelProposal: "Proposal Canceled",
+  SignOffProposal: "Proposal Signed off",
+  FinalizeVote: "Vote Finalized",
+  ExecuteTransaction: "Transaction Executed",
+  CreateMintGovernance: "Created Governance Mint",
+  CreateTokenGovernance: "Created Token Governance",
+  SetGovernanceConfig: "Set Governance Config",
+  FlagTransactionError: "Flagged Transaction Error",
+  SetRealmAuthority: "Set Realm Authority",
+  SetRealmConfig: "Set Realm Config",
+  CreateTokenOwnerRecord: "Created Token Owner Record",
+  UpdateProgramMetadata: "Updated Program Metadata",
+  CreateNativeTreasury: "Created Native Treasury",
+  RemoveTransaction: "Removed Transaction",
+  InsertTransaction: "Inserted Transaction",
+};
+
 export const extractLogInfo = (informationLogs: any) => {
   let errorLog = "";
   const instructionLogs = [];
 
   informationLogs.forEach((log: string) => {
     if (log.includes("GOVERNANCE-ERROR")) {
-      console.log("FOUND AN ERROR", log);
       const errorString = log.split("Program log: GOVERNANCE-ERROR: ")[1];
       errorLog = errorString;
     }
@@ -51,7 +80,27 @@ export const extractLogInfo = (informationLogs: any) => {
       )[1];
       // sometimes, logs have more info after the instruction keyword
       const actualInstruction = instructionString.split(" ")[0];
-      instructionLogs.push(actualInstruction);
+      // @ts-ignore
+      const plainText = InstructionToText[actualInstruction];
+      if (plainText) {
+        instructionLogs.push(plainText);
+      } else {
+        instructionLogs.push(actualInstruction);
+      }
+    }
+    if (log.includes("GOVERNANCE-CHAT-INSTRUCTION")) {
+      const instructionString = log.split(
+        "Program log: GOVERNANCE-CHAT-INSTRUCTION: "
+      )[1];
+      // sometimes, logs have more info after the instruction keyword
+      const actualInstruction = instructionString.split(" ")[0];
+      // @ts-ignore
+      const plainText = InstructionToText[actualInstruction];
+      if (plainText) {
+        instructionLogs.push(plainText);
+      } else {
+        instructionLogs.push(actualInstruction);
+      }
     }
   });
 

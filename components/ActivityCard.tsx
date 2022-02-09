@@ -5,7 +5,7 @@ import { Linking } from "react-native";
 import { format } from "date-fns";
 import { useTheme } from "styled-components";
 import * as Unicons from "@iconscout/react-native-unicons";
-import { GovernanceInstruction } from "@solana/spl-governance";
+import { InstructionToText } from "../utils/cleanData";
 /*
   <who made transaction> <type> <type of instruction> in <what governance> <date>
 
@@ -34,54 +34,94 @@ export const ActivityCard = ({ activity }: ActivityCardProps) => {
   };
 
   const renderActivityIcon = () => {
-    const successStatus = "Ok" in activity.status;
-    const errorStatus = "Err" in activity.status;
-    let ic;
+    const instruction = instructionLogs[0]; // just take initial instruction for now
 
-    // TODO: render as switch statement for different governance instructions
-    if (successStatus) {
-      return (
-        <IconContainer type="success">
-          <Unicons.UilCheck size="24" color={theme.success[400]} />
-        </IconContainer>
-      );
+    const isSuccessful = "Ok" in activity.status ? true : false;
+
+    switch (instruction) {
+      case InstructionToText.CastVote:
+        return (
+          <IconContainer isSuccessful={isSuccessful} color={theme.success[400]}>
+            <Unicons.UilEnvelopeCheck
+              size="22"
+              color={isSuccessful ? theme.success[400] : theme.error[400]}
+            />
+          </IconContainer>
+        );
+      case InstructionToText.RelinquishVote:
+        return (
+          <IconContainer isSuccessful={isSuccessful} color={theme.success[400]}>
+            <Unicons.UilEnvelopeRedo
+              size="22"
+              color={isSuccessful ? theme.success[400] : theme.error[400]}
+            />
+          </IconContainer>
+        );
+      case InstructionToText.PostMessage:
+        return (
+          <IconContainer
+            isSuccessful={isSuccessful}
+            color={theme.secondary[400]}
+          >
+            <Unicons.UilCommentAltLines
+              size="20"
+              color={isSuccessful ? theme.secondary[400] : theme.error[400]}
+            />
+          </IconContainer>
+        );
+      case InstructionToText.CreateProposal:
+        return (
+          <IconContainer isSuccessful={isSuccessful} color={theme.primary[400]}>
+            <Unicons.UilFilePlusAlt
+              size="20"
+              color={isSuccessful ? theme.primary[400] : theme.error[400]}
+            />
+          </IconContainer>
+        );
+      case InstructionToText.SetRealmAuthority:
+        return (
+          <IconContainer isSuccessful={isSuccessful} color={theme.purple[400]}>
+            <Unicons.UilFilePlusAlt
+              size="20"
+              color={isSuccessful ? theme.purple[400] : theme.error[400]}
+            />
+          </IconContainer>
+        );
+      case InstructionToText.DepositGoverningTokens:
+        return (
+          <IconContainer isSuccessful={isSuccessful} color={theme.aqua[400]}>
+            <Unicons.UilMoneyWithdraw
+              size="20"
+              color={isSuccessful ? theme.aqua[400] : theme.error[400]}
+            />
+          </IconContainer>
+        );
+      default:
+        return (
+          <IconContainer isSuccessful={isSuccessful} color={theme.success[400]}>
+            <Unicons.UilCheck
+              size="24"
+              color={isSuccessful ? theme.success[400] : theme.error[400]}
+            />
+          </IconContainer>
+        );
     }
-
-    if (errorStatus) {
-      return (
-        <IconContainer type="error">
-          <Unicons.UilExclamation size="28" color={theme.error[400]} />
-        </IconContainer>
-      );
-    }
-
-    // switch (expr) {
-    //   case successStatus:
-    //     console.log('Oranges are $0.59 a pound.');
-    //     break;
-    //   case errorStatus:
-    //     console.log('Mangoes and papayas are $2.79 a pound.');
-    //     // expected output: "Mangoes and papayas are $2.79 a pound."
-    //     break;
-    //   default:
-    //     console.log(`Sorry, we are out.`);
-    // }
-
-    return <View />;
   };
 
   return (
     <Container>
       {renderActivityIcon()}
       <TextContainer>
-        {instructionLogs && instructionLogs[0] ? (
-          <ErrorText>{instructionLogs[0]}</ErrorText>
-        ) : null}
+        <TitleContainer>
+          {instructionLogs && instructionLogs[0] ? (
+            <ActivityTitle>{instructionLogs[0]}</ActivityTitle>
+          ) : null}
+          <SignatureText>
+            {`${signature.slice(0, 4)}...${signature.slice(-4)}`}
+          </SignatureText>
+        </TitleContainer>
         {errorLog ? <ErrorText>{errorLog}.</ErrorText> : null}
         <ActivityDate>{transactionDate}</ActivityDate>
-        <SignatureText>
-          {`${signature.slice(0, 4)}...${signature.slice(-4)}`}
-        </SignatureText>
       </TextContainer>
       <IconButton onPress={handleActivityClick} activeOpacity={0.5}>
         <Unicons.UilAngleDoubleRight size="28" color={theme.gray[400]} />
@@ -106,11 +146,10 @@ const Container = styled.View`
 `;
 
 const SignatureText = styled.Text`
-  color: ${(props: any) => props.theme.gray[300]};
-  font-size: 16px;
+  color: ${(props: any) => props.theme.gray[500]};
+  font-size: 12px;
   font-weight: bold;
   text-align: left;
-  margin-top: ${(props: any) => props.theme.spacing[1]};
 `;
 
 const ActivityDate = styled.Text`
@@ -120,12 +159,19 @@ const ActivityDate = styled.Text`
   text-align: left;
 `;
 
+const ActivityTitle = styled.Text`
+  color: ${(props: any) => props.theme.gray[100]};
+  font-size: 16px;
+  margin-bottom: ${(props: any) => props.theme.spacing[1]};
+  font-weight: bold;
+  text-align: left;
+`;
+
 const ErrorText = styled.Text`
   color: ${(props: any) => props.theme.gray[100]};
   font-size: 14px;
   line-height: 20px;
   margin-bottom: ${(props: any) => props.theme.spacing[2]};
-  font-weight: bold;
   text-align: left;
 `;
 
@@ -136,13 +182,14 @@ const IconButton = styled.TouchableOpacity`
   height: 40px;
   border-radius: 100px;
   background: ${(props: any) => props.theme.gray[700]};
+  margin-left: ${(props: any) => props.theme.spacing[3]};
 `;
 
 const TextContainer = styled.View`
   flex: 1;
 `;
 
-const IconContainer = styled.View<{ type: "success" | "error" }>`
+const IconContainer = styled.View<{ isSuccessful: boolean; color: string }>`
   flex: 1;
   justify-content: center;
   align-items: center;
@@ -153,7 +200,9 @@ const IconContainer = styled.View<{ type: "success" | "error" }>`
   border-radius: 100px;
   margin-right: ${(props: any) => props.theme.spacing[3]};
   background: ${(props: any) =>
-    props.type === "success"
-      ? props.theme.success[400]
-      : props.theme.error[400]}44;
+    props.isSuccessful ? props.color : props.theme.error[400]}44;
+`;
+
+const TitleContainer = styled.View`
+  margin-bottom: ${(props: any) => props.theme.spacing[3]};
 `;

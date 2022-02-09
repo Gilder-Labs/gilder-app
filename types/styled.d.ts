@@ -9,6 +9,7 @@ declare module "styled-components" {
     error: Color;
     warning: Color;
     purple: Color;
+    aqua: Color;
     blue: Color;
     spacing: {
       1: string;

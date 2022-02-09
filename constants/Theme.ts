@@ -39,7 +39,7 @@ export const darkTheme = {
     800: "#155E75",
     900: "#164E63",
   },
-  violet: {
+  purple: {
     50: "#f5f3ff",
     100: "#ede9fe",
     200: "#ddd6fe",
