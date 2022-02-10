@@ -7,6 +7,7 @@ import { createAvatar } from "@dicebear/avatars";
 import * as style from "@dicebear/avatars-jdenticon-sprites";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Unicons from "@iconscout/react-native-unicons";
+import numeral from "numeral";
 
 interface MemberCardProps {
   member: any;
@@ -44,7 +45,9 @@ export const MemberCard = ({ member }: MemberCardProps) => {
           </DetailContainer>
           <DetailContainer>
             <SubtitleText>Vote Weight</SubtitleText>
-            <VoteWeight>{member.depositAmount}</VoteWeight>
+            <VoteWeight>
+              {numeral(Number(member.depositAmount)).format("0.00a")}
+            </VoteWeight>
           </DetailContainer>
         </TextContainer>
       </ContentContainer>
@@ -62,7 +65,9 @@ const Container = styled.View`
 `;
 
 const ContentContainer = styled.View`
-  padding: ${(props: any) => props.theme.spacing[5]};
+  padding: ${(props: any) => props.theme.spacing[3]};
+  padding-left: ${(props: any) => props.theme.spacing[5]};
+  padding-right: ${(props: any) => props.theme.spacing[5]};
   width: 100%;
   /* justify-content: space-between; */
 `;
@@ -71,7 +76,7 @@ const MemberName = styled.Text`
   color: ${(props: any) => props.theme.gray[100]}
   font-weight: bold;
   font-size: 18px;
-  margin-top:${(props: any) => props.theme.spacing[2]};
+  margin-top:${(props: any) => props.theme.spacing[4]};
   margin-bottom: ${(props: any) => props.theme.spacing[3]};
 
 `;
@@ -83,13 +88,13 @@ const TextContainer = styled.View`
 
 const VotesCast = styled.Text`
   color: ${(props: any) => props.theme.gray[300]};
-  font-size: 18;
+  font-size: 18px;
   font-weight: bold;
 `;
 
 const VoteWeight = styled.Text`
   color: ${(props: any) => props.theme.gray[300]};
-  font-size: 18;
+  font-size: 18px;
   font-weight: bold;
   text-align: right;
 `;
