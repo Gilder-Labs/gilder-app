@@ -38,15 +38,19 @@ export const MemberCard = ({ member }: MemberCardProps) => {
         )}...${member.governingTokenOwner.slice(0, 4)}`}</MemberName>
 
         <TextContainer>
-          <VotesCast>Total Votes Cast: {member.totalVotesCount}</VotesCast>
-          <VotesCast>Vote weight: {member.depositAmount}</VotesCast>
+          <DetailContainer>
+            <SubtitleText>Total Votes</SubtitleText>
+            <VotesCast>{member.totalVotesCount}</VotesCast>
+          </DetailContainer>
+          <DetailContainer>
+            <SubtitleText>Vote Weight</SubtitleText>
+            <VoteWeight>{member.depositAmount}</VoteWeight>
+          </DetailContainer>
         </TextContainer>
       </ContentContainer>
     </Container>
   );
 };
-
-//           <VotesCast>Vote weight: {member.depositAmount}</VotesCast>
 
 const Container = styled.View`
   margin-bottom: ${(props: any) => props.theme.spacing[3]};
@@ -79,6 +83,22 @@ const TextContainer = styled.View`
 
 const VotesCast = styled.Text`
   color: ${(props: any) => props.theme.gray[300]};
+  font-size: 18;
+  font-weight: bold;
+`;
+
+const VoteWeight = styled.Text`
+  color: ${(props: any) => props.theme.gray[300]};
+  font-size: 18;
+  font-weight: bold;
+  text-align: right;
+`;
+
+const DetailContainer = styled.View``;
+
+const SubtitleText = styled.Text`
+  color: ${(props: any) => props.theme.gray[500]};
+  font-size: 12;
 `;
 
 const IconContainer = styled.View`
