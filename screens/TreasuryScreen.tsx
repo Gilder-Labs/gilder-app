@@ -99,5 +99,5 @@ const SubtitleText = styled.Text`
 `;
 
 const HeaderContainer = styled.View`
-  padding: ${(props: any) => props.theme.spacing[4]};
+  margin-bottom: ${(props: any) => props.theme.spacing[4]};
 `;

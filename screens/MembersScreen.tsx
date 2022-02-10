@@ -28,7 +28,7 @@ export default function ActivityScreen({
         data={realmMembers}
         renderItem={renderMember}
         keyExtractor={(item) => item.governingTokenOwner}
-        style={{ margin: 16 }}
+        style={{ padding: 16 }}
         ListHeaderComponent={
           <HeaderContainer>
             <TextContainer>
