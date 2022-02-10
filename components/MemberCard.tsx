@@ -29,6 +29,8 @@ export const MemberCard = ({ member }: MemberCardProps) => {
       "purple",
       "success",
       "error",
+      "warning",
+      "blue",
     ];
 
     const seed = member.governingTokenOwner.charCodeAt(0);
@@ -43,7 +45,7 @@ export const MemberCard = ({ member }: MemberCardProps) => {
     <Container>
       <LinearGradient
         // Background Linear Gradient
-        colors={[`${theme[color][600]}44`, `${theme[color][800]}44`]}
+        colors={[`${theme[color][600]}66`, `${theme[color][800]}66`]}
         style={{ height: 48, flex: 1, width: "100%" }}
         start={{ x: 0.1, y: 0.2 }}
       ></LinearGradient>
@@ -80,6 +82,8 @@ const Container = styled.View`
   align-items: center;
   justify-content: space-between;
   position: relative;
+  border-radius: 8px;
+  overflow: hidden;
 `;
 
 const ContentContainer = styled.View`
@@ -106,13 +110,13 @@ const TextContainer = styled.View`
 
 const VotesCast = styled.Text`
   color: ${(props: any) => props.theme.gray[300]};
-  font-size: 18px;
+  font-size: 24px;
   font-weight: bold;
 `;
 
 const VoteWeight = styled.Text`
   color: ${(props: any) => props.theme.gray[300]};
-  font-size: 18px;
+  font-size: 24px;
   font-weight: bold;
   text-align: right;
 `;
@@ -133,6 +137,6 @@ const IconContainer = styled.View<{ color: string }>`
   left: 20px;
   top: 24px;
   overflow: hidden;
-  border: 2px solid black;
+  border: 2px solid ${(props: any) => props.theme.gray[900]};
   border-radius: 100px;
 `;
