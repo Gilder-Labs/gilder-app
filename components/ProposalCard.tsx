@@ -116,7 +116,7 @@ const Description = styled.Text`
   padding-left: ${(props: any) => props.theme.spacing[4]};
   padding-right: ${(props: any) => props.theme.spacing[4]};
 
-  margin-bottom: ${(props: any) => props.theme.spacing[2]};
+  margin-bottom: ${(props: any) => props.theme.spacing[3]};
   line-height: 20px;
   font-size: 14px;
 `;
