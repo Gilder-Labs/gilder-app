@@ -26,7 +26,6 @@ export const MemberCard = ({ member }: MemberCardProps) => {
       "primary",
       "secondary",
       "aqua",
-      "gray",
       "purple",
       "success",
       "error",
