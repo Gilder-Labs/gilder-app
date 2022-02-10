@@ -26,10 +26,10 @@ const BadgeContainer = styled.View<{
 }>`
   ${(props: any) => {
     if (props.type === "success") {
-      return `background:  ${props.theme.success[800]}44`;
+      return `background:  ${props.theme.aqua[800]}44`;
     }
     if (props.type === "pending") {
-      return `background:  ${props.theme.secondary[800]}44`;
+      return `background:  ${props.theme.purple[800]}44`;
     }
     if (props.type === "error") {
       return `background:  ${props.theme.error[800]}44;`;
@@ -41,16 +41,16 @@ const BadgeContainer = styled.View<{
 
 ${(props: any) => {
   if (props.type === "success") {
-    return `border:  ${props.theme.success[300]}`;
+    return `border:  ${props.theme.aqua[400]}`;
   }
   if (props.type === "pending") {
-    return `border:  ${props.theme.secondary[300]}`;
+    return `border:  ${props.theme.purple[400]}`;
   }
   if (props.type === "error") {
-    return `border:  ${props.theme.error[300]};`;
+    return `border:  ${props.theme.error[400]};`;
   }
   if (props.type === "gray") {
-    return `border:  ${props.theme.gray[300]};`;
+    return `border:  ${props.theme.gray[400]};`;
   }
 }}
 
@@ -65,22 +65,21 @@ ${(props: any) => {
 
 const BadgeText = styled.Text<{
   type: "success" | "pending" | "error" | "gray";
-  size: string;
 }>`
   font-size: 14px;
 
   ${(props: any) => {
     if (props.type === "success") {
-      return `color:  ${props.theme.success[300]}`;
+      return `color:  ${props.theme.aqua[400]}`;
     }
     if (props.type === "pending") {
-      return `color:  ${props.theme.secondary[300]}`;
+      return `color:  ${props.theme.purple[400]}`;
     }
     if (props.type === "error") {
-      return `color:  ${props.theme.error[300]};`;
+      return `color:  ${props.theme.error[400]};`;
     }
     if (props.type === "gray") {
-      return `color:  ${props.theme.gray[300]};`;
+      return `color:  ${props.theme.gray[400]};`;
     }
   }}
 `;

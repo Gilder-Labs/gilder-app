@@ -91,11 +91,12 @@ const BadgeRow = styled.View`
 const ProposalTitle = styled.Text`
   color: ${(props: any) => props.theme.gray[100]}
   font-weight: bold;
-  font-size: 16px;
+  font-size: 18px;
+  line-height: 24px;
 `;
 
 const DateText = styled.Text`
-  color: ${(props: any) => props.theme.gray[400]}
+  color: ${(props: any) => props.theme.gray[500]}
   font-weight: bold;
   font-size: 12px;
 `;
@@ -121,17 +122,15 @@ const VoteContainer = styled.View`
 const VoteNo = styled.View<{ percent: any }>`
   width: ${(props) => props.percent}%;
   height: 8px;
-  background: ${(props) => props.theme.error[600]};
+  background: ${(props) => props.theme.gray[600]};
 
-  border-top-right-radius: 2px;
-  border-bottom-right-radius: 2px;
+  border-radius: 4px;
 `;
 const VoteYes = styled.View<{ percent: any }>`
   width: ${(props) => props.percent}%;
   height: 8px;
-  background: ${(props) => props.theme.success[500]};
-  border-top-left-radius: 2px;
-  border-bottom-left-radius: 2px;
+  background: ${(props) => props.theme.gray[300]};
+  border-radius: 4px;
 `;
 
 const VoteCountRow = styled.View`
@@ -140,7 +139,7 @@ const VoteCountRow = styled.View`
 `;
 
 const VoteText = styled.Text`
-  color: ${(props: any) => props.theme.gray[300]};
+  color: ${(props: any) => props.theme.gray[500]};
   margin-bottom: ${(props: any) => props.theme.spacing[2]};
   font-size: 12px;
 `;

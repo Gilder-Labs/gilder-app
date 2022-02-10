@@ -27,6 +27,11 @@ export interface realmState {
   realmProposals: Array<any>;
   realmActivity: Array<ConfirmedSignatureInfo>;
   tokenPriceData: any;
+  isLoadingMembers: boolean;
+  isLoadingRealms: boolean;
+  isLoadingActivities: boolean;
+  isLoadingProposals: boolean;
+  isLoadingVaults: boolean;
 }
 
 interface realmType {
@@ -56,6 +61,11 @@ const initialState: realmState = {
     "By2sVGZXwfQq6rAiAM3rNPJ9iQfb5e2QhnF4YjJ4Bip", // grape
   ],
   realmActivity: [],
+  isLoadingMembers: false,
+  isLoadingRealms: false,
+  isLoadingActivities: false,
+  isLoadingProposals: false,
+  isLoadingVaults: false,
 };
 /* 
   main: https://ssc-dao.genesysgo.net/  
@@ -323,10 +333,17 @@ export const realmSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchRealms.pending, (state) => {})
-      .addCase(fetchRealms.rejected, (state) => {})
+      .addCase(fetchRealms.pending, (state) => {
+        state.isLoadingRealms = true;
+      })
+      .addCase(fetchRealms.rejected, (state) => {
+        state.isLoadingRealms = false;
+        // TODO handle error
+      })
       .addCase(fetchRealms.fulfilled, (state, action: any) => {
         state.realms = action.payload.realms;
+        state.isLoadingRealms = false;
+
         // state.selectedRealm = action.payload.selectedRealm;
       })
       .addCase(fetchRealm.pending, (state) => {})
@@ -334,23 +351,43 @@ export const realmSlice = createSlice({
       .addCase(fetchRealm.fulfilled, (state, action: any) => {
         state.selectedRealm = action.payload;
       })
-      .addCase(fetchRealmActivity.pending, (state) => {})
-      .addCase(fetchRealmActivity.rejected, (state) => {})
+      .addCase(fetchRealmActivity.pending, (state) => {
+        state.isLoadingActivities = true;
+      })
+      .addCase(fetchRealmActivity.rejected, (state) => {
+        state.isLoadingActivities = false;
+      })
       .addCase(fetchRealmActivity.fulfilled, (state, action: any) => {
+        state.isLoadingActivities = false;
         state.realmActivity = action.payload;
       })
-      .addCase(fetchRealmMembers.pending, (state) => {})
-      .addCase(fetchRealmMembers.rejected, (state) => {})
+      .addCase(fetchRealmMembers.pending, (state) => {
+        state.isLoadingMembers = true;
+      })
+      .addCase(fetchRealmMembers.rejected, (state) => {
+        state.isLoadingMembers = false;
+      })
       .addCase(fetchRealmMembers.fulfilled, (state, action: any) => {
+        state.isLoadingMembers = false;
+
         state.realmMembers = action.payload;
       })
-      .addCase(fetchRealmProposals.pending, (state) => {})
-      .addCase(fetchRealmProposals.rejected, (state) => {})
+      .addCase(fetchRealmProposals.pending, (state) => {
+        state.isLoadingProposals = true;
+      })
+      .addCase(fetchRealmProposals.rejected, (state) => {
+        state.isLoadingProposals = false;
+      })
       .addCase(fetchRealmProposals.fulfilled, (state, action: any) => {
+        state.isLoadingProposals = false;
         state.realmProposals = action.payload;
       })
-      .addCase(fetchRealmVaults.pending, (state) => {})
-      .addCase(fetchRealmVaults.rejected, (state) => {})
+      .addCase(fetchRealmVaults.pending, (state) => {
+        state.isLoadingVaults = true;
+      })
+      .addCase(fetchRealmVaults.rejected, (state) => {
+        state.isLoadingVaults = false;
+      })
       .addCase(fetchRealmVaults.fulfilled, (state, action: any) => {
         let tokenPriceObject = {};
         // @ts-ignore
@@ -360,6 +397,7 @@ export const realmSlice = createSlice({
         });
 
         state.realmVaults = action.payload.vaults;
+        state.isLoadingVaults = false;
         state.tokenPriceData = tokenPriceObject;
       });
   },
