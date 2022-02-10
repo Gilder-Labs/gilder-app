@@ -54,7 +54,7 @@ export default function TreasuryScreen({
         data={realmVaults}
         renderItem={renderVault}
         keyExtractor={(item) => item.vaultId}
-        style={{ paddingTop: 16, paddingBottom: 16 }}
+        style={{ padding: 16 }}
         ListHeaderComponent={
           <HeaderContainer>
             <TreasuryValueContainer>
@@ -85,8 +85,6 @@ const TreasuryText = styled.Text`
 const Container = styled.View`
   flex: 1;
   background: ${(props: any) => props.theme.gray[900]};
-  padding-left: ${(props: any) => props.theme.spacing[4]};
-  padding-right: ${(props: any) => props.theme.spacing[4]};
 `;
 
 const TreasuryValueContainer = styled.View``;

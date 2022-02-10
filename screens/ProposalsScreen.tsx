@@ -19,7 +19,7 @@ export default function ProposalScreen({
         data={realmProposals}
         renderItem={renderProposal}
         keyExtractor={(item) => item.proposalId}
-        style={{ paddingTop: 16, paddingBottom: 16 }}
+        style={{ padding: 16 }}
         ListHeaderComponent={
           <HeaderContainer>
             <TreasuryValueContainer>
@@ -36,8 +36,6 @@ export default function ProposalScreen({
 const Container = styled.View`
   background-color: ${(props) => props.theme.gray[900]};
   flex: 1;
-  padding-left: ${(props: any) => props.theme.spacing[4]};
-  padding-right: ${(props: any) => props.theme.spacing[4]};
 `;
 
 const TreasuryText = styled.Text`
