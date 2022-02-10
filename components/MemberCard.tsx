@@ -21,15 +21,34 @@ export const MemberCard = ({ member }: MemberCardProps) => {
     // ... and other options
   });
 
+  const getColorType = () => {
+    const colorArray = [
+      "primary",
+      "secondary",
+      "aqua",
+      "gray",
+      "purple",
+      "success",
+      "error",
+    ];
+
+    const seed = member.governingTokenOwner.charCodeAt(0);
+    const index = seed % (colorArray.length - 1);
+
+    return colorArray[index];
+  };
+
+  const color = getColorType();
+
   return (
     <Container>
       <LinearGradient
         // Background Linear Gradient
-        colors={[`${theme.primary[600]}44`, `${theme.primary[800]}44`]}
+        colors={[`${theme[color][600]}44`, `${theme[color][800]}44`]}
         style={{ height: 48, flex: 1, width: "100%" }}
         start={{ x: 0.1, y: 0.2 }}
       ></LinearGradient>
-      <IconContainer>
+      <IconContainer color={color}>
         <SvgXml xml={jdenticonSvg} width="44px" height="44px" />
       </IconContainer>
       <ContentContainer>
@@ -106,9 +125,9 @@ const SubtitleText = styled.Text`
   font-size: 12;
 `;
 
-const IconContainer = styled.View`
+const IconContainer = styled.View<{ color: string }>`
   /* border-radius: 100px, */
-  background: ${(props: any) => props.theme.primary[800]};
+  background: ${(props: any) => props.theme[props.color][800]};
   flex-direction: row;
   align-items: center;
   position: absolute;
