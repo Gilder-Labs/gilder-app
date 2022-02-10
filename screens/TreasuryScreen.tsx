@@ -58,6 +58,7 @@ export default function TreasuryScreen({
           renderItem={renderVault}
           keyExtractor={(item) => item.vaultId}
           style={{ padding: 16 }}
+          ListFooterComponent={<EmptyView />}
           ListHeaderComponent={
             <HeaderContainer>
               <TreasuryValueContainer>
@@ -95,4 +96,8 @@ const SubtitleText = styled.Text`
 
 const HeaderContainer = styled.View`
   margin-bottom: ${(props: any) => props.theme.spacing[4]};
+`;
+
+const EmptyView = styled.View`
+  height: 100px;
 `;

@@ -53,6 +53,7 @@ export default function ActivityScreen({
           renderItem={renderActivity}
           keyExtractor={(item) => item.signature}
           style={{ padding: 16 }}
+          ListFooterComponent={<EmptyView />}
           // ItemSeparatorComponent={renderSeparator}
           // ListHeaderComponent={
           //   <DateSeparator>
@@ -80,4 +81,6 @@ const DateSeparator = styled.Text`
   height: 20px;
 `;
 
-const EmptyView = styled.View``;
+const EmptyView = styled.View`
+  height: 100px;
+`;

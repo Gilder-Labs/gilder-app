@@ -190,7 +190,7 @@ export const fetchRealmActivity = createAsyncThunk(
     try {
       let transactions = await connection.getConfirmedSignaturesForAddress2(
         new PublicKey(realm?.pubKey),
-        { limit: 30 }
+        { limit: 20 }
       );
 
       transactions = transactions?.sort(
@@ -205,8 +205,6 @@ export const fetchRealmActivity = createAsyncThunk(
       rawTransactionsFilled = await connection.getParsedTransactions(
         signatures
       );
-
-      console.log("rawTransactionsFilled", rawTransactionsFilled);
 
       activitiesParsed = rawTransactionsFilled?.map((transaction, index) => {
         return {

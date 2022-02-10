@@ -34,6 +34,7 @@ export default function ActivityScreen({
           renderItem={renderMember}
           keyExtractor={(item) => item.governingTokenOwner}
           style={{ padding: 16 }}
+          ListFooterComponent={<EmptyView />}
           ListHeaderComponent={
             <HeaderContainer>
               <TextContainer>
@@ -89,4 +90,8 @@ const HeaderContainer = styled.View`
 const SubtitleTextLeft = styled.Text`
   color: ${(props: any) => props.theme.gray[400]};
   font-size: 16px;
+`;
+
+const EmptyView = styled.View`
+  height: 100px;
 `;
