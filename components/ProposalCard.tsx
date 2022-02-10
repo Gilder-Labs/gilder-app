@@ -13,8 +13,8 @@ interface ProposalCardProps {
 const proposalStatusKey = {
   Succeeded: "success",
   Completed: "success",
-  Cancelled: "error",
-  Draft: "pending",
+  Cancelled: "gray",
+  Draft: "warning",
   Executing: "pending",
   Voting: "pending",
   Defeated: "error",

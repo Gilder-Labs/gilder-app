@@ -22,7 +22,7 @@ const BadgeFlexContainer = styled.View`
 `;
 
 const BadgeContainer = styled.View<{
-  type: "success" | "pending" | "error" | "gray";
+  type: "success" | "pending" | "error" | "gray" | "warning";
 }>`
   ${(props: any) => {
     if (props.type === "success") {
@@ -36,6 +36,9 @@ const BadgeContainer = styled.View<{
     }
     if (props.type === "gray") {
       return `background:  ${props.theme.gray[800]}44;`;
+    }
+    if (props.type === "warning") {
+      return `background:  ${props.theme.warning[800]}44;`;
     }
   }}
 
@@ -51,6 +54,9 @@ ${(props: any) => {
   }
   if (props.type === "gray") {
     return `border:  ${props.theme.gray[400]};`;
+  }
+  if (props.type === "warning") {
+    return `border:  ${props.theme.warning[400]};`;
   }
 }}
 
@@ -80,6 +86,9 @@ const BadgeText = styled.Text<{
     }
     if (props.type === "gray") {
       return `color:  ${props.theme.gray[400]};`;
+    }
+    if (props.type === "warning") {
+      return `color:  ${props.theme.warning[400]};`;
     }
   }}
 `;
