@@ -4,13 +4,13 @@ import { RootTabScreenProps } from "../types";
 
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import styled from "styled-components/native";
-import { VaultCard } from "../components";
+import { VaultCard, Loading } from "../components";
 import numeral from "numeral";
 
 export default function TreasuryScreen({
   navigation,
 }: RootTabScreenProps<"Treasury">) {
-  const { tokenPriceData, realmVaults } = useAppSelector(
+  const { tokenPriceData, realmVaults, isLoadingVaults } = useAppSelector(
     (state) => state.realms
   );
   const [treasuryValue, setTreasuryValue] = useState("0");
@@ -50,27 +50,24 @@ export default function TreasuryScreen({
 
   return (
     <Container>
-      <FlatList
-        data={realmVaults}
-        renderItem={renderVault}
-        keyExtractor={(item) => item.vaultId}
-        style={{ padding: 16 }}
-        ListHeaderComponent={
-          <HeaderContainer>
-            <TreasuryValueContainer>
-              <SubtitleText> Total Balance </SubtitleText>
-              <TreasuryText>{treasuryValue}</TreasuryText>
-            </TreasuryValueContainer>
-          </HeaderContainer>
-        }
-      />
-      {/* {realmVaults.map((vault) => (
-        <VaultCard
-          vaultId={vault.vaultId}
-          tokens={vault.tokens}
-          key={vault.vaultId}
+      {isLoadingVaults ? (
+        <Loading />
+      ) : (
+        <FlatList
+          data={realmVaults}
+          renderItem={renderVault}
+          keyExtractor={(item) => item.vaultId}
+          style={{ padding: 16 }}
+          ListHeaderComponent={
+            <HeaderContainer>
+              <TreasuryValueContainer>
+                <SubtitleText> Total Balance </SubtitleText>
+                <TreasuryText>{treasuryValue}</TreasuryText>
+              </TreasuryValueContainer>
+            </HeaderContainer>
+          }
         />
-      ))} */}
+      )}
     </Container>
   );
 }

@@ -1,13 +1,15 @@
 import { RootTabScreenProps } from "../types";
 import styled from "styled-components/native";
 import { useAppSelector } from "../hooks/redux";
-import { MemberCard } from "../components";
+import { MemberCard, Loading } from "../components";
 import { FlatList } from "react-native";
 
 export default function ActivityScreen({
   navigation,
 }: RootTabScreenProps<"Activity">) {
-  const { realmMembers } = useAppSelector((state) => state.realms);
+  const { realmMembers, isLoadingMembers } = useAppSelector(
+    (state) => state.realms
+  );
 
   const renderMember = ({ item }: any) => {
     return <MemberCard key={item.governingTokenOwner} member={item} />;
@@ -24,25 +26,29 @@ export default function ActivityScreen({
 
   return (
     <Container>
-      <FlatList
-        data={realmMembers}
-        renderItem={renderMember}
-        keyExtractor={(item) => item.governingTokenOwner}
-        style={{ padding: 16 }}
-        ListHeaderComponent={
-          <HeaderContainer>
-            <TextContainer>
-              <SubtitleTextLeft>Votes</SubtitleTextLeft>
-              <HeaderTitleLeft>{getTotalVotes()}</HeaderTitleLeft>
-            </TextContainer>
+      {isLoadingMembers ? (
+        <Loading />
+      ) : (
+        <FlatList
+          data={realmMembers}
+          renderItem={renderMember}
+          keyExtractor={(item) => item.governingTokenOwner}
+          style={{ padding: 16 }}
+          ListHeaderComponent={
+            <HeaderContainer>
+              <TextContainer>
+                <SubtitleTextLeft>Votes</SubtitleTextLeft>
+                <HeaderTitleLeft>{getTotalVotes()}</HeaderTitleLeft>
+              </TextContainer>
 
-            <TextContainer>
-              <SubtitleText>Members</SubtitleText>
-              <HeaderTitle>{realmMembers.length}</HeaderTitle>
-            </TextContainer>
-          </HeaderContainer>
-        }
-      />
+              <TextContainer>
+                <SubtitleText>Members</SubtitleText>
+                <HeaderTitle>{realmMembers.length}</HeaderTitle>
+              </TextContainer>
+            </HeaderContainer>
+          }
+        />
+      )}
     </Container>
   );
 }

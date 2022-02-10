@@ -1,13 +1,15 @@
 import { RootTabScreenProps } from "../types";
 import styled from "styled-components/native";
 import { useAppSelector } from "../hooks/redux";
-import { ProposalCard } from "../components";
+import { ProposalCard, Loading } from "../components";
 import { FlatList } from "react-native";
 
 export default function ProposalScreen({
   navigation,
 }: RootTabScreenProps<"Proposals">) {
-  const { realmProposals } = useAppSelector((state) => state.realms);
+  const { realmProposals, isLoadingProposals } = useAppSelector(
+    (state) => state.realms
+  );
 
   const renderProposal = ({ item }: any) => {
     return <ProposalCard proposal={item} />;
@@ -15,20 +17,24 @@ export default function ProposalScreen({
 
   return (
     <Container>
-      <FlatList
-        data={realmProposals}
-        renderItem={renderProposal}
-        keyExtractor={(item) => item.proposalId}
-        style={{ padding: 16 }}
-        ListHeaderComponent={
-          <HeaderContainer>
-            <TreasuryValueContainer>
-              <SubtitleText> Total Proposals </SubtitleText>
-              <TreasuryText>{realmProposals.length}</TreasuryText>
-            </TreasuryValueContainer>
-          </HeaderContainer>
-        }
-      />
+      {isLoadingProposals ? (
+        <Loading />
+      ) : (
+        <FlatList
+          data={realmProposals}
+          renderItem={renderProposal}
+          keyExtractor={(item) => item.proposalId}
+          style={{ padding: 16 }}
+          ListHeaderComponent={
+            <HeaderContainer>
+              <TreasuryValueContainer>
+                <SubtitleText> Total Proposals </SubtitleText>
+                <TreasuryText>{realmProposals.length}</TreasuryText>
+              </TreasuryValueContainer>
+            </HeaderContainer>
+          }
+        />
+      )}
     </Container>
   );
 }

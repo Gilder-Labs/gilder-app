@@ -1,7 +1,7 @@
 import { RootTabScreenProps } from "../types";
 import styled from "styled-components/native";
 import { useAppSelector } from "../hooks/redux";
-import { ActivityCard } from "../components";
+import { ActivityCard, Loading } from "../components";
 import { FlatList } from "react-native";
 import { format, differenceInDays } from "date-fns";
 
@@ -15,7 +15,9 @@ import { format, differenceInDays } from "date-fns";
 export default function ActivityScreen({
   navigation,
 }: RootTabScreenProps<"Activity">) {
-  const { realmActivity } = useAppSelector((state) => state.realms);
+  const { realmActivity, isLoadingActivities } = useAppSelector(
+    (state) => state.realms
+  );
 
   // Use 1 if it exists because we don't have a way to get it easily from flatlist to check if the second activity is a different day.
   // @ts-ignore
@@ -43,23 +45,27 @@ export default function ActivityScreen({
 
   return (
     <Container>
-      <FlatList
-        data={realmActivity}
-        renderItem={renderActivity}
-        keyExtractor={(item) => item.signature}
-        style={{ padding: 16 }}
-        // ItemSeparatorComponent={renderSeparator}
-        // ListHeaderComponent={
-        //   <DateSeparator>
-        //     {realmActivity[0] &&
-        //       format(
-        //         // @ts-ignore
-        //         realmActivity[0]?.blockTime * 1000,
-        //         "LLL d, yyyy - p"
-        //       )}
-        //   </DateSeparator>
-        // }
-      />
+      {isLoadingActivities ? (
+        <Loading />
+      ) : (
+        <FlatList
+          data={realmActivity}
+          renderItem={renderActivity}
+          keyExtractor={(item) => item.signature}
+          style={{ padding: 16 }}
+          // ItemSeparatorComponent={renderSeparator}
+          // ListHeaderComponent={
+          //   <DateSeparator>
+          //     {realmActivity[0] &&
+          //       format(
+          //         // @ts-ignore
+          //         realmActivity[0]?.blockTime * 1000,
+          //         "LLL d, yyyy - p"
+          //       )}
+          //   </DateSeparator>
+          // }
+        />
+      )}
     </Container>
   );
 }

@@ -9,3 +9,4 @@ export * from "./ProposalCard";
 export * from "./Badge";
 export * from "./VaultCard";
 export * from "./TokenCard";
+export * from "./Loading";
