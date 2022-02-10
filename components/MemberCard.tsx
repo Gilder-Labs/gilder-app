@@ -95,7 +95,7 @@ const ContentContainer = styled.View`
 `;
 
 const MemberName = styled.Text`
-  color: ${(props: any) => props.theme.gray[100]}
+  color: ${(props: any) => props.theme.gray[300]}
   font-weight: bold;
   font-size: 18px;
   margin-top:${(props: any) => props.theme.spacing[4]};
@@ -109,13 +109,13 @@ const TextContainer = styled.View`
 `;
 
 const VotesCast = styled.Text`
-  color: ${(props: any) => props.theme.gray[300]};
+  color: ${(props: any) => props.theme.gray[100]};
   font-size: 24px;
   font-weight: bold;
 `;
 
 const VoteWeight = styled.Text`
-  color: ${(props: any) => props.theme.gray[300]};
+  color: ${(props: any) => props.theme.gray[100]};
   font-size: 24px;
   font-weight: bold;
   text-align: right;
@@ -124,8 +124,8 @@ const VoteWeight = styled.Text`
 const DetailContainer = styled.View``;
 
 const SubtitleText = styled.Text`
-  color: ${(props: any) => props.theme.gray[500]};
-  font-size: 12;
+  color: ${(props: any) => props.theme.gray[400]};
+  font-size: 12px;
 `;
 
 const IconContainer = styled.View<{ color: string }>`
