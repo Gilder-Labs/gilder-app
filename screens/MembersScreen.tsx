@@ -35,6 +35,7 @@ export default function ActivityScreen({
           keyExtractor={(item) => item.governingTokenOwner}
           style={{ padding: 16 }}
           ListFooterComponent={<EmptyView />}
+          scrollIndicatorInsets={{ right: 1 }}
           ListHeaderComponent={
             <HeaderContainer>
               <TextContainer>

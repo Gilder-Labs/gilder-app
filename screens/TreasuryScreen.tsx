@@ -59,6 +59,7 @@ export default function TreasuryScreen({
           keyExtractor={(item) => item.vaultId}
           style={{ padding: 16 }}
           ListFooterComponent={<EmptyView />}
+          scrollIndicatorInsets={{ right: 1 }}
           ListHeaderComponent={
             <HeaderContainer>
               <TreasuryValueContainer>

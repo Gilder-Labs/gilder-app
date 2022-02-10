@@ -52,8 +52,9 @@ export default function ActivityScreen({
           data={realmActivity}
           renderItem={renderActivity}
           keyExtractor={(item) => item.signature}
-          style={{ padding: 16 }}
+          style={{ padding: 16, minWidth: "100%" }}
           ListFooterComponent={<EmptyView />}
+          scrollIndicatorInsets={{ right: 1 }}
           // ItemSeparatorComponent={renderSeparator}
           // ListHeaderComponent={
           //   <DateSeparator>

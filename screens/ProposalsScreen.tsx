@@ -26,6 +26,7 @@ export default function ProposalScreen({
           keyExtractor={(item) => item.proposalId}
           style={{ padding: 16 }}
           ListFooterComponent={<EmptyView />}
+          scrollIndicatorInsets={{ right: 1 }}
           ListHeaderComponent={
             <HeaderContainer>
               <TreasuryValueContainer>
