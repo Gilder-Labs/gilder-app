@@ -74,7 +74,7 @@ export default function Navigation({}: {}) {
   return (
     <NavigationContainer linking={LinkingConfiguration} theme={NavigationTheme}>
       <Drawer.Navigator
-        initialRouteName="Activity" // Dashboard
+        initialRouteName="Members" // Dashboard
         drawerContent={(props) => <DrawerContentContainer {...props} />}
         screenOptions={{
           drawerActiveBackgroundColor: theme?.gray[800],
@@ -128,7 +128,7 @@ export default function Navigation({}: {}) {
               </DrawerTabText>
             ),
             drawerIcon: ({ focused, color, size }) => (
-              <Unicons.UilEnvelopeCheck size="28" color={color} />
+              <Unicons.UilFileAlt size="28" color={color} />
             ),
           }}
         />

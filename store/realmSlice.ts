@@ -247,7 +247,12 @@ export const fetchRealmMembers = createAsyncThunk(
       };
     });
 
-    return members;
+    const sortedMembers = members?.sort(
+      // @ts-ignore
+      (a, b) => b?.totalVotesCount - a?.totalVotesCount
+    );
+
+    return sortedMembers;
   }
 );
 
