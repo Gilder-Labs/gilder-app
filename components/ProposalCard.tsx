@@ -55,18 +55,20 @@ export const ProposalCard = ({ proposal }: ProposalCardProps) => {
         <Badge title={status} type={proposalStatusKey[status]} />
       </BadgeRow>
       <Description>{description}</Description>
-      <VoteCountRow>
-        <VoteText>
-          Approve - {numeral(yesVotes).format("0a")} ({yesPercentage}%)
-        </VoteText>
-        <VoteText>
-          Deny - {numeral(noVotes).format("0a")} ({noPercentage}%)
-        </VoteText>
-      </VoteCountRow>
-      <VoteContainer>
-        <VoteYes percent={yesPercentage} />
-        <VoteNo percent={noPercentage} />
-      </VoteContainer>
+      <Votes>
+        <VoteCountRow>
+          <VoteText>
+            Approve - {numeral(yesVotes).format("0a")} ({yesPercentage}%)
+          </VoteText>
+          <VoteText>
+            Deny - {numeral(noVotes).format("0a")} ({noPercentage}%)
+          </VoteText>
+        </VoteCountRow>
+        <VoteContainer>
+          <VoteYes percent={yesPercentage} />
+          <VoteNo percent={noPercentage} />
+        </VoteContainer>
+      </Votes>
     </Container>
   );
 };
@@ -75,15 +77,17 @@ const Container = styled.View`
   /* height: 80px; */
   width: 100%%;
   margin-bottom: ${(props: any) => props.theme.spacing[3]};
-  border-radius: 4px;
+  border-radius: 8px;
   background: ${(props: any) => props.theme.gray[800]};
-  padding: ${(props: any) => props.theme.spacing[4]};
   flex-direction: column;
 `;
 
 const BadgeRow = styled.View`
   flex-direction: row;
   justify-content: space-between;
+  padding-left: ${(props: any) => props.theme.spacing[4]};
+  padding-right: ${(props: any) => props.theme.spacing[4]};
+
   /* align-items: center; */
   margin-bottom: ${(props: any) => props.theme.spacing[2]};
 `;
@@ -102,12 +106,16 @@ const DateText = styled.Text`
 `;
 
 const TextContainer = styled.View`
+  padding: ${(props: any) => props.theme.spacing[4]};
   padding-bottom: ${(props: any) => props.theme.spacing[2]};
   /* margin-bottom: ${(props: any) => props.theme.spacing[2]}; */
 `;
 
 const Description = styled.Text`
   color: ${(props: any) => props.theme.gray[200]};
+  padding-left: ${(props: any) => props.theme.spacing[4]};
+  padding-right: ${(props: any) => props.theme.spacing[4]};
+
   margin-bottom: ${(props: any) => props.theme.spacing[2]};
   line-height: 20px;
   font-size: 14px;
@@ -115,21 +123,21 @@ const Description = styled.Text`
 
 const VoteContainer = styled.View`
   flex-direction: row;
-  background: ${(props: any) => props.theme.gray[600]};
+  background: ${(props: any) => props.theme.gray[900]};
   border-radius: 2px;
 `;
 
 const VoteNo = styled.View<{ percent: any }>`
   width: ${(props) => props.percent}%;
   height: 8px;
-  background: ${(props) => props.theme.gray[600]};
+  background: ${(props) => props.theme.gray[900]};
 
   border-radius: 4px;
 `;
 const VoteYes = styled.View<{ percent: any }>`
   width: ${(props) => props.percent}%;
   height: 8px;
-  background: ${(props) => props.theme.gray[300]};
+  background: ${(props) => props.theme.gray[200]};
   border-radius: 4px;
 `;
 
@@ -139,7 +147,13 @@ const VoteCountRow = styled.View`
 `;
 
 const VoteText = styled.Text`
-  color: ${(props: any) => props.theme.gray[500]};
+  color: ${(props: any) => props.theme.gray[300]};
   margin-bottom: ${(props: any) => props.theme.spacing[2]};
   font-size: 12px;
+`;
+
+const Votes = styled.View`
+  background: ${(props) => props.theme.gray[700]};
+  padding: ${(props: any) => props.theme.spacing[4]};
+  border-radius: 8px;
 `;
