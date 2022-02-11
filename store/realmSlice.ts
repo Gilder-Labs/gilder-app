@@ -328,7 +328,6 @@ export const realmSlice = createSlice({
       const realmIdIndex = state.realmWatchlist.findIndex(
         (id) => id === realmId
       );
-      console.log("realmIdIndex", realmIdIndex);
       if (realmIdIndex < 0) {
         // if in watchlist toggle off
         state.realmWatchlist.push(action.payload);

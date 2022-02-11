@@ -17,9 +17,7 @@ export const RealmSelectModal = ({
   handleOnClose,
 }: RealmSelectModalProps) => {
   const theme = useTheme();
-  const { selectedRealm, realmsData, realmWatchlist } = useAppSelector(
-    (state) => state.realms
-  );
+  const { realmsData } = useAppSelector((state) => state.realms);
 
   if (!realmsData) {
     return <View />;
@@ -62,6 +60,7 @@ export const RealmSelectModal = ({
           keyExtractor={(item) => item}
           style={{ paddingTop: 16 }}
           scrollIndicatorInsets={{ right: 1 }}
+          ListFooterComponent={<EmptyView />}
         />
       </RealmContainer>
     </Modal>
@@ -97,3 +96,7 @@ const CloseIconButton = styled.TouchableOpacity`
 `;
 
 const SearchBar = styled.TextInput``;
+
+const EmptyView = styled.View`
+  height: 150px;
+`;
