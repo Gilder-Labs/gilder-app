@@ -3,7 +3,7 @@ import {
   DrawerItemList,
   DrawerContent,
 } from "@react-navigation/drawer";
-import { View, Modal, Text } from "react-native";
+import { FlatList, View } from "react-native";
 import styled from "styled-components/native";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
@@ -22,33 +22,36 @@ export function DrawerContentContainer(props: any) {
   );
 
   const realmDisplayName = realmsData[selectedRealm?.pubKey]?.displayName;
+
+  const renderRealmIcon = ({ item }: any) => {
+    return <RealmIconButton realmId={item} key={item} />;
+  };
+
   return (
-    <DrawerContentScrollView
-      {...props}
-      scrollEnabled={false}
-      contentContainerStyle={{ alignItems: "stretch", flexGrow: "1" }}
-      style={{ backgroundColor: "#131313" }}
-    >
+    <DrawerRootContainer {...props} style={{ backgroundColor: "#131313" }}>
       <StyledHeader>
         <GilderLogo source={Logo} />
       </StyledHeader>
       <StyledContainer>
-        <RealmScrollContainer
-          contentContainerStyle={{
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          {realmWatchlist.map((realmId) => (
-            <RealmIconButton realmId={realmId} key={realmId} />
-          ))}
-          <Divider />
-          <AddRealmButtonContainer
-            onPress={() => setRealmSelectIsOpen(true)}
-            activeOpacity={0.4}
-          >
-            <Unicons.UilPlus size="20" color={theme.gray[400]} />
-          </AddRealmButtonContainer>
+        <RealmScrollContainer>
+          <FlatList
+            data={realmWatchlist}
+            renderItem={renderRealmIcon}
+            keyExtractor={(item) => item}
+            style={{ padding: 8 }}
+            scrollIndicatorInsets={{ right: 1 }}
+            ListFooterComponent={
+              <View>
+                <Divider />
+                <AddRealmButtonContainer
+                  onPress={() => setRealmSelectIsOpen(true)}
+                  activeOpacity={0.4}
+                >
+                  <Unicons.UilPlus size="20" color={theme.gray[400]} />
+                </AddRealmButtonContainer>
+              </View>
+            }
+          />
         </RealmScrollContainer>
         <DrawerContentContainerWrapper>
           <Content>
@@ -75,9 +78,13 @@ export function DrawerContentContainer(props: any) {
         open={realmSelectisOpen}
         handleOnClose={() => setRealmSelectIsOpen(false)}
       />
-    </DrawerContentScrollView>
+    </DrawerRootContainer>
   );
 }
+
+const DrawerRootContainer = styled.View`
+  padding-top: 52px;
+`;
 
 const StyledRealmName = styled.Text`
   color: ${(props) => props.theme.gray[200]};
@@ -104,12 +111,12 @@ const StyledContainer = styled.View`
   background-color: ${(props) => props.theme.gray[900]};
 `;
 
-const RealmScrollContainer = styled.ScrollView`
+const RealmScrollContainer = styled.View`
   max-width: 64px;
   height: 100%;
-  padding: 8px;
-  padding-top: 16px;
   background: ${(props) => props.theme.gray[800]};
+  justify-content: center;
+  align-items: center;
 `;
 
 const AddRealmButtonContainer = styled.TouchableOpacity`
@@ -122,9 +129,9 @@ const AddRealmButtonContainer = styled.TouchableOpacity`
 `;
 
 const Divider = styled.View`
-  flex: 1;
-  width: 48px;
+  /* width: 48px; */
   height: 2px;
+  max-height: 2px;
   background-color: ${(props) => props.theme.gray[600]};
   margin-bottom: ${(props) => props.theme.spacing[4]};
 `;
@@ -132,6 +139,8 @@ const Divider = styled.View`
 const DrawerContentContainerWrapper = styled.View`
   flex: 1;
   justify-content: space-between;
+  /* height: 100%; */
+  /* padding-bottom: 100px; */
 `;
 
 const GilderLogo = styled.Image`
@@ -151,8 +160,8 @@ const StyledHeader = styled.View`
 `;
 
 const ConnectWalletContainer = styled.View`
-  background: ${(props) => props.theme.gray[1000]};
-  /* height: 64px; */
+  background: ${(props) => props.theme.gray[900]};
+
   padding: ${(props) => props.theme.spacing[3]};
   padding-bottom: ${(props) => props.theme.spacing[5]};
 
@@ -160,22 +169,19 @@ const ConnectWalletContainer = styled.View`
   border-color: ${(props) => props.theme.gray[900]};
 `;
 
-const Content = styled.View`
-  flex: 1;
-`;
+const Content = styled.View``;
 
 const WalletConnectText = styled.Text`
   color: ${(props) => props.theme.gray[400]};
 `;
 
 const ConnectWalletButton = styled.TouchableOpacity`
-  flex: 1;
   flex-direction: row;
-
   height: 48px;
   align-items: center;
   justify-content: center;
   border-radius: 4px;
+  margin-bottom: 80px;
 
   background: ${(props) => props.theme.gray[800]};
 `;
