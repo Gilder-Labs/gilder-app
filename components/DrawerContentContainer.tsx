@@ -79,18 +79,6 @@ export function DrawerContentContainer(props: any) {
   );
 }
 
-const StyledHeader = styled.View`
-  background-color: ${(props) => props.theme.gray[1000]};
-  flex: 1;
-  align-items: center;
-  padding-bottom: ${(props) => props.theme.spacing[4]};
-  padding-left: ${(props) => props.theme.spacing[4]};
-  /* border-bottom-color: ${(props) => props.theme.gray[800]}; */
-  border-bottom-width: 1px;
-  flex-direction: row;
-  max-height: 40px;
-`;
-
 const StyledRealmName = styled.Text`
   color: ${(props) => props.theme.gray[200]};
   font-size: 20px;
@@ -147,8 +135,19 @@ const DrawerContentContainerWrapper = styled.View`
 `;
 
 const GilderLogo = styled.Image`
-  height: 36px;
+  height: 30px;
   width: 120px;
+`;
+
+const StyledHeader = styled.View`
+  background-color: ${(props) => props.theme.gray[1000]};
+  align-items: center;
+  padding-left: ${(props) => props.theme.spacing[4]};
+  padding-bottom: ${(props) => props.theme.spacing[2]};
+  /* border-bottom-color: ${(props) => props.theme.gray[800]}; */
+  border-bottom-width: 1px;
+  flex-direction: row;
+  /* max-height: 40px; */
 `;
 
 const ConnectWalletContainer = styled.View`
