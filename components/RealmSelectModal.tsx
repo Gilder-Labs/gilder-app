@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Modal, Text, Pressable, View } from "react-native";
+import { Modal, FlatList, View } from "react-native";
 import styled from "styled-components/native";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import * as Unicons from "@iconscout/react-native-unicons";
@@ -29,6 +29,12 @@ export const RealmSelectModal = ({
     handleOnClose();
   };
 
+  const renderRealmCard = ({ item }) => {
+    return <RealmCard realmId={item} onClick={() => handleRealmClick()} />;
+  };
+
+  console.log("realmsData", realmsData);
+
   return (
     <Modal
       animationType="slide"
@@ -48,36 +54,23 @@ export const RealmSelectModal = ({
       {/* Input to filter by name or public key */}
       {/* <SearchBar /> */}
 
-      <Container>
-        <RealmContainer>
-          {Object.keys(realmsData).map((realmId) => (
-            <RealmCard
-              realmId={realmId}
-              key={realmId}
-              onClick={() => handleRealmClick()}
-            />
-          ))}
-        </RealmContainer>
-      </Container>
+      <RealmContainer>
+        <FlatList
+          data={Object.keys(realmsData)}
+          renderItem={renderRealmCard}
+          numColumns={2}
+          keyExtractor={(item) => item}
+          style={{ paddingTop: 16 }}
+          scrollIndicatorInsets={{ right: 1 }}
+        />
+      </RealmContainer>
     </Modal>
   );
 };
 
-const Container = styled.ScrollView`
-  background-color: ${(props) => props.theme.gray[900]};
-  flex: 1;
-  padding-top: ${(props) => props.theme.spacing[2]};
-`;
-
 const RealmContainer = styled.View`
   background-color: ${(props) => props.theme.gray[900]};
-  flex: 1;
-  padding: ${(props) => props.theme.spacing[2]};
-  flex-wrap: wrap;
   width: 100%;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: stretch;
 `;
 
 const Header = styled.View`

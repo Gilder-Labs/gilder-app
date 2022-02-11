@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { addRealmToWatchlist } from "../store/realmSlice";
+import { toggleRealmInWatchlist } from "../store/realmSlice";
 import { RealmIcon } from "./RealmIcon";
 
 interface RealmCardProps {
@@ -16,17 +16,19 @@ export const RealmCard = ({ realmId, onClick }: RealmCardProps) => {
   const dispatch = useAppDispatch();
 
   const handleRealmClick = () => {
-    dispatch(addRealmToWatchlist(realmId));
-    onClick();
+    dispatch(toggleRealmInWatchlist(realmId));
+    // onClick();
   };
 
   const realmInfo = realmsData[realmId];
+  const isSelected = realmWatchlist.includes(realmId);
 
   return (
     <ContainerButton
       onPress={handleRealmClick}
       key={realmId}
       activeOpacity={0.4}
+      isSelected={isSelected}
     >
       <Container>
         <RealmIcon realmId={realmId} />
@@ -36,14 +38,20 @@ export const RealmCard = ({ realmId, onClick }: RealmCardProps) => {
   );
 };
 
-const ContainerButton = styled.TouchableOpacity`
+const ContainerButton = styled.TouchableOpacity<{ isSelected: boolean }>`
   height: 140px;
-  width: 45%;
+  flex: 1;
   margin-bottom: ${(props: any) => props.theme.spacing[3]};
+  margin-left: ${(props: any) => props.theme.spacing[2]};
+  margin-right: ${(props: any) => props.theme.spacing[2]};
   border-radius: 4px;
   background: ${(props: any) => props.theme.gray[800]};
   padding-left: ${(props: any) => props.theme.spacing[3]};
   padding-right: ${(props: any) => props.theme.spacing[3]};
+  border: ${(props: any) =>
+    props.isSelected
+      ? `2px solid  ${props.theme.primary[400]}`
+      : "2px solid transparent"};
 `;
 
 const RealmName = styled.Text`

@@ -322,8 +322,9 @@ export const realmSlice = createSlice({
   name: "realms",
   initialState,
   reducers: {
-    addRealmToWatchlist: (state, action) => {
-      state.realmWatchlist.push(action.payload);
+    toggleRealmInWatchlist: (state, action) => {
+      console.log("toggle", action.payload);
+      // state.realmWatchlist.push(action.payload);
     },
     selectRealm: (state, action) => {
       state.selectedRealm = action.payload;
@@ -401,6 +402,6 @@ export const realmSlice = createSlice({
   },
 });
 
-export const { addRealmToWatchlist } = realmSlice.actions;
+export const { toggleRealmInWatchlist } = realmSlice.actions;
 
 export default realmSlice.reducer;
