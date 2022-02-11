@@ -27,6 +27,8 @@ export default function ProposalScreen({
           style={{ padding: 16 }}
           ListFooterComponent={<EmptyView />}
           scrollIndicatorInsets={{ right: 1 }}
+          removeClippedSubviews={true}
+          initialNumToRender={10}
           ListHeaderComponent={
             <HeaderContainer>
               <TreasuryValueContainer>

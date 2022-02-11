@@ -109,7 +109,7 @@ const RealmNameContainer = styled.View`
 `;
 
 const StyledContainer = styled.View`
-  flex: 1;
+  height: 100%;
   flex-direction: row;
   align-content: stretch;
   align-self: stretch;
@@ -118,8 +118,7 @@ const StyledContainer = styled.View`
 
 const RealmScrollContainer = styled.ScrollView`
   max-width: 64px;
-  flex: 1;
-  flex-grow: 1;
+  height: 100%;
   padding: 8px;
   padding-top: 16px;
   background: ${(props) => props.theme.gray[800]};

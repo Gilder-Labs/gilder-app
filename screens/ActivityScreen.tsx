@@ -55,6 +55,8 @@ export default function ActivityScreen({
           style={{ padding: 16, minWidth: "100%" }}
           ListFooterComponent={<EmptyView />}
           scrollIndicatorInsets={{ right: 1 }}
+          removeClippedSubviews={true}
+          initialNumToRender={15}
           // ItemSeparatorComponent={renderSeparator}
           // ListHeaderComponent={
           //   <DateSeparator>
