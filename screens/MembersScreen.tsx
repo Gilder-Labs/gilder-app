@@ -32,7 +32,7 @@ export default function ActivityScreen({
         <FlatList
           data={realmMembers}
           renderItem={renderMember}
-          keyExtractor={(item) => item.governingTokenOwner}
+          keyExtractor={(item) => item.publicKey}
           style={{ padding: 16 }}
           ListFooterComponent={<EmptyView />}
           scrollIndicatorInsets={{ right: 1 }}

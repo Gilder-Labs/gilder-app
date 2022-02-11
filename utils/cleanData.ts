@@ -63,6 +63,7 @@ export const InstructionToText = {
   CreateNativeTreasury: "Created Native Treasury",
   RemoveTransaction: "Removed Transaction",
   InsertTransaction: "Inserted Transaction",
+  InvalidInstructionData: "Invalid Transaction", // not a governance instruction just bad attempt
 };
 
 export const extractLogInfo = (informationLogs: any) => {
@@ -70,9 +71,12 @@ export const extractLogInfo = (informationLogs: any) => {
   const instructionLogs = [];
 
   informationLogs.forEach((log: string) => {
+    if (log.includes("Program log: Error:")) {
+      errorLog = "Data in instruction invalid";
+      instructionLogs.push(InstructionToText["InvalidInstructionData"]);
+    }
     if (log.includes("GOVERNANCE-ERROR")) {
-      const errorString = log.split("Program log: GOVERNANCE-ERROR: ")[1];
-      errorLog = errorString;
+      errorLog = log.split("Program log: GOVERNANCE-ERROR: ")[1];
     }
     if (log.includes("GOVERNANCE-INSTRUCTION")) {
       const instructionString = log.split(
