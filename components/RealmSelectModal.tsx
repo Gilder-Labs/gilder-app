@@ -33,7 +33,7 @@ export const RealmSelectModal = ({
     return <RealmCard realmId={item} onClick={() => handleRealmClick()} />;
   };
 
-  console.log("realmsData", realmsData);
+  // console.log("realmsData", realmsData);
 
   return (
     <Modal

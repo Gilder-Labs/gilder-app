@@ -323,8 +323,19 @@ export const realmSlice = createSlice({
   initialState,
   reducers: {
     toggleRealmInWatchlist: (state, action) => {
-      console.log("toggle", action.payload);
-      // state.realmWatchlist.push(action.payload);
+      const realmId = action.payload;
+
+      const realmIdIndex = state.realmWatchlist.findIndex(
+        (id) => id === realmId
+      );
+      console.log("realmIdIndex", realmIdIndex);
+      if (realmIdIndex < 0) {
+        // if in watchlist toggle off
+        state.realmWatchlist.push(action.payload);
+      } else {
+        // else toggle on
+        state.realmWatchlist.splice(realmIdIndex, 1);
+      }
     },
     selectRealm: (state, action) => {
       state.selectedRealm = action.payload;
