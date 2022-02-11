@@ -21,16 +21,18 @@ export const RealmIcon = ({ realmId }: RealmIconProps) => {
     });
 
     let realmIconUrl = realmsData[realmId]?.ogImage;
-
+    let fullFilePath = realmIconUrl?.slice(0, 5) === "https";
     // image is a png, render regular image component
     if (realmIconUrl?.slice(-3) === "png") {
       isSvgImage = false;
     }
 
     // image url has a relative path
-    if (realmIconUrl?.slice(0, 5) !== "https") {
+    if (!fullFilePath) {
       realmIconUrl = `https://realms.today${realmIconUrl}`;
-    } else if (isSvgImage) {
+    }
+
+    if (isSvgImage && fullFilePath) {
       // if is svg + has a full url to svg
       return <SvgUri width="44" height="44" uri={realmIconUrl} />;
     }

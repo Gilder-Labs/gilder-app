@@ -39,6 +39,7 @@ export const RealmIconButton = ({
 
 const ContainerButton = styled.TouchableOpacity`
   height: 44px;
+  width: 44px;
   margin-bottom: ${(props: any) => props.theme.spacing[4]};
   border-radius: 4px;
 `;
@@ -48,7 +49,7 @@ const Container = styled.View``;
 const RealmSelectedIndicator = styled.View`
   width: 6px;
   height: 36px;
-  left: -12px;
+  left: -10px;
   top: 4px;
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;

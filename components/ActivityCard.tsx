@@ -105,6 +105,33 @@ export const ActivityCard = ({ activity }: ActivityCardProps) => {
             />
           </IconContainer>
         );
+      case InstructionToText.CreateRealm:
+        return (
+          <IconContainer isSuccessful={isSuccessful} color={theme.aqua[400]}>
+            <Unicons.UilEstate
+              size="20"
+              color={isSuccessful ? theme.aqua[400] : theme.error[400]}
+            />
+          </IconContainer>
+        );
+      case InstructionToText.CreateProgramGovernance:
+        return (
+          <IconContainer isSuccessful={isSuccessful} color={theme.aqua[400]}>
+            <Unicons.UilFilePlus
+              size="20"
+              color={isSuccessful ? theme.aqua[400] : theme.error[400]}
+            />
+          </IconContainer>
+        );
+      case InstructionToText.CreateTokenGovernance:
+        return (
+          <IconContainer isSuccessful={isSuccessful} color={theme.aqua[400]}>
+            <Unicons.UilFilePlus
+              size="20"
+              color={isSuccessful ? theme.aqua[400] : theme.error[400]}
+            />
+          </IconContainer>
+        );
       case InstructionToText.WithdrawGoverningTokens:
         return (
           <IconContainer isSuccessful={isSuccessful} color={theme.aqua[400]}>
