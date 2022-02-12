@@ -32,6 +32,7 @@ export function DrawerContentContainer(props: any) {
     <DrawerRootContainer {...props} style={{ backgroundColor: "#131313" }}>
       <StyledHeader>
         <GilderLogo source={Logo} />
+        <BetaBadge> BETA </BetaBadge>
       </StyledHeader>
       <StyledContainer>
         <RealmScrollContainer>
@@ -138,6 +139,7 @@ const DrawerContentContainerWrapper = styled.View`
 const GilderLogo = styled.Image`
   height: 30px;
   width: 120px;
+  margin-right: ${(props) => props.theme.spacing[1]};
 `;
 
 const StyledHeader = styled.View`
@@ -152,3 +154,11 @@ const StyledHeader = styled.View`
 `;
 
 const Content = styled.View``;
+
+const BetaBadge = styled.Text`
+  font-size: 12px;
+  border-radius: 4px;
+  border: 1px solid ${(props) => props.theme.gray[400]};
+  color: ${(props) => props.theme.gray[400]};
+  background: ${(props) => props.theme.gray[700]}44;
+`;
