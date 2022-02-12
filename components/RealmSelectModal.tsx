@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Modal, FlatList, View } from "react-native";
 import styled from "styled-components/native";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import * as Unicons from "@iconscout/react-native-unicons";
-
+import { debounce, filter } from "lodash";
 import { useTheme } from "styled-components";
 import { RealmCard } from "./RealmCard";
 
@@ -42,15 +42,21 @@ export const RealmSelectModal = ({
 
     if (!newText) {
       setFilteredRealms(realms);
-    }
-    const filtRealms = realms.filter(
-      (realm) =>
-        realm.name.toLowerCase().includes(newText.toLowerCase()) ||
-        realm.pubKey === newText
-    );
+    } else {
+      const filtRealms = realms.filter(
+        (realm) =>
+          realm.name.toLowerCase().includes(newText.toLowerCase()) ||
+          realm.pubKey === newText
+      );
 
-    setFilteredRealms(filtRealms);
+      setFilteredRealms(filtRealms);
+    }
   };
+
+  const debouncedChangeHandler = useCallback(
+    debounce(handleSearchChange, 300),
+    []
+  );
 
   return (
     <Modal
@@ -71,8 +77,8 @@ export const RealmSelectModal = ({
       {/* <SearchBar /> */}
       <SearchBarContainer>
         <SearchBar
-          placeholder="Type here to search by name or public key"
-          onChangeText={handleSearchChange}
+          placeholder="Search by name or public key"
+          onChangeText={debouncedChangeHandler}
           placeholderTextColor={theme.gray[400]}
           selectionColor={theme.gray[200]}
         />
