@@ -63,7 +63,7 @@ export function DrawerContentContainer(props: any) {
             </RealmNameContainer>
             <DrawerItemList {...props} />
           </Content>
-          <ConnectWalletButton />
+          {/* <ConnectWalletButton /> */}
         </DrawerContentContainerWrapper>
       </StyledContainer>
       <RealmSelectModal

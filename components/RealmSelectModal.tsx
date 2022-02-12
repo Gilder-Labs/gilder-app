@@ -94,7 +94,7 @@ export const RealmSelectModal = ({
             paddingTop: 16,
             paddingLeft: 8,
             paddingRight: 8,
-            height: "100%",
+            // height: "100%",
           }}
           scrollIndicatorInsets={{ right: 1 }}
           ListFooterComponent={<EmptyView />}
@@ -110,6 +110,7 @@ export const RealmSelectModal = ({
 const RealmContainer = styled.View`
   background-color: ${(props) => props.theme.gray[900]};
   width: 100%;
+  height: 100%;
 `;
 
 const Header = styled.View`

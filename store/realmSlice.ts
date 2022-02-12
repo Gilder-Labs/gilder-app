@@ -57,8 +57,6 @@ const initialState: realmState = {
     "B1CxhV1khhj7n5mi5hebbivesqH9mvXr5Hfh2nD2UCh6", // real monke dao
     "DPiH3H3c7t47BMxqTxLsuPQpEC6Kne8GA9VXbxpnZxFE", // mango
     "759qyfKDMMuo9v36tW7fbGanL63mZFPNbhU7zjPrkuGK", // socean
-    // "GBXLYo4ycRNfzuzYeudu6y2ng4afNeW14WcpM2E4JJSL", // uxd
-    "By2sVGZXwfQq6rAiAM3rNPJ9iQfb5e2QhnF4YjJ4Bip", // grape
   ],
   realmActivity: [],
   isLoadingMembers: false,
@@ -285,7 +283,6 @@ export const fetchRealmProposals = createAsyncThunk(
       console.log("error", error);
     }
 
-    console.log("raw proposals", rawProposals);
     // votingAt, signingOffAt, votingCompletedAt, draftAt, executingAt
     // format(getStateTimestamp * 1000, "LLL cc, yyyy"
     let proposals = rawProposals?.map((proposal: any) => {
