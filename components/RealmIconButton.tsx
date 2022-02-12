@@ -41,7 +41,7 @@ export const RealmIconButton = ({
 const ContainerButton = styled.TouchableOpacity<{ isSelected: boolean }>`
   height: 48px;
   width: 48px;
-  margin-bottom: ${(props: any) => props.theme.spacing[4]};
+  margin-bottom: ${(props: any) => props.theme.spacing[3]};
   border-radius: 100px;
   padding: ${(props: any) => props.theme.spacing[1]};
   background: ${(props: any) => props.theme.gray[900]};

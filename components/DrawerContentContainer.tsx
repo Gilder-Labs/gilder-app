@@ -48,7 +48,7 @@ export function DrawerContentContainer(props: any) {
                   onPress={() => setRealmSelectIsOpen(true)}
                   activeOpacity={0.4}
                 >
-                  <Unicons.UilPlus size="20" color={theme.gray[400]} />
+                  <Unicons.UilPlus size="20" color={theme.gray[500]} />
                 </AddRealmButtonContainer>
               </View>
             }
@@ -104,7 +104,6 @@ const StyledContainer = styled.View`
 `;
 
 const RealmScrollContainer = styled.View`
-  max-width: 74px;
   height: 100%;
   background: ${(props) => props.theme.gray[800]};
   justify-content: center;
@@ -112,11 +111,12 @@ const RealmScrollContainer = styled.View`
 `;
 
 const AddRealmButtonContainer = styled.TouchableOpacity`
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   border-radius: 100px;
   align-items: center;
   justify-content: center;
+  /* background: ${(props) => props.theme.gray[900]}; */
   border: 2px dashed ${(props) => props.theme.gray[500]};
 `;
 
@@ -125,7 +125,7 @@ const Divider = styled.View`
   height: 2px;
   max-height: 2px;
   background-color: ${(props) => props.theme.gray[600]};
-  margin-bottom: ${(props) => props.theme.spacing[4]};
+  margin-bottom: ${(props) => props.theme.spacing[3]};
 `;
 
 const DrawerContentContainerWrapper = styled.View`
