@@ -17,7 +17,7 @@ export const RealmSelectModal = ({
   handleOnClose,
 }: RealmSelectModalProps) => {
   const theme = useTheme();
-  const { realmsData } = useAppSelector((state) => state.realms);
+  const { realmsData, realms } = useAppSelector((state) => state.realms);
 
   if (!realmsData) {
     return <View />;
@@ -28,7 +28,7 @@ export const RealmSelectModal = ({
   };
 
   const renderRealmCard = ({ item }) => {
-    return <RealmCard realmId={item} onClick={() => handleRealmClick()} />;
+    return <RealmCard realm={item} onClick={() => handleRealmClick()} />;
   };
 
   // console.log("realmsData", realmsData);
@@ -54,10 +54,10 @@ export const RealmSelectModal = ({
 
       <RealmContainer>
         <FlatList
-          data={Object.keys(realmsData)}
+          data={realms}
           renderItem={renderRealmCard}
           numColumns={2}
-          keyExtractor={(item) => item}
+          keyExtractor={(item) => item.pubKey}
           style={{ paddingTop: 16, paddingLeft: 8, paddingRight: 8 }}
           scrollIndicatorInsets={{ right: 1 }}
           ListFooterComponent={<EmptyView />}

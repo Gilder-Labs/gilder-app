@@ -80,13 +80,16 @@ const TokensInfo = getTokensInfo();
 export const fetchRealms = createAsyncThunk("realms/fetchRealms", async () => {
   let realms;
   const realmsRaw = await getRealms(connection, REALM_GOVERNANCE_PKEY);
+  console.log("raw realms", realmsRaw);
   realms = realmsRaw.map((realm) => {
     return {
       name: realm.account.name,
       pubKey: realm.pubkey.toString(),
       communityMint: realm.account.communityMint.toString(),
       councilMint: realm.account?.config?.councilMint?.toString(),
-      overnanceId: realm?.owner.toString(),
+      governanceId: realm?.owner.toString(),
+      accountType: realm.account.accountType,
+      votingProposalCount: realm.account.votingProposalCount,
     };
   });
   return { realms: realms };
@@ -96,13 +99,15 @@ export const fetchRealm = createAsyncThunk(
   "realms/fetchRealm",
   async (realmId: string) => {
     const rawRealm = await getRealm(connection, new PublicKey(realmId));
-    // console.log("rawrealm", rawRealm);
+    console.log("rawrealm", rawRealm);
     return {
       name: rawRealm.account.name,
       pubKey: rawRealm.pubkey.toString(),
       communityMint: rawRealm.account.communityMint.toString(),
       councilMint: rawRealm.account?.config?.councilMint?.toString(),
       governanceId: rawRealm?.owner.toString(),
+      accountType: rawRealm.account.accountType,
+      votingProposalCount: rawRealm.account.votingProposalCount,
     };
   }
 );

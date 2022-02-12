@@ -5,34 +5,34 @@ import { toggleRealmInWatchlist } from "../store/realmSlice";
 import { RealmIcon } from "./RealmIcon";
 
 interface RealmCardProps {
-  realmId: string;
+  realm: any;
   onClick: any;
 }
 
-export const RealmCard = ({ realmId, onClick }: RealmCardProps) => {
+export const RealmCard = ({ realm, onClick }: RealmCardProps) => {
   const { realmsData, realmWatchlist } = useAppSelector(
     (state) => state.realms
   );
   const dispatch = useAppDispatch();
 
   const handleRealmClick = () => {
-    dispatch(toggleRealmInWatchlist(realmId));
+    dispatch(toggleRealmInWatchlist(realm.pubKey));
     // onClick();
   };
 
-  const realmInfo = realmsData[realmId];
-  const isSelected = realmWatchlist.includes(realmId);
+  const realmInfo = realmsData[realm.pubKey];
+  const isSelected = realmWatchlist.includes(realm.pubKey);
 
   return (
     <ContainerButton
       onPress={handleRealmClick}
-      key={realmId}
+      key={realm.pubKey}
       activeOpacity={0.4}
       isSelected={isSelected}
     >
       <Container>
-        <RealmIcon realmId={realmId} />
-        <RealmName>{realmInfo.displayName || realmInfo.symbol}</RealmName>
+        <RealmIcon realmId={realm.pubKey} />
+        <RealmName>{realmInfo?.displayName || realm.name}</RealmName>
       </Container>
     </ContainerButton>
   );
