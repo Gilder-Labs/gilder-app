@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, FlatList, View } from "react-native";
 import styled from "styled-components/native";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
@@ -17,7 +17,13 @@ export const RealmSelectModal = ({
   handleOnClose,
 }: RealmSelectModalProps) => {
   const theme = useTheme();
+  const [searchText, setSearchText] = useState("");
+  const [filteredRealms, setFilteredRealms] = useState(realms);
   const { realmsData, realms } = useAppSelector((state) => state.realms);
+
+  useEffect(() => {
+    setFilteredRealms(realms);
+  }, [realms]);
 
   if (!realmsData) {
     return <View />;
@@ -31,7 +37,20 @@ export const RealmSelectModal = ({
     return <RealmCard realm={item} onClick={() => handleRealmClick()} />;
   };
 
-  // console.log("realmsData", realmsData);
+  const handleSearchChange = (newText: string) => {
+    setSearchText(newText);
+
+    if (!newText) {
+      setFilteredRealms(realms);
+    }
+    const filtRealms = realms.filter(
+      (realm) =>
+        realm.name.toLowerCase().includes(newText.toLowerCase()) ||
+        realm.pubKey === newText
+    );
+
+    setFilteredRealms(filtRealms);
+  };
 
   return (
     <Modal
@@ -40,7 +59,6 @@ export const RealmSelectModal = ({
       onRequestClose={handleOnClose}
       presentationStyle="pageSheet"
     >
-      {/* Header - Title + close */}
       <Header>
         <View style={{ width: 48, height: 48 }} />
         <HeaderTitle> Add Realm</HeaderTitle>
@@ -51,14 +69,27 @@ export const RealmSelectModal = ({
 
       {/* Input to filter by name or public key */}
       {/* <SearchBar /> */}
+      <SearchBarContainer>
+        <SearchBar
+          placeholder="Type here to search by name or public key"
+          onChangeText={handleSearchChange}
+          placeholderTextColor={theme.gray[400]}
+          selectionColor={theme.gray[200]}
+        />
+      </SearchBarContainer>
 
       <RealmContainer>
         <FlatList
-          data={realms}
+          data={filteredRealms}
           renderItem={renderRealmCard}
           numColumns={2}
           keyExtractor={(item) => item.pubKey}
-          style={{ paddingTop: 16, paddingLeft: 8, paddingRight: 8 }}
+          style={{
+            paddingTop: 16,
+            paddingLeft: 8,
+            paddingRight: 8,
+            height: "100%",
+          }}
           scrollIndicatorInsets={{ right: 1 }}
           ListFooterComponent={<EmptyView />}
         />
@@ -95,8 +126,25 @@ const CloseIconButton = styled.TouchableOpacity`
   align-items: center;
 `;
 
-const SearchBar = styled.TextInput``;
+const SearchBar = styled.TextInput`
+  margin: ${(props) => props.theme.spacing[2]};
+  padding: ${(props) => props.theme.spacing[3]};
+  font-size: 14px;
+  background-color: ${(props) => props.theme.gray[800]};
+  border-radius: 4px;
+  border: 1px solid ${(props) => props.theme.gray[500]};
+  color: ${(props) => props.theme.gray[100]};
+
+  :focus {
+    background: green;
+  }
+`;
 
 const EmptyView = styled.View`
   height: 150px;
+`;
+
+const SearchBarContainer = styled.View`
+  padding: ${(props) => props.theme.spacing[2]};
+  background-color: ${(props) => props.theme.gray[900]};
 `;
