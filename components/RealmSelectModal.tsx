@@ -98,6 +98,9 @@ export const RealmSelectModal = ({
           }}
           scrollIndicatorInsets={{ right: 1 }}
           ListFooterComponent={<EmptyView />}
+          ListEmptyComponent={
+            <EmptyText>No DAO's match that name or public key.</EmptyText>
+          }
         />
       </RealmContainer>
     </Modal>
@@ -153,4 +156,12 @@ const EmptyView = styled.View`
 const SearchBarContainer = styled.View`
   padding: ${(props) => props.theme.spacing[2]};
   background-color: ${(props) => props.theme.gray[900]};
+`;
+
+const EmptyText = styled.Text`
+  color: ${(props) => props.theme.gray[100]};
+  font-size: 26px;
+  line-height: 40px;
+  font-weight: bold;
+  margin: ${(props) => props.theme.spacing[4]};
 `;
