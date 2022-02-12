@@ -31,7 +31,9 @@ export const RealmCard = ({ realm, onClick }: RealmCardProps) => {
       isSelected={isSelected}
     >
       <Container>
-        <RealmIcon realmId={realm.pubKey} />
+        <IconContainer>
+          <RealmIcon realmId={realm.pubKey} />
+        </IconContainer>
         <RealmName>{realmInfo?.displayName || realm.name}</RealmName>
       </Container>
     </ContainerButton>
@@ -66,4 +68,11 @@ const Container = styled.View`
   justify-content: center;
   align-items: center;
   height: 140px;
+`;
+
+const IconContainer = styled.View`
+  margin-bottom: ${(props: any) => props.theme.spacing[4]};
+  border-radius: 100px;
+  padding: ${(props: any) => props.theme.spacing[2]};
+  background: ${(props: any) => props.theme.gray[900]};
 `;

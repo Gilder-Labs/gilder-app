@@ -28,20 +28,27 @@ export const RealmIconButton = ({
       key={realmId}
       activeOpacity={0.4}
       disabled={isDisabled}
+      isSelected={isSelected}
     >
       <Container>
-        {isSelected && <RealmSelectedIndicator />}
+        {/* {isSelected && <RealmSelectedIndicator />} */}
         <RealmIcon realmId={realmId} />
       </Container>
     </ContainerButton>
   );
 };
 
-const ContainerButton = styled.TouchableOpacity`
-  height: 44px;
-  width: 44px;
+const ContainerButton = styled.TouchableOpacity<{ isSelected: boolean }>`
+  height: 48px;
+  width: 48px;
   margin-bottom: ${(props: any) => props.theme.spacing[4]};
-  border-radius: 4px;
+  border-radius: 100px;
+  padding: ${(props: any) => props.theme.spacing[1]};
+  background: ${(props: any) => props.theme.gray[900]};
+  border: ${(props: any) =>
+    props.isSelected
+      ? `2px solid ${props.theme.aqua[600]}}`
+      : "2px solid transparent"};
 `;
 
 const Container = styled.View``;

@@ -104,7 +104,7 @@ const StyledContainer = styled.View`
 `;
 
 const RealmScrollContainer = styled.View`
-  max-width: 64px;
+  max-width: 74px;
   height: 100%;
   background: ${(props) => props.theme.gray[800]};
   justify-content: center;

@@ -34,14 +34,14 @@ export const RealmIcon = ({ realmId }: RealmIconProps) => {
 
     if (isSvgImage && fullFilePath) {
       // if is svg + has a full url to svg
-      return <SvgUri width="44" height="44" uri={realmIconUrl} />;
+      return <SvgUri width="36" height="36" uri={realmIconUrl} />;
     }
 
     iconImage = isSvgImage ? (
       <SvgXml
         key={realmId}
-        width="44"
-        height="44"
+        width="36"
+        height="36"
         // style={{ marginBottom: 12 }}
         xml={jdenticonSvg}
       />
@@ -59,14 +59,19 @@ export const RealmIcon = ({ realmId }: RealmIconProps) => {
 };
 
 const Container = styled.View`
-  height: 44px;
+  height: 36px;
   border-radius: 4px;
+  overflow: hidden;
+  border-radius: 100px;
+  align-items: center;
+  justify-content: center;
 `;
 
 const RealmIconImage = styled.Image`
-  width: 44px;
-  height: 44px;
-  margin-bottom: 12px;
+  width: 36px;
+  min-width: 36px;
+  height: 36px;
+  min-height: 36px;
   justify-content: center;
   align-self: center;
   overflow: hidden;
