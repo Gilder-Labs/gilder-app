@@ -17,10 +17,10 @@ const Container = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
+  height: 100%;
+  background: ${(props) => props.theme.gray[900]};
 `;
 
 const Text = styled.Text``;
 
-const Loader = styled.ActivityIndicator`
-  color: red;
-`;
+const Loader = styled.ActivityIndicator``;

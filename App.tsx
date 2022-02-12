@@ -8,7 +8,9 @@ import { ThemeProvider } from "./utils/styled-components";
 import { darkTheme } from "./constants/Theme";
 import { store } from "./store";
 import { Provider } from "react-redux";
-
+import { PersistGate } from "redux-persist/integration/react";
+import { persistStore } from "redux-persist";
+import { Loading } from "./components";
 import useCachedResources from "./hooks/useCachedResources";
 import Navigation from "./navigation";
 
@@ -26,12 +28,16 @@ export default function App() {
   if (!isLoadingComplete) {
     return null;
   } else {
+    let persistor = persistStore(store);
+
     return (
       <SafeAreaProvider>
         <Provider store={store}>
           <ThemeProvider theme={darkTheme}>
-            <StatusBar style="light" />
-            <Navigation />
+            <PersistGate loading={<Loading />} persistor={persistor}>
+              <StatusBar style="light" />
+              <Navigation />
+            </PersistGate>
           </ThemeProvider>
         </Provider>
       </SafeAreaProvider>
