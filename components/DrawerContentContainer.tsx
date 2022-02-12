@@ -9,6 +9,7 @@ import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { RealmIconButton } from "./RealmIconButton";
 import { RealmSelectModal } from "./RealmSelectModal";
+import { ConnectWalletButton } from "./ConnectWalletButton";
 import { useTheme } from "styled-components";
 import Logo from "../assets/images/GilderLogo.png";
 import * as Unicons from "@iconscout/react-native-unicons";
@@ -62,16 +63,7 @@ export function DrawerContentContainer(props: any) {
             </RealmNameContainer>
             <DrawerItemList {...props} />
           </Content>
-          <ConnectWalletContainer>
-            <ConnectWalletButton>
-              <Unicons.UilWallet
-                size="20"
-                color={theme.gray[400]}
-                style={{ marginRight: 8 }}
-              />
-              <WalletConnectText>Connect Wallet</WalletConnectText>
-            </ConnectWalletButton>
-          </ConnectWalletContainer>
+          <ConnectWalletButton />
         </DrawerContentContainerWrapper>
       </StyledContainer>
       <RealmSelectModal
@@ -159,29 +151,4 @@ const StyledHeader = styled.View`
   /* max-height: 40px; */
 `;
 
-const ConnectWalletContainer = styled.View`
-  background: ${(props) => props.theme.gray[900]};
-
-  padding: ${(props) => props.theme.spacing[3]};
-  padding-bottom: ${(props) => props.theme.spacing[5]};
-
-  border-top-width: 1px;
-  border-color: ${(props) => props.theme.gray[900]};
-`;
-
 const Content = styled.View``;
-
-const WalletConnectText = styled.Text`
-  color: ${(props) => props.theme.gray[400]};
-`;
-
-const ConnectWalletButton = styled.TouchableOpacity`
-  flex-direction: row;
-  height: 48px;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-  margin-bottom: 80px;
-
-  background: ${(props) => props.theme.gray[800]};
-`;
