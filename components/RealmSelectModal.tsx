@@ -58,7 +58,7 @@ export const RealmSelectModal = ({
           renderItem={renderRealmCard}
           numColumns={2}
           keyExtractor={(item) => item}
-          style={{ paddingTop: 16 }}
+          style={{ paddingTop: 16, paddingLeft: 8, paddingRight: 8 }}
           scrollIndicatorInsets={{ right: 1 }}
           ListFooterComponent={<EmptyView />}
         />
