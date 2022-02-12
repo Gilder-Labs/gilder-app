@@ -80,7 +80,6 @@ const TokensInfo = getTokensInfo();
 export const fetchRealms = createAsyncThunk("realms/fetchRealms", async () => {
   let realms;
   const realmsRaw = await getRealms(connection, REALM_GOVERNANCE_PKEY);
-  console.log("raw realms", realmsRaw);
   realms = realmsRaw.map((realm) => {
     return {
       name: realm.account.name,
@@ -286,6 +285,7 @@ export const fetchRealmProposals = createAsyncThunk(
       console.log("error", error);
     }
 
+    console.log("raw proposals", rawProposals);
     // votingAt, signingOffAt, votingCompletedAt, draftAt, executingAt
     // format(getStateTimestamp * 1000, "LLL cc, yyyy"
     let proposals = rawProposals?.map((proposal: any) => {

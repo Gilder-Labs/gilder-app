@@ -45,7 +45,7 @@ export const ProposalCard = ({ proposal }: ProposalCardProps) => {
   const dateTimestamp = proposal?.votingCompletedAt || getStateTimestamp;
 
   return (
-    <Container>
+    <Container isVoting={status === "Voting"}>
       <TextContainer>
         <ProposalTitle>{name}</ProposalTitle>
       </TextContainer>
@@ -73,13 +73,17 @@ export const ProposalCard = ({ proposal }: ProposalCardProps) => {
   );
 };
 
-const Container = styled.View`
+const Container = styled.View<{ isVoting: boolean }>`
   /* height: 80px; */
   width: 100%%;
   margin-bottom: ${(props: any) => props.theme.spacing[3]};
   border-radius: 8px;
   background: ${(props: any) => props.theme.gray[800]};
   flex-direction: column;
+  border: ${(props: any) =>
+    props.isVoting
+      ? `2px solid ${props.theme.gray[400]}}`
+      : "2px solid transparent"};
 `;
 
 const BadgeRow = styled.View`
