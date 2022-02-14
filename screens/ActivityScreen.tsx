@@ -1,5 +1,5 @@
 import { RootTabScreenProps } from "../types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { ActivityCard, Loading } from "../components";
 import { FlatList } from "react-native";
@@ -27,6 +27,13 @@ export default function ActivityScreen({
   // @ts-ignore
   // let dateTracker = realmActivity[1]?.blockTime * 1000;
 
+  useEffect(() => {
+    // when loading activities is finished we can turn off fetching more
+    if (!isLoadingActivities) {
+      setIsFetchingMore(false);
+    }
+  }, [isLoadingActivities]);
+
   const renderActivity = ({ item }: any) => {
     return <ActivityCard activity={item} key={item.signature} />;
   };
@@ -53,15 +60,17 @@ export default function ActivityScreen({
   };
 
   const onEndReached = () => {
-    console.log("at the end");
-    setIsFetchingMore(true);
-    dispatch(
-      fetchRealmActivity({
-        realm: selectedRealm,
-        fetchAfterSignature:
-          "3muySMQvb5EmQJnuNYYxzAXHtrBhjFNpRZ7GZxyzGafQCgHvb228pwEYz1HAEJDmVtudqUH9gn5fT1V3Loj89cKN",
-      })
-    );
+    if (!isFetchingMore && realmActivity) {
+      const lastActivity = realmActivity?.slice(-1)[0];
+      setIsFetchingMore(true);
+      dispatch(
+        fetchRealmActivity({
+          realm: selectedRealm,
+          // get the signature of the last activity we have to get more
+          fetchAfterSignature: lastActivity?.signature,
+        })
+      );
+    }
   };
 
   return (
@@ -74,12 +83,14 @@ export default function ActivityScreen({
           renderItem={renderActivity}
           keyExtractor={(item) => item.signature}
           style={{ padding: 16, minWidth: "100%" }}
-          ListFooterComponent={isFetchingMore ? <Loading /> : <EmptyView />}
+          ListFooterComponent={
+            isFetchingMore ? <Loading size={64} /> : <EmptyView />
+          }
           scrollIndicatorInsets={{ right: 1 }}
           removeClippedSubviews={true}
           initialNumToRender={15}
           onEndReached={onEndReached}
-          onEndReachedThreshold={3}
+          onEndReachedThreshold={1}
           // onRefresh={handleRefresh}
           // refreshing={isRefreshing}
           // ItemSeparatorComponent={renderSeparator}
