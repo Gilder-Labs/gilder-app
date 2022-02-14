@@ -4583,7 +4583,7 @@ expo-modules-core@0.6.4:
     compare-versions "^3.4.0"
     invariant "^2.2.4"
 
-expo-splash-screen@~0.14.1:
+expo-splash-screen@^0.14.2:
   version "0.14.2"
   resolved "https://registry.yarnpkg.com/expo-splash-screen/-/expo-splash-screen-0.14.2.tgz#2598d6980e71ecd8b7467ca821fb9dbfb80f355b"
   integrity sha512-X25D/0E2AWEFGgDWIVXZ5Bl7FhYk7TgVhEWvplBqrDY7G7vg5l1aoH6PelOQINWPsa1dcRyA7REdN2ltO+0LAw==

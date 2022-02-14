@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "gilder-app",
+    "name": "Gilder",
     "slug": "gilder-app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -9,7 +9,7 @@
     "userInterfaceStyle": "automatic",
     "plugins": ["expo-community-flipper"],
     "splash": {
-      "image": "./assets/images/GilderLogo.png",
+      "image": "./assets/images/GilderSplash.png",
       "resizeMode": "contain",
       "backgroundColor": "#000000"
     },

@@ -1,5 +1,7 @@
 import { DefaultTheme } from "styled-components/native";
 
+declare module "@iconscout/react-native-unicons";
+
 declare module "styled-components" {
   export interface DefaultTheme {
     primary: Color;

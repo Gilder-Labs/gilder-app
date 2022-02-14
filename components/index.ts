@@ -11,3 +11,4 @@ export * from "./VaultCard";
 export * from "./TokenCard";
 export * from "./Loading";
 export * from "./ConnectWalletButton";
+export * from "./SplashScreen";

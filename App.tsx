@@ -10,37 +10,28 @@ import { store } from "./store";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
-import { Loading } from "./components";
+import { SplashScreen } from "./components";
 import useCachedResources from "./hooks/useCachedResources";
 import Navigation from "./navigation";
 
-// For flipper
-// import { connectToDevTools } from "react-devtools-core";
-// if (__DEV__) {
-//   connectToDevTools({
-//     host: "localhost",
-//     port: 8097,
-//   });
-// }
-
 export default function App() {
   const isLoadingComplete = useCachedResources();
-  if (!isLoadingComplete) {
-    return null;
-  } else {
-    let persistor = persistStore(store);
-
-    return (
-      <SafeAreaProvider>
-        <Provider store={store}>
-          <ThemeProvider theme={darkTheme}>
-            <PersistGate loading={<Loading />} persistor={persistor}>
-              <StatusBar style="light" />
-              <Navigation />
-            </PersistGate>
-          </ThemeProvider>
-        </Provider>
-      </SafeAreaProvider>
-    );
-  }
+  // if (!isLoadingComplete) {
+  //   return null;
+  // } else {
+  let persistor = persistStore(store);
+  //loading={<Loading />}
+  return (
+    <SafeAreaProvider>
+      <Provider store={store}>
+        <ThemeProvider theme={darkTheme}>
+          <PersistGate loading={<SplashScreen />} persistor={persistor}>
+            <StatusBar style="light" />
+            <Navigation />
+          </PersistGate>
+        </ThemeProvider>
+      </Provider>
+    </SafeAreaProvider>
+  );
+  // }
 }

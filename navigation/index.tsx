@@ -1,8 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { NavigationContainer, DarkTheme } from "@react-navigation/native";
 import * as React from "react";
-import { Button, View, Text } from "react-native";
-// import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { DrawerContentContainer } from "../components/DrawerContentContainer";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import * as Unicons from "@iconscout/react-native-unicons";
@@ -26,15 +24,15 @@ import MembersScreen from "../screens/MembersScreen";
 import ProposalsScreen from "../screens/ProposalsScreen";
 
 import LinkingConfiguration from "./LinkingConfiguration";
-import { setupWalletConnect } from "../utils";
+// import { setupWalletConnect } from "../utils";
 
-// const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 
 export default function Navigation({}: {}) {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const { selectedRealm } = useAppSelector((state) => state.realms);
+  const [appIsReady, setAppIsReady] = useState(false);
 
   // TODO: connect to solana wallet
   // https://github.com/WalletConnect/walletconnect-monorepo/commit/36d8520bf269f2f36efb06e57ca376931837cfde
@@ -72,82 +70,87 @@ export default function Navigation({}: {}) {
   };
 
   return (
-    <NavigationContainer linking={LinkingConfiguration} theme={NavigationTheme}>
-      <Drawer.Navigator
-        initialRouteName="Members" // Dashboard
-        drawerContent={(props) => <DrawerContentContainer {...props} />}
-        screenOptions={{
-          drawerActiveBackgroundColor: theme?.gray[800],
-          drawerActiveTintColor: theme?.primary[400],
-          drawerInactiveTintColor: theme?.gray[400],
-          drawerStyle: {
-            width: 320,
-          },
-          headerTintColor: "#f4f4f5", //Set Header text color
-          swipeEdgeWidth: 500, // Allows user to open drawer swiping left with on any part of screen
-        }}
-        // screenOptions={{
-        //   drawerType: Layout.window.width >= 768 ? "permanent" : "front",
-        // }}
+    <RootContainer>
+      <NavigationContainer
+        linking={LinkingConfiguration}
+        theme={NavigationTheme}
       >
-        <Drawer.Screen
-          name="Treasury"
-          component={TreasuryScreen}
-          options={{
-            drawerLabel: ({ focused, color }) => (
-              <DrawerTabText color={color} focused={focused}>
-                Treasury
-              </DrawerTabText>
-            ),
-            drawerIcon: ({ focused, color, size }) => (
-              <Unicons.UilGold size="28" color={color} />
-            ),
+        <Drawer.Navigator
+          initialRouteName="Members" // Dashboard
+          drawerContent={(props) => <DrawerContentContainer {...props} />}
+          screenOptions={{
+            drawerActiveBackgroundColor: theme?.gray[800],
+            drawerActiveTintColor: theme?.primary[400],
+            drawerInactiveTintColor: theme?.gray[400],
+            drawerStyle: {
+              width: 320,
+            },
+            headerTintColor: "#f4f4f5", //Set Header text color
+            swipeEdgeWidth: 500, // Allows user to open drawer swiping left with on any part of screen
           }}
-        />
-        <Drawer.Screen
-          name="Members"
-          component={MembersScreen}
-          options={{
-            drawerLabel: ({ focused, color }) => (
-              <DrawerTabText color={color} focused={focused}>
-                Members
-              </DrawerTabText>
-            ),
-            drawerIcon: ({ focused, color, size }) => (
-              <Unicons.UilUsersAlt size="28" color={color} />
-            ),
-          }}
-        />
-        <Drawer.Screen
-          name="Proposals"
-          component={ProposalsScreen}
-          options={{
-            drawerLabel: ({ focused, color }) => (
-              <DrawerTabText color={color} focused={focused}>
-                Proposals
-              </DrawerTabText>
-            ),
-            drawerIcon: ({ focused, color, size }) => (
-              <Unicons.UilFileAlt size="28" color={color} />
-            ),
-          }}
-        />
-        <Drawer.Screen
-          name="Activity"
-          component={ActivityScreen}
-          options={{
-            drawerLabel: ({ focused, color }) => (
-              <DrawerTabText color={color} focused={focused}>
-                Activity
-              </DrawerTabText>
-            ),
-            drawerIcon: ({ focused, color, size }) => (
-              <Unicons.UilListUl size="28" color={color} />
-            ),
-          }}
-        />
-      </Drawer.Navigator>
-    </NavigationContainer>
+          // screenOptions={{
+          //   drawerType: Layout.window.width >= 768 ? "permanent" : "front",
+          // }}
+        >
+          <Drawer.Screen
+            name="Treasury"
+            component={TreasuryScreen}
+            options={{
+              drawerLabel: ({ focused, color }) => (
+                <DrawerTabText color={color} focused={focused}>
+                  Treasury
+                </DrawerTabText>
+              ),
+              drawerIcon: ({ focused, color, size }) => (
+                <Unicons.UilGold size="28" color={color} />
+              ),
+            }}
+          />
+          <Drawer.Screen
+            name="Members"
+            component={MembersScreen}
+            options={{
+              drawerLabel: ({ focused, color }) => (
+                <DrawerTabText color={color} focused={focused}>
+                  Members
+                </DrawerTabText>
+              ),
+              drawerIcon: ({ focused, color, size }) => (
+                <Unicons.UilUsersAlt size="28" color={color} />
+              ),
+            }}
+          />
+          <Drawer.Screen
+            name="Proposals"
+            component={ProposalsScreen}
+            options={{
+              drawerLabel: ({ focused, color }) => (
+                <DrawerTabText color={color} focused={focused}>
+                  Proposals
+                </DrawerTabText>
+              ),
+              drawerIcon: ({ focused, color, size }) => (
+                <Unicons.UilFileAlt size="28" color={color} />
+              ),
+            }}
+          />
+          <Drawer.Screen
+            name="Activity"
+            component={ActivityScreen}
+            options={{
+              drawerLabel: ({ focused, color }) => (
+                <DrawerTabText color={color} focused={focused}>
+                  Activity
+                </DrawerTabText>
+              ),
+              drawerIcon: ({ focused, color, size }) => (
+                <Unicons.UilListUl size="28" color={color} />
+              ),
+            }}
+          />
+        </Drawer.Navigator>
+      </NavigationContainer>
+    </RootContainer>
   );
 }
 
@@ -156,4 +159,9 @@ const DrawerTabText = styled.Text<{ color: string; focused: boolean }>`
   font-size: 16px;
   margin-left: -16px;
   font-weight: ${(props) => (props.focused ? "bold" : "normal")};
+`;
+
+const RootContainer = styled.View`
+  flex: 1;
+  background: black;
 `;
