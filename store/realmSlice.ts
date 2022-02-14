@@ -70,6 +70,9 @@ const initialState: realmState = {
   devnet: https://psytrbhymqlkfrhudd.dev.genesysgo.net:8899/
   devent: wss://psytrbhymqlkfrhudd.dev.genesysgo.net:8900/
 */
+
+// getMultipleAccounts - gets account info of a bunch of accounts in 1 api request
+
 const rpcConnection = "https://ssc-dao.genesysgo.net/";
 
 let connection = new web3.Connection(rpcConnection, "confirmed");
@@ -185,14 +188,17 @@ export const fetchRealmVaults = createAsyncThunk(
 
 export const fetchRealmActivity = createAsyncThunk(
   "realms/fetchRealmActivity",
-  async (realm: any) => {
+  async ({ realm, fetchAfterSignature }: any) => {
     let rawTransactionsFilled;
     let activitiesParsed = [];
 
     try {
       let transactions = await connection.getConfirmedSignaturesForAddress2(
         new PublicKey(realm?.pubKey),
-        { limit: 20 }
+        {
+          limit: 20,
+          before: fetchAfterSignature ? fetchAfterSignature : undefined,
+        }
       );
 
       transactions = transactions?.sort(
@@ -219,7 +225,10 @@ export const fetchRealmActivity = createAsyncThunk(
         };
       });
 
-      return activitiesParsed;
+      return {
+        activities: activitiesParsed,
+        fetchedMore: !!fetchAfterSignature,
+      };
     } catch (error) {
       console.log("transaction error", error);
     }
@@ -370,7 +379,15 @@ export const realmSlice = createSlice({
       })
       .addCase(fetchRealmActivity.fulfilled, (state, action: any) => {
         state.isLoadingActivities = false;
-        state.realmActivity = action.payload;
+
+        if (action.payload.fetchedMore) {
+          state.realmActivity = [
+            ...state.realmActivity,
+            ...action.payload.activities,
+          ];
+        } else {
+          state.realmActivity = action.payload.activities;
+        }
       })
       .addCase(fetchRealmMembers.pending, (state) => {
         state.isLoadingMembers = true;

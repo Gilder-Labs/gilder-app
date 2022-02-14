@@ -16,22 +16,22 @@ import Navigation from "./navigation";
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
-  // if (!isLoadingComplete) {
-  //   return null;
-  // } else {
-  let persistor = persistStore(store);
-  //loading={<Loading />}
-  return (
-    <SafeAreaProvider>
-      <Provider store={store}>
-        <ThemeProvider theme={darkTheme}>
-          <PersistGate loading={<SplashScreen />} persistor={persistor}>
-            <StatusBar style="light" />
-            <Navigation />
-          </PersistGate>
-        </ThemeProvider>
-      </Provider>
-    </SafeAreaProvider>
-  );
-  // }
+  if (!isLoadingComplete) {
+    return <SplashScreen />;
+  } else {
+    let persistor = persistStore(store);
+    //loading={<Loading />}
+    return (
+      <SafeAreaProvider>
+        <Provider store={store}>
+          <ThemeProvider theme={darkTheme}>
+            <PersistGate loading={<SplashScreen />} persistor={persistor}>
+              <StatusBar style="light" />
+              <Navigation />
+            </PersistGate>
+          </ThemeProvider>
+        </Provider>
+      </SafeAreaProvider>
+    );
+  }
 }

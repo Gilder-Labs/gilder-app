@@ -51,7 +51,12 @@ export default function Navigation({}: {}) {
   useEffect(() => {
     if (selectedRealm?.pubKey) {
       dispatch(fetchRealmVaults(selectedRealm));
-      dispatch(fetchRealmActivity(selectedRealm));
+      dispatch(
+        fetchRealmActivity({
+          realm: selectedRealm,
+          fetchAfterSignature: undefined,
+        })
+      );
       dispatch(fetchRealmProposals(selectedRealm));
       dispatch(fetchRealmMembers(selectedRealm));
     }
@@ -76,7 +81,7 @@ export default function Navigation({}: {}) {
         theme={NavigationTheme}
       >
         <Drawer.Navigator
-          initialRouteName="Members" // Dashboard
+          initialRouteName="Activity"
           drawerContent={(props) => <DrawerContentContainer {...props} />}
           screenOptions={{
             drawerActiveBackgroundColor: theme?.gray[800],
