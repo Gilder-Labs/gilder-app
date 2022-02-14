@@ -4,7 +4,7 @@
     "slug": "gilder-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/DarkIcon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "plugins": ["expo-community-flipper"],
@@ -13,11 +13,11 @@
       "resizeMode": "contain",
       "backgroundColor": "#000000"
     },
-    "owner": "dawggydawg",
+    "owner": "gilder",
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": ["**/*", "assets/images/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.dawggydawg.gilderapp"
