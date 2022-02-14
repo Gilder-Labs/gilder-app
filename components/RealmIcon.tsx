@@ -60,6 +60,7 @@ export const RealmIcon = ({ realmId }: RealmIconProps) => {
 
 const Container = styled.View`
   height: 36px;
+  min-width: 36px;
   border-radius: 4px;
   overflow: hidden;
   border-radius: 100px;

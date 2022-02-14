@@ -81,7 +81,26 @@ const TokensInfo = getTokensInfo();
 export const fetchRealms = createAsyncThunk("realms/fetchRealms", async () => {
   let realms;
   const realmsRaw = await getRealms(connection, REALM_GOVERNANCE_PKEY);
+
+  // get realms with unique program id
+  let realmDataKeys = Object.keys(cleanedRealmData);
+  let uniqueRealmGovs = realmDataKeys.filter(
+    (realmId) =>
+      cleanedRealmData[realmId].programId !== REALM_GOVERNANCE_PKEY.toString()
+  );
+  // add them into realms list
+  let realmsWithGovs = uniqueRealmGovs.map((realmId) => {
+    const realmWithGov = cleanedRealmData[realmId];
+    return {
+      name: realmWithGov?.displayName || realmWithGov?.symbol,
+      governanceId: realmWithGov?.programId,
+      pubKey: realmWithGov?.realmId,
+    };
+  });
+
   realms = realmsRaw.map((realm) => {
+    // realm is in our realmdata from : https://github.com/solana-labs/governance-ui/blob/main/public/realms/mainnet-beta.json
+    // delete off object so we can find custom governanceId realms we need to add to realm list
     return {
       name: realm.account.name,
       pubKey: realm.pubkey.toString(),
@@ -92,14 +111,14 @@ export const fetchRealms = createAsyncThunk("realms/fetchRealms", async () => {
       votingProposalCount: realm.account.votingProposalCount,
     };
   });
-  return { realms: realms };
+
+  return { realms: [...realmsWithGovs, ...realms] };
 });
 
 export const fetchRealm = createAsyncThunk(
   "realms/fetchRealm",
   async (realmId: string) => {
     const rawRealm = await getRealm(connection, new PublicKey(realmId));
-    console.log("rawrealm", rawRealm);
     return {
       name: rawRealm.account.name,
       pubKey: rawRealm.pubkey.toString(),
