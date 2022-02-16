@@ -81,7 +81,7 @@ export default function Navigation({}: {}) {
         theme={NavigationTheme}
       >
         <Drawer.Navigator
-          initialRouteName="Activity"
+          initialRouteName="Treasury"
           drawerContent={(props) => <DrawerContentContainer {...props} />}
           screenOptions={{
             drawerActiveBackgroundColor: theme?.gray[800],
