@@ -18,18 +18,25 @@ export const RealmSelectModal = ({
 }: RealmSelectModalProps) => {
   const theme = useTheme();
   const [searchText, setSearchText] = useState("");
-  const [filteredRealms, setFilteredRealms] = useState(realms);
   const { realmsData, realms } = useAppSelector((state) => state.realms);
+  const [filteredRealms, setFilteredRealms] = useState(realms);
 
   useEffect(() => {
     setFilteredRealms(realms);
   }, [realms]);
+
+  useEffect(() => {
+    setSearchText("");
+    setFilteredRealms(realms);
+  }, [open]);
 
   if (!realmsData) {
     return <View />;
   }
 
   const handleRealmClick = () => {
+    setSearchText("");
+    setFilteredRealms(realms);
     handleOnClose();
   };
 
