@@ -18,7 +18,9 @@ export const RealmSelectModal = ({
 }: RealmSelectModalProps) => {
   const theme = useTheme();
   const [searchText, setSearchText] = useState("");
-  const { realmsData, realms } = useAppSelector((state) => state.realms);
+  const { realmsData, realms, realmWatchlist } = useAppSelector(
+    (state) => state.realms
+  );
   const [filteredRealms, setFilteredRealms] = useState(realms);
 
   useEffect(() => {
@@ -75,9 +77,15 @@ export const RealmSelectModal = ({
       <Header>
         <View style={{ width: 48, height: 48 }} />
         <HeaderTitle> Add Realm</HeaderTitle>
-        <CloseIconButton onPress={handleOnClose} activeOpacity={0.5}>
-          <Unicons.UilTimes size="20" color={theme.gray[200]} />
-        </CloseIconButton>
+
+        {/* if a user has no realms, don't let them close modal till they pick one */}
+        {realmWatchlist.length ? (
+          <CloseIconButton onPress={handleOnClose} activeOpacity={0.5}>
+            <Unicons.UilTimes size="20" color={theme.gray[200]} />
+          </CloseIconButton>
+        ) : (
+          <View style={{ width: 48 }} />
+        )}
       </Header>
 
       {/* Input to filter by name or public key */}

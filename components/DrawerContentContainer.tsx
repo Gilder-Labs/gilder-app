@@ -5,7 +5,7 @@ import {
 } from "@react-navigation/drawer";
 import { FlatList, View } from "react-native";
 import styled from "styled-components/native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { RealmIconButton } from "./RealmIconButton";
 import { RealmSelectModal } from "./RealmSelectModal";
@@ -21,6 +21,13 @@ export function DrawerContentContainer(props: any) {
   const { selectedRealm, realmsData, realmWatchlist } = useAppSelector(
     (state) => state.realms
   );
+
+  useEffect(() => {
+    // when a user enters app, if they don't have any realms selected, make the modal open to pick some
+    if (!realmWatchlist.length) {
+      setRealmSelectIsOpen(true);
+    }
+  }, []);
 
   const realmDisplayName = realmsData[selectedRealm?.pubKey]?.displayName;
 
