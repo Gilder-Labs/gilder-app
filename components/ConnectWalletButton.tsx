@@ -3,6 +3,7 @@ import styled from "styled-components/native";
 import { useTheme } from "styled-components";
 import * as Unicons from "@iconscout/react-native-unicons";
 import { Connection, clusterApiUrl, Keypair, PublicKey } from "@solana/web3.js";
+import { RPC_CONNECTION } from "../constants/Solana";
 
 import OpenLogin, { LoginProvider, Network } from "openlogin-expo-sdk";
 import Constants, { AppOwnership } from "expo-constants";
@@ -20,9 +21,6 @@ const networks = {
   devnet: { url: clusterApiUrl("devnet"), displayName: "Devnet" },
   testnet: { url: clusterApiUrl("testnet"), displayName: "Testnet" },
 };
-
-const solanaNetwork = networks.devnet;
-const connection = new Connection(solanaNetwork.url);
 
 const scheme = "openloginexposdkexampleexpo";
 const resolvedRedirectUrl =

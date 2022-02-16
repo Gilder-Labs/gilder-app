@@ -14,7 +14,11 @@ import {
 import axios from "axios";
 
 import * as web3 from "@solana/web3.js";
-import { SPL_PUBLIC_KEY, REALM_GOVERNANCE_PKEY } from "../constants/Solana";
+import {
+  SPL_PUBLIC_KEY,
+  REALM_GOVERNANCE_PKEY,
+  RPC_CONNECTION,
+} from "../constants/Solana";
 import { cleanRealmData, getTokensInfo, extractLogInfo } from "../utils";
 
 export interface realmState {
@@ -61,17 +65,10 @@ const initialState: realmState = {
   isLoadingProposals: false,
   isLoadingVaults: false,
 };
-/* 
-  main: https://ssc-dao.genesysgo.net/  
-  devnet: https://psytrbhymqlkfrhudd.dev.genesysgo.net:8899/
-  devent: wss://psytrbhymqlkfrhudd.dev.genesysgo.net:8900/
-*/
 
 // getMultipleAccounts - gets account info of a bunch of accounts in 1 api request
 
-const rpcConnection = "https://ssc-dao.genesysgo.net/";
-
-let connection = new web3.Connection(rpcConnection, "confirmed");
+let connection = new web3.Connection(RPC_CONNECTION, "confirmed");
 const TokensInfo = getTokensInfo();
 
 export const fetchRealms = createAsyncThunk("realms/fetchRealms", async () => {
