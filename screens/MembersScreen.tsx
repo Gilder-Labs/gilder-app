@@ -7,8 +7,8 @@ import { FlatList } from "react-native";
 export default function ActivityScreen({
   navigation,
 }: RootTabScreenProps<"Activity">) {
-  const { realmMembers, isLoadingMembers } = useAppSelector(
-    (state) => state.realms
+  const { members, isLoadingMembers } = useAppSelector(
+    (state) => state.members
   );
 
   const renderMember = ({ item }: any) => {
@@ -18,7 +18,7 @@ export default function ActivityScreen({
   const getTotalVotes = () => {
     let totalVotes = 0;
 
-    realmMembers.forEach((member) => {
+    members.forEach((member) => {
       totalVotes += member.totalVotesCount;
     });
     return totalVotes;
@@ -30,7 +30,7 @@ export default function ActivityScreen({
         <Loading />
       ) : (
         <FlatList
-          data={realmMembers}
+          data={members}
           renderItem={renderMember}
           keyExtractor={(item) => item.publicKey}
           style={{ padding: 16 }}
@@ -47,7 +47,7 @@ export default function ActivityScreen({
 
               <TextContainer>
                 <SubtitleText>Members</SubtitleText>
-                <HeaderTitle>{realmMembers.length}</HeaderTitle>
+                <HeaderTitle>{members.length}</HeaderTitle>
               </TextContainer>
             </HeaderContainer>
           }
