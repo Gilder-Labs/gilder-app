@@ -11,7 +11,7 @@ interface TokenCardProps {
 }
 
 export const TokenCard = ({ token }: TokenCardProps) => {
-  const { tokenPriceData } = useAppSelector((state) => state.realms);
+  const { tokenPriceData } = useAppSelector((state) => state.treasury);
   let jdenticonSvg = createAvatar(style, {
     seed: token.mint,
   });

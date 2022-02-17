@@ -10,7 +10,7 @@ interface VaultCardProps {
 }
 
 export const VaultCard = ({ vaultId, tokens }: VaultCardProps) => {
-  const { tokenPriceData } = useAppSelector((state) => state.realms);
+  const { tokenPriceData } = useAppSelector((state) => state.treasury);
 
   const getVaultTotalValue = () => {
     let totalValue = 0;
