@@ -2,6 +2,7 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import solanaReducer from "./solanaSlice";
 import realmReducer from "./realmSlice";
 import walletReducer from "./walletSlice";
+import treasuryReducer from "./treasurySlice";
 import {
   persistStore,
   persistReducer,
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
   realms: realmReducer,
   solana: solanaReducer,
   wallet: walletReducer,
+  treasury: treasuryReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -75,13 +75,13 @@ export const ConnectWalletButton = ({}: ConnectWalletProps) => {
 
   return (
     <ConnectWalletContainer>
-      <StyledText>Key: {key}</StyledText>
+      {/* <StyledText>Key: {key}</StyledText>
       <StyledText>Error: {errorMsg}</StyledText>
       <StyledText>Linking URL: {resolvedRedirectUrl.href}</StyledText>
       <StyledText>appOwnership: {Constants.appOwnership}</StyledText>
       <StyledText>
         executionEnvironment: {Constants.executionEnvironment}
-      </StyledText>
+      </StyledText> */}
       <ConnectButton onPress={login}>
         <Unicons.UilWallet
           size="20"

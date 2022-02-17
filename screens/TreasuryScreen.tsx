@@ -10,15 +10,15 @@ import numeral from "numeral";
 export default function TreasuryScreen({
   navigation,
 }: RootTabScreenProps<"Treasury">) {
-  const { tokenPriceData, realmVaults, isLoadingVaults } = useAppSelector(
-    (state) => state.realms
+  const { tokenPriceData, vaults, isLoadingVaults } = useAppSelector(
+    (state) => state.treasury
   );
   const [treasuryValue, setTreasuryValue] = useState("0");
 
   const getTreasuryTotalValue = () => {
     let totalValue = 0;
 
-    realmVaults.forEach((vault) => {
+    vaults.forEach((vault) => {
       vault.tokens.forEach((token: any) => {
         const coinGeckoId = token?.extensions?.coingeckoId;
         totalValue +=
@@ -31,7 +31,7 @@ export default function TreasuryScreen({
 
   useEffect(() => {
     setTreasuryValue(getTreasuryTotalValue());
-  }, [realmVaults]);
+  }, [vaults]);
 
   // * list vaults - use public key for name?
   // * onclick vault list tokens in stack?
@@ -54,7 +54,7 @@ export default function TreasuryScreen({
         <Loading />
       ) : (
         <FlatList
-          data={realmVaults}
+          data={vaults}
           renderItem={renderVault}
           keyExtractor={(item) => item.vaultId}
           style={{ padding: 16 }}

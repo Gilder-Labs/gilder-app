@@ -11,7 +11,6 @@ import {
   GovernanceInstruction,
   getGovernance,
 } from "@solana/spl-governance";
-import axios from "axios";
 
 import * as web3 from "@solana/web3.js";
 import {
@@ -24,7 +23,6 @@ import { cleanRealmData, getTokensInfo, extractLogInfo } from "../utils";
 export interface realmState {
   realms: Array<any>;
   selectedRealm: any;
-  realmVaults: Array<any>;
   realmsData: any;
   realmWatchlist: Array<string>;
   realmMembers: Array<any>;
@@ -35,7 +33,6 @@ export interface realmState {
   isLoadingRealms: boolean;
   isLoadingActivities: boolean;
   isLoadingProposals: boolean;
-  isLoadingVaults: boolean;
 }
 
 interface realmType {
@@ -51,25 +48,21 @@ const cleanedRealmData = cleanRealmData();
 const initialState: realmState = {
   realms: [],
   selectedRealm: null,
-  realmVaults: [],
   realmsData: cleanedRealmData,
   realmMembers: [],
   realmProposals: [],
   tokenPriceData: null,
-  // TODO: eventually store in local storage
   realmWatchlist: [],
   realmActivity: [],
   isLoadingMembers: false,
   isLoadingRealms: false,
   isLoadingActivities: false,
   isLoadingProposals: false,
-  isLoadingVaults: false,
 };
 
 // getMultipleAccounts - gets account info of a bunch of accounts in 1 api request
 
 let connection = new web3.Connection(RPC_CONNECTION, "confirmed");
-const TokensInfo = getTokensInfo();
 
 export const fetchRealms = createAsyncThunk("realms/fetchRealms", async () => {
   let realms;
@@ -121,80 +114,6 @@ export const fetchRealm = createAsyncThunk(
       accountType: rawRealm.account.accountType,
       votingProposalCount: rawRealm.account.votingProposalCount,
     };
-  }
-);
-
-export const fetchRealmVaults = createAsyncThunk(
-  "realms/fetchRealmVaults",
-  async (realm: any) => {
-    const rawGovernances = await getAllGovernances(
-      connection,
-      new PublicKey(realm.governanceId),
-      new PublicKey(realm.pubKey)
-    );
-
-    const rawFilteredVaults = rawGovernances.filter(
-      (gov) =>
-        gov.account.accountType === GovernanceAccountType.TokenGovernanceV1 ||
-        gov.account.accountType === GovernanceAccountType.TokenGovernanceV2
-    );
-
-    const vaultsInfo = rawFilteredVaults.map((governance) => {
-      return {
-        pubKey: governance.pubkey.toString(), // program that controls vault/token account
-        vaultId: governance.account?.governedAccount.toString(), // vault/token account where tokens are held
-      };
-    });
-
-    const vaultsWithTokensRaw = await Promise.all(
-      vaultsInfo.map((vault) =>
-        connection.getParsedTokenAccountsByOwner(new PublicKey(vault.pubKey), {
-          programId: SPL_PUBLIC_KEY,
-        })
-      )
-    );
-
-    const tokensData = await TokensInfo;
-    const coinGeckoUrl = "https://api.coingecko.com/api/v3/coins/markets";
-    let tokenIds = new Set();
-    // const tokenPriceData = await axios.get(coinGeckoUrl, {
-    //   params: {
-    //     ids: "usd-coin,terra-luna,solana",
-    //     vs_currency: "usd",
-    //   },
-    // });
-    // console.log("price data from coingecko", tokenPriceData);
-
-    // fetch token prices here.
-    //
-
-    let vaultsParsed = vaultsWithTokensRaw.map((vault, index) => {
-      return {
-        pubKey: vaultsInfo[index].pubKey,
-        vaultId: vaultsInfo[index].vaultId,
-        tokens: vault.value.map((token) => {
-          let tokenInfo = tokensData.get(token.account.data.parsed.info.mint);
-          tokenIds.add(tokenInfo?.extensions?.coingeckoId);
-          return {
-            ...tokenInfo,
-            mint: token.account.data.parsed.info.mint,
-            owner: token.account.data.parsed.info.owner.toString(),
-            tokenAmount: token.account.data.parsed.info.tokenAmount,
-            vaultId: token.pubkey.toString(),
-          };
-        }),
-      };
-    });
-
-    const tokenIdsString = Array.from(tokenIds).join();
-    const tokenPriceResponse = await axios.get(coinGeckoUrl, {
-      params: {
-        ids: tokenIdsString,
-        vs_currency: "usd",
-      },
-    });
-
-    return { vaults: vaultsParsed, tokenPriceData: tokenPriceResponse.data };
   }
 );
 
@@ -421,24 +340,6 @@ export const realmSlice = createSlice({
       .addCase(fetchRealmProposals.fulfilled, (state, action: any) => {
         state.isLoadingProposals = false;
         state.realmProposals = action.payload;
-      })
-      .addCase(fetchRealmVaults.pending, (state) => {
-        state.isLoadingVaults = true;
-      })
-      .addCase(fetchRealmVaults.rejected, (state) => {
-        state.isLoadingVaults = false;
-      })
-      .addCase(fetchRealmVaults.fulfilled, (state, action: any) => {
-        let tokenPriceObject = {};
-        // @ts-ignore
-        action.payload.tokenPriceData.forEach((token) => {
-          // @ts-ignore
-          tokenPriceObject[token.id] = token;
-        });
-
-        state.realmVaults = action.payload.vaults;
-        state.isLoadingVaults = false;
-        state.tokenPriceData = tokenPriceObject;
       });
   },
 });

@@ -9,12 +9,12 @@ import { useTheme } from "styled-components";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import {
   fetchRealms,
-  fetchRealmVaults,
   fetchRealm,
   fetchRealmActivity,
   fetchRealmMembers,
   fetchRealmProposals,
 } from "../store/realmSlice";
+import { fetchVaults } from "../store/treasurySlice";
 import { SvgUri } from "react-native-svg";
 import styled from "styled-components/native";
 
@@ -51,7 +51,7 @@ export default function Navigation({}: {}) {
 
   useEffect(() => {
     if (selectedRealm?.pubKey) {
-      dispatch(fetchRealmVaults(selectedRealm));
+      dispatch(fetchVaults(selectedRealm));
       dispatch(
         fetchRealmActivity({
           realm: selectedRealm,
