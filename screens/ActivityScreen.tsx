@@ -5,7 +5,7 @@ import { ActivityCard, Loading } from "../components";
 import { FlatList } from "react-native";
 import { format, differenceInDays } from "date-fns";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { fetchRealmActivity } from "../store/realmSlice";
+import { fetchRealmActivity } from "../store/activitySlice";
 
 // TWO ways to do this.
 // Each separator, check if previous item is the same day
