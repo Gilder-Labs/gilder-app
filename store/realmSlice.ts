@@ -27,11 +27,9 @@ export interface realmState {
   realmWatchlist: Array<string>;
   realmMembers: Array<any>;
   realmProposals: Array<any>;
-  realmActivity: Array<ConfirmedSignatureInfo>;
   tokenPriceData: any;
   isLoadingMembers: boolean;
   isLoadingRealms: boolean;
-  isLoadingActivities: boolean;
   isLoadingProposals: boolean;
 }
 
@@ -53,10 +51,8 @@ const initialState: realmState = {
   realmProposals: [],
   tokenPriceData: null,
   realmWatchlist: [],
-  realmActivity: [],
   isLoadingMembers: false,
   isLoadingRealms: false,
-  isLoadingActivities: false,
   isLoadingProposals: false,
 };
 
@@ -114,56 +110,6 @@ export const fetchRealm = createAsyncThunk(
       accountType: rawRealm.account.accountType,
       votingProposalCount: rawRealm.account.votingProposalCount,
     };
-  }
-);
-
-export const fetchRealmActivity = createAsyncThunk(
-  "realms/fetchRealmActivity",
-  async ({ realm, fetchAfterSignature }: any) => {
-    let rawTransactionsFilled;
-    let activitiesParsed = [];
-
-    try {
-      let transactions = await connection.getConfirmedSignaturesForAddress2(
-        new PublicKey(realm?.pubKey),
-        {
-          limit: 20,
-          before: fetchAfterSignature ? fetchAfterSignature : undefined,
-        }
-      );
-
-      transactions = transactions?.sort(
-        // @ts-ignore
-        (a, b) => b?.blockTime - a?.blockTime
-      );
-
-      let signatures = transactions.map((transaction) => {
-        return transaction.signature;
-      });
-
-      rawTransactionsFilled = await connection.getParsedTransactions(
-        signatures
-      );
-
-      activitiesParsed = rawTransactionsFilled?.map((transaction, index) => {
-        return {
-          signature: transactions[index].signature,
-          blockTime: transaction?.blockTime,
-          // @ts-ignore
-          status: transaction?.meta?.status,
-          logs: transaction?.meta?.logMessages,
-          logsParsed: extractLogInfo(transaction?.meta?.logMessages),
-        };
-      });
-
-      return {
-        activities: activitiesParsed,
-        fetchedMore: !!fetchAfterSignature,
-      };
-    } catch (error) {
-      console.log("transaction error", error);
-    }
-    return [];
   }
 );
 
@@ -301,24 +247,6 @@ export const realmSlice = createSlice({
       .addCase(fetchRealm.rejected, (state) => {})
       .addCase(fetchRealm.fulfilled, (state, action: any) => {
         state.selectedRealm = action.payload;
-      })
-      .addCase(fetchRealmActivity.pending, (state) => {
-        state.isLoadingActivities = true;
-      })
-      .addCase(fetchRealmActivity.rejected, (state) => {
-        state.isLoadingActivities = false;
-      })
-      .addCase(fetchRealmActivity.fulfilled, (state, action: any) => {
-        state.isLoadingActivities = false;
-
-        if (action.payload.fetchedMore) {
-          state.realmActivity = [
-            ...state.realmActivity,
-            ...action.payload.activities,
-          ];
-        } else {
-          state.realmActivity = action.payload.activities;
-        }
       })
       .addCase(fetchRealmMembers.pending, (state) => {
         state.isLoadingMembers = true;

@@ -3,6 +3,8 @@ import solanaReducer from "./solanaSlice";
 import realmReducer from "./realmSlice";
 import walletReducer from "./walletSlice";
 import treasuryReducer from "./treasurySlice";
+import activityReducer from "./activitySlice";
+
 import {
   persistStore,
   persistReducer,
@@ -27,6 +29,7 @@ const rootReducer = combineReducers({
   solana: solanaReducer,
   wallet: walletReducer,
   treasury: treasuryReducer,
+  activities: activityReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

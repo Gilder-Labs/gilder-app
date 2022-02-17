@@ -17,9 +17,11 @@ import { fetchRealmActivity } from "../store/realmSlice";
 export default function ActivityScreen({
   navigation,
 }: RootTabScreenProps<"Activity">) {
-  const { realmActivity, isLoadingActivities, selectedRealm } = useAppSelector(
-    (state) => state.realms
+  const { selectedRealm } = useAppSelector((state) => state.realms);
+  const { realmActivity, isLoadingActivities } = useAppSelector(
+    (state) => state.activities
   );
+
   const dispatch = useAppDispatch();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isFetchingMore, setIsFetchingMore] = useState(false);

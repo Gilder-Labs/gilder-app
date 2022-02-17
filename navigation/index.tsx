@@ -10,10 +10,10 @@ import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import {
   fetchRealms,
   fetchRealm,
-  fetchRealmActivity,
   fetchRealmMembers,
   fetchRealmProposals,
 } from "../store/realmSlice";
+import { fetchRealmActivity } from "../store/activitySlice";
 import { fetchVaults } from "../store/treasurySlice";
 import { SvgUri } from "react-native-svg";
 import styled from "styled-components/native";
