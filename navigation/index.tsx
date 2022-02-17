@@ -11,11 +11,10 @@ import {
   fetchRealms,
   fetchRealm,
   fetchRealmMembers,
-  fetchRealmProposals,
 } from "../store/realmSlice";
+import { fetchRealmProposals } from "../store/proposalsSlice";
 import { fetchRealmActivity } from "../store/activitySlice";
 import { fetchVaults } from "../store/treasurySlice";
-import { SvgUri } from "react-native-svg";
 import styled from "styled-components/native";
 
 import ActivityScreen from "../screens/ActivityScreen";
@@ -24,7 +23,6 @@ import MembersScreen from "../screens/MembersScreen";
 import ProposalsScreen from "../screens/ProposalsScreen";
 
 import LinkingConfiguration from "./LinkingConfiguration";
-// import { setupWalletConnect } from "../utils";
 
 const Drawer = createDrawerNavigator();
 
@@ -32,21 +30,9 @@ export default function Navigation({}: {}) {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const { selectedRealm } = useAppSelector((state) => state.realms);
-  const [appIsReady, setAppIsReady] = useState(false);
-
-  // TODO: connect to solana wallet
-  // https://github.com/WalletConnect/walletconnect-monorepo/commit/36d8520bf269f2f36efb06e57ca376931837cfde
-  // useEffect(() => {
-  //   setupWalletConnect();
-  // }, []);
 
   useEffect(() => {
     dispatch(fetchRealms());
-    // TODO: Replace this with modal popping up and letting user select a DAO on initial load
-    // mango key: DPiH3H3c7t47BMxqTxLsuPQpEC6Kne8GA9VXbxpnZxFE
-    // monkedao: 39aX7mDZ1VLpZcPWstBhQBoqwNkhf5f1KDACguvrryi6
-    // if()
-    // dispatch(fetchRealm());
   }, []);
 
   useEffect(() => {

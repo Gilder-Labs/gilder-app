@@ -26,11 +26,9 @@ export interface realmState {
   realmsData: any;
   realmWatchlist: Array<string>;
   realmMembers: Array<any>;
-  realmProposals: Array<any>;
   tokenPriceData: any;
   isLoadingMembers: boolean;
   isLoadingRealms: boolean;
-  isLoadingProposals: boolean;
 }
 
 interface realmType {
@@ -48,12 +46,10 @@ const initialState: realmState = {
   selectedRealm: null,
   realmsData: cleanedRealmData,
   realmMembers: [],
-  realmProposals: [],
   tokenPriceData: null,
   realmWatchlist: [],
   isLoadingMembers: false,
   isLoadingRealms: false,
-  isLoadingProposals: false,
 };
 
 // getMultipleAccounts - gets account info of a bunch of accounts in 1 api request
@@ -152,60 +148,6 @@ export const fetchRealmMembers = createAsyncThunk(
   }
 );
 
-export const fetchRealmProposals = createAsyncThunk(
-  "realms/fetchRealmProposals",
-  async (realm: any) => {
-    let rawProposals;
-    const governanceId = new PublicKey(realm.governanceId);
-
-    try {
-      rawProposals = await getAllProposals(
-        connection,
-        governanceId,
-        new PublicKey(realm.pubKey)
-      );
-      rawProposals = rawProposals.flat();
-    } catch (error) {
-      console.log("error", error);
-    }
-
-    // votingAt, signingOffAt, votingCompletedAt, draftAt, executingAt
-    // format(getStateTimestamp * 1000, "LLL cc, yyyy"
-    let proposals = rawProposals?.map((proposal: any) => {
-      return {
-        description: proposal?.account?.descriptionLink,
-        name: proposal?.account?.name,
-        proposalId: proposal.pubkey.toString(),
-        status: ProposalState[proposal?.account?.state],
-        isVoteFinalized: proposal.account.isVoteFinalized(),
-        isFinalState: proposal.account.isFinalState(),
-        getStateSortRank: proposal.account.getStateSortRank(),
-        isPreVotingState: proposal.account.isPreVotingState(),
-        // getYesVoteOption: proposal.account.getYesVoteOption(),
-        getYesVoteCount: proposal.account.getYesVoteCount().toString(),
-        getNoVoteCount: proposal.account.getNoVoteCount().toString(),
-        // getTimeToVoteEnd: proposal.account.getTimeToVoteEnd(governanceId),
-        // hasVoteTimeEnded: proposal.account.hasVoteTimeEnded(governanceId),
-
-        // Dates
-        getStateTimestamp: proposal.account.getStateTimestamp(), // date/time it hit currents state
-        votingAt: proposal.account?.votingAt?.toNumber(),
-        signingOffAt: proposal.account?.signingOffAt?.toNumber(),
-        votingCompletedAt: proposal.account?.votingCompletedAt?.toNumber(),
-        draftAt: proposal.account?.draftAt?.toNumber(),
-        executingAt: proposal.account?.executingAt?.toNumber(),
-      };
-    });
-
-    // sorts in most recent first.
-    proposals = proposals?.sort(
-      (a, b) => b.getStateTimestamp - a.getStateTimestamp
-    );
-
-    return proposals;
-  }
-);
-
 export const realmSlice = createSlice({
   name: "realms",
   initialState,
@@ -258,16 +200,6 @@ export const realmSlice = createSlice({
         state.isLoadingMembers = false;
 
         state.realmMembers = action.payload;
-      })
-      .addCase(fetchRealmProposals.pending, (state) => {
-        state.isLoadingProposals = true;
-      })
-      .addCase(fetchRealmProposals.rejected, (state) => {
-        state.isLoadingProposals = false;
-      })
-      .addCase(fetchRealmProposals.fulfilled, (state, action: any) => {
-        state.isLoadingProposals = false;
-        state.realmProposals = action.payload;
       });
   },
 });

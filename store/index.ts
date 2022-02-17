@@ -4,7 +4,7 @@ import realmReducer from "./realmSlice";
 import walletReducer from "./walletSlice";
 import treasuryReducer from "./treasurySlice";
 import activityReducer from "./activitySlice";
-
+import proposalsReducer from "./proposalsSlice";
 import {
   persistStore,
   persistReducer,
@@ -22,6 +22,7 @@ const persistConfig = {
   key: "root",
   storage: AsyncStorage,
   stateReconciler: autoMergeLevel2,
+  // whitelist: ["realms"],
 };
 
 const rootReducer = combineReducers({
@@ -30,6 +31,7 @@ const rootReducer = combineReducers({
   wallet: walletReducer,
   treasury: treasuryReducer,
   activities: activityReducer,
+  proposals: proposalsReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

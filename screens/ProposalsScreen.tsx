@@ -7,8 +7,8 @@ import { FlatList } from "react-native";
 export default function ProposalScreen({
   navigation,
 }: RootTabScreenProps<"Proposals">) {
-  const { realmProposals, isLoadingProposals } = useAppSelector(
-    (state) => state.realms
+  const { proposals, isLoadingProposals } = useAppSelector(
+    (state) => state.proposals
   );
 
   const renderProposal = ({ item }: any) => {
@@ -21,7 +21,7 @@ export default function ProposalScreen({
         <Loading />
       ) : (
         <FlatList
-          data={realmProposals}
+          data={proposals}
           renderItem={renderProposal}
           keyExtractor={(item) => item.proposalId}
           style={{ padding: 16 }}
@@ -33,7 +33,7 @@ export default function ProposalScreen({
             <HeaderContainer>
               <TreasuryValueContainer>
                 <SubtitleText> Total Proposals </SubtitleText>
-                <TreasuryText>{realmProposals.length}</TreasuryText>
+                <TreasuryText>{proposals.length}</TreasuryText>
               </TreasuryValueContainer>
             </HeaderContainer>
           }
