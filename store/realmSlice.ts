@@ -25,9 +25,7 @@ export interface realmState {
   selectedRealm: any;
   realmsData: any;
   realmWatchlist: Array<string>;
-  realmMembers: Array<any>;
   tokenPriceData: any;
-  isLoadingMembers: boolean;
   isLoadingRealms: boolean;
 }
 
@@ -45,10 +43,8 @@ const initialState: realmState = {
   realms: [],
   selectedRealm: null,
   realmsData: cleanedRealmData,
-  realmMembers: [],
   tokenPriceData: null,
   realmWatchlist: [],
-  isLoadingMembers: false,
   isLoadingRealms: false,
 };
 
@@ -109,45 +105,6 @@ export const fetchRealm = createAsyncThunk(
   }
 );
 
-export const fetchRealmMembers = createAsyncThunk(
-  "realms/fetchRealmMembers",
-  async (realm: realmType) => {
-    // TODO: handle councilMint tokens
-
-    let rawTokenOwnerRecords;
-
-    try {
-      rawTokenOwnerRecords = await getAllTokenOwnerRecords(
-        connection,
-        new PublicKey(realm.governanceId),
-        new PublicKey(realm.pubKey)
-      );
-      // console.log("token mems?", rawTokenOwnerRecords);
-    } catch (error) {
-      console.log("error", error);
-    }
-
-    const members = rawTokenOwnerRecords?.map((member) => {
-      return {
-        publicKey: member.pubkey.toString(),
-        owner: member.owner.toString(), // RealmId
-        totalVotesCount: member.account.totalVotesCount, // How many votes they have
-        outstandingProposalCount: member.account.outstandingProposalCount,
-        governingTokenOwner: member.account.governingTokenOwner.toString(), // Wallet address of owner of dao token
-        governingTokenMint: member.account.governingTokenMint.toString(),
-        depositAmount: member.account.governingTokenDepositAmount.toString(),
-      };
-    });
-
-    const sortedMembers = members?.sort(
-      // @ts-ignore
-      (a, b) => b?.totalVotesCount - a?.totalVotesCount
-    );
-
-    return sortedMembers;
-  }
-);
-
 export const realmSlice = createSlice({
   name: "realms",
   initialState,
@@ -189,17 +146,6 @@ export const realmSlice = createSlice({
       .addCase(fetchRealm.rejected, (state) => {})
       .addCase(fetchRealm.fulfilled, (state, action: any) => {
         state.selectedRealm = action.payload;
-      })
-      .addCase(fetchRealmMembers.pending, (state) => {
-        state.isLoadingMembers = true;
-      })
-      .addCase(fetchRealmMembers.rejected, (state) => {
-        state.isLoadingMembers = false;
-      })
-      .addCase(fetchRealmMembers.fulfilled, (state, action: any) => {
-        state.isLoadingMembers = false;
-
-        state.realmMembers = action.payload;
       });
   },
 });

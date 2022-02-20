@@ -49,7 +49,7 @@ const ContainerButton = styled.TouchableOpacity<{ isSelected: boolean }>`
   background: ${(props: any) => props.theme.gray[900]};
   border: ${(props: any) =>
     props.isSelected
-      ? `2px solid ${props.theme.secondary[600]}}`
+      ? `2px solid ${props.theme.aqua[600]}}`
       : "2px solid transparent"};
 `;
 

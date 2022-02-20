@@ -37,6 +37,8 @@ export const fetchVaults = createAsyncThunk(
       new PublicKey(realm.pubKey)
     );
 
+    console.log("governances", rawGovernances);
+
     const rawFilteredVaults = rawGovernances.filter(
       (gov) =>
         gov.account.accountType === GovernanceAccountType.TokenGovernanceV1 ||

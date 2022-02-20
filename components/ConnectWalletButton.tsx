@@ -4,11 +4,13 @@ import { useTheme } from "styled-components";
 import * as Unicons from "@iconscout/react-native-unicons";
 import { Connection, clusterApiUrl, Keypair, PublicKey } from "@solana/web3.js";
 import { RPC_CONNECTION } from "../constants/Solana";
-
+import { useAppDispatch, useAppSelector } from "../hooks/redux";
+import { setWallet } from "../store/walletSlice";
 import OpenLogin, { LoginProvider, Network } from "openlogin-expo-sdk";
 import Constants, { AppOwnership } from "expo-constants";
 import * as Linking from "expo-linking";
 import { getED25519Key } from "@toruslabs/openlogin-ed25519";
+import bs58 from "bs58";
 
 import { URL } from "react-native-url-polyfill";
 
@@ -33,6 +35,8 @@ interface ConnectWalletProps {}
 
 export const ConnectWalletButton = ({}: ConnectWalletProps) => {
   const theme = useTheme();
+  const dispatch = useAppDispatch();
+  const { publicKey } = useAppSelector((state) => state.wallet);
   const [key, setKey] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -58,10 +62,16 @@ export const ConnectWalletButton = ({}: ConnectWalletProps) => {
       const { sk } = getED25519Key(state.privKey);
       const keyPair = Keypair.fromSecretKey(sk);
       // public key of our new wallet
-      const publicKey = keyPair.publicKey.toString();
+      const pubKey = keyPair.publicKey.toString();
+      const privateKey = bs58.encode(keyPair.secretKey);
 
-      // TODO: Handle wallet store locally
-
+      dispatch(
+        setWallet({
+          publicKey: pubKey,
+          privateKey: privateKey,
+          userInfo: userInfo,
+        })
+      );
       // const accountInfo = await connection.getParsedAccountInfo(
       //   new PublicKey("5YWDXAX1xygHp4t7wjmPzzfWuybEuKWmd3ojUBnJtkxq"),
       //   "confirmed"
