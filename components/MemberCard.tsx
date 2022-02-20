@@ -11,9 +11,10 @@ import numeral from "numeral";
 
 interface MemberCardProps {
   member: any;
+  onSelect: any;
 }
 
-export const MemberCard = ({ member }: MemberCardProps) => {
+export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
   const theme = useTheme();
 
   let jdenticonSvg = createAvatar(style, {
@@ -42,7 +43,7 @@ export const MemberCard = ({ member }: MemberCardProps) => {
   const color = getColorType();
 
   return (
-    <Container>
+    <Container onPress={onSelect}>
       <LinearGradient
         // Background Linear Gradient
         colors={[`${theme[color][600]}66`, `${theme[color][800]}66`]}
@@ -75,7 +76,7 @@ export const MemberCard = ({ member }: MemberCardProps) => {
   );
 };
 
-const Container = styled.View`
+const Container = styled.TouchableOpacity`
   margin-bottom: ${(props: any) => props.theme.spacing[3]};
   border-radius: 4px;
   background: ${(props: any) => props.theme.gray[800]};

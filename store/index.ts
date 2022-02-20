@@ -22,7 +22,7 @@ import autoMergeLevel2 from "redux-persist/lib/stateReconciler/autoMergeLevel2";
 const persistConfig = {
   key: "root",
   storage: AsyncStorage,
-  stateReconciler: autoMergeLevel2,
+  stateReconciler: autoMergeLevel2, // merge old and new stuff. Will need to blacklist to remove old data.
   // whitelist: ["realms"],
 };
 

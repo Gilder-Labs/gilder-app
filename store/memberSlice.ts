@@ -4,13 +4,17 @@ import {
   getRealms,
   getRealm,
   getAllTokenOwnerRecords, // returns all members of a realm
+
+  // TODO:
+  getVoteRecordsByVoter, // get all votes a member did
+  getGovernanceChatMessagesByVoter,
 } from "@solana/spl-governance";
 
 import * as web3 from "@solana/web3.js";
 import { REALM_GOVERNANCE_PKEY, RPC_CONNECTION } from "../constants/Solana";
 
 export interface realmState {
-  members: Array<any>;
+  members: Array<Member>;
   isLoadingMembers: boolean;
 }
 
@@ -46,6 +50,8 @@ export const fetchRealmMembers = createAsyncThunk(
     } catch (error) {
       console.log("error", error);
     }
+
+    console.log("rawMembers", rawTokenOwnerRecords);
 
     const members = rawTokenOwnerRecords?.map((member) => {
       return {

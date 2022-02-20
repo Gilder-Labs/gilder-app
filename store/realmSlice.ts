@@ -25,7 +25,6 @@ export interface realmState {
   selectedRealm: any;
   realmsData: any;
   realmWatchlist: Array<string>;
-  tokenPriceData: any;
   isLoadingRealms: boolean;
 }
 
@@ -43,7 +42,6 @@ const initialState: realmState = {
   realms: [],
   selectedRealm: null,
   realmsData: cleanedRealmData,
-  tokenPriceData: null,
   realmWatchlist: [],
   isLoadingRealms: false,
 };
@@ -83,6 +81,10 @@ export const fetchRealms = createAsyncThunk("realms/fetchRealms", async () => {
       governanceId: realm?.owner.toString(),
       accountType: realm.account.accountType,
       votingProposalCount: realm.account.votingProposalCount,
+      maxVoteWeight:
+        realm.account.config.communityMintMaxVoteWeightSource.toString(),
+      minTokensToCreateGov:
+        realm.account.config.minCommunityTokensToCreateGovernance.toString(),
     };
   });
 
@@ -93,6 +95,7 @@ export const fetchRealm = createAsyncThunk(
   "realms/fetchRealm",
   async (realmId: string) => {
     const rawRealm = await getRealm(connection, new PublicKey(realmId));
+    console.log("raw realm", rawRealm);
     return {
       name: rawRealm.account.name,
       pubKey: rawRealm.pubkey.toString(),
@@ -101,6 +104,10 @@ export const fetchRealm = createAsyncThunk(
       governanceId: rawRealm?.owner.toString(),
       accountType: rawRealm.account.accountType,
       votingProposalCount: rawRealm.account.votingProposalCount,
+      maxVoteWeight:
+        rawRealm.account.config.communityMintMaxVoteWeightSource.value.toString(),
+      minTokensToCreateGov:
+        rawRealm.account.config.minCommunityTokensToCreateGovernance.toString(),
     };
   }
 );

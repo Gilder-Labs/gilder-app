@@ -12,3 +12,4 @@ export * from "./TokenCard";
 export * from "./Loading";
 export * from "./ConnectWalletButton";
 export * from "./SplashScreen";
+export * from "./MemberProfileModal";

@@ -1,8 +1,9 @@
 import { RootTabScreenProps } from "../types";
 import styled from "styled-components/native";
 import { useAppSelector } from "../hooks/redux";
-import { MemberCard, Loading } from "../components";
+import { MemberCard, Loading, MemberProfileModal } from "../components";
 import { FlatList } from "react-native";
+import { useState } from "react";
 
 export default function ActivityScreen({
   navigation,
@@ -10,15 +11,28 @@ export default function ActivityScreen({
   const { members, isLoadingMembers } = useAppSelector(
     (state) => state.members
   );
+  const [isMemberProfileOpen, setIsMemberProfileOpen] = useState(false);
+  const [selectedMember, setSelectedMember] = useState<Member>(null);
+
+  const handleMemberSelect = (member: Member) => {
+    setSelectedMember(member);
+    setIsMemberProfileOpen(true);
+  };
 
   const renderMember = ({ item }: any) => {
-    return <MemberCard key={item.governingTokenOwner} member={item} />;
+    return (
+      <MemberCard
+        key={item.governingTokenOwner}
+        member={item}
+        onSelect={() => handleMemberSelect(item)}
+      />
+    );
   };
 
   const getTotalVotes = () => {
     let totalVotes = 0;
 
-    members.forEach((member) => {
+    members.forEach((member: Member) => {
       totalVotes += member.totalVotesCount;
     });
     return totalVotes;
@@ -53,6 +67,11 @@ export default function ActivityScreen({
           }
         />
       )}
+      <MemberProfileModal
+        open={isMemberProfileOpen}
+        handleOnClose={() => setIsMemberProfileOpen(false)}
+        member={selectedMember}
+      />
     </Container>
   );
 }
