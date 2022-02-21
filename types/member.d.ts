@@ -7,3 +7,13 @@ interface Member {
   depositAmount: string;
   governingTokenMint: string;
 }
+
+interface ChatMessage {
+  postedAt: number;
+  replyTo: string | null;
+  proposalId: string;
+  body: string;
+  author: string;
+  isReply: boolean;
+  isReaction: boolean;
+}

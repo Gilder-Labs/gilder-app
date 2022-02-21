@@ -8,6 +8,7 @@ import {
   // TODO:
   getVoteRecordsByVoter, // get all votes a member did
   getGovernanceChatMessagesByVoter,
+  GOVERNANCE_CHAT_PROGRAM_ID,
 } from "@solana/spl-governance";
 
 import * as web3 from "@solana/web3.js";
@@ -16,11 +17,15 @@ import { REALM_GOVERNANCE_PKEY, RPC_CONNECTION } from "../constants/Solana";
 export interface realmState {
   members: Array<Member>;
   isLoadingMembers: boolean;
+  memberChat: Array<ChatMessage>;
+  isLoadingChat: boolean;
 }
 
 const initialState: realmState = {
   members: [],
   isLoadingMembers: false,
+  memberChat: [],
+  isLoadingChat: false,
 };
 
 interface realmType {
@@ -74,6 +79,41 @@ export const fetchRealmMembers = createAsyncThunk(
   }
 );
 
+export const fetchMemberChat = createAsyncThunk(
+  "realms/fetchMemberChat",
+  async (member: Member) => {
+    console.log("fetching member chat");
+
+    let rawChatMesssages;
+
+    try {
+      rawChatMesssages = await getGovernanceChatMessagesByVoter(
+        connection,
+        GOVERNANCE_CHAT_PROGRAM_ID,
+        new PublicKey(member.governingTokenOwner)
+      );
+      console.log("raw messages", rawChatMesssages);
+      const parsedChatMessages = rawChatMesssages.map((message) => {
+        return {
+          postedAt: message.account.postedAt.toNumber(),
+          replyTo: message.account.replyTo?.toString() || null,
+          proposalId: message.account.proposal.toString(),
+          body: message.account.body.value,
+          author: message.account.author.toString(),
+          isReply: message.account.body.isReply,
+          isReaction: message.account.body.type === 0,
+        };
+      });
+
+      return parsedChatMessages;
+    } catch (error) {
+      console.log("error", error);
+    }
+
+    return [];
+  }
+);
+
 export const memberSlice = createSlice({
   name: "realms",
   initialState,
@@ -90,6 +130,16 @@ export const memberSlice = createSlice({
         state.isLoadingMembers = false;
 
         state.members = action.payload;
+      })
+      .addCase(fetchMemberChat.pending, (state) => {
+        state.isLoadingChat = true;
+      })
+      .addCase(fetchMemberChat.rejected, (state) => {
+        state.isLoadingChat = false;
+      })
+      .addCase(fetchMemberChat.fulfilled, (state, action: any) => {
+        state.isLoadingChat = false;
+        state.memberChat = action.payload;
       });
   },
 });

@@ -4,6 +4,7 @@ import styled from "styled-components/native";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import * as Unicons from "@iconscout/react-native-unicons";
 import { useTheme } from "styled-components";
+import { fetchMemberChat } from "../store/memberSlice";
 
 interface MemberProfileModalProps {
   open: boolean;
@@ -14,8 +15,16 @@ interface MemberProfileModalProps {
 export const MemberProfileModal = ({
   open,
   handleOnClose,
+  member,
 }: MemberProfileModalProps) => {
   const theme = useTheme();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (member) {
+      dispatch(fetchMemberChat(member));
+    }
+  }, [member]);
 
   return (
     <Modal
