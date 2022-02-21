@@ -4,7 +4,7 @@ import styled from "styled-components/native";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import * as Unicons from "@iconscout/react-native-unicons";
 import { useTheme } from "styled-components";
-import { fetchMemberChat } from "../store/memberSlice";
+import { fetchMemberChat, fetchMemberVotes } from "../store/memberSlice";
 import { ChatMessage } from "./ChatMessage";
 
 interface MemberProfileProps {
@@ -23,13 +23,20 @@ export const MemberProfile = ({
   const { memberChat, isLoadingChat } = useAppSelector(
     (state) => state.members
   );
+  const { selectedRealm } = useAppSelector((state) => state.realms);
   const { proposalsMap } = useAppSelector((state) => state.proposals);
 
   useEffect(() => {
     if (member) {
       dispatch(fetchMemberChat(member));
+      dispatch(fetchMemberVotes({ member, realm: selectedRealm }));
     }
   }, [member]);
+
+  //
+  if (!member) {
+    return <EmptyView />;
+  }
 
   return (
     <Modal
@@ -40,7 +47,11 @@ export const MemberProfile = ({
     >
       <Header>
         <View style={{ width: 48, height: 48 }} />
-        <HeaderTitle> Member 123 </HeaderTitle>
+        <HeaderTitle>
+          {" "}
+          {member.governingTokenOwner.slice(0, 4)}...
+          {member.governingTokenOwner.slice(-4)}{" "}
+        </HeaderTitle>
         <CloseIconButton onPress={handleOnClose} activeOpacity={0.5}>
           <Unicons.UilTimes size="20" color={theme.gray[200]} />
         </CloseIconButton>
@@ -87,3 +98,5 @@ const ContentContainer = styled.View`
   width: 100%;
   height: 100%;
 `;
+
+const EmptyView = styled.View``;

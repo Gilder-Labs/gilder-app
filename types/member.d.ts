@@ -3,7 +3,7 @@ interface Member {
   owner: string;
   totalVotesCount: number;
   outstandingProposalCount: number;
-  governingTokenOwner: string;
+  governingTokenOwner: string; // wallet address
   depositAmount: string;
   governingTokenMint: string;
 }

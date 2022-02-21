@@ -14,18 +14,24 @@ import {
 import * as web3 from "@solana/web3.js";
 import { REALM_GOVERNANCE_PKEY, RPC_CONNECTION } from "../constants/Solana";
 
+interface Vote {}
+
 export interface realmState {
   members: Array<Member>;
-  isLoadingMembers: boolean;
   memberChat: Array<ChatMessage>;
+  memberVotes: Array<Vote>;
+  isLoadingMembers: boolean;
   isLoadingChat: boolean;
+  isLoadingVotes: boolean;
 }
 
 const initialState: realmState = {
   members: [],
-  isLoadingMembers: false,
   memberChat: [],
+  memberVotes: [],
+  isLoadingMembers: false,
   isLoadingChat: false,
+  isLoadingVotes: false,
 };
 
 interface realmType {
@@ -82,8 +88,6 @@ export const fetchRealmMembers = createAsyncThunk(
 export const fetchMemberChat = createAsyncThunk(
   "realms/fetchMemberChat",
   async (member: Member) => {
-    console.log("fetching member chat");
-
     let rawChatMesssages;
 
     try {
@@ -118,6 +122,37 @@ export const fetchMemberChat = createAsyncThunk(
   }
 );
 
+export const fetchMemberVotes = createAsyncThunk(
+  "realms/fetchMemberVotes",
+  async ({ member, realm }: any) => {
+    let rawVoteRecords;
+
+    try {
+      rawVoteRecords = await getVoteRecordsByVoter(
+        connection,
+        new PublicKey(realm.governanceId), // change this based on the dao program id
+        new PublicKey(member.governingTokenOwner)
+      );
+
+      let parsedVoteRecords = rawVoteRecords.map((vote) => {
+        return {
+          proposalId: vote.account.proposal.toString(),
+          isRelinquished: vote.account.isRelinquished,
+          voterWeightNo: vote.account.getNoVoteWeight()?.toString(),
+          voteWeightYes: vote.account.getYesVoteWeight()?.toString(),
+        };
+      });
+      console.log("raw vote records", rawVoteRecords);
+
+      return parsedVoteRecords;
+    } catch (error) {
+      console.log("error", error);
+    }
+
+    return [];
+  }
+);
+
 export const memberSlice = createSlice({
   name: "realms",
   initialState,
@@ -144,6 +179,16 @@ export const memberSlice = createSlice({
       .addCase(fetchMemberChat.fulfilled, (state, action: any) => {
         state.isLoadingChat = false;
         state.memberChat = action.payload;
+      })
+      .addCase(fetchMemberVotes.pending, (state) => {
+        state.isLoadingVotes = true;
+      })
+      .addCase(fetchMemberVotes.rejected, (state) => {
+        state.isLoadingVotes = false;
+      })
+      .addCase(fetchMemberVotes.fulfilled, (state, action: any) => {
+        state.isLoadingVotes = false;
+        state.memberVotes = action.payload;
       });
   },
 });
