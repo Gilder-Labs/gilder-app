@@ -5,18 +5,19 @@ import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import * as Unicons from "@iconscout/react-native-unicons";
 import { useTheme } from "styled-components";
 import { fetchMemberChat, fetchMemberVotes } from "../store/memberSlice";
-import { ChatMessage } from "./ChatMessage";
+import { ChatMessage } from "../components/ChatMessage";
 
 interface MemberProfileProps {
   open: boolean;
-  handleOnClose: any;
   member: Member;
+  route: any;
+  navigation: any;
 }
 
 export const MemberProfile = ({
   open,
-  handleOnClose,
-  member,
+  route,
+  navigation,
 }: MemberProfileProps) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
@@ -25,6 +26,7 @@ export const MemberProfile = ({
   );
   const { selectedRealm } = useAppSelector((state) => state.realms);
   const { proposalsMap } = useAppSelector((state) => state.proposals);
+  const { member } = route?.params;
 
   useEffect(() => {
     if (member) {
@@ -33,29 +35,26 @@ export const MemberProfile = ({
     }
   }, [member]);
 
+  const handleBack = () => {
+    navigation.goBack();
+  };
+
   //
   if (!member) {
     return <EmptyView />;
   }
 
   return (
-    <Modal
-      animationType="slide"
-      visible={open}
-      onRequestClose={handleOnClose}
-      presentationStyle="pageSheet"
-    >
-      <Header>
-        <View style={{ width: 48, height: 48 }} />
-        <HeaderTitle>
-          {" "}
-          {member.governingTokenOwner.slice(0, 4)}...
-          {member.governingTokenOwner.slice(-4)}{" "}
-        </HeaderTitle>
-        <CloseIconButton onPress={handleOnClose} activeOpacity={0.5}>
-          <Unicons.UilTimes size="20" color={theme.gray[200]} />
-        </CloseIconButton>
-      </Header>
+    // <Modal
+    //   animationType="slide"
+    //   visible={open}
+    //   onRequestClose={handleOnClose}
+    //   presentationStyle="pageSheet"
+    // >
+    <Container>
+      <BackIconButton onPress={handleBack} activeOpacity={0.5}>
+        <Unicons.UilArrowLeft size="28" color={theme.gray[200]} />
+      </BackIconButton>
       <ContentContainer>
         {memberChat.map((message) => (
           <ChatMessage
@@ -64,29 +63,14 @@ export const MemberProfile = ({
           />
         ))}
       </ContentContainer>
-    </Modal>
+    </Container>
+    // </Modal>
   );
 };
 
-const MyText = styled.Text``;
+const Container = styled.View``;
 
-const Header = styled.View`
-  height: 64px;
-  background-color: ${(props) => props.theme.gray[800]};
-  justify-content: space-between;
-  align-items: center;
-  flex-direction: row;
-  padding-left: ${(props) => props.theme.spacing[2]};
-  padding-right: ${(props) => props.theme.spacing[2]};
-`;
-
-const HeaderTitle = styled.Text`
-  font-size: 18px;
-  font-weight: bold;
-  color: ${(props) => props.theme.gray[50]};
-`;
-
-const CloseIconButton = styled.TouchableOpacity`
+const BackIconButton = styled.TouchableOpacity`
   width: 48px;
   height: 48px;
   justify-content: center;

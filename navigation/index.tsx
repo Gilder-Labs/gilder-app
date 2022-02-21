@@ -3,6 +3,7 @@ import { NavigationContainer, DarkTheme } from "@react-navigation/native";
 import * as React from "react";
 import { DrawerContentContainer } from "../components/DrawerContentContainer";
 import { createDrawerNavigator } from "@react-navigation/drawer";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as Unicons from "@iconscout/react-native-unicons";
 
 import { useTheme } from "styled-components";
@@ -20,8 +21,27 @@ import MembersScreen from "../screens/MembersScreen";
 import ProposalsScreen from "../screens/ProposalsScreen";
 
 import LinkingConfiguration from "./LinkingConfiguration";
+import { MemberProfile } from "../screens/MemberProfile";
 
 const Drawer = createDrawerNavigator();
+const Stack = createNativeStackNavigator();
+
+function StackScreen() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Members"
+        component={MembersScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="MemberDetails"
+        component={MemberProfile}
+        options={{ headerShown: false }}
+      />
+    </Stack.Navigator>
+  );
+}
 
 export default function Navigation({}: {}) {
   const theme = useTheme();
@@ -97,7 +117,7 @@ export default function Navigation({}: {}) {
           />
           <Drawer.Screen
             name="Members"
-            component={MembersScreen}
+            component={StackScreen}
             options={{
               drawerLabel: ({ focused, color }) => (
                 <DrawerTabText color={color} focused={focused}>

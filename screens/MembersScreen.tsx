@@ -17,6 +17,10 @@ export default function ActivityScreen({
   const handleMemberSelect = (member: Member) => {
     setSelectedMember(member);
     setIsMemberProfileOpen(true);
+    //@ts-ignore
+    navigation.push("MemberDetails", {
+      member: member,
+    });
   };
 
   const renderMember = ({ item }: any) => {
@@ -67,11 +71,6 @@ export default function ActivityScreen({
           }
         />
       )}
-      <MemberProfile
-        open={isMemberProfileOpen}
-        handleOnClose={() => setIsMemberProfileOpen(false)}
-        member={selectedMember}
-      />
     </Container>
   );
 }
