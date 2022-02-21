@@ -93,7 +93,7 @@ export const fetchMemberChat = createAsyncThunk(
         new PublicKey(member.governingTokenOwner)
       );
       console.log("raw messages", rawChatMesssages);
-      const parsedChatMessages = rawChatMesssages.map((message) => {
+      let parsedChatMessages = rawChatMesssages.map((message) => {
         return {
           postedAt: message.account.postedAt.toNumber(),
           replyTo: message.account.replyTo?.toString() || null,
@@ -104,6 +104,10 @@ export const fetchMemberChat = createAsyncThunk(
           isReaction: message.account.body.type === 0,
         };
       });
+
+      parsedChatMessages = parsedChatMessages?.sort(
+        (a, b) => b.postedAt - a.postedAt
+      );
 
       return parsedChatMessages;
     } catch (error) {

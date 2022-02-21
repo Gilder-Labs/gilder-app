@@ -19,6 +19,9 @@ export const MemberProfileModal = ({
 }: MemberProfileModalProps) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
+  const { memberChat, isLoadingChat } = useAppSelector(
+    (state) => state.members
+  );
 
   useEffect(() => {
     if (member) {
@@ -40,15 +43,14 @@ export const MemberProfileModal = ({
           <Unicons.UilTimes size="20" color={theme.gray[200]} />
         </CloseIconButton>
       </Header>
+      {memberChat.map((message) => (
+        <MyText>{message.body} </MyText>
+      ))}
     </Modal>
   );
 };
 
-const RealmContainer = styled.View`
-  background-color: ${(props) => props.theme.gray[900]};
-  width: 100%;
-  height: 100%;
-`;
+const MyText = styled.Text``;
 
 const Header = styled.View`
   height: 64px;

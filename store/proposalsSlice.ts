@@ -6,11 +6,13 @@ import { RPC_CONNECTION } from "../constants/Solana";
 export interface ProposalsState {
   isLoadingProposals: boolean;
   proposals: Array<any>;
+  proposalsMap: any;
 }
 
 const initialState: ProposalsState = {
   isLoadingProposals: false,
   proposals: [],
+  proposalsMap: null,
 };
 
 let connection = new Connection(RPC_CONNECTION, "confirmed");
@@ -32,13 +34,16 @@ export const fetchRealmProposals = createAsyncThunk(
       console.log("error", error);
     }
 
+    const proposalsMap = {};
+
     // votingAt, signingOffAt, votingCompletedAt, draftAt, executingAt
     // format(getStateTimestamp * 1000, "LLL cc, yyyy"
     let proposals = rawProposals?.map((proposal: any) => {
-      return {
+      const proposalId = proposal.pubkey.toString();
+      let data = {
         description: proposal?.account?.descriptionLink,
         name: proposal?.account?.name,
-        proposalId: proposal.pubkey.toString(),
+        proposalId: proposalId,
         status: ProposalState[proposal?.account?.state],
         isVoteFinalized: proposal.account.isVoteFinalized(),
         isFinalState: proposal.account.isFinalState(),
@@ -58,6 +63,9 @@ export const fetchRealmProposals = createAsyncThunk(
         draftAt: proposal.account?.draftAt?.toNumber(),
         executingAt: proposal.account?.executingAt?.toNumber(),
       };
+      //@ts-ignore
+      proposalsMap[proposalId] = data;
+      return data;
     });
 
     // sorts in most recent first.
@@ -65,7 +73,7 @@ export const fetchRealmProposals = createAsyncThunk(
       (a, b) => b.getStateTimestamp - a.getStateTimestamp
     );
 
-    return proposals;
+    return { proposals: proposals, proposalsMap: proposalsMap };
   }
 );
 
@@ -83,7 +91,8 @@ export const proposalsSlice = createSlice({
       })
       .addCase(fetchRealmProposals.fulfilled, (state, action: any) => {
         state.isLoadingProposals = false;
-        state.proposals = action.payload;
+        state.proposals = action.payload.proposals;
+        state.proposalsMap = action.payload.proposalsMap;
       });
   },
 });
