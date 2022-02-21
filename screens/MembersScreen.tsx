@@ -1,7 +1,7 @@
 import { RootTabScreenProps } from "../types";
 import styled from "styled-components/native";
 import { useAppSelector } from "../hooks/redux";
-import { MemberCard, Loading, MemberProfileModal } from "../components";
+import { MemberCard, Loading, MemberProfile } from "../components";
 import { FlatList } from "react-native";
 import { useState } from "react";
 
@@ -67,7 +67,7 @@ export default function ActivityScreen({
           }
         />
       )}
-      <MemberProfileModal
+      <MemberProfile
         open={isMemberProfileOpen}
         handleOnClose={() => setIsMemberProfileOpen(false)}
         member={selectedMember}

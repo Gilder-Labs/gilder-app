@@ -5,23 +5,25 @@ import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import * as Unicons from "@iconscout/react-native-unicons";
 import { useTheme } from "styled-components";
 import { fetchMemberChat } from "../store/memberSlice";
+import { ChatMessage } from "./ChatMessage";
 
-interface MemberProfileModalProps {
+interface MemberProfileProps {
   open: boolean;
   handleOnClose: any;
   member: Member;
 }
 
-export const MemberProfileModal = ({
+export const MemberProfile = ({
   open,
   handleOnClose,
   member,
-}: MemberProfileModalProps) => {
+}: MemberProfileProps) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const { memberChat, isLoadingChat } = useAppSelector(
     (state) => state.members
   );
+  const { proposalsMap } = useAppSelector((state) => state.proposals);
 
   useEffect(() => {
     if (member) {
@@ -43,9 +45,14 @@ export const MemberProfileModal = ({
           <Unicons.UilTimes size="20" color={theme.gray[200]} />
         </CloseIconButton>
       </Header>
-      {memberChat.map((message) => (
-        <MyText>{message.body} </MyText>
-      ))}
+      <ContentContainer>
+        {memberChat.map((message) => (
+          <ChatMessage
+            message={message}
+            proposal={proposalsMap[message.proposalId]}
+          />
+        ))}
+      </ContentContainer>
     </Modal>
   );
 };
@@ -73,4 +80,10 @@ const CloseIconButton = styled.TouchableOpacity`
   height: 48px;
   justify-content: center;
   align-items: center;
+`;
+
+const ContentContainer = styled.View`
+  background-color: ${(props) => props.theme.gray[900]};
+  width: 100%;
+  height: 100%;
 `;
