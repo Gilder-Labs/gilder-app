@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { SvgXml } from "react-native-svg";
-
 import { useTheme } from "styled-components";
 import { createAvatar } from "@dicebear/avatars";
 import * as style from "@dicebear/avatars-jdenticon-sprites";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Unicons from "@iconscout/react-native-unicons";
 import numeral from "numeral";
+import { getColorType } from "../utils";
 
 interface MemberCardProps {
   member: any;
@@ -22,25 +22,7 @@ export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
     // ... and other options
   });
 
-  const getColorType = () => {
-    const colorArray = [
-      "primary",
-      "secondary",
-      "aqua",
-      "purple",
-      "success",
-      "error",
-      "warning",
-      "blue",
-    ];
-
-    const seed = member.governingTokenOwner.charCodeAt(0);
-    const index = seed % (colorArray.length - 1);
-
-    return colorArray[index];
-  };
-
-  const color = getColorType();
+  const color = getColorType(member.governingTokenOwner);
 
   return (
     <Container onPress={onSelect}>

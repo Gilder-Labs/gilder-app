@@ -28,7 +28,11 @@ const Stack = createNativeStackNavigator();
 
 function StackScreen() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        fullScreenGestureEnabled: true, // kinda works?
+      }}
+    >
       <Stack.Screen
         name="Members"
         component={MembersScreen}

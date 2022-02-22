@@ -1,9 +1,8 @@
 import { RootTabScreenProps } from "../types";
 import styled from "styled-components/native";
 import { useAppSelector } from "../hooks/redux";
-import { MemberCard, Loading, MemberProfile } from "../components";
+import { MemberCard, Loading } from "../components";
 import { FlatList } from "react-native";
-import { useState } from "react";
 
 export default function ActivityScreen({
   navigation,
@@ -11,12 +10,8 @@ export default function ActivityScreen({
   const { members, isLoadingMembers } = useAppSelector(
     (state) => state.members
   );
-  const [isMemberProfileOpen, setIsMemberProfileOpen] = useState(false);
-  const [selectedMember, setSelectedMember] = useState<Member>(null);
 
   const handleMemberSelect = (member: Member) => {
-    setSelectedMember(member);
-    setIsMemberProfileOpen(true);
     //@ts-ignore
     navigation.push("MemberDetails", {
       member: member,

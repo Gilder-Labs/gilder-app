@@ -6,6 +6,8 @@ import * as Unicons from "@iconscout/react-native-unicons";
 import { useTheme } from "styled-components";
 import { fetchMemberChat, fetchMemberVotes } from "../store/memberSlice";
 import { ChatMessage } from "../components/ChatMessage";
+import { LinearGradient } from "expo-linear-gradient";
+import { getColorType } from "../utils";
 
 interface MemberProfileProps {
   open: boolean;
@@ -14,14 +16,10 @@ interface MemberProfileProps {
   navigation: any;
 }
 
-export const MemberProfile = ({
-  open,
-  route,
-  navigation,
-}: MemberProfileProps) => {
+export const MemberProfile = ({ route, navigation }: MemberProfileProps) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
-  const { memberChat, isLoadingChat } = useAppSelector(
+  const { memberChat, isLoadingChat, isLoadingVotes } = useAppSelector(
     (state) => state.members
   );
   const { selectedRealm } = useAppSelector((state) => state.realms);
@@ -39,10 +37,15 @@ export const MemberProfile = ({
     navigation.goBack();
   };
 
-  //
-  if (!member) {
-    return <EmptyView />;
-  }
+  const renderChatMessage = ({ item }: any) => {
+    return (
+      <ChatMessage
+        message={item}
+        key={item.postedAt}
+        proposal={proposalsMap[item.proposalId]}
+      />
+    );
+  };
 
   return (
     // <Modal
@@ -52,17 +55,22 @@ export const MemberProfile = ({
     //   presentationStyle="pageSheet"
     // >
     <Container>
-      <BackIconButton onPress={handleBack} activeOpacity={0.5}>
-        <Unicons.UilArrowLeft size="28" color={theme.gray[200]} />
-      </BackIconButton>
-      <ContentContainer>
-        {memberChat.map((message) => (
-          <ChatMessage
-            message={message}
-            proposal={proposalsMap[message.proposalId]}
-          />
-        ))}
-      </ContentContainer>
+      <HeaderContainer>
+        <BackIconButton onPress={handleBack} activeOpacity={0.5}>
+          <Unicons.UilAngleLeft size="28" color={theme.gray[200]} />
+        </BackIconButton>
+      </HeaderContainer>
+
+      <FlatList
+        data={memberChat}
+        renderItem={renderChatMessage}
+        keyExtractor={(item) => item.postedAt.toString()}
+        style={{ padding: 16 }}
+        ListFooterComponent={<EmptyView />}
+        scrollIndicatorInsets={{ right: 1 }}
+        removeClippedSubviews={true}
+        initialNumToRender={10}
+      />
     </Container>
     // </Modal>
   );
@@ -84,3 +92,5 @@ const ContentContainer = styled.View`
 `;
 
 const EmptyView = styled.View``;
+
+const HeaderContainer = styled.View``;
