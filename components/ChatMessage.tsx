@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components/native";
 import { useTheme } from "styled-components";
-import { format } from "date-fns";
+import { format, formatDistance } from "date-fns";
 import { createAvatar } from "@dicebear/avatars";
 import * as style from "@dicebear/avatars-jdenticon-sprites";
 import { SvgXml } from "react-native-svg";
@@ -26,11 +26,16 @@ export const ChatMessage = ({ message, proposal }: ChatMessageProps) => {
   return (
     <Container>
       <IconContainer color={color}>
-        <SvgXml xml={jdenticonSvg} width="44px" height="44px" />
+        <SvgXml xml={jdenticonSvg} width="34px" height="34px" />
       </IconContainer>
-      <ProposalName> {proposal?.name} </ProposalName>
-      <MessageDate> {format(postedAt * 1000, "LLL d, yyyy - p")}</MessageDate>
-      <MessageBody> {body} </MessageBody>
+
+      <Column>
+        <ProposalName>{proposal?.name} </ProposalName>
+        <MessageDate>
+          {formatDistance(postedAt * 1000, new Date(), { addSuffix: true })}
+        </MessageDate>
+        <MessageBody>{body} </MessageBody>
+      </Column>
     </Container>
   );
 };
@@ -40,30 +45,43 @@ const Container = styled.View`
   margin-top: ${(props) => props.theme.spacing[3]};
   padding: ${(props) => props.theme.spacing[3]};
   border-radius: 8px;
+  flex-direction: row;
 `;
 
 const MessageBody = styled.Text`
   color: ${(props) => props.theme.gray[200]};
+  font-size: 14px;
+  line-height: 20px;
 `;
 
 const MessageDate = styled.Text`
   color: ${(props) => props.theme.gray[400]};
+  margin-bottom: ${(props) => props.theme.spacing[3]};
 `;
 
 const ProposalName = styled.Text`
   color: ${(props) => props.theme.gray[100]};
   font-weight: bold;
-  margin-bottom: ${(props) => props.theme.spacing[2]};
+  margin-bottom: ${(props) => props.theme.spacing[1]};
 `;
 
 const IconContainer = styled.View<{ color: string }>`
   /* border-radius: 100px, */
+  margin-right: ${(props) => props.theme.spacing[3]};
   background: ${(props: any) => props.theme[props.color][800]};
   flex-direction: row;
   align-items: center;
   overflow: hidden;
-  border: 2px solid ${(props: any) => props.theme.gray[900]};
+  border: 1px solid ${(props: any) => props.theme.gray[900]};
   border-radius: 100px;
-  width: 48px;
-  height: 48px;
+  width: 36px;
+  height: 36px;
+`;
+
+const Row = styled.View`
+  flex-direction: row;
+`;
+
+const Column = styled.View`
+  flex: 1;
 `;

@@ -91,6 +91,8 @@ const ContentContainer = styled.View`
   height: 100%;
 `;
 
-const EmptyView = styled.View``;
+const EmptyView = styled.View`
+  height: 200px;
+`;
 
 const HeaderContainer = styled.View``;
