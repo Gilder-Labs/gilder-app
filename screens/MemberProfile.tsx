@@ -18,7 +18,7 @@ interface MemberProfileProps {
   navigation: any;
 }
 
-export const MemberProfile = ({ route, navigation }: MemberProfileProps) => {
+export const MemberProfile = ({ route }: MemberProfileProps) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const { memberChat, isLoadingChat, isLoadingVotes } = useAppSelector(
@@ -36,10 +36,6 @@ export const MemberProfile = ({ route, navigation }: MemberProfileProps) => {
     }
   }, [member]);
 
-  const handleBack = () => {
-    navigation.goBack();
-  };
-
   const renderChatMessage = ({ item }: any) => {
     return (
       <ChatMessage
@@ -51,11 +47,11 @@ export const MemberProfile = ({ route, navigation }: MemberProfileProps) => {
   };
 
   let jdenticonSvg = createAvatar(style, {
-    seed: member.governingTokenOwner,
+    seed: member.walletId,
     // ... and other options
   });
 
-  const color = getColorType(member.governingTokenOwner);
+  const color = getColorType(member.walletId);
 
   return (
     <Container>

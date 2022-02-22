@@ -70,7 +70,7 @@ export const fetchRealmMembers = createAsyncThunk(
         owner: member.owner.toString(), // RealmId
         totalVotesCount: member.account.totalVotesCount, // How many votes they have
         outstandingProposalCount: member.account.outstandingProposalCount,
-        governingTokenOwner: member.account.governingTokenOwner.toString(), // Wallet address of owner of dao token
+        walletId: member.account.governingTokenOwner.toString(), // Wallet address of owner of dao token
         governingTokenMint: member.account.governingTokenMint.toString(),
         depositAmount: member.account.governingTokenDepositAmount.toString(),
       };
@@ -94,7 +94,7 @@ export const fetchMemberChat = createAsyncThunk(
       rawChatMesssages = await getGovernanceChatMessagesByVoter(
         connection,
         GOVERNANCE_CHAT_PROGRAM_ID,
-        new PublicKey(member.governingTokenOwner)
+        new PublicKey(member.walletId)
       );
       console.log("raw messages", rawChatMesssages);
       let parsedChatMessages = rawChatMesssages.map((message) => {
@@ -131,7 +131,7 @@ export const fetchMemberVotes = createAsyncThunk(
       rawVoteRecords = await getVoteRecordsByVoter(
         connection,
         new PublicKey(realm.governanceId), // change this based on the dao program id
-        new PublicKey(member.governingTokenOwner)
+        new PublicKey(member.walletId)
       );
 
       let parsedVoteRecords = rawVoteRecords.map((vote) => {

@@ -21,7 +21,7 @@ export default function ActivityScreen({
   const renderMember = ({ item }: any) => {
     return (
       <MemberCard
-        key={item.governingTokenOwner}
+        key={item.walletId}
         member={item}
         onSelect={() => handleMemberSelect(item)}
       />

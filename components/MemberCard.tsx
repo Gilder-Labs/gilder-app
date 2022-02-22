@@ -18,11 +18,11 @@ export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
   const theme = useTheme();
 
   let jdenticonSvg = createAvatar(style, {
-    seed: member.governingTokenOwner,
+    seed: member.walletId,
     // ... and other options
   });
 
-  const color = getColorType(member.governingTokenOwner);
+  const color = getColorType(member.walletId);
 
   return (
     <Container onPress={onSelect}>
@@ -36,10 +36,10 @@ export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
         <SvgXml xml={jdenticonSvg} width="44px" height="44px" />
       </IconContainer>
       <ContentContainer>
-        <MemberName>{`${member.governingTokenOwner.slice(
+        <MemberName>{`${member.walletId.slice(0, 4)}...${member.walletId.slice(
           0,
           4
-        )}...${member.governingTokenOwner.slice(0, 4)}`}</MemberName>
+        )}`}</MemberName>
 
         <TextContainer>
           <DetailContainer>

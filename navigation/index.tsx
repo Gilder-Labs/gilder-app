@@ -149,7 +149,8 @@ export default function Navigation({}: {}) {
       >
         <Stack.Navigator
           screenOptions={{
-            fullScreenGestureEnabled: true, // kinda works?
+            fullScreenGestureEnabled: true,
+            headerTintColor: "#f4f4f5", //Set Header text color
           }}
           initialRouteName="Root"
         >
@@ -162,6 +163,12 @@ export default function Navigation({}: {}) {
             name="MemberDetails"
             component={MemberProfile}
             // options={{ headerShown: false }}
+            options={({ route }) => ({
+              title: `${route.params.member.walletId.slice(
+                0,
+                4
+              )}...${route.params.member.walletId.slice(-4)}`,
+            })}
           />
         </Stack.Navigator>
       </NavigationContainer>
