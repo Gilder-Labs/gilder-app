@@ -32,9 +32,10 @@ function StackScreen() {
       screenOptions={{
         fullScreenGestureEnabled: true, // kinda works?
       }}
+      initialRouteName="MembersScreen"
     >
       <Stack.Screen
-        name="Members"
+        name="MembersScreen"
         component={MembersScreen}
         options={{ headerShown: false }}
       />

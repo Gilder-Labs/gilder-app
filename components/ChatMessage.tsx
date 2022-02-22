@@ -46,6 +46,8 @@ const Container = styled.View`
   padding: ${(props) => props.theme.spacing[3]};
   border-radius: 8px;
   flex-direction: row;
+  margin-left: ${(props) => props.theme.spacing[3]};
+  margin-right: ${(props) => props.theme.spacing[3]};
 `;
 
 const MessageBody = styled.Text`
