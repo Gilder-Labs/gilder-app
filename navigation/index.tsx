@@ -26,25 +26,83 @@ import { MemberProfile } from "../screens/MemberProfile";
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
 
-function StackScreen() {
+function DrawerScreen() {
+  const theme = useTheme();
   return (
-    <Stack.Navigator
+    <Drawer.Navigator
+      initialRouteName="Members"
+      drawerContent={(props) => <DrawerContentContainer {...props} />}
       screenOptions={{
-        fullScreenGestureEnabled: true, // kinda works?
+        drawerActiveBackgroundColor: theme?.gray[800],
+        drawerActiveTintColor: theme?.primary[400],
+        drawerInactiveTintColor: theme?.gray[400],
+        drawerStyle: {
+          width: 320,
+        },
+        headerTintColor: "#f4f4f5", //Set Header text color
+        swipeEdgeWidth: 500, // Allows user to open drawer swiping left with on any part of screen
       }}
-      initialRouteName="MembersScreen"
+      // screenOptions={{
+      //   drawerType: Layout.window.width >= 768 ? "permanent" : "front",
+      // }}
     >
-      <Stack.Screen
-        name="MembersScreen"
+      <Drawer.Screen
+        name="Treasury"
+        component={TreasuryScreen}
+        options={{
+          drawerLabel: ({ focused, color }) => (
+            <DrawerTabText color={color} focused={focused}>
+              Treasury
+            </DrawerTabText>
+          ),
+          drawerIcon: ({ focused, color, size }) => (
+            <Unicons.UilGold size="28" color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Members"
         component={MembersScreen}
-        options={{ headerShown: false }}
+        options={{
+          drawerLabel: ({ focused, color }) => (
+            <DrawerTabText color={color} focused={focused}>
+              Members
+            </DrawerTabText>
+          ),
+          drawerIcon: ({ focused, color, size }) => (
+            <Unicons.UilUsersAlt size="28" color={color} />
+          ),
+        }}
       />
-      <Stack.Screen
-        name="MemberDetails"
-        component={MemberProfile}
-        options={{ headerShown: false }}
+      <Drawer.Screen
+        name="Proposals"
+        component={ProposalsScreen}
+        options={{
+          drawerLabel: ({ focused, color }) => (
+            <DrawerTabText color={color} focused={focused}>
+              Proposals
+            </DrawerTabText>
+          ),
+          drawerIcon: ({ focused, color, size }) => (
+            <Unicons.UilFileAlt size="28" color={color} />
+          ),
+        }}
       />
-    </Stack.Navigator>
+      <Drawer.Screen
+        name="Activity"
+        component={ActivityScreen}
+        options={{
+          drawerLabel: ({ focused, color }) => (
+            <DrawerTabText color={color} focused={focused}>
+              Activity
+            </DrawerTabText>
+          ),
+          drawerIcon: ({ focused, color, size }) => (
+            <Unicons.UilListUl size="28" color={color} />
+          ),
+        }}
+      />
+    </Drawer.Navigator>
   );
 }
 
@@ -89,80 +147,23 @@ export default function Navigation({}: {}) {
         linking={LinkingConfiguration}
         theme={NavigationTheme}
       >
-        <Drawer.Navigator
-          initialRouteName="Members"
-          drawerContent={(props) => <DrawerContentContainer {...props} />}
+        <Stack.Navigator
           screenOptions={{
-            drawerActiveBackgroundColor: theme?.gray[800],
-            drawerActiveTintColor: theme?.primary[400],
-            drawerInactiveTintColor: theme?.gray[400],
-            drawerStyle: {
-              width: 320,
-            },
-            headerTintColor: "#f4f4f5", //Set Header text color
-            swipeEdgeWidth: 500, // Allows user to open drawer swiping left with on any part of screen
+            fullScreenGestureEnabled: true, // kinda works?
           }}
-          // screenOptions={{
-          //   drawerType: Layout.window.width >= 768 ? "permanent" : "front",
-          // }}
+          initialRouteName="Root"
         >
-          <Drawer.Screen
-            name="Treasury"
-            component={TreasuryScreen}
-            options={{
-              drawerLabel: ({ focused, color }) => (
-                <DrawerTabText color={color} focused={focused}>
-                  Treasury
-                </DrawerTabText>
-              ),
-              drawerIcon: ({ focused, color, size }) => (
-                <Unicons.UilGold size="28" color={color} />
-              ),
-            }}
+          <Stack.Screen
+            name="Root"
+            component={DrawerScreen}
+            options={{ headerShown: false }}
           />
-          <Drawer.Screen
-            name="Members"
-            component={StackScreen}
-            options={{
-              drawerLabel: ({ focused, color }) => (
-                <DrawerTabText color={color} focused={focused}>
-                  Members
-                </DrawerTabText>
-              ),
-              drawerIcon: ({ focused, color, size }) => (
-                <Unicons.UilUsersAlt size="28" color={color} />
-              ),
-            }}
+          <Stack.Screen
+            name="MemberDetails"
+            component={MemberProfile}
+            // options={{ headerShown: false }}
           />
-          <Drawer.Screen
-            name="Proposals"
-            component={ProposalsScreen}
-            options={{
-              drawerLabel: ({ focused, color }) => (
-                <DrawerTabText color={color} focused={focused}>
-                  Proposals
-                </DrawerTabText>
-              ),
-              drawerIcon: ({ focused, color, size }) => (
-                <Unicons.UilFileAlt size="28" color={color} />
-              ),
-            }}
-          />
-          <Drawer.Screen
-            name="Activity"
-            component={ActivityScreen}
-            options={{
-              drawerLabel: ({ focused, color }) => (
-                <DrawerTabText color={color} focused={focused}>
-                  Activity
-                </DrawerTabText>
-              ),
-              drawerIcon: ({ focused, color, size }) => (
-                <Unicons.UilListUl size="28" color={color} />
-              ),
-            }}
-          />
-        </Drawer.Navigator>
+        </Stack.Navigator>
       </NavigationContainer>
     </RootContainer>
   );

@@ -48,22 +48,22 @@ export const TokenCard = ({ token }: TokenCardProps) => {
           </CoinSubtitle>
         </CoinTitleContainer>
         <CoinPriceContainer>
-          {coinGeckoId && (
+          {coinGeckoId && tokenPriceData && (
             <CoinPriceText>
               {numeral(
-                tokenPriceData[coinGeckoId].current_price *
+                tokenPriceData[coinGeckoId]?.current_price *
                   token.tokenAmount.uiAmount
               ).format("$0.00a")}
             </CoinPriceText>
           )}
-          {coinGeckoId && (
+          {coinGeckoId && tokenPriceData && (
             <CoinPercentText
               isNegative={
-                tokenPriceData[coinGeckoId].price_change_percentage_24h < 0
+                tokenPriceData[coinGeckoId]?.price_change_percentage_24h < 0
               }
             >
               {numeral(
-                tokenPriceData[coinGeckoId].price_change_percentage_24h
+                tokenPriceData[coinGeckoId]?.price_change_percentage_24h
               ).format("0.00")}
               %
             </CoinPercentText>
