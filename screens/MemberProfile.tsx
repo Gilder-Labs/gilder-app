@@ -3,7 +3,11 @@ import { Modal, FlatList, View } from "react-native";
 import styled from "styled-components/native";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import * as Unicons from "@iconscout/react-native-unicons";
+import { SvgXml } from "react-native-svg";
 import { useTheme } from "styled-components";
+import { createAvatar } from "@dicebear/avatars";
+import * as style from "@dicebear/avatars-jdenticon-sprites";
+
 import { fetchMemberChat, fetchMemberVotes } from "../store/memberSlice";
 import { ChatMessage } from "../components/ChatMessage";
 import { LinearGradient } from "expo-linear-gradient";
@@ -47,18 +51,28 @@ export const MemberProfile = ({ route, navigation }: MemberProfileProps) => {
     );
   };
 
+  let jdenticonSvg = createAvatar(style, {
+    seed: member.governingTokenOwner,
+    // ... and other options
+  });
+
+  const color = getColorType(member.governingTokenOwner);
+
   return (
-    // <Modal
-    //   animationType="slide"
-    //   visible={open}
-    //   onRequestClose={handleOnClose}
-    //   presentationStyle="pageSheet"
-    // >
     <Container>
       <HeaderContainer>
-        <BackIconButton onPress={handleBack} activeOpacity={0.5}>
-          <Unicons.UilAngleLeft size="28" color={theme.gray[200]} />
-        </BackIconButton>
+        <LinearGradient
+          colors={[`${theme[color][600]}66`, `${theme[color][800]}66`]}
+          style={{ height: 48, flex: 1, width: "100%" }}
+          start={{ x: 0.1, y: 0.2 }}
+        >
+          <BackIconButton onPress={handleBack} activeOpacity={0.5}>
+            <Unicons.UilAngleLeft size="28" color={theme.gray[200]} />
+          </BackIconButton>
+        </LinearGradient>
+        <IconContainer color={color}>
+          <SvgXml xml={jdenticonSvg} width="60px" height="60px" />
+        </IconContainer>
       </HeaderContainer>
 
       <FlatList
@@ -72,7 +86,6 @@ export const MemberProfile = ({ route, navigation }: MemberProfileProps) => {
         initialNumToRender={10}
       />
     </Container>
-    // </Modal>
   );
 };
 
@@ -95,4 +108,22 @@ const EmptyView = styled.View`
   height: 200px;
 `;
 
-const HeaderContainer = styled.View``;
+const HeaderContainer = styled.View`
+  height: 80px;
+  margin-bottom: 48px;
+  border-bottom-width: 1px;
+  border-color: ${(props) => props.theme.gray[1000]};
+`;
+
+const IconContainer = styled.View<{ color: string }>`
+  /* border-radius: 100px, */
+  background: ${(props: any) => props.theme[props.color][800]};
+  flex-direction: row;
+  align-items: center;
+  position: absolute;
+  left: 40px;
+  top: 48px;
+  overflow: hidden;
+  border: 2px solid ${(props: any) => props.theme.gray[900]};
+  border-radius: 100px;
+`;
