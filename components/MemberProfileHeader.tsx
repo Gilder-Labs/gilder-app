@@ -13,7 +13,7 @@ interface MemberProfileHeaderProps {
 }
 
 export const MemberProfileHeader = ({
-  selectedTab = "info",
+  selectedTab = "Messages",
   onSelectTab,
   color,
   icon,
@@ -26,7 +26,7 @@ export const MemberProfileHeader = ({
         colors={[`${theme[color][600]}66`, `${theme[color][800]}66`]}
         style={{
           height: 80,
-          flex: 1,
+          // flex: 1,
           width: "100%",
           flexDirection: "row",
           justifyContent: "space-between",
@@ -37,7 +37,7 @@ export const MemberProfileHeader = ({
         <SvgXml xml={icon} width="60px" height="60px" />
       </IconContainer>
       <MemberInfoSwitcherContainer>
-        <NavIconButton
+        {/* <NavIconButton
           color={color}
           isSelected={selectedTab === "Info"}
           onPress={() => onSelectTab("Info")}
@@ -48,7 +48,7 @@ export const MemberProfileHeader = ({
             color={theme[color][200]}
           />
           <ButtonText color={color}>Info</ButtonText>
-        </NavIconButton>
+        </NavIconButton> */}
         <NavIconButton
           color={color}
           isSelected={selectedTab === "Messages"}

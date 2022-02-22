@@ -14,12 +14,10 @@ import {
 import * as web3 from "@solana/web3.js";
 import { REALM_GOVERNANCE_PKEY, RPC_CONNECTION } from "../constants/Solana";
 
-interface Vote {}
-
 export interface realmState {
   members: Array<Member>;
   memberChat: Array<ChatMessage>;
-  memberVotes: Array<Vote>;
+  memberVotes: Array<MemberVote>;
   isLoadingMembers: boolean;
   isLoadingChat: boolean;
   isLoadingVotes: boolean;

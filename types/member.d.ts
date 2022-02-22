@@ -17,3 +17,10 @@ interface ChatMessage {
   isReply: boolean;
   isReaction: boolean;
 }
+
+interface MemberVote {
+  proposalId: string;
+  isRelinquished: boolean;
+  voterWeightNo: string;
+  voteWeightYes: string;
+}
