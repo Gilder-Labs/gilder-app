@@ -1,16 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { PublicKey, ConfirmedSignatureInfo } from "@solana/web3.js";
-import {
-  getRealms,
-  getRealm,
-  getAllGovernances, // all governances of a realm
-  ProposalState,
-  getAllProposals,
-  getAllTokenOwnerRecords, // returns all members of a realm
-  GovernanceAccountType, // Map that has all types of governance
-  GovernanceInstruction,
-  getGovernance,
-} from "@solana/spl-governance";
+import { getRealms, getRealm } from "@solana/spl-governance";
 
 import * as web3 from "@solana/web3.js";
 import {

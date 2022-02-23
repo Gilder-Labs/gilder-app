@@ -23,6 +23,10 @@ export const ChatMessage = ({ message, proposal }: ChatMessageProps) => {
 
   const color = getColorType(author);
 
+  if (!proposal) {
+    return <EmptyView />;
+  }
+
   return (
     <Container>
       <IconContainer color={color}>
@@ -87,3 +91,5 @@ const Row = styled.View`
 const Column = styled.View`
   flex: 1;
 `;
+
+const EmptyView = styled.View``;
