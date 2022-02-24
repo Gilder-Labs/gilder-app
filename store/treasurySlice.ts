@@ -17,12 +17,14 @@ export interface TreasuryState {
   isLoadingVaults: boolean;
   tokenPriceData: any;
   vaults: Array<any>;
+  governances: Array<any>;
 }
 
 const initialState: TreasuryState = {
   isLoadingVaults: false,
   vaults: [],
   tokenPriceData: null,
+  governances: [],
 };
 
 let connection = new Connection(RPC_CONNECTION, "confirmed");
@@ -90,7 +92,11 @@ export const fetchVaults = createAsyncThunk(
       },
     });
 
-    return { vaults: vaultsParsed, tokenPriceData: tokenPriceResponse.data };
+    return {
+      vaults: vaultsParsed,
+      tokenPriceData: tokenPriceResponse.data,
+      governances: [],
+    };
   }
 );
 
@@ -117,6 +123,7 @@ export const treasurySlice = createSlice({
         state.vaults = action.payload.vaults;
         state.isLoadingVaults = false;
         state.tokenPriceData = tokenPriceObject;
+        state.governances = action.payload.governances;
       });
   },
 });

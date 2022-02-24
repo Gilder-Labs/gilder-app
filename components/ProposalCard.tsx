@@ -40,9 +40,36 @@ export const ProposalCard = ({ proposal }: ProposalCardProps) => {
     ? Math.round((yesVotes / totalVotes) * 100)
     : 0;
   const noPercentage = noVotes ? Math.round((noVotes / totalVotes) * 100) : 0;
-  // console.log("yes votes", yesPercentage);
 
   const dateTimestamp = proposal?.votingCompletedAt || getStateTimestamp;
+
+  // CODE FOR COUNTDOWN FROM GOV UI
+  // const getTimeToVoteEnd = () => {
+  //   const now = moment().unix()
+
+  //   let timeToVoteEnd = proposal.isPreVotingState()
+  //     ? governance.config.maxVotingTime
+  //     : (proposal.votingAt?.toNumber() ?? 0) +
+  //       governance.config.maxVotingTime -
+  //       now
+
+  //   if (timeToVoteEnd <= 0) {
+  //     return ZeroCountdown
+  //   }
+
+  //   const days = Math.floor(timeToVoteEnd / 86400)
+  //   timeToVoteEnd -= days * 86400
+
+  //   const hours = Math.floor(timeToVoteEnd / 3600) % 24
+  //   timeToVoteEnd -= hours * 3600
+
+  //   const minutes = Math.floor(timeToVoteEnd / 60) % 60
+  //   timeToVoteEnd -= minutes * 60
+
+  //   const seconds = Math.floor(timeToVoteEnd % 60)
+
+  //   return { days, hours, minutes, seconds }
+  // }
 
   return (
     <Container isVoting={status === "Voting"}>

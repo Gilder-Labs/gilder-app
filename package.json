@@ -28,6 +28,7 @@
     "@solana/spl-token": "^0.1.8",
     "@solana/spl-token-registry": "^0.2.2156",
     "@solana/web3.js": "^1.34.0",
+    "@solflare-wallet/pfp": "^0.0.6",
     "@toruslabs/openlogin": "^1.5.0",
     "@toruslabs/openlogin-ed25519": "^1.5.0",
     "@types/styled-components": "^5.1.20",

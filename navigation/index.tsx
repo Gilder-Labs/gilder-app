@@ -30,7 +30,7 @@ function DrawerScreen() {
   const theme = useTheme();
   return (
     <Drawer.Navigator
-      initialRouteName="Members"
+      initialRouteName="Proposals"
       drawerContent={(props) => <DrawerContentContainer {...props} />}
       screenOptions={{
         drawerActiveBackgroundColor: theme?.gray[800],
