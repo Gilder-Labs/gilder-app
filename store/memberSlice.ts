@@ -60,7 +60,7 @@ export const fetchRealmMembers = createAsyncThunk(
       console.log("error", error);
     }
 
-    console.log("rawMembers", rawTokenOwnerRecords);
+    // console.log("rawMembers", rawTokenOwnerRecords);
 
     const members = rawTokenOwnerRecords?.map((member) => {
       return {
@@ -94,7 +94,7 @@ export const fetchMemberChat = createAsyncThunk(
         GOVERNANCE_CHAT_PROGRAM_ID,
         new PublicKey(member.walletId)
       );
-      console.log("raw messages", rawChatMesssages);
+      // console.log("raw messages", rawChatMesssages);
       let parsedChatMessages = rawChatMesssages.map((message) => {
         return {
           postedAt: message.account.postedAt.toNumber(),
@@ -140,7 +140,7 @@ export const fetchMemberVotes = createAsyncThunk(
           voteWeightYes: vote.account.getYesVoteWeight()?.toString(),
         };
       });
-      console.log("raw vote records", rawVoteRecords);
+      // console.log("raw vote records", rawVoteRecords);
 
       return parsedVoteRecords;
     } catch (error) {

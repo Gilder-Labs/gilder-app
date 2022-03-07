@@ -35,12 +35,14 @@ export const fetchRealmProposals = createAsyncThunk(
     }
 
     const proposalsMap = {};
+    console.log("proposals raw", rawProposals);
 
     // votingAt, signingOffAt, votingCompletedAt, draftAt, executingAt
     // format(getStateTimestamp * 1000, "LLL cc, yyyy"
     let proposals = rawProposals?.map((proposal: any) => {
       const proposalId = proposal.pubkey.toString();
       let data = {
+        governanceId: proposal?.account?.governance.toString(),
         description: proposal?.account?.descriptionLink,
         name: proposal?.account?.name,
         proposalId: proposalId,

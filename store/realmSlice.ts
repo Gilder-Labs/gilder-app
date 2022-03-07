@@ -85,7 +85,7 @@ export const fetchRealm = createAsyncThunk(
   "realms/fetchRealm",
   async (realmId: string) => {
     const rawRealm = await getRealm(connection, new PublicKey(realmId));
-    console.log("raw realm", rawRealm);
+    // console.log("raw realm", rawRealm);
     return {
       name: rawRealm.account.name,
       pubKey: rawRealm.pubkey.toString(),
@@ -95,9 +95,9 @@ export const fetchRealm = createAsyncThunk(
       accountType: rawRealm.account.accountType,
       votingProposalCount: rawRealm.account.votingProposalCount,
       maxVoteWeight:
-        rawRealm.account.config.communityMintMaxVoteWeightSource.value.toString(),
+        rawRealm.account.config.communityMintMaxVoteWeightSource.value.toNumber(),
       minTokensToCreateGov:
-        rawRealm.account.config.minCommunityTokensToCreateGovernance.toString(),
+        rawRealm.account.config.minCommunityTokensToCreateGovernance.toNumber(),
     };
   }
 );
