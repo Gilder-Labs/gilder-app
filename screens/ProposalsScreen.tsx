@@ -19,7 +19,12 @@ export default function ProposalScreen({
   };
 
   const renderProposal = ({ item }: any) => {
-    return <ProposalCard proposal={item} onClick={handleProposalSelect} />;
+    return (
+      <ProposalCard
+        proposal={item}
+        onClick={() => handleProposalSelect(item)}
+      />
+    );
   };
 
   return (
