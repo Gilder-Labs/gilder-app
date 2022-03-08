@@ -98,6 +98,13 @@ export const fetchRealm = createAsyncThunk(
         rawRealm.account.config.communityMintMaxVoteWeightSource.value.toNumber(),
       minTokensToCreateGov:
         rawRealm.account.config.minCommunityTokensToCreateGovernance.toNumber(),
+      fmtSupplyFraction:
+        rawRealm.account.config.communityMintMaxVoteWeightSource.fmtSupplyFractionPercentage(),
+      supplyFraction: rawRealm.account.config.communityMintMaxVoteWeightSource
+        .getSupplyFraction()
+        .toNumber(),
+      isFullSupply:
+        rawRealm.account.config.communityMintMaxVoteWeightSource.isFullSupply(),
     };
   }
 );

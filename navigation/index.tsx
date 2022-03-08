@@ -22,6 +22,7 @@ import ProposalsScreen from "../screens/ProposalsScreen";
 
 import LinkingConfiguration from "./LinkingConfiguration";
 import { MemberProfile } from "../screens/MemberProfile";
+import { ProposalDetailScreen } from "../screens/ProposalDetailScreen";
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -169,6 +170,13 @@ export default function Navigation({}: {}) {
                 4
               )}...${route.params.member.walletId.slice(-4)}`,
             })}
+          />
+          <Stack.Screen
+            name="ProposalDetail"
+            component={ProposalDetailScreen}
+            // options={({ route }) => ({
+            //   title: `...`,
+            // })}
           />
         </Stack.Navigator>
       </NavigationContainer>

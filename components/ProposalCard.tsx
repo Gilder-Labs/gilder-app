@@ -6,6 +6,7 @@ import numeral from "numeral";
 
 interface ProposalCardProps {
   proposal: any;
+  onClick: any;
 }
 
 // "success" | "pending" | "error";
@@ -20,7 +21,7 @@ const proposalStatusKey = {
   Defeated: "error",
 };
 
-export const ProposalCard = ({ proposal }: ProposalCardProps) => {
+export const ProposalCard = ({ proposal, onClick }: ProposalCardProps) => {
   const {
     status,
     name,
@@ -72,7 +73,7 @@ export const ProposalCard = ({ proposal }: ProposalCardProps) => {
   // }
 
   return (
-    <Container isVoting={status === "Voting"}>
+    <Container isVoting={status === "Voting"} onPress={onClick}>
       <TextContainer>
         <ProposalTitle>{name}</ProposalTitle>
       </TextContainer>
@@ -81,7 +82,7 @@ export const ProposalCard = ({ proposal }: ProposalCardProps) => {
         {/* @ts-ignore */}
         <Badge title={status} type={proposalStatusKey[status]} />
       </BadgeRow>
-      <Description>{description}</Description>
+      {/* <Description>{description}</Description> */}
       <Votes>
         <VoteCountRow>
           <VoteText>
@@ -100,7 +101,7 @@ export const ProposalCard = ({ proposal }: ProposalCardProps) => {
   );
 };
 
-const Container = styled.View<{ isVoting: boolean }>`
+const Container = styled.TouchableOpacity<{ isVoting: boolean }>`
   /* height: 80px; */
   width: 100%%;
   margin-bottom: ${(props: any) => props.theme.spacing[3]};

@@ -1,5 +1,13 @@
 [
   {
+    "symbol": "Ukraine",
+    "displayName": "Ukraine.SOL",
+    "programId": "gUAedF544JeE6NYbQakQvribHykUNgaPJqcgf3UQVnY",
+    "realmId": "5piGF94RbCqaogoFFWA9cYmt29qUpQejGCEjRKuwCz7d",
+    "bannerImage": "/realms/Ukraine/img/Flag_of_Ukraine.svg",
+    "ogImage": "/realms/Ukraine/img/Ukraine_Logo.png"
+  },
+  {
     "symbol": "MNGO",
     "displayName": "Mango DAO",
     "programId": "GqTPL6qRf5aUuqscLh8Rg2HTxPUXfhhAXDptTLhp1t2J",
@@ -325,13 +333,13 @@
     "ogImage": "https://governance.meta-collective.digital/realms/META/img/logo.png"
   },
   {
-    "symbol": "UXD",
+    "symbol": "UXP",
     "displayName": "UXDProtocol",
     "programId": "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw",
     "realmId": "GBXLYo4ycRNfzuzYeudu6y2ng4afNeW14WcpM2E4JJSL",
     "website": "https://uxd.fi",
     "twitter": "@UXDProtocol",
-    "ogImage": "/realms/UXD/img/uxd_logo.png"
+    "ogImage": "/realms/UXP/img/UXP-Black.png"
   },
   {
     "symbol": "MonkeVentures",
@@ -362,5 +370,66 @@
     "programId": "GRNPT8MPw3LYY6RdjsgKeFji5kMiG1fSxnxDjDBu4s73",
     "realmId": "5J2bRTkzoSXWKZMW4o5tyNsT7Zwn9dDkDt6rMz6Ze9u1",
     "ogImage": "/realms/Renpo/img/renpo_logo.png"
+  },
+  {
+    "symbol": "Ikohaus",
+    "displayName": "Ikohaus",
+    "programId": "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw",
+    "realmId": "WBmKxddpbtnVPXXUFCJf5BcC4qfCRZ9wsZSxTZBjdM5",
+    "website": "https://ikohaus.business.site",
+    "twitter": "@Ikohaus",
+    "ogImage": "/realms/Ikohaus/img/Ikohaus_Logo.png"
+  },
+  {
+    "symbol": "Senshi",
+    "displayName": "SenshiDAO",
+    "programId": "Ghope52FuF6HU3AAhJuAAyS2fiqbVhkAotb7YprL5tdS",
+    "realmId": "2ZcZV69pMY5rrPSNSsAP7y7QgQygzAgDYKvVFvf6H9fR"
+  },
+  {
+    "symbol": "DAKU",
+    "displayName": "DAKU DAO",
+    "programId": "Ghope52FuF6HU3AAhJuAAyS2fiqbVhkAotb7YprL5tdS",
+    "realmId": "9osGkueZJvHdZ8RbcGjgW7usUyBSCKQZSuFrujReXZpx",
+    "ogImage": "/realms/DAKU/img/daku_logo.png"
+  },
+  {
+    "symbol": "MMCC",
+    "displayName": "MMCC ClubDAO",
+    "programId": "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw",
+    "realmId": "6UkNFSiwje4Rs4EB31V4bj8YQYx9viGTxD3WyrM3j5R2",
+    "website": "https://linktr.ee/MeerkatMillionaires",
+    "twitter": "@mmccsolana",
+    "ogImage": "/realms/MMCC/img/MMCC_Logo.png"
+  },
+  {
+    "symbol": "montanaland",
+    "displayName": "Montana Land sDAO",
+    "programId": "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw",
+    "realmId": "GURMs9sYzDNPhTJxsuDvFUpoBom8VKFicbjxK57hCj4e",
+    "ogImage": "/realms/MontanaLand/img/logo.png",
+    "website": "https://montanaland.slowdao.xyz/",
+    "twitter": "@montanaland"
+  },
+  {
+    "symbol": "$RIBS",
+    "displayName": "ROYAL LION DAO",
+    "programId": "Ghope52FuF6HU3AAhJuAAyS2fiqbVhkAotb7YprL5tdS",
+    "realmId": "2ChWrquGfvcECwA3DRDhkGEzidyc7fTZXxJrkzUvjnJE",
+    "ogImage": "/realms/RIBS/img/lion_logo.png"
+  },
+  {
+    "symbol": "$PANDA",
+    "displayName": "Panda Fraternity DAO",
+    "programId": "Ghope52FuF6HU3AAhJuAAyS2fiqbVhkAotb7YprL5tdS",
+    "realmId": "2TTR5PXXHQFTjYedHfYQpEe1GTwwYFuoywawVnSi1RLb",
+    "ogImage": "/realms/PANDA/img/PandaDAOlogo.png"
+  },
+  {
+    "symbol": "XPWizards",
+    "displayName": "XPWizardsDAO",
+    "programId": "Ghope52FuF6HU3AAhJuAAyS2fiqbVhkAotb7YprL5tdS",
+    "realmId": "7FMLXrTxwEUKoyMJdumd8A2nWkgq4bToQq5Uqds8kRsu",
+    "ogImage": "/realms/XPWizards/img/xpwizlogo.png"
   }
 ]

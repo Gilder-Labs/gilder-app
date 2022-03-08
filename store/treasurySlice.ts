@@ -104,8 +104,8 @@ export const fetchVaults = createAsyncThunk(
           governance.account.config.minCouncilTokensToCreateProposal.toNumber(),
         totalProposalCount: governance.account.proposalCount,
         votingProposalCount: governance.account.votingProposalCount,
-        voteThresholdPercentage:
-          governance.account.config.voteThresholdPercentage,
+        // voteThresholdPercentage:
+        //   governance.account.config.voteThresholdPercentage,
         accountType: governance.account.accountType,
         isAccountGovernance: governance.account.isAccountGovernance(),
         isMintGovernance: governance.account.isMintGovernance(),

@@ -11,8 +11,15 @@ export default function ProposalScreen({
     (state) => state.proposals
   );
 
+  const handleProposalSelect = (proposal: Proposal) => {
+    //@ts-ignore
+    navigation.push("ProposalDetail", {
+      proposal: proposal,
+    });
+  };
+
   const renderProposal = ({ item }: any) => {
-    return <ProposalCard proposal={item} />;
+    return <ProposalCard proposal={item} onClick={handleProposalSelect} />;
   };
 
   return (
