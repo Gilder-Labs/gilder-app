@@ -3,7 +3,7 @@ import styled from "styled-components/native";
 
 interface BadgeProps {
   title: string;
-  type: "success" | "pending" | "error" | "gray";
+  type: "success" | "pending" | "error" | "gray" | "warning";
   size?: "default" | "small";
 }
 

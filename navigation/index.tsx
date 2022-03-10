@@ -35,7 +35,7 @@ function DrawerScreen() {
       drawerContent={(props) => <DrawerContentContainer {...props} />}
       screenOptions={{
         drawerActiveBackgroundColor: theme?.gray[800],
-        drawerActiveTintColor: theme?.primary[400],
+        drawerActiveTintColor: theme?.gray[200],
         drawerInactiveTintColor: theme?.gray[400],
         drawerStyle: {
           width: 320,
@@ -133,12 +133,12 @@ export default function Navigation({}: {}) {
   const NavigationTheme = {
     dark: false,
     colors: {
-      primary: theme?.primary[400],
+      primary: theme?.gray[400],
       background: theme?.gray[1000],
       card: theme?.gray[1000],
       text: theme?.gray[200],
       border: theme?.gray[1000],
-      notification: theme?.primary[700],
+      notification: theme?.gray[700],
     },
   };
 
@@ -174,9 +174,9 @@ export default function Navigation({}: {}) {
           <Stack.Screen
             name="ProposalDetail"
             component={ProposalDetailScreen}
-            // options={({ route }) => ({
-            //   title: `...`,
-            // })}
+            options={({ route }) => ({
+              title: "Proposal Details",
+            })}
           />
         </Stack.Navigator>
       </NavigationContainer>

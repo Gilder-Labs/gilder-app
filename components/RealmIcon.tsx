@@ -59,8 +59,8 @@ export const RealmIcon = ({ realmId }: RealmIconProps) => {
 };
 
 const Container = styled.View`
-  height: 36px;
-  min-width: 36px;
+  height: 38px;
+  min-width: 38px;
   border-radius: 4px;
   overflow: hidden;
   border-radius: 100px;
@@ -69,10 +69,10 @@ const Container = styled.View`
 `;
 
 const RealmIconImage = styled.Image`
-  width: 36px;
-  min-width: 36px;
-  height: 36px;
-  min-height: 36px;
+  width: 38px;
+  min-width: 38px;
+  height: 38px;
+  min-height: 38px;
   justify-content: center;
   align-self: center;
   overflow: hidden;

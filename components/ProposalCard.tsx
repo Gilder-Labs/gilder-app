@@ -76,27 +76,27 @@ export const ProposalCard = ({ proposal, onClick }: ProposalCardProps) => {
     <Container isVoting={status === "Voting"} onPress={onClick}>
       <TextContainer>
         <ProposalTitle>{name}</ProposalTitle>
-      </TextContainer>
-      <BadgeRow>
-        <DateText>{format(dateTimestamp * 1000, "MMM d, yyyy - p")}</DateText>
-        {/* @ts-ignore */}
         <Badge title={status} type={proposalStatusKey[status]} />
-      </BadgeRow>
-      {/* <Description>{description}</Description> */}
-      <Votes>
-        <VoteCountRow>
-          <VoteText>
-            Approve - {numeral(yesVotes).format("0a")} ({yesPercentage}%)
-          </VoteText>
-          <VoteText>
-            Deny - {numeral(noVotes).format("0a")} ({noPercentage}%)
-          </VoteText>
-        </VoteCountRow>
-        <VoteContainer>
-          <VoteYes percent={yesPercentage} />
-          <VoteNo percent={noPercentage} />
-        </VoteContainer>
-      </Votes>
+      </TextContainer>
+      <ProposalSubData>
+        <DateText>{format(dateTimestamp * 1000, "MMM d, yyyy - p")}</DateText>
+      </ProposalSubData>
+      {status === "Voting" && (
+        <Votes>
+          <VoteCountRow>
+            <VoteText>
+              Approve - {numeral(yesVotes).format("0a")} ({yesPercentage}%)
+            </VoteText>
+            <VoteText>
+              Deny - {numeral(noVotes).format("0a")} ({noPercentage}%)
+            </VoteText>
+          </VoteCountRow>
+          <VoteContainer>
+            <VoteYes percent={yesPercentage} />
+            <VoteNo percent={noPercentage} />
+          </VoteContainer>
+        </Votes>
+      )}
     </Container>
   );
 };
@@ -108,20 +108,20 @@ const Container = styled.TouchableOpacity<{ isVoting: boolean }>`
   border-radius: 8px;
   background: ${(props: any) => props.theme.gray[800]};
   flex-direction: column;
-  border: ${(props: any) =>
+  /* border: ${(props: any) =>
     props.isVoting
       ? `2px solid ${props.theme.gray[400]}}`
-      : "2px solid transparent"};
+      : "2px solid transparent"}; */
 `;
 
-const BadgeRow = styled.View`
+const ProposalSubData = styled.View`
   flex-direction: row;
   justify-content: space-between;
   padding-left: ${(props: any) => props.theme.spacing[4]};
   padding-right: ${(props: any) => props.theme.spacing[4]};
 
   /* align-items: center; */
-  margin-bottom: ${(props: any) => props.theme.spacing[2]};
+  margin-bottom: ${(props: any) => props.theme.spacing[3]};
 `;
 
 const ProposalTitle = styled.Text`
@@ -129,6 +129,9 @@ const ProposalTitle = styled.Text`
   font-weight: bold;
   font-size: 18px;
   line-height: 24px;
+  flex-wrap: wrap;
+  max-width: 240px;
+  padding-right: ${(props: any) => props.theme.spacing[2]};
 `;
 
 const DateText = styled.Text`
@@ -139,13 +142,14 @@ const DateText = styled.Text`
 
 const TextContainer = styled.View`
   padding: ${(props: any) => props.theme.spacing[4]};
-  padding-bottom: ${(props: any) => props.theme.spacing[2]};
+  padding-bottom: ${(props: any) => props.theme.spacing[1]};
+  flex-direction: row;
+  justify-content: space-between;
   /* margin-bottom: ${(props: any) => props.theme.spacing[2]}; */
 `;
 
 const Description = styled.Text`
   color: ${(props: any) => props.theme.gray[200]};
-  padding-left: ${(props: any) => props.theme.spacing[4]};
   padding-right: ${(props: any) => props.theme.spacing[4]};
 
   margin-bottom: ${(props: any) => props.theme.spacing[3]};
@@ -169,7 +173,7 @@ const VoteNo = styled.View<{ percent: any }>`
 const VoteYes = styled.View<{ percent: any }>`
   width: ${(props) => props.percent}%;
   height: 8px;
-  background: ${(props) => props.theme.gray[200]};
+  background: ${(props) => props.theme.gray[400]};
   border-radius: 4px;
 `;
 

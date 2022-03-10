@@ -49,19 +49,8 @@ const ContainerButton = styled.TouchableOpacity<{ isSelected: boolean }>`
   background: ${(props: any) => props.theme.gray[900]};
   border: ${(props: any) =>
     props.isSelected
-      ? `2px solid ${props.theme.aqua[600]}}`
-      : "2px solid transparent"};
+      ? `1px solid ${props.theme.primary[400]}}`
+      : "1px solid transparent"};
 `;
 
 const Container = styled.View``;
-
-const RealmSelectedIndicator = styled.View`
-  width: 6px;
-  height: 36px;
-  left: -10px;
-  top: 4px;
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
-  background: ${(props: any) => props.theme.gray[300]};
-  position: absolute;
-`;
