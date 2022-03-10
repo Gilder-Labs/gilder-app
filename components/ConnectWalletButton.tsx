@@ -11,6 +11,7 @@ import Constants, { AppOwnership } from "expo-constants";
 import * as Linking from "expo-linking";
 import { getED25519Key } from "@toruslabs/openlogin-ed25519";
 import bs58 from "bs58";
+import { abbreviatePublicKey } from "../utils";
 
 import { URL } from "react-native-url-polyfill";
 
@@ -98,7 +99,9 @@ export const ConnectWalletButton = ({}: ConnectWalletProps) => {
           color={theme.gray[400]}
           style={{ marginRight: 8 }}
         />
-        <WalletConnectText>Connect Wallet</WalletConnectText>
+        <WalletConnectText>
+          {publicKey ? abbreviatePublicKey(publicKey) : "Connect Wallet"}
+        </WalletConnectText>
       </ConnectButton>
     </ConnectWalletContainer>
   );
