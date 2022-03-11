@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { Badge } from "./Badge";
-import { format } from "date-fns";
+import { format, getUnixTime, formatDistance } from "date-fns";
 import numeral from "numeral";
 
 interface ProposalCardProps {
   proposal: any;
   onClick: any;
+  governance: any;
 }
 
 // "success" | "pending" | "error";
@@ -21,14 +22,19 @@ const proposalStatusKey = {
   Defeated: "error",
 };
 
-export const ProposalCard = ({ proposal, onClick }: ProposalCardProps) => {
+export const ProposalCard = ({
+  proposal,
+  onClick,
+  governance,
+}: ProposalCardProps) => {
   const {
     status,
     name,
-    description,
     getStateTimestamp,
     getYesVoteCount,
     getNoVoteCount,
+    isPreVotingState,
+    votingAt,
   } = proposal;
 
   // @ts-ignore
@@ -44,33 +50,32 @@ export const ProposalCard = ({ proposal, onClick }: ProposalCardProps) => {
 
   const dateTimestamp = proposal?.votingCompletedAt || getStateTimestamp;
 
-  // CODE FOR COUNTDOWN FROM GOV UI
-  // const getTimeToVoteEnd = () => {
-  //   const now = moment().unix()
+  const getTimeToVoteEnd = () => {
+    const now = getUnixTime(new Date());
 
-  //   let timeToVoteEnd = proposal.isPreVotingState()
-  //     ? governance.config.maxVotingTime
-  //     : (proposal.votingAt?.toNumber() ?? 0) +
-  //       governance.config.maxVotingTime -
-  //       now
+    let timeToVoteEnd = isPreVotingState
+      ? governance?.maxVotingTime
+      : (votingAt ?? 0) + governance?.maxVotingTime - now;
 
-  //   if (timeToVoteEnd <= 0) {
-  //     return ZeroCountdown
-  //   }
+    if (timeToVoteEnd <= 0) {
+      return 0;
+    }
 
-  //   const days = Math.floor(timeToVoteEnd / 86400)
-  //   timeToVoteEnd -= days * 86400
+    const days = Math.floor(timeToVoteEnd / 86400);
+    timeToVoteEnd -= days * 86400;
 
-  //   const hours = Math.floor(timeToVoteEnd / 3600) % 24
-  //   timeToVoteEnd -= hours * 3600
+    const hours = Math.floor(timeToVoteEnd / 3600) % 24;
+    timeToVoteEnd -= hours * 3600;
 
-  //   const minutes = Math.floor(timeToVoteEnd / 60) % 60
-  //   timeToVoteEnd -= minutes * 60
+    const minutes = Math.floor(timeToVoteEnd / 60) % 60;
+    timeToVoteEnd -= minutes * 60;
 
-  //   const seconds = Math.floor(timeToVoteEnd % 60)
+    const seconds = Math.floor(timeToVoteEnd % 60);
+    return { days, hours, minutes, seconds };
+  };
 
-  //   return { days, hours, minutes, seconds }
-  // }
+  const timeLeft = getTimeToVoteEnd();
+  const isVoting = status === "Voting";
 
   return (
     <Container isVoting={status === "Voting"} onPress={onClick}>
@@ -80,8 +85,24 @@ export const ProposalCard = ({ proposal, onClick }: ProposalCardProps) => {
       </TextContainer>
       <ProposalSubData>
         <DateText>{format(dateTimestamp * 1000, "MMM d, yyyy - p")}</DateText>
+        {isVoting ? (
+          <TimeContainer>
+            <TimeText>
+              Ends in {timeLeft.days && `${timeLeft.days}d: `}
+              {timeLeft.hours && `${timeLeft.hours}h: `}
+              {timeLeft.minutes && `${timeLeft.minutes}m`}
+            </TimeText>
+          </TimeContainer>
+        ) : (
+          <StatusText>
+            {status}{" "}
+            {formatDistance(getStateTimestamp * 1000, new Date(), {
+              addSuffix: true,
+            })}
+          </StatusText>
+        )}
       </ProposalSubData>
-      {status === "Voting" && (
+      {isVoting && (
         <Votes>
           <VoteCountRow>
             <VoteText>
@@ -115,13 +136,11 @@ const Container = styled.TouchableOpacity<{ isVoting: boolean }>`
 `;
 
 const ProposalSubData = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-start;
   padding-left: ${(props: any) => props.theme.spacing[4]};
   padding-right: ${(props: any) => props.theme.spacing[4]};
-
-  /* align-items: center; */
   margin-bottom: ${(props: any) => props.theme.spacing[3]};
+  align-items: flex-start;
 `;
 
 const ProposalTitle = styled.Text`
@@ -138,6 +157,12 @@ const DateText = styled.Text`
   color: ${(props: any) => props.theme.gray[500]}
   font-weight: bold;
   font-size: 12px;
+  margin-bottom:  ${(props: any) => props.theme.spacing[2]};
+`;
+
+const StatusText = styled.Text`
+  color: ${(props: any) => props.theme.gray[300]}
+  font-size: 14px;
 `;
 
 const TextContainer = styled.View`
@@ -148,13 +173,20 @@ const TextContainer = styled.View`
   /* margin-bottom: ${(props: any) => props.theme.spacing[2]}; */
 `;
 
-const Description = styled.Text`
+const TimeContainer = styled.View`
   color: ${(props: any) => props.theme.gray[200]};
-  padding-right: ${(props: any) => props.theme.spacing[4]};
+  padding: ${(props: any) => props.theme.spacing[1]};
+  background: ${(props: any) => props.theme.gray[1000]};
+  flex: 1;
+  border-radius: 4px;
+  justify-content: space-between;
+  flex-direction: row;
+`;
 
-  margin-bottom: ${(props: any) => props.theme.spacing[3]};
+const TimeText = styled.Text`
+  color: ${(props: any) => props.theme.gray[200]};
   line-height: 20px;
-  font-size: 14px;
+  font-size: 16px;
 `;
 
 const VoteContainer = styled.View`
@@ -192,4 +224,9 @@ const Votes = styled.View`
   background: ${(props) => props.theme.gray[700]};
   padding: ${(props: any) => props.theme.spacing[4]};
   border-radius: 8px;
+`;
+
+const EmptyView = styled.View`
+  width: 100px;
+  background: red;
 `;

@@ -11,6 +11,10 @@ export default function ProposalScreen({
     (state) => state.proposals
   );
 
+  const { governancesMap, isLoadingVaults } = useAppSelector(
+    (state) => state.treasury
+  );
+
   const handleProposalSelect = (proposal: Proposal) => {
     //@ts-ignore
     navigation.push("ProposalDetail", {
@@ -23,13 +27,14 @@ export default function ProposalScreen({
       <ProposalCard
         proposal={item}
         onClick={() => handleProposalSelect(item)}
+        governance={governancesMap[item.governanceId]}
       />
     );
   };
 
   return (
     <Container>
-      {isLoadingProposals ? (
+      {isLoadingProposals && isLoadingVaults ? (
         <Loading />
       ) : (
         <FlatList
