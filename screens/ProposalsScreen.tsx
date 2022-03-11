@@ -11,9 +11,11 @@ export default function ProposalScreen({
     (state) => state.proposals
   );
 
-  const { governancesMap, isLoadingVaults } = useAppSelector(
+  const { governancesMap, isLoadingVaults, tokenMap } = useAppSelector(
     (state) => state.treasury
   );
+
+  const { selectedRealm } = useAppSelector((state) => state.realms);
 
   const handleProposalSelect = (proposal: Proposal) => {
     //@ts-ignore
@@ -23,11 +25,17 @@ export default function ProposalScreen({
   };
 
   const renderProposal = ({ item }: any) => {
+    const { communityMint, councilMint } = selectedRealm;
+    const communityToken = tokenMap[communityMint];
+    const councilToken = tokenMap[councilMint];
+
     return (
       <ProposalCard
         proposal={item}
         onClick={() => handleProposalSelect(item)}
         governance={governancesMap[item.governanceId]}
+        communityToken={communityToken}
+        councilToken={councilToken}
       />
     );
   };

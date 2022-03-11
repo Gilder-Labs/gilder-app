@@ -19,6 +19,7 @@ export interface TreasuryState {
   vaults: Array<any>;
   governances: Array<any>;
   governancesMap: any;
+  tokenMap: any;
 }
 
 const initialState: TreasuryState = {
@@ -27,6 +28,7 @@ const initialState: TreasuryState = {
   tokenPriceData: null,
   governances: [],
   governancesMap: null,
+  tokenMap: null,
 };
 
 let connection = new Connection(RPC_CONNECTION, "confirmed");
@@ -40,6 +42,7 @@ export const fetchVaults = createAsyncThunk(
       new PublicKey(realm.governanceId),
       new PublicKey(realm.pubKey)
     );
+    const tokenMap = {};
 
     // console.log("governances", rawGovernances);
 
@@ -75,13 +78,17 @@ export const fetchVaults = createAsyncThunk(
         tokens: vault.value.map((token) => {
           let tokenInfo = tokensData.get(token.account.data.parsed.info.mint);
           tokenIds.add(tokenInfo?.extensions?.coingeckoId);
-          return {
+
+          const tokenData = {
             ...tokenInfo,
             mint: token.account.data.parsed.info.mint,
             owner: token.account.data.parsed.info.owner.toString(),
             tokenAmount: token.account.data.parsed.info.tokenAmount,
             vaultId: token.pubkey.toString(),
           };
+          //@ts-ignore
+          tokenMap[tokenData.mint] = tokenData;
+          return tokenData;
         }),
       };
     });
@@ -130,6 +137,7 @@ export const fetchVaults = createAsyncThunk(
       tokenPriceData: tokenPriceResponse.data,
       governances: governancesParsed,
       governancesMap: governancesMap,
+      tokenMap: tokenMap,
     };
   }
 );
@@ -159,6 +167,7 @@ export const treasurySlice = createSlice({
         state.tokenPriceData = tokenPriceObject;
         state.governances = action.payload.governances;
         state.governancesMap = action.payload.governancesMap;
+        state.tokenMap = action.payload.tokenMap;
       });
   },
 });

@@ -3,11 +3,14 @@ import styled from "styled-components/native";
 import { Badge } from "./Badge";
 import { format, getUnixTime, formatDistance } from "date-fns";
 import numeral from "numeral";
+import BigNumber from "big-number";
 
 interface ProposalCardProps {
   proposal: any;
   onClick: any;
   governance: any;
+  communityToken: Token;
+  councilToken: Token;
 }
 
 // "success" | "pending" | "error";
@@ -26,6 +29,8 @@ export const ProposalCard = ({
   proposal,
   onClick,
   governance,
+  communityToken,
+  councilToken,
 }: ProposalCardProps) => {
   const {
     status,
@@ -74,6 +79,19 @@ export const ProposalCard = ({
     return { days, hours, minutes, seconds };
   };
 
+  const getVoteFormatted = (votes: string) => {
+    console.log("Community Token", communityToken);
+    console.log("Council token", councilToken);
+    let voteString;
+    if (communityToken) {
+      voteString = votes.slice(0, -communityToken.tokenAmount.decimals);
+    } else {
+      voteString = votes.slice(0, -councilToken.tokenAmount.decimals);
+    }
+
+    return numeral(Number(voteString)).format("0,0");
+  };
+
   const timeLeft = getTimeToVoteEnd();
   const isVoting = status === "Voting";
 
@@ -87,8 +105,9 @@ export const ProposalCard = ({
         <DateText>{format(dateTimestamp * 1000, "MMM d, yyyy - p")}</DateText>
         {isVoting ? (
           <TimeContainer>
+            <StatusText>Ends in </StatusText>
             <TimeText>
-              Ends in {timeLeft.days && `${timeLeft.days}d: `}
+              {timeLeft.days && `${timeLeft.days}d: `}
               {timeLeft.hours && `${timeLeft.hours}h: `}
               {timeLeft.minutes && `${timeLeft.minutes}m`}
             </TimeText>
@@ -106,10 +125,10 @@ export const ProposalCard = ({
         <Votes>
           <VoteCountRow>
             <VoteText>
-              Approve - {numeral(yesVotes).format("0a")} ({yesPercentage}%)
+              Approve - {getVoteFormatted(getYesVoteCount)} ({yesPercentage}%)
             </VoteText>
             <VoteText>
-              Deny - {numeral(noVotes).format("0a")} ({noPercentage}%)
+              Deny - {getVoteFormatted(getNoVoteCount)} ({noPercentage}%)
             </VoteText>
           </VoteCountRow>
           <VoteContainer>
@@ -162,7 +181,7 @@ const DateText = styled.Text`
 
 const StatusText = styled.Text`
   color: ${(props: any) => props.theme.gray[300]}
-  font-size: 14px;
+  font-size: 16px;
 `;
 
 const TextContainer = styled.View`
@@ -174,19 +193,17 @@ const TextContainer = styled.View`
 `;
 
 const TimeContainer = styled.View`
-  color: ${(props: any) => props.theme.gray[200]};
-  padding: ${(props: any) => props.theme.spacing[1]};
-  background: ${(props: any) => props.theme.gray[1000]};
   flex: 1;
   border-radius: 4px;
   justify-content: space-between;
   flex-direction: row;
+  align-items: center;
 `;
 
 const TimeText = styled.Text`
-  color: ${(props: any) => props.theme.gray[200]};
-  line-height: 20px;
+  color: ${(props: any) => props.theme.gray[300]};
   font-size: 16px;
+  font-weight: bold;
 `;
 
 const VoteContainer = styled.View`
