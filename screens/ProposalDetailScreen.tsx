@@ -39,14 +39,34 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
     isPreVotingState,
     votingAt,
     description,
+    governingTokenMint,
   } = proposal;
 
   const governance = governancesMap[proposal.governanceId];
   const { voteThresholdPercentage } = governance;
-  const { communityMintSupply, communityMintDecimals } = selectedRealm;
+
+  const {
+    communityMint,
+    communityMintSupply,
+    communityMintDecimals,
+    councilMint,
+    councilMintSupply,
+    councilMintDecimals,
+  } = selectedRealm;
+
+  const mintSupply =
+    governingTokenMint === communityMint
+      ? communityMintSupply
+      : councilMintSupply;
+  const mintDecimals =
+    governingTokenMint === communityMint
+      ? communityMintDecimals
+      : councilMintDecimals;
 
   const yesVotes = Number(getYesVoteCount);
   const noVotes = Number(getNoVoteCount);
+
+  console.log("proposal", proposal);
 
   const totalVotes = yesVotes + noVotes;
 
@@ -83,22 +103,24 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
 
   const getVoteFormatted = (votes: string) => {
     let voteString;
-    voteString = votes.slice(0, -communityMintDecimals);
+    if (mintDecimals === 0) {
+      return numeral(Number(votes)).format("0,0");
+    }
 
+    voteString = votes.slice(0, -mintDecimals);
     return numeral(Number(voteString)).format("0,0");
   };
 
   const getQuorum = () => {
-    const communityMintSupplyFormatted = communityMintSupply.slice(
-      0,
-      -communityMintDecimals
-    );
-    const yesVoteFormatted = Number(
-      getYesVoteCount.slice(0, -communityMintDecimals)
-    );
+    const mintSupplyFormatted =
+      mintDecimals === 0 ? mintSupply : mintSupply.slice(0, -mintDecimals);
+    const yesVoteFormatted =
+      mintDecimals === 0
+        ? getYesVoteCount
+        : Number(getYesVoteCount.slice(0, -mintDecimals));
 
     const totalVotes =
-      Number(communityMintSupplyFormatted) * (voteThresholdPercentage * 0.01);
+      Number(mintSupplyFormatted) * (voteThresholdPercentage * 0.01);
 
     const totalVotesNeeded = totalVotes - yesVoteFormatted;
     let totalVotesNeededPercentage = (yesVoteFormatted / totalVotes) * 100;

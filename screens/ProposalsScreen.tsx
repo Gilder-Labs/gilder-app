@@ -29,7 +29,15 @@ export default function ProposalScreen({
   const renderProposal = ({ item }: any) => {
     const proposalGovernance = governancesMap[item.governanceId];
     const { voteThresholdPercentage } = proposalGovernance;
-    const { communityMintSupply, communityMintDecimals } = selectedRealm;
+    const {
+      communityMint,
+      communityMintSupply,
+      communityMintDecimals,
+      councilMint,
+      councilMintSupply,
+      councilMintDecimals,
+    } = selectedRealm;
+    const { governingTokenMint } = item;
     // TODO handle council tokens
     // const councilToken = tokenMap?.[councilMint];
 
@@ -38,8 +46,16 @@ export default function ProposalScreen({
         proposal={item}
         onClick={() => handleProposalSelect(item)}
         governance={proposalGovernance}
-        communityMintSupply={communityMintSupply}
-        communityMintDecimals={communityMintDecimals}
+        mintSupply={
+          governingTokenMint === communityMint
+            ? communityMintSupply
+            : councilMintSupply
+        }
+        mintDecimals={
+          governingTokenMint === communityMint
+            ? communityMintDecimals
+            : councilMintDecimals
+        }
         voteThresholdPercentage={voteThresholdPercentage}
       />
     );

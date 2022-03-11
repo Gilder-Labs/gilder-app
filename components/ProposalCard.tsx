@@ -8,8 +8,8 @@ interface ProposalCardProps {
   proposal: any;
   onClick: any;
   governance: any;
-  communityMintSupply: string;
-  communityMintDecimals: number;
+  mintSupply: string;
+  mintDecimals: number;
   voteThresholdPercentage: number;
 }
 
@@ -27,8 +27,8 @@ export const ProposalCard = ({
   proposal,
   onClick,
   governance,
-  communityMintSupply,
-  communityMintDecimals,
+  mintSupply,
+  mintDecimals,
   voteThresholdPercentage,
 }: ProposalCardProps) => {
   const {
@@ -80,22 +80,24 @@ export const ProposalCard = ({
 
   const getVoteFormatted = (votes: string) => {
     let voteString;
-    voteString = votes.slice(0, -communityMintDecimals);
+    if (mintDecimals === 0) {
+      return numeral(Number(votes)).format("0,0");
+    }
 
+    voteString = votes.slice(0, -mintDecimals);
     return numeral(Number(voteString)).format("0,0");
   };
 
   const getQuorum = () => {
-    const communityMintSupplyFormatted = communityMintSupply.slice(
-      0,
-      -communityMintDecimals
-    );
-    const yesVoteFormatted = Number(
-      getYesVoteCount.slice(0, -communityMintDecimals)
-    );
+    const mintSupplyFormatted =
+      mintDecimals === 0 ? mintSupply : mintSupply.slice(0, -mintDecimals);
+    const yesVoteFormatted =
+      mintDecimals === 0
+        ? getYesVoteCount
+        : Number(getYesVoteCount.slice(0, -mintDecimals));
 
     const totalVotes =
-      Number(communityMintSupplyFormatted) * (voteThresholdPercentage * 0.01);
+      Number(mintSupplyFormatted) * (voteThresholdPercentage * 0.01);
 
     const totalVotesNeeded = totalVotes - yesVoteFormatted;
     let totalVotesNeededPercentage = (yesVoteFormatted / totalVotes) * 100;

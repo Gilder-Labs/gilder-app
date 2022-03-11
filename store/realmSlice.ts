@@ -101,7 +101,7 @@ export const fetchRealm = createAsyncThunk(
     }
     if (rawRealm.account.config.councilMint) {
       councilMintPromise = connection.getParsedAccountInfo(
-        new PublicKey(rawRealm.account.communityMint)
+        new PublicKey(rawRealm.account.config.councilMint)
       );
     }
 
