@@ -9,8 +9,10 @@ interface ProposalCardProps {
   proposal: any;
   onClick: any;
   governance: any;
-  communityToken: Token;
-  councilToken: Token;
+  communityMintSupply: string;
+  communityMintDecimals: number;
+  voteThresholdPercentage: number;
+  // councilToken: Token;
 }
 
 // "success" | "pending" | "error";
@@ -29,8 +31,9 @@ export const ProposalCard = ({
   proposal,
   onClick,
   governance,
-  communityToken,
-  councilToken,
+  communityMintSupply,
+  communityMintDecimals,
+  voteThresholdPercentage,
 }: ProposalCardProps) => {
   const {
     status,
@@ -54,6 +57,15 @@ export const ProposalCard = ({
   const noPercentage = noVotes ? Math.round((noVotes / totalVotes) * 100) : 0;
 
   const dateTimestamp = proposal?.votingCompletedAt || getStateTimestamp;
+
+  // const minimumYesVotes =
+  //   fmtTokenAmount(maxVoteWeight, proposalMint.decimals) *
+  //   (voteThresholdPct / 100)
+
+  //   const yesVotesRequired =
+  // proposalMint.decimals == 0
+  // ? Math.ceil(rawYesVotesRequired)
+  // : rawYesVotesRequired
 
   const getTimeToVoteEnd = () => {
     const now = getUnixTime(new Date());
@@ -80,17 +92,36 @@ export const ProposalCard = ({
   };
 
   const getVoteFormatted = (votes: string) => {
-    console.log("Community Token", communityToken);
-    console.log("Council token", councilToken);
     let voteString;
-    if (communityToken) {
-      voteString = votes.slice(0, -communityToken.tokenAmount.decimals);
-    } else {
-      voteString = votes.slice(0, -councilToken.tokenAmount.decimals);
-    }
+    voteString = votes.slice(0, -communityMintDecimals);
 
     return numeral(Number(voteString)).format("0,0");
   };
+
+  const getQuorum = () => {
+    const communityMintSupplyFormatted = communityMintSupply.slice(
+      0,
+      -communityMintDecimals
+    );
+    const yesVoteFormatted = Number(
+      getYesVoteCount.slice(0, -communityMintDecimals)
+    );
+
+    const totalVotes =
+      Number(communityMintSupplyFormatted) * (voteThresholdPercentage * 0.01);
+
+    const totalVotesNeeded = totalVotes - yesVoteFormatted;
+    let totalVotesNeededPercentage = (yesVoteFormatted / totalVotes) * 100;
+    totalVotesNeededPercentage =
+      totalVotesNeededPercentage > 100 ? 100 : totalVotesNeededPercentage;
+
+    return {
+      votesNeeded: numeral(Number(totalVotesNeeded)).format("0,0"),
+      totalVotesNeededPercentage: totalVotesNeededPercentage,
+    };
+  };
+
+  const quorumData = getQuorum();
 
   const timeLeft = getTimeToVoteEnd();
   const isVoting = status === "Voting";
@@ -125,13 +156,13 @@ export const ProposalCard = ({
         <Votes>
           <VoteCountRow>
             <VoteColumn>
-              <DateText>Approve</DateText>
+              <ApproveText>Yes</ApproveText>
               <VoteText>
                 {getVoteFormatted(getYesVoteCount)} ({yesPercentage}%)
               </VoteText>
             </VoteColumn>
             <VoteColumn>
-              <DateText style={{ textAlign: "right" }}>Deny</DateText>
+              <ApproveText style={{ textAlign: "right" }}>No</ApproveText>
               <VoteText>
                 {getVoteFormatted(getNoVoteCount)} ({noPercentage}%)
               </VoteText>
@@ -141,6 +172,21 @@ export const ProposalCard = ({
             <VoteYes percent={yesPercentage} />
             <VoteNo percent={noPercentage} />
           </VoteContainer>
+
+          {/* Quorum row */}
+          <VoteCountRow>
+            <VoteColumn>
+              <ApproveText>Approval Quorum</ApproveText>
+              <VoteText>
+                {Number(quorumData.votesNeeded) < 0
+                  ? "Quorum Reached"
+                  : `${quorumData.votesNeeded} yes votes still needed.`}
+              </VoteText>
+            </VoteColumn>
+          </VoteCountRow>
+          <QuorumContainer>
+            <VoteYes percent={quorumData.totalVotesNeededPercentage} />
+          </QuorumContainer>
         </Votes>
       )}
     </Container>
@@ -216,6 +262,13 @@ const VoteContainer = styled.View`
   flex-direction: row;
   background: ${(props: any) => props.theme.gray[900]};
   border-radius: 2px;
+  margin-bottom: ${(props: any) => props.theme.spacing[2]};
+`;
+
+const QuorumContainer = styled.View`
+  flex-direction: row;
+  background: ${(props: any) => props.theme.gray[900]};
+  border-radius: 2px;
 `;
 
 const VoteNo = styled.View<{ percent: any }>`
@@ -252,3 +305,10 @@ const Votes = styled.View`
 `;
 
 const VoteColumn = styled.View``;
+
+const ApproveText = styled.Text`
+color: ${(props: any) => props.theme.gray[400]}
+  font-weight: bold;
+  font-size: 12px;
+  margin-bottom:  ${(props: any) => props.theme.spacing[2]};
+`;

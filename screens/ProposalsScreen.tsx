@@ -11,11 +11,13 @@ export default function ProposalScreen({
     (state) => state.proposals
   );
 
-  const { governancesMap, isLoadingVaults, tokenMap } = useAppSelector(
+  const { governancesMap, isLoadingVaults } = useAppSelector(
     (state) => state.treasury
   );
 
-  const { selectedRealm } = useAppSelector((state) => state.realms);
+  const { selectedRealm, isLoadingSelectedRealm } = useAppSelector(
+    (state) => state.realms
+  );
 
   const handleProposalSelect = (proposal: Proposal) => {
     //@ts-ignore
@@ -25,24 +27,30 @@ export default function ProposalScreen({
   };
 
   const renderProposal = ({ item }: any) => {
-    const { communityMint, councilMint } = selectedRealm;
-    const communityToken = tokenMap[communityMint];
-    const councilToken = tokenMap[councilMint];
+    const proposalGovernance = governancesMap[item.governanceId];
+    const { voteThresholdPercentage } = proposalGovernance;
+    const { communityMintSupply, communityMintDecimals } = selectedRealm;
+    // TODO handle council tokens
+    // const councilToken = tokenMap?.[councilMint];
 
     return (
       <ProposalCard
         proposal={item}
         onClick={() => handleProposalSelect(item)}
         governance={governancesMap[item.governanceId]}
-        communityToken={communityToken}
-        councilToken={councilToken}
+        communityMintSupply={communityMintSupply}
+        communityMintDecimals={communityMintDecimals}
+        voteThresholdPercentage={voteThresholdPercentage}
       />
     );
   };
 
   return (
     <Container>
-      {isLoadingProposals && isLoadingVaults ? (
+      {isLoadingProposals ||
+      isLoadingVaults ||
+      isLoadingSelectedRealm ||
+      !selectedRealm ? (
         <Loading />
       ) : (
         <FlatList

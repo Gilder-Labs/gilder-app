@@ -13,6 +13,7 @@ export default function TreasuryScreen({
   const { tokenPriceData, vaults, isLoadingVaults } = useAppSelector(
     (state) => state.treasury
   );
+  const { isLoadingSelectedRealm } = useAppSelector((state) => state.realms);
   const [treasuryValue, setTreasuryValue] = useState("0");
 
   const getTreasuryTotalValue = () => {
@@ -50,7 +51,7 @@ export default function TreasuryScreen({
 
   return (
     <Container>
-      {isLoadingVaults ? (
+      {isLoadingVaults || isLoadingSelectedRealm ? (
         <Loading />
       ) : (
         <FlatList

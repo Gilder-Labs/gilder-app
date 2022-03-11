@@ -16,6 +16,7 @@ export interface realmState {
   realmsData: any;
   realmWatchlist: Array<string>;
   isLoadingRealms: boolean;
+  isLoadingSelectedRealm: boolean;
 }
 
 interface realmType {
@@ -34,6 +35,7 @@ const initialState: realmState = {
   realmsData: cleanedRealmData,
   realmWatchlist: [],
   isLoadingRealms: false,
+  isLoadingSelectedRealm: false,
 };
 
 // getMultipleAccounts - gets account info of a bunch of accounts in 1 api request
@@ -86,11 +88,49 @@ export const fetchRealm = createAsyncThunk(
   async (realmId: string) => {
     const rawRealm = await getRealm(connection, new PublicKey(realmId));
     // console.log("raw realm", rawRealm);
+    console.log("raw realm", rawRealm);
+    let communityMintData = null;
+    let communityMintPromise;
+    let councilMintData = null;
+    let councilMintPromise;
+
+    if (rawRealm.account.communityMint) {
+      communityMintPromise = connection.getParsedAccountInfo(
+        new PublicKey(rawRealm.account.communityMint)
+      );
+    }
+    if (rawRealm.account.config.councilMint) {
+      councilMintPromise = connection.getParsedAccountInfo(
+        new PublicKey(rawRealm.account.communityMint)
+      );
+    }
+
+    if (rawRealm.account.communityMint) {
+      communityMintData = await communityMintPromise;
+      console.log("community mint data", communityMintData);
+    }
+    if (rawRealm.account.config.councilMint) {
+      councilMintData = await councilMintPromise;
+      console.log("council mint data", councilMintData);
+    }
+
     return {
       name: rawRealm.account.name,
       pubKey: rawRealm.pubkey.toString(),
       communityMint: rawRealm.account.communityMint.toString(),
+      communityMintDecimals: communityMintData
+        ? communityMintData.value?.data?.parsed?.info?.decimals
+        : null,
+      communityMintSupply: communityMintData
+        ? communityMintData.value?.data?.parsed?.info?.supply
+        : null,
       councilMint: rawRealm.account?.config?.councilMint?.toString(),
+      councilMintDecimals: councilMintData
+        ? councilMintData.value?.data?.parsed?.info?.decimals
+        : null,
+      councilMintSupply: councilMintData
+        ? councilMintData.value?.data?.parsed?.info?.supply
+        : null,
       governanceId: rawRealm?.owner.toString(),
       accountType: rawRealm.account.accountType,
       votingProposalCount: rawRealm.account.votingProposalCount,
@@ -143,13 +183,15 @@ export const realmSlice = createSlice({
       .addCase(fetchRealms.fulfilled, (state, action: any) => {
         state.realms = action.payload.realms;
         state.isLoadingRealms = false;
-
         // state.selectedRealm = action.payload.selectedRealm;
       })
-      .addCase(fetchRealm.pending, (state) => {})
+      .addCase(fetchRealm.pending, (state) => {
+        state.isLoadingSelectedRealm = true;
+      })
       .addCase(fetchRealm.rejected, (state) => {})
       .addCase(fetchRealm.fulfilled, (state, action: any) => {
         state.selectedRealm = action.payload;
+        state.isLoadingSelectedRealm = false;
       });
   },
 });

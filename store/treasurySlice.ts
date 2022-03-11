@@ -95,6 +95,8 @@ export const fetchVaults = createAsyncThunk(
 
     const governancesMap = {};
 
+    console.log("raw governances", rawGovernances);
+
     const governancesParsed = rawGovernances.map((governance, index) => {
       let governanceId = governance.pubkey.toString();
       let data = {
@@ -111,8 +113,9 @@ export const fetchVaults = createAsyncThunk(
           governance.account.config.minCouncilTokensToCreateProposal.toNumber(),
         totalProposalCount: governance.account.proposalCount,
         votingProposalCount: governance.account.votingProposalCount,
-        // voteThresholdPercentage:
-        //   governance.account.config.voteThresholdPercentage,
+        // percentage of total tokens that need to vote for there to be quorum
+        voteThresholdPercentage:
+          governance.account.config.voteThresholdPercentage.value,
         accountType: governance.account.accountType,
         isAccountGovernance: governance.account.isAccountGovernance(),
         isMintGovernance: governance.account.isMintGovernance(),
