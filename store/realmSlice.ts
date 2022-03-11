@@ -170,6 +170,9 @@ export const realmSlice = createSlice({
     selectRealm: (state, action) => {
       state.selectedRealm = action.payload;
     },
+    realmLoaded: (state, action) => {
+      state.isLoadingSelectedRealm = false;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -182,7 +185,6 @@ export const realmSlice = createSlice({
       })
       .addCase(fetchRealms.fulfilled, (state, action: any) => {
         state.realms = action.payload.realms;
-        state.isLoadingRealms = false;
         // state.selectedRealm = action.payload.selectedRealm;
       })
       .addCase(fetchRealm.pending, (state) => {
@@ -191,11 +193,10 @@ export const realmSlice = createSlice({
       .addCase(fetchRealm.rejected, (state) => {})
       .addCase(fetchRealm.fulfilled, (state, action: any) => {
         state.selectedRealm = action.payload;
-        state.isLoadingSelectedRealm = false;
       });
   },
 });
 
-export const { toggleRealmInWatchlist } = realmSlice.actions;
+export const { toggleRealmInWatchlist, realmLoaded } = realmSlice.actions;
 
 export default realmSlice.reducer;

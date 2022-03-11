@@ -37,7 +37,7 @@ export default function ProposalScreen({
       <ProposalCard
         proposal={item}
         onClick={() => handleProposalSelect(item)}
-        governance={governancesMap[item.governanceId]}
+        governance={proposalGovernance}
         communityMintSupply={communityMintSupply}
         communityMintDecimals={communityMintDecimals}
         voteThresholdPercentage={voteThresholdPercentage}

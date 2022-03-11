@@ -3,7 +3,6 @@ import styled from "styled-components/native";
 import { Badge } from "./Badge";
 import { format, getUnixTime, formatDistance } from "date-fns";
 import numeral from "numeral";
-import BigNumber from "big-number";
 
 interface ProposalCardProps {
   proposal: any;
@@ -12,10 +11,7 @@ interface ProposalCardProps {
   communityMintSupply: string;
   communityMintDecimals: number;
   voteThresholdPercentage: number;
-  // councilToken: Token;
 }
-
-// "success" | "pending" | "error";
 
 const proposalStatusKey = {
   Succeeded: "success",
@@ -57,15 +53,6 @@ export const ProposalCard = ({
   const noPercentage = noVotes ? Math.round((noVotes / totalVotes) * 100) : 0;
 
   const dateTimestamp = proposal?.votingCompletedAt || getStateTimestamp;
-
-  // const minimumYesVotes =
-  //   fmtTokenAmount(maxVoteWeight, proposalMint.decimals) *
-  //   (voteThresholdPct / 100)
-
-  //   const yesVotesRequired =
-  // proposalMint.decimals == 0
-  // ? Math.ceil(rawYesVotesRequired)
-  // : rawYesVotesRequired
 
   const getTimeToVoteEnd = () => {
     const now = getUnixTime(new Date());
@@ -118,6 +105,7 @@ export const ProposalCard = ({
     return {
       votesNeeded: numeral(Number(totalVotesNeeded)).format("0,0"),
       totalVotesNeededPercentage: totalVotesNeededPercentage,
+      hasMetQuorum: Number(totalVotesNeeded) < 0,
     };
   };
 
@@ -127,7 +115,7 @@ export const ProposalCard = ({
   const isVoting = status === "Voting";
 
   return (
-    <Container isVoting={status === "Voting"} onPress={onClick}>
+    <Container onPress={onClick}>
       <TextContainer>
         <ProposalTitle>{name}</ProposalTitle>
         <Badge title={status} type={proposalStatusKey[status]} />
@@ -178,7 +166,7 @@ export const ProposalCard = ({
             <VoteColumn>
               <ApproveText>Approval Quorum</ApproveText>
               <VoteText>
-                {Number(quorumData.votesNeeded) < 0
+                {quorumData.hasMetQuorum
                   ? "Quorum Reached"
                   : `${quorumData.votesNeeded} yes votes still needed.`}
               </VoteText>
@@ -193,17 +181,13 @@ export const ProposalCard = ({
   );
 };
 
-const Container = styled.TouchableOpacity<{ isVoting: boolean }>`
+const Container = styled.TouchableOpacity`
   /* height: 80px; */
   width: 100%%;
   margin-bottom: ${(props: any) => props.theme.spacing[3]};
   border-radius: 8px;
   background: ${(props: any) => props.theme.gray[800]};
   flex-direction: column;
-  /* border: ${(props: any) =>
-    props.isVoting
-      ? `2px solid ${props.theme.gray[400]}}`
-      : "2px solid transparent"}; */
 `;
 
 const ProposalSubData = styled.View`
@@ -245,7 +229,6 @@ const TextContainer = styled.View`
 `;
 
 const TimeContainer = styled.View`
-  flex: 1;
   border-radius: 4px;
   justify-content: space-between;
   flex-direction: row;
@@ -262,7 +245,7 @@ const VoteContainer = styled.View`
   flex-direction: row;
   background: ${(props: any) => props.theme.gray[900]};
   border-radius: 2px;
-  margin-bottom: ${(props: any) => props.theme.spacing[2]};
+  margin-bottom: ${(props: any) => props.theme.spacing[3]};
 `;
 
 const QuorumContainer = styled.View`

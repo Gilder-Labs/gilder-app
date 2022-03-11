@@ -8,7 +8,7 @@ import * as Unicons from "@iconscout/react-native-unicons";
 
 import { useTheme } from "styled-components";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { fetchRealms, fetchRealm } from "../store/realmSlice";
+import { fetchRealms, realmLoaded } from "../store/realmSlice";
 import { fetchRealmMembers } from "../store/memberSlice";
 import { fetchRealmProposals } from "../store/proposalsSlice";
 import { fetchRealmActivity } from "../store/activitySlice";
@@ -127,6 +127,7 @@ export default function Navigation({}: {}) {
       );
       dispatch(fetchRealmProposals(selectedRealm));
       dispatch(fetchRealmMembers(selectedRealm));
+      dispatch(realmLoaded(""));
     }
   }, [selectedRealm]);
 
