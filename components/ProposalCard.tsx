@@ -124,12 +124,18 @@ export const ProposalCard = ({
       {isVoting && (
         <Votes>
           <VoteCountRow>
-            <VoteText>
-              Approve - {getVoteFormatted(getYesVoteCount)} ({yesPercentage}%)
-            </VoteText>
-            <VoteText>
-              Deny - {getVoteFormatted(getNoVoteCount)} ({noPercentage}%)
-            </VoteText>
+            <VoteColumn>
+              <DateText>Approve</DateText>
+              <VoteText>
+                {getVoteFormatted(getYesVoteCount)} ({yesPercentage}%)
+              </VoteText>
+            </VoteColumn>
+            <VoteColumn>
+              <DateText style={{ textAlign: "right" }}>Deny</DateText>
+              <VoteText>
+                {getVoteFormatted(getNoVoteCount)} ({noPercentage}%)
+              </VoteText>
+            </VoteColumn>
           </VoteCountRow>
           <VoteContainer>
             <VoteYes percent={yesPercentage} />
@@ -232,9 +238,11 @@ const VoteCountRow = styled.View`
 `;
 
 const VoteText = styled.Text`
-  color: ${(props: any) => props.theme.gray[300]};
+  color: ${(props: any) => props.theme.gray[200]};
   margin-bottom: ${(props: any) => props.theme.spacing[2]};
-  font-size: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: -${(props: any) => props.theme.spacing[1]};
 `;
 
 const Votes = styled.View`
@@ -243,7 +251,4 @@ const Votes = styled.View`
   border-radius: 8px;
 `;
 
-const EmptyView = styled.View`
-  width: 100px;
-  background: red;
-`;
+const VoteColumn = styled.View``;
