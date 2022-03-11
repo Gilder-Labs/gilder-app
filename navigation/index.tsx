@@ -29,6 +29,7 @@ const Stack = createNativeStackNavigator();
 
 function DrawerScreen() {
   const theme = useTheme();
+  const { activeProposals } = useAppSelector((state) => state.treasury);
   return (
     <Drawer.Navigator
       initialRouteName="Proposals"
@@ -80,9 +81,18 @@ function DrawerScreen() {
         component={ProposalsScreen}
         options={{
           drawerLabel: ({ focused, color }) => (
-            <DrawerTabText color={color} focused={focused}>
-              Proposals
-            </DrawerTabText>
+            <DrawerLabelContainer>
+              <DrawerTabText color={color} focused={focused}>
+                Proposals
+              </DrawerTabText>
+              {activeProposals > 0 && (
+                <NotificationContainer>
+                  <DrawerTabNotification>
+                    {activeProposals}
+                  </DrawerTabNotification>
+                </NotificationContainer>
+              )}
+            </DrawerLabelContainer>
           ),
           drawerIcon: ({ focused, color, size }) => (
             <Unicons.UilFileAlt size="28" color={color} />
@@ -195,4 +205,25 @@ const DrawerTabText = styled.Text<{ color: string; focused: boolean }>`
 const RootContainer = styled.View`
   flex: 1;
   background: black;
+`;
+
+const DrawerTabNotification = styled.Text`
+  color: ${(props) => props.theme.gray[100]};
+`;
+
+const NotificationContainer = styled.View`
+  background: ${(props) => props.theme.secondary[800]};
+  color: white;
+  height: 20px;
+  width: 20px;
+
+  border-radius: 100px;
+  justify-content: center;
+  align-items: center;
+`;
+
+const DrawerLabelContainer = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 `;

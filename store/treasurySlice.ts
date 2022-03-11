@@ -20,6 +20,7 @@ export interface TreasuryState {
   governances: Array<any>;
   governancesMap: any;
   tokenMap: any;
+  activeProposals: number;
 }
 
 const initialState: TreasuryState = {
@@ -29,6 +30,7 @@ const initialState: TreasuryState = {
   governances: [],
   governancesMap: null,
   tokenMap: null,
+  activeProposals: 0,
 };
 
 let connection = new Connection(RPC_CONNECTION, "confirmed");
@@ -43,8 +45,7 @@ export const fetchVaults = createAsyncThunk(
       new PublicKey(realm.pubKey)
     );
     const tokenMap = {};
-
-    // console.log("governances", rawGovernances);
+    let activeProposals = 0;
 
     const rawFilteredVaults = rawGovernances.filter(
       (gov) =>
@@ -95,10 +96,9 @@ export const fetchVaults = createAsyncThunk(
 
     const governancesMap = {};
 
-    console.log("raw governances", rawGovernances);
-
     const governancesParsed = rawGovernances.map((governance, index) => {
       let governanceId = governance.pubkey.toString();
+      activeProposals += governance.account.votingProposalCount;
       let data = {
         governanceId: governanceId,
         governedAccount: governance.account.governedAccount.toString(),
@@ -141,6 +141,7 @@ export const fetchVaults = createAsyncThunk(
       governances: governancesParsed,
       governancesMap: governancesMap,
       tokenMap: tokenMap,
+      activeProposals: activeProposals,
     };
   }
 );
@@ -171,6 +172,7 @@ export const treasurySlice = createSlice({
         state.governances = action.payload.governances;
         state.governancesMap = action.payload.governancesMap;
         state.tokenMap = action.payload.tokenMap;
+        state.activeProposals = action.payload.activeProposals;
       });
   },
 });
