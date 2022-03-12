@@ -5,7 +5,7 @@ import * as Unicons from "@iconscout/react-native-unicons";
 import { Connection, clusterApiUrl, Keypair, PublicKey } from "@solana/web3.js";
 import { RPC_CONNECTION } from "../constants/Solana";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { setWallet } from "../store/walletSlice";
+import { setWallet, openWallet } from "../store/walletSlice";
 import OpenLogin, { LoginProvider, Network } from "openlogin-expo-sdk";
 import Constants, { AppOwnership } from "expo-constants";
 import * as Linking from "expo-linking";
@@ -47,10 +47,20 @@ export const ConnectWalletButton = ({}: ConnectWalletProps) => {
         clientId:
           "BAuRcQ4h95bd4sIZ1gy1iRVCGAGzn0JK30mbgzEN404myjo02xKOw0t0B7ImCY_jNhl5XGOT7T1Q1cQ9wi-BkUQ",
         network: Network.MAINNET,
+        // @ts-ignore
+        // redirectUrl only applies for Android SDK, it is designated by iOS SDK in iOS, which is \(bundleId)://auth
+        // redirectUrl: 'com.example.openloginreactnativesdk://auth',
       });
       const state = await openlogin.login({
         loginProvider: LoginProvider.ANY,
         redirectUrl: resolvedRedirectUrl,
+        // Need to be  paying customer for white label
+        // extraLoginOptions: {
+        //   whiteLabelData: {
+        //     name: "Hello world",
+        //     dark: true,
+        //   },
+        // },
       });
       // get social login user info
       const userInfo = await state.userInfo;
@@ -84,6 +94,10 @@ export const ConnectWalletButton = ({}: ConnectWalletProps) => {
     }
   };
 
+  const handleOpenWallet = () => {
+    dispatch(openWallet(""));
+  };
+
   return (
     <ConnectWalletContainer>
       {/* <StyledText>Key: {key}</StyledText>
@@ -93,7 +107,7 @@ export const ConnectWalletButton = ({}: ConnectWalletProps) => {
       <StyledText>
         executionEnvironment: {Constants.executionEnvironment}
       </StyledText> */}
-      <ConnectButton onPress={login}>
+      <ConnectButton onPress={publicKey ? handleOpenWallet : login}>
         <Unicons.UilWallet
           size="20"
           color={theme.gray[400]}
