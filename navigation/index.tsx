@@ -208,14 +208,16 @@ const RootContainer = styled.View`
 `;
 
 const DrawerTabNotification = styled.Text`
-  color: ${(props) => props.theme.gray[100]};
+  color: ${(props) => props.theme.secondary[400]};
 `;
 
 const NotificationContainer = styled.View`
-  background: ${(props) => props.theme.secondary[800]};
-  color: white;
-  height: 20px;
-  width: 20px;
+  background: ${(props) => props.theme.secondary[800]}55;
+  border: 1px solid ${(props) => props.theme.secondary[800]};
+  height: 24px;
+  width: 24px;
+  margin-top: -4px;
+  margin-bottom: -4px;
 
   border-radius: 100px;
   justify-content: center;

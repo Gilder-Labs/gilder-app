@@ -1,18 +1,27 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { PublicKey, ConfirmedSignatureInfo, Connection } from "@solana/web3.js";
-import { ProposalState, getAllProposals } from "@solana/spl-governance";
+import {
+  ProposalState,
+  getAllProposals,
+  getGovernanceChatMessages,
+  GOVERNANCE_CHAT_PROGRAM_ID,
+} from "@solana/spl-governance";
 import { RPC_CONNECTION } from "../constants/Solana";
 
 export interface ProposalsState {
   isLoadingProposals: boolean;
   proposals: Array<any>;
   proposalsMap: any;
+  chatMessages: Array<ChatMessage>;
+  isLoadingChatMessages: boolean;
 }
 
 const initialState: ProposalsState = {
   isLoadingProposals: false,
   proposals: [],
   proposalsMap: null,
+  chatMessages: [],
+  isLoadingChatMessages: false,
 };
 
 let connection = new Connection(RPC_CONNECTION, "confirmed");
@@ -77,6 +86,41 @@ export const fetchRealmProposals = createAsyncThunk(
   }
 );
 
+export const fetchProposalChat = createAsyncThunk(
+  "realms/fetchProposalChat",
+  async (proposalId: string) => {
+    let rawChatMesssages;
+
+    try {
+      rawChatMesssages = await getGovernanceChatMessages(
+        connection,
+        GOVERNANCE_CHAT_PROGRAM_ID,
+        new PublicKey(proposalId)
+      );
+      console.log("raw proposal chats", rawChatMesssages);
+      let parsedChatMessages = rawChatMesssages.map((message) => {
+        return {
+          postedAt: message.account.postedAt.toNumber(),
+          replyTo: message.account.replyTo?.toString() || null,
+          proposalId: message.account.proposal.toString(),
+          body: message.account.body.value,
+          author: message.account.author.toString(),
+          isReply: message.account.body.isReply,
+          isReaction: message.account.body.type === 0,
+        };
+      });
+
+      parsedChatMessages = parsedChatMessages?.sort(
+        (a, b) => b.postedAt - a.postedAt
+      );
+
+      return parsedChatMessages;
+    } catch (error) {
+      console.log("error", error);
+    }
+  }
+);
+
 export const proposalsSlice = createSlice({
   name: "proposals",
   initialState,
@@ -93,6 +137,16 @@ export const proposalsSlice = createSlice({
         state.isLoadingProposals = false;
         state.proposals = action.payload.proposals;
         state.proposalsMap = action.payload.proposalsMap;
+      })
+      .addCase(fetchProposalChat.pending, (state) => {
+        state.isLoadingChatMessages = true;
+      })
+      .addCase(fetchProposalChat.rejected, (state) => {
+        state.isLoadingChatMessages = false;
+      })
+      .addCase(fetchProposalChat.fulfilled, (state, action: any) => {
+        state.isLoadingChatMessages = false;
+        state.chatMessages = action.payload;
       });
   },
 });

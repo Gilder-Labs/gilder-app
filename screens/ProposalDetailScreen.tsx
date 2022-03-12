@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components/native";
+import { FlatList } from "react-native";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { useTheme } from "styled-components";
-import { Badge } from "../components";
+import { Badge, ChatMessage } from "../components";
 import { format, getUnixTime, formatDistance } from "date-fns";
 import numeral from "numeral";
+import { fetchProposalChat } from "../store/proposalsSlice";
 
 interface ProposalDetailScreen {
   route: any;
@@ -25,10 +27,13 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const { selectedRealm } = useAppSelector((state) => state.realms);
-  const { proposalsMap } = useAppSelector((state) => state.proposals);
   const { governancesMap, isLoadingVaults } = useAppSelector(
     (state) => state.treasury
   );
+  const { chatMessages, isLoadingChatMessages } = useAppSelector(
+    (state) => state.proposals
+  );
+
   const { proposal } = route?.params;
   const {
     status,
@@ -42,8 +47,18 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
     governingTokenMint,
   } = proposal;
 
-  const governance = governancesMap[proposal.governanceId];
-  const { voteThresholdPercentage } = governance;
+  useEffect(() => {
+    dispatch(fetchProposalChat(proposal.proposalId));
+  }, [proposal]);
+
+  const governance = governancesMap?.[proposal.governanceId];
+
+  const voteThresholdPercentage = governance?.voteThresholdPercentage || 0;
+
+  // Return empty view till we have loaded
+  if (!selectedRealm) {
+    return <VoteColumn />;
+  }
 
   const {
     communityMint,
@@ -65,16 +80,11 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
 
   const yesVotes = Number(getYesVoteCount);
   const noVotes = Number(getNoVoteCount);
-
-  console.log("proposal", proposal);
-
   const totalVotes = yesVotes + noVotes;
-
   const yesPercentage = yesVotes
     ? Math.round((yesVotes / totalVotes) * 100)
     : 0;
   const noPercentage = noVotes ? Math.round((noVotes / totalVotes) * 100) : 0;
-
   const dateTimestamp = proposal?.votingCompletedAt || getStateTimestamp;
 
   const getTimeToVoteEnd = () => {
@@ -99,6 +109,17 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
 
     const seconds = Math.floor(timeToVoteEnd % 60);
     return { days, hours, minutes, seconds };
+  };
+
+  const renderChatMessage = ({ item }: any) => {
+    return (
+      <ChatMessage
+        message={item}
+        key={item.postedAt}
+        proposal={proposal}
+        isInProposal={true}
+      />
+    );
   };
 
   const getVoteFormatted = (votes: string) => {
@@ -140,90 +161,107 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
   const isVoting = status === "Voting";
 
   return (
-    <Container>
-      <TextContainer>
-        <ProposalTitle>{name}</ProposalTitle>
-        <Badge title={status} type={proposalStatusKey[status]} />
-      </TextContainer>
-      <ProposalSubData>
-        <DateText>{format(dateTimestamp * 1000, "MMM d, yyyy - p")}</DateText>
-        {isVoting ? (
-          <TimeContainer>
-            <StatusText>Ends in </StatusText>
-            <TimeText>
-              {timeLeft.days && `${timeLeft.days}d: `}
-              {timeLeft.hours && `${timeLeft.hours}h: `}
-              {timeLeft.minutes && `${timeLeft.minutes}m`}
-            </TimeText>
-          </TimeContainer>
-        ) : (
-          <StatusText>
-            {status}{" "}
-            {formatDistance(getStateTimestamp * 1000, new Date(), {
-              addSuffix: true,
-            })}
-          </StatusText>
-        )}
-      </ProposalSubData>
-      <Votes>
-        <VoteCountRow>
-          <VoteColumn>
-            <ApproveText>Yes</ApproveText>
-            <VoteText>
-              {getVoteFormatted(getYesVoteCount)} ({yesPercentage}%)
-            </VoteText>
-          </VoteColumn>
-          <VoteColumn>
-            <ApproveText style={{ textAlign: "right" }}>No</ApproveText>
-            <VoteText>
-              {getVoteFormatted(getNoVoteCount)} ({noPercentage}%)
-            </VoteText>
-          </VoteColumn>
-        </VoteCountRow>
-        <VoteContainer>
-          <VoteYes percent={yesPercentage} />
-          <VoteNo percent={noPercentage} />
-        </VoteContainer>
+    <FlatList
+      data={chatMessages}
+      renderItem={renderChatMessage}
+      keyExtractor={(item: any) => item.postedAt.toString()}
+      style={{
+        backgroundColor: theme.gray[900],
+      }}
+      ListFooterComponent={<EmptyView />}
+      scrollIndicatorInsets={{ right: 1 }}
+      removeClippedSubviews={true}
+      initialNumToRender={10}
+      ListHeaderComponent={
+        <Container>
+          <TextContainer>
+            <ProposalTitle>{name}</ProposalTitle>
+            <Badge title={status} type={proposalStatusKey[status]} />
+          </TextContainer>
+          <ProposalSubData>
+            <DateText>
+              {format(dateTimestamp * 1000, "MMM d, yyyy - p")}
+            </DateText>
+            {isVoting ? (
+              <TimeContainer>
+                <StatusText>Ends in </StatusText>
+                <TimeText>
+                  {`${timeLeft.days}d: `}
+                  {`${timeLeft.hours}h: `}
+                  {`${timeLeft.minutes}m`}
+                </TimeText>
+              </TimeContainer>
+            ) : (
+              <StatusText>
+                {status}{" "}
+                {formatDistance(getStateTimestamp * 1000, new Date(), {
+                  addSuffix: true,
+                })}
+              </StatusText>
+            )}
+          </ProposalSubData>
+          <Votes>
+            <VoteCountRow>
+              <VoteColumn>
+                <ApproveText>Yes</ApproveText>
+                <VoteText>
+                  {getVoteFormatted(getYesVoteCount)} ({yesPercentage}%)
+                </VoteText>
+              </VoteColumn>
+              <VoteColumn>
+                <ApproveText style={{ textAlign: "right" }}>No</ApproveText>
+                <VoteText>
+                  {getVoteFormatted(getNoVoteCount)} ({noPercentage}%)
+                </VoteText>
+              </VoteColumn>
+            </VoteCountRow>
+            <VoteContainer>
+              <VoteYes percent={yesPercentage} />
+              <VoteNo percent={noPercentage} />
+            </VoteContainer>
 
-        {/* Quorum row */}
-        <VoteCountRow>
-          <VoteColumn>
-            <ApproveText>Approval Quorum</ApproveText>
-            <VoteText>
-              {quorumData.hasMetQuorum
-                ? "Quorum Reached"
-                : `${quorumData.votesNeeded} yes votes still needed.`}
-            </VoteText>
-          </VoteColumn>
-        </VoteCountRow>
-        <QuorumContainer>
-          <VoteYes percent={quorumData.totalVotesNeededPercentage} />
-        </QuorumContainer>
-      </Votes>
-      <DescriptionText>{description} </DescriptionText>
-    </Container>
+            {/* Quorum row */}
+            <VoteCountRow>
+              <VoteColumn>
+                <ApproveText>Approval Quorum</ApproveText>
+                <VoteText>
+                  {quorumData.hasMetQuorum
+                    ? "Quorum Reached"
+                    : `${quorumData.votesNeeded} yes votes still needed.`}
+                </VoteText>
+              </VoteColumn>
+            </VoteCountRow>
+            <QuorumContainer>
+              <VoteYes percent={quorumData.totalVotesNeededPercentage} />
+            </QuorumContainer>
+          </Votes>
+          <DescriptionText>{description} </DescriptionText>
+
+          <ChatTitle>Discussion</ChatTitle>
+          <Divider />
+        </Container>
+      }
+    />
   );
 };
 
-const Container = styled.ScrollView`
-  width: 100%;
-  height: 100%;
+const Container = styled.View`
   flex-direction: column;
   background: ${(props: any) => props.theme.gray[900]};
 `;
 
 const ProposalSubData = styled.View`
   justify-content: flex-start;
-  padding-left: ${(props: any) => props.theme.spacing[4]};
-  padding-right: ${(props: any) => props.theme.spacing[4]};
-  margin-bottom: ${(props: any) => props.theme.spacing[3]};
+  padding-left: ${(props: any) => props.theme.spacing[3]};
+  padding-right: ${(props: any) => props.theme.spacing[3]};
+  margin-bottom: ${(props: any) => props.theme.spacing[4]};
   align-items: flex-start;
 `;
 
 const ProposalTitle = styled.Text`
   color: ${(props: any) => props.theme.gray[100]}
   font-weight: bold;
-  font-size: 18px;
+  font-size: 22px;
   line-height: 24px;
   flex-wrap: wrap;
   max-width: 240px;
@@ -234,8 +272,8 @@ const DescriptionText = styled.Text`
   color: ${(props: any) => props.theme.gray[100]};
   font-size: 16px;
   line-height: 24px;
-  padding-left: ${(props: any) => props.theme.spacing[4]};
-  padding-right: ${(props: any) => props.theme.spacing[4]};
+  padding-left: ${(props: any) => props.theme.spacing[3]};
+  padding-right: ${(props: any) => props.theme.spacing[3]};
 `;
 
 const DateText = styled.Text`
@@ -251,7 +289,7 @@ const StatusText = styled.Text`
 `;
 
 const TextContainer = styled.View`
-  padding: ${(props: any) => props.theme.spacing[4]};
+  padding: ${(props: any) => props.theme.spacing[3]};
   padding-bottom: ${(props: any) => props.theme.spacing[1]};
   flex-direction: row;
   justify-content: space-between;
@@ -315,16 +353,38 @@ const Votes = styled.View`
   background: ${(props) => props.theme.gray[700]};
   padding: ${(props: any) => props.theme.spacing[4]};
   border-radius: 8px;
-  margin-left: ${(props: any) => props.theme.spacing[4]};
-  margin-right: ${(props: any) => props.theme.spacing[4]};
+  margin-left: ${(props: any) => props.theme.spacing[3]};
+  margin-right: ${(props: any) => props.theme.spacing[3]};
   margin-bottom: ${(props: any) => props.theme.spacing[4]};
 `;
 
 const VoteColumn = styled.View``;
 
+const EmptyView = styled.View`
+  height: 200px;
+`;
+
 const ApproveText = styled.Text`
-color: ${(props: any) => props.theme.gray[400]}
+  color: ${(props: any) => props.theme.gray[400]}
   font-weight: bold;
   font-size: 12px;
   margin-bottom:  ${(props: any) => props.theme.spacing[2]};
+`;
+
+const ChatTitle = styled.Text`
+  color: ${(props: any) => props.theme.gray[100]}
+  font-weight: bold;
+  font-size: 20px;
+  padding-left: ${(props: any) => props.theme.spacing[4]};
+  padding-right: ${(props: any) => props.theme.spacing[4]};
+  margin-top: ${(props: any) => props.theme.spacing[4]};
+  margin-bottom: ${(props: any) => props.theme.spacing[2]};
+
+`;
+
+const Divider = styled.View`
+  height: 2px;
+  background: ${(props: any) => props.theme.gray[700]};
+  margin-left: ${(props: any) => props.theme.spacing[3]};
+  margin-right: ${(props: any) => props.theme.spacing[3]};
 `;

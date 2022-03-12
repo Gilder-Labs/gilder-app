@@ -44,14 +44,11 @@ export const ProposalCard = ({
   // @ts-ignore
   const yesVotes = Number(getYesVoteCount);
   const noVotes = Number(getNoVoteCount);
-
   const totalVotes = yesVotes + noVotes;
-
   const yesPercentage = yesVotes
     ? Math.round((yesVotes / totalVotes) * 100)
     : 0;
   const noPercentage = noVotes ? Math.round((noVotes / totalVotes) * 100) : 0;
-
   const dateTimestamp = proposal?.votingCompletedAt || getStateTimestamp;
 
   const getTimeToVoteEnd = () => {
@@ -112,7 +109,6 @@ export const ProposalCard = ({
   };
 
   const quorumData = getQuorum();
-
   const timeLeft = getTimeToVoteEnd();
   const isVoting = status === "Voting";
 
@@ -128,9 +124,9 @@ export const ProposalCard = ({
           <TimeContainer>
             <StatusText>Ends in </StatusText>
             <TimeText>
-              {timeLeft.days && `${timeLeft.days}d: `}
-              {timeLeft.hours && `${timeLeft.hours}h: `}
-              {timeLeft.minutes && `${timeLeft.minutes}m`}
+              {`${timeLeft.days}d: `}
+              {`${timeLeft.hours}h: `}
+              {`${timeLeft.minutes}m`}
             </TimeText>
           </TimeContainer>
         ) : (

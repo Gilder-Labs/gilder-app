@@ -5,14 +5,19 @@ import { format, formatDistance } from "date-fns";
 import { createAvatar } from "@dicebear/avatars";
 import * as style from "@dicebear/avatars-jdenticon-sprites";
 import { SvgXml } from "react-native-svg";
-import { getColorType } from "../utils";
+import { getColorType, abbreviatePublicKey } from "../utils";
 
 interface ChatMessageProps {
   message: ChatMessage;
   proposal: Proposal;
+  isInProposal?: boolean;
 }
 
-export const ChatMessage = ({ message, proposal }: ChatMessageProps) => {
+export const ChatMessage = ({
+  message,
+  proposal,
+  isInProposal = false,
+}: ChatMessageProps) => {
   const theme = useTheme();
   const { body, postedAt, proposalId, author } = message;
 
@@ -34,7 +39,9 @@ export const ChatMessage = ({ message, proposal }: ChatMessageProps) => {
       </IconContainer>
 
       <Column>
-        <ProposalName>{proposal?.name} </ProposalName>
+        <ProposalName>
+          {isInProposal ? abbreviatePublicKey(author) : proposal?.name}{" "}
+        </ProposalName>
         <MessageDate>
           {formatDistance(postedAt * 1000, new Date(), { addSuffix: true })}
         </MessageDate>
@@ -63,6 +70,7 @@ const MessageBody = styled.Text`
 const MessageDate = styled.Text`
   color: ${(props) => props.theme.gray[400]};
   margin-bottom: ${(props) => props.theme.spacing[3]};
+  font-size: 12px;
 `;
 
 const ProposalName = styled.Text`
