@@ -23,7 +23,7 @@ const persistConfig = {
   key: "root",
   storage: AsyncStorage,
   stateReconciler: autoMergeLevel2, // merge old and new stuff. Will need to blacklist to remove old data.
-  // whitelist: ["realms"],
+  whitelist: ["realms", "wallet"],
 };
 
 const rootReducer = combineReducers({

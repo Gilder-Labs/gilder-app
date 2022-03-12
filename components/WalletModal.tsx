@@ -6,7 +6,7 @@ import * as Unicons from "@iconscout/react-native-unicons";
 import { debounce, filter } from "lodash";
 import { useTheme } from "styled-components";
 import { RealmCard } from "./RealmCard";
-import { closeWallet } from "../store/walletSlice";
+import { closeWallet, disconnectWallet } from "../store/walletSlice";
 
 interface RealmSelectModalProps {}
 
@@ -20,20 +20,40 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
     dispatch(closeWallet(""));
   };
 
+  const handleDisconnect = () => {
+    dispatch(disconnectWallet(""));
+  };
+
+  // Remove header title thing
+  // Show wallet icon + public key
+  // Add copy icon
+  // Total balance
+  //Tabs:
+  //    Shows coins in wallet
+  //    show activity
+  // send? (later)
+  // on transaction - shows details and slider to approve, make modal half size
+
   return (
     <Modal
       animationType="slide"
       visible={isWalletOpen}
-      onRequestClose={() => {}}
+      onRequestClose={handleClose}
       presentationStyle="pageSheet"
+      transparent={true}
     >
-      <Header>
-        <View style={{ width: 48, height: 48 }} />
-        <HeaderTitle> Add Realm</HeaderTitle>
-        <CloseIconButton onPress={handleClose} activeOpacity={0.5}>
-          <Unicons.UilTimes size="20" color={theme.gray[200]} />
-        </CloseIconButton>
-      </Header>
+      <Container>
+        <Header>
+          <View style={{ width: 48, height: 48 }} />
+          <HeaderTitle>Wallet</HeaderTitle>
+          <CloseIconButton onPress={handleClose} activeOpacity={0.5}>
+            <Unicons.UilTimes size="20" color={theme.gray[200]} />
+          </CloseIconButton>
+        </Header>
+        <DisconnectButton onPress={handleDisconnect}>
+          <ButtonText>Disconnect Wallet</ButtonText>
+        </DisconnectButton>
+      </Container>
     </Modal>
   );
 };
@@ -65,4 +85,26 @@ const EmptyView = styled.View`
   height: 150px;
 `;
 
-const Container = styled.View``;
+const Container = styled.View`
+  /*  Styles for half size modal */
+  /* height: 50%; */
+  /* margin-top: auto; */
+  height: 100%;
+  background: blue;
+  border-radius: 20px;
+`;
+
+const DisconnectButton = styled.TouchableOpacity`
+  flex-direction: row;
+  height: 48px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  margin-bottom: 80px;
+
+  background: ${(props) => props.theme.gray[800]};
+`;
+
+const ButtonText = styled.Text`
+  color: ${(props) => props.theme.gray[400]};
+`;

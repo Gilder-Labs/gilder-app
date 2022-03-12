@@ -37,8 +37,8 @@ function DrawerScreen() {
       drawerContent={(props) => <DrawerContentContainer {...props} />}
       screenOptions={{
         drawerActiveBackgroundColor: theme?.gray[800],
-        drawerActiveTintColor: theme?.gray[200],
-        drawerInactiveTintColor: theme?.gray[400],
+        drawerActiveTintColor: theme?.gray[300],
+        drawerInactiveTintColor: theme?.gray[500],
         drawerStyle: {
           width: 320,
         },

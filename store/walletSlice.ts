@@ -26,6 +26,12 @@ export const walletSlice = createSlice({
       state.userInfo = action.payload.userInfo;
       state.isWalletOpen = true;
     },
+    disconnectWallet: (state, action) => {
+      state.publicKey = "";
+      state.privateKey = "";
+      state.userInfo = null;
+      state.isWalletOpen = false;
+    },
     openWallet: (state, action) => {
       state.isWalletOpen = true;
     },
@@ -36,6 +42,7 @@ export const walletSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setWallet, openWallet, closeWallet } = walletSlice.actions;
+export const { setWallet, openWallet, closeWallet, disconnectWallet } =
+  walletSlice.actions;
 
 export default walletSlice.reducer;

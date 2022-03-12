@@ -100,13 +100,10 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
 
     const days = Math.floor(timeToVoteEnd / 86400);
     timeToVoteEnd -= days * 86400;
-
     const hours = Math.floor(timeToVoteEnd / 3600) % 24;
     timeToVoteEnd -= hours * 3600;
-
     const minutes = Math.floor(timeToVoteEnd / 60) % 60;
     timeToVoteEnd -= minutes * 60;
-
     const seconds = Math.floor(timeToVoteEnd % 60);
     return { days, hours, minutes, seconds };
   };
