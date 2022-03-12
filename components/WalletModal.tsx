@@ -3,10 +3,9 @@ import { Modal, FlatList, View } from "react-native";
 import styled from "styled-components/native";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import * as Unicons from "@iconscout/react-native-unicons";
-import { debounce, filter } from "lodash";
 import { useTheme } from "styled-components";
-import { RealmCard } from "./RealmCard";
 import { closeWallet, disconnectWallet } from "../store/walletSlice";
+import { PublicKeyTextCopy } from "./PublicKeyTextCopy";
 
 interface RealmSelectModalProps {}
 
@@ -14,9 +13,10 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
-  const { isWalletOpen } = useAppSelector((state) => state.wallet);
+  const { isWalletOpen, publicKey } = useAppSelector((state) => state.wallet);
 
   const handleClose = () => {
+    console.log("trying to close");
     dispatch(closeWallet(""));
   };
 
@@ -39,8 +39,9 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
       animationType="slide"
       visible={isWalletOpen}
       onRequestClose={handleClose}
+      onDismiss={handleClose}
       presentationStyle="pageSheet"
-      transparent={true}
+      // transparent={true}
     >
       <Container>
         <Header>
@@ -50,6 +51,7 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
             <Unicons.UilTimes size="20" color={theme.gray[200]} />
           </CloseIconButton>
         </Header>
+        <PublicKeyTextCopy publicKey={publicKey} />
         <DisconnectButton onPress={handleDisconnect}>
           <ButtonText>Disconnect Wallet</ButtonText>
         </DisconnectButton>
@@ -62,6 +64,7 @@ const Header = styled.View`
   height: 64px;
   background-color: ${(props) => props.theme.gray[800]};
   justify-content: space-between;
+  width: 100%;
   align-items: center;
   flex-direction: row;
   padding-left: ${(props) => props.theme.spacing[2]};
@@ -90,8 +93,9 @@ const Container = styled.View`
   /* height: 50%; */
   /* margin-top: auto; */
   height: 100%;
-  background: blue;
+  background: ${(props) => props.theme.gray[900]};
   border-radius: 20px;
+  align-items: center;
 `;
 
 const DisconnectButton = styled.TouchableOpacity`
