@@ -96,7 +96,7 @@ export const ProposalCard = ({
     const totalVotes =
       Number(mintSupplyFormatted) * (voteThresholdPercentage * 0.01);
 
-    const totalVotesNeeded = totalVotes - yesVoteFormatted;
+    const totalVotesNeeded = Math.ceil(totalVotes - yesVoteFormatted);
     let totalVotesNeededPercentage = (yesVoteFormatted / totalVotes) * 100;
     totalVotesNeededPercentage =
       totalVotesNeededPercentage > 100 ? 100 : totalVotesNeededPercentage;

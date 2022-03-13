@@ -15,12 +15,11 @@ import { TokenList } from "./TokenList";
 import numeral from "numeral";
 import PagerView from "react-native-pager-view";
 
-interface RealmSelectModalProps {}
+interface WalletTransactionModalProps {}
 
-export const WalletModal = ({}: RealmSelectModalProps) => {
+export const WalletTransactionModal = ({}: WalletTransactionModalProps) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
-  const [selectedPage, setSelectedPage] = useState(0);
 
   const { isWalletOpen, publicKey, tokenPriceData, tokens } = useAppSelector(
     (state) => state.wallet
@@ -68,12 +67,12 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
     >
       <Container>
         <Header>
-          <CloseIconButton onPress={handleClose} activeOpacity={0.5}>
-            <Unicons.UilTimes size="20" color={theme.gray[200]} />
-          </CloseIconButton>
           <DisconnectButton onPress={handleDisconnect}>
             <ButtonText>Disconnect</ButtonText>
           </DisconnectButton>
+          <CloseIconButton onPress={handleClose} activeOpacity={0.5}>
+            <Unicons.UilTimes size="20" color={theme.gray[200]} />
+          </CloseIconButton>
         </Header>
         <IconContainer color={color}>
           <SvgXml xml={jdenticonSvg} width="52px" height="52px" />

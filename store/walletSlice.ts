@@ -17,6 +17,7 @@ export interface WalletState {
   isLoadingTokens: boolean;
   tokens: Array<Token>;
   tokenPriceData: any;
+  isTransactionModalOpen: boolean;
 }
 
 const initialState: WalletState = {
@@ -27,6 +28,7 @@ const initialState: WalletState = {
   tokens: [],
   isLoadingTokens: false,
   tokenPriceData: null,
+  isTransactionModalOpen: false,
 };
 
 let connection = new Connection(RPC_CONNECTION, "confirmed");
@@ -142,6 +144,12 @@ export const walletSlice = createSlice({
     closeWallet: (state, action) => {
       state.isWalletOpen = false;
     },
+    openTransactionModal: (state, action) => {
+      state.isTransactionModalOpen = true;
+    },
+    closeTransactionModal: (state, action) => {
+      state.isTransactionModalOpen = false;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -160,7 +168,13 @@ export const walletSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setWallet, openWallet, closeWallet, disconnectWallet } =
-  walletSlice.actions;
+export const {
+  setWallet,
+  openWallet,
+  closeWallet,
+  disconnectWallet,
+  openTransactionModal,
+  closeTransactionModal,
+} = walletSlice.actions;
 
 export default walletSlice.reducer;

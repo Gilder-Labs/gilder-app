@@ -16,6 +16,7 @@ import { REALM_GOVERNANCE_PKEY, RPC_CONNECTION } from "../constants/Solana";
 
 export interface realmState {
   members: Array<Member>;
+  membersMap: any;
   memberChat: Array<ChatMessage>;
   memberVotes: Array<MemberVote>;
   isLoadingMembers: boolean;
@@ -62,8 +63,10 @@ export const fetchRealmMembers = createAsyncThunk(
 
     // console.log("rawMembers", rawTokenOwnerRecords);
 
+    const membersMap = {};
+
     const members = rawTokenOwnerRecords?.map((member) => {
-      return {
+      let memberData = {
         publicKey: member.pubkey.toString(),
         owner: member.owner.toString(), // RealmId
         totalVotesCount: member.account.totalVotesCount, // How many votes they have
@@ -72,6 +75,11 @@ export const fetchRealmMembers = createAsyncThunk(
         governingTokenMint: member.account.governingTokenMint.toString(),
         depositAmount: member.account.governingTokenDepositAmount.toString(),
       };
+
+      // @ts-ignore
+      membersMap[memberData.walletId] = memberData;
+
+      return memberData;
     });
 
     const sortedMembers = members?.sort(
@@ -79,7 +87,7 @@ export const fetchRealmMembers = createAsyncThunk(
       (a, b) => b?.totalVotesCount - a?.totalVotesCount
     );
 
-    return sortedMembers;
+    return { members: sortedMembers, membersMap: membersMap };
   }
 );
 
@@ -165,8 +173,8 @@ export const memberSlice = createSlice({
       })
       .addCase(fetchRealmMembers.fulfilled, (state, action: any) => {
         state.isLoadingMembers = false;
-
-        state.members = action.payload;
+        state.membersMap = action.payload.membersMap;
+        state.members = action.payload.members;
       })
       .addCase(fetchMemberChat.pending, (state) => {
         state.isLoadingChat = true;

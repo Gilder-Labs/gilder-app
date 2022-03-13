@@ -95,7 +95,6 @@ export const fetchProposalChat = createAsyncThunk(
         GOVERNANCE_CHAT_PROGRAM_ID,
         new PublicKey(proposalId)
       );
-      console.log("raw proposal chats", rawChatMesssages);
       let parsedChatMessages = rawChatMesssages.map((message) => {
         return {
           postedAt: message.account.postedAt.toNumber(),

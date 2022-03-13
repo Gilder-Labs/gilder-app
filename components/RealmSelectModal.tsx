@@ -75,9 +75,6 @@ export const RealmSelectModal = ({
       presentationStyle="pageSheet"
     >
       <Header>
-        <View style={{ width: 48, height: 48 }} />
-        <HeaderTitle> Add Realm</HeaderTitle>
-
         {/* if a user has no realms, don't let them close modal till they pick one */}
         {realmWatchlist.length ? (
           <CloseIconButton onPress={handleOnClose} activeOpacity={0.5}>
@@ -86,6 +83,8 @@ export const RealmSelectModal = ({
         ) : (
           <View style={{ width: 48 }} />
         )}
+        <HeaderTitle> Add Realm</HeaderTitle>
+        <View style={{ width: 48, height: 48 }} />
       </Header>
 
       {/* Input to filter by name or public key */}

@@ -3,7 +3,7 @@ import styled from "styled-components/native";
 import { FlatList } from "react-native";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { useTheme } from "styled-components";
-import { Badge, ChatMessage, Button } from "../components";
+import { Badge, ChatMessage, Button, Loading } from "../components";
 import { format, getUnixTime, formatDistance } from "date-fns";
 import numeral from "numeral";
 import { fetchProposalChat } from "../store/proposalsSlice";
@@ -30,9 +30,13 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
   const { governancesMap, isLoadingVaults } = useAppSelector(
     (state) => state.treasury
   );
+  const { isLoadingMembers } = useAppSelector((state) => state.members);
   const { chatMessages, isLoadingChatMessages } = useAppSelector(
     (state) => state.proposals
   );
+  const { membersMap } = useAppSelector((state) => state.members);
+
+  const { publicKey } = useAppSelector((state) => state.wallet);
 
   const { proposal } = route?.params;
   const {
@@ -140,7 +144,7 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
     const totalVotes =
       Number(mintSupplyFormatted) * (voteThresholdPercentage * 0.01);
 
-    const totalVotesNeeded = totalVotes - yesVoteFormatted;
+    const totalVotesNeeded = Math.ceil(totalVotes - yesVoteFormatted);
     let totalVotesNeededPercentage = (yesVoteFormatted / totalVotes) * 100;
     totalVotesNeededPercentage =
       totalVotesNeededPercentage > 100 ? 100 : totalVotesNeededPercentage;
@@ -156,6 +160,11 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
 
   const timeLeft = getTimeToVoteEnd();
   const isVoting = status === "Voting";
+  const isMember = membersMap[publicKey];
+
+  if (isLoadingVaults || isLoadingMembers) {
+    return <Loading />;
+  }
 
   return (
     <FlatList
@@ -224,7 +233,7 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
                 <VoteText>
                   {quorumData.hasMetQuorum
                     ? "Quorum Reached"
-                    : `${quorumData.votesNeeded} yes votes still needed.`}
+                    : `${quorumData.votesNeeded} yes votes still needed`}
                 </VoteText>
               </VoteColumn>
             </VoteCountRow>
@@ -232,7 +241,7 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
               <VoteYes percent={quorumData.totalVotesNeededPercentage} />
             </QuorumContainer>
           </Votes>
-          {isVoting && (
+          {isVoting && isMember && (
             <>
               <Title>Voting</Title>
               <Divider />
