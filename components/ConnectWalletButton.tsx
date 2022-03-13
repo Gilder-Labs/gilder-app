@@ -5,13 +5,13 @@ import * as Unicons from "@iconscout/react-native-unicons";
 import { Connection, clusterApiUrl, Keypair, PublicKey } from "@solana/web3.js";
 import { RPC_CONNECTION } from "../constants/Solana";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { setWallet, openWallet } from "../store/walletSlice";
 import OpenLogin, { LoginProvider, Network } from "openlogin-expo-sdk";
 import Constants, { AppOwnership } from "expo-constants";
 import * as Linking from "expo-linking";
 import { getED25519Key } from "@toruslabs/openlogin-ed25519";
 import bs58 from "bs58";
 import { abbreviatePublicKey } from "../utils";
+import { setWallet, openWallet } from "../store/walletSlice";
 
 import { URL } from "react-native-url-polyfill";
 
@@ -83,11 +83,6 @@ export const ConnectWalletButton = ({}: ConnectWalletProps) => {
           userInfo: userInfo,
         })
       );
-      // const accountInfo = await connection.getParsedAccountInfo(
-      //   new PublicKey("5YWDXAX1xygHp4t7wjmPzzfWuybEuKWmd3ojUBnJtkxq"),
-      //   "confirmed"
-      // );
-      // console.log("Account info", accountInfo);
     } catch (e) {
       console.error(e);
       setErrorMsg(String(e));

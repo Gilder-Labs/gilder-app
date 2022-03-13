@@ -17,7 +17,6 @@ export const PublicKeyTextCopy = ({
   const theme = useTheme();
 
   const copyToClipboard = () => {
-    console.log("copying", publicKey);
     Clipboard.setString(publicKey);
   };
 

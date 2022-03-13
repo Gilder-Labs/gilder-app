@@ -31,7 +31,7 @@ export const VaultCard = ({ vaultId, tokens }: VaultCardProps) => {
         </VaultTitle>
         <VaultValue>{getVaultTotalValue()}</VaultValue>
       </TitleContainer>
-      <TokenList tokens={tokens} />
+      <TokenList tokens={tokens} tokenPriceData={tokenPriceData} />
     </Container>
   );
 };

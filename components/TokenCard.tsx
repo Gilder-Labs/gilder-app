@@ -8,14 +8,23 @@ import { SvgXml } from "react-native-svg";
 
 interface TokenCardProps {
   token: any;
+  tokenPriceData: any;
+  hideUnknownTokens: boolean;
 }
 
-export const TokenCard = ({ token }: TokenCardProps) => {
-  const { tokenPriceData } = useAppSelector((state) => state.treasury);
+export const TokenCard = ({
+  token,
+  tokenPriceData,
+  hideUnknownTokens,
+}: TokenCardProps) => {
   let jdenticonSvg = createAvatar(style, {
     seed: token.mint,
   });
   const coinGeckoId = token?.extensions?.coingeckoId;
+
+  if (!token.name && hideUnknownTokens) {
+    return null;
+  }
 
   return (
     <CoinCard key={token.mint + token.owner}>

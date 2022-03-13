@@ -1,11 +1,18 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Modal, FlatList, View } from "react-native";
 import styled from "styled-components/native";
+import { getColorType } from "../utils";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import * as Unicons from "@iconscout/react-native-unicons";
-import { useTheme } from "styled-components";
 import { closeWallet, disconnectWallet } from "../store/walletSlice";
+import * as style from "@dicebear/avatars-jdenticon-sprites";
 import { PublicKeyTextCopy } from "./PublicKeyTextCopy";
+import { SvgXml } from "react-native-svg";
+import { useTheme } from "styled-components";
+import { createAvatar } from "@dicebear/avatars";
+import { fetchTokens } from "../store/walletSlice";
+import { TokenList } from "./TokenList";
+import numeral from "numeral";
 
 interface RealmSelectModalProps {}
 
@@ -13,10 +20,11 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
-  const { isWalletOpen, publicKey } = useAppSelector((state) => state.wallet);
+  const { isWalletOpen, publicKey, tokenPriceData, tokens } = useAppSelector(
+    (state) => state.wallet
+  );
 
   const handleClose = () => {
-    console.log("trying to close");
     dispatch(closeWallet(""));
   };
 
@@ -24,15 +32,28 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
     dispatch(disconnectWallet(""));
   };
 
-  // Remove header title thing
-  // Show wallet icon + public key
-  // Add copy icon
-  // Total balance
-  //Tabs:
-  //    Shows coins in wallet
-  //    show activity
-  // send? (later)
-  // on transaction - shows details and slider to approve, make modal half size
+  useEffect(() => {
+    if (isWalletOpen && publicKey) {
+      dispatch(fetchTokens(publicKey));
+    }
+  }, [isWalletOpen]);
+
+  let jdenticonSvg = createAvatar(style, {
+    seed: publicKey,
+    // ... and other options
+  });
+  const color = getColorType(publicKey);
+
+  const getTotalValue = () => {
+    let totalValue = 0;
+    tokens.forEach((token) => {
+      const coinGeckoId = token?.extensions?.coingeckoId;
+      totalValue +=
+        tokenPriceData[coinGeckoId]?.current_price *
+          token.tokenAmount.uiAmount || 0;
+    });
+    return numeral(totalValue).format("$0,0.00");
+  };
 
   return (
     <Modal
@@ -45,16 +66,27 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
     >
       <Container>
         <Header>
-          <View style={{ width: 48, height: 48 }} />
-          <HeaderTitle>Wallet</HeaderTitle>
+          <DisconnectButton onPress={handleDisconnect}>
+            <ButtonText>Disconnect</ButtonText>
+          </DisconnectButton>
           <CloseIconButton onPress={handleClose} activeOpacity={0.5}>
             <Unicons.UilTimes size="20" color={theme.gray[200]} />
           </CloseIconButton>
         </Header>
+        <IconContainer color={color}>
+          <SvgXml xml={jdenticonSvg} width="52px" height="52px" />
+        </IconContainer>
         <PublicKeyTextCopy publicKey={publicKey} />
-        <DisconnectButton onPress={handleDisconnect}>
-          <ButtonText>Disconnect Wallet</ButtonText>
-        </DisconnectButton>
+
+        <WalletValue>{getTotalValue()}</WalletValue>
+
+        <TokenContainer>
+          <TokenList
+            tokens={tokens}
+            tokenPriceData={tokenPriceData}
+            hideUnknownTokens={true}
+          />
+        </TokenContainer>
       </Container>
     </Modal>
   );
@@ -69,12 +101,7 @@ const Header = styled.View`
   flex-direction: row;
   padding-left: ${(props) => props.theme.spacing[2]};
   padding-right: ${(props) => props.theme.spacing[2]};
-`;
-
-const HeaderTitle = styled.Text`
-  font-size: 18px;
-  font-weight: bold;
-  color: ${(props) => props.theme.gray[50]};
+  margin-bottom: ${(props) => props.theme.spacing[3]};
 `;
 
 const CloseIconButton = styled.TouchableOpacity`
@@ -100,15 +127,43 @@ const Container = styled.View`
 
 const DisconnectButton = styled.TouchableOpacity`
   flex-direction: row;
-  height: 48px;
   align-items: center;
   justify-content: center;
   border-radius: 4px;
-  margin-bottom: 80px;
-
-  background: ${(props) => props.theme.gray[800]};
+  padding: ${(props) => props.theme.spacing[2]};
 `;
 
 const ButtonText = styled.Text`
   color: ${(props) => props.theme.gray[400]};
+`;
+
+const IconContainer = styled.View<{ color: string }>`
+  /* border-radius: 100px, */
+  background: ${(props: any) => props.theme[props.color][800]};
+  flex-direction: row;
+  align-items: center;
+  overflow: hidden;
+  border: 2px solid ${(props: any) => props.theme.gray[900]};
+  border-radius: 100px;
+  margin-bottom: ${(props) => props.theme.spacing[2]};
+`;
+
+const TokenContainer = styled.ScrollView`
+  width: 100%;
+  margin-top: ${(props: any) => props.theme.spacing[3]};
+
+  margin-bottom: ${(props: any) => props.theme.spacing[3]};
+  border-radius: 4px;
+  padding: ${(props: any) => props.theme.spacing[4]};
+  flex-direction: column;
+  background: ${(props: any) => props.theme.gray[800]};
+  height: 100%;
+`;
+
+const WalletValue = styled.Text`
+  color: ${(props: any) => props.theme.gray[100]}
+  font-weight: bold;
+  font-size: 32px;
+  margin-top: ${(props: any) => props.theme.spacing[3]};
+
 `;

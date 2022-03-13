@@ -5,13 +5,24 @@ import { TokenCard } from "./TokenCard";
 
 interface TokenCardProps {
   tokens: Array<any>;
+  tokenPriceData: any;
+  hideUnknownTokens?: boolean;
 }
 
-export const TokenList = ({ tokens }: TokenCardProps) => {
+export const TokenList = ({
+  tokens,
+  tokenPriceData,
+  hideUnknownTokens = false,
+}: TokenCardProps) => {
   return (
     <Container>
       {tokens.map((token) => (
-        <TokenCard token={token} key={token.mint + token.vaultId} />
+        <TokenCard
+          token={token}
+          key={token.mint + token.vaultId}
+          tokenPriceData={tokenPriceData}
+          hideUnknownTokens={hideUnknownTokens}
+        />
       ))}
     </Container>
   );
