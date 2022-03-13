@@ -56,12 +56,9 @@ export const fetchRealmMembers = createAsyncThunk(
         new PublicKey(realm.governanceId),
         new PublicKey(realm.pubKey)
       );
-      // console.log("token mems?", rawTokenOwnerRecords);
     } catch (error) {
       console.log("error", error);
     }
-
-    // console.log("rawMembers", rawTokenOwnerRecords);
 
     const membersMap = {};
 

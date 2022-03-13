@@ -137,6 +137,7 @@ export const proposalsSlice = createSlice({
       })
       .addCase(fetchProposalChat.pending, (state) => {
         state.isLoadingChatMessages = true;
+        state.chatMessages = [];
       })
       .addCase(fetchProposalChat.rejected, (state) => {
         state.isLoadingChatMessages = false;

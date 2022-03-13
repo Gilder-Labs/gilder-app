@@ -8,6 +8,15 @@ interface ButtonProps {
   size?: "default" | "small";
   onPress: any;
   marginRight?: boolean;
+  shade?: "100" | "200" | "300" | "400" | "500" | "600" | "700" | "800" | "900";
+  color?:
+    | "gray"
+    | "primary"
+    | "secondary"
+    | "aqua"
+    | "purple"
+    | "error"
+    | "warning";
 }
 
 export const Button = ({
@@ -15,9 +24,16 @@ export const Button = ({
   size = "default",
   onPress,
   marginRight = false,
+  shade = "800",
+  color = "gray",
 }: ButtonProps) => {
   return (
-    <ButtonContainer onPress={onPress} marginRight={marginRight}>
+    <ButtonContainer
+      onPress={onPress}
+      marginRight={marginRight}
+      shade={shade}
+      color={color}
+    >
       {/* <Unicons.UilWallet
           size="20"
           color={theme.gray[400]}
@@ -32,14 +48,25 @@ const ButtonText = styled.Text`
   color: ${(props) => props.theme.gray[200]};
 `;
 
-const ButtonContainer = styled.TouchableOpacity<{ marginRight: boolean }>`
+const ButtonContainer = styled.TouchableOpacity<{
+  marginRight: boolean;
+  shade: "100" | "200" | "300" | "400" | "500" | "600" | "700" | "800" | "900";
+  color:
+    | "gray"
+    | "primary"
+    | "secondary"
+    | "aqua"
+    | "purple"
+    | "error"
+    | "warning";
+}>`
   flex-direction: row;
   height: 48px;
   flex: 1;
   align-items: center;
   justify-content: center;
   border-radius: 4px;
-  margin-right: ${(props) => (props.marginRight ? props.theme.spacing[2] : 0)};
+  margin-right: ${(props) => (props.marginRight ? props.theme.spacing[3] : 0)};
 
-  background: ${(props) => props.theme.gray[800]};
+  background: ${(props) => props.theme[props.color][props.shade]};
 `;
