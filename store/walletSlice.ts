@@ -41,7 +41,7 @@ export const fetchTokens = createAsyncThunk(
       // TODO: differentiate between NFTS/tokens
 
       const solanaLamportsInWallet = await connection.getBalance(
-        new PublicKey("EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i")
+        new PublicKey(publicKey)
       );
 
       const solanaBalance = solanaLamportsInWallet / LAMPORTS_PER_SOL;
@@ -49,7 +49,7 @@ export const fetchTokens = createAsyncThunk(
 
       const response = await connection.getParsedTokenAccountsByOwner(
         // new PublicKey(publicKey),
-        new PublicKey("EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i"),
+        new PublicKey(publicKey),
         {
           programId: SPL_PUBLIC_KEY,
         }

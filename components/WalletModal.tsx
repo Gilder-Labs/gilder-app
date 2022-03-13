@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Modal, FlatList, View } from "react-native";
+import { Modal, FlatList, View, StyleSheet, Animated } from "react-native";
 import styled from "styled-components/native";
 import { getColorType } from "../utils";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
@@ -13,12 +13,14 @@ import { createAvatar } from "@dicebear/avatars";
 import { fetchTokens } from "../store/walletSlice";
 import { TokenList } from "./TokenList";
 import numeral from "numeral";
+import PagerView from "react-native-pager-view";
 
 interface RealmSelectModalProps {}
 
 export const WalletModal = ({}: RealmSelectModalProps) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
+  const [selectedPage, setSelectedPage] = useState(0);
 
   const { isWalletOpen, publicKey, tokenPriceData, tokens } = useAppSelector(
     (state) => state.wallet
@@ -80,17 +82,33 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
 
         <WalletValue>{getTotalValue()}</WalletValue>
 
-        <TokenContainer>
-          <TokenList
-            tokens={tokens}
-            tokenPriceData={tokenPriceData}
-            hideUnknownTokens={true}
-          />
-        </TokenContainer>
+        <PagerView style={styles.viewPager} initialPage={selectedPage}>
+          <TokenContainer key="1">
+            <TokenList
+              tokens={tokens}
+              tokenPriceData={tokenPriceData}
+              hideUnknownTokens={true}
+            />
+          </TokenContainer>
+          {/* <TokenContainer key="2">
+            <WalletValue>NFTS</WalletValue>
+          </TokenContainer>
+          <TokenContainer key="3">
+            <WalletValue>Activity</WalletValue>
+          </TokenContainer> */}
+        </PagerView>
       </Container>
     </Modal>
   );
 };
+
+const styles = StyleSheet.create({
+  viewPager: {
+    // flex: 1,
+    width: "100%",
+    height: "100%",
+  },
+});
 
 const Header = styled.View`
   height: 64px;
@@ -149,7 +167,7 @@ const IconContainer = styled.View<{ color: string }>`
 `;
 
 const TokenContainer = styled.ScrollView`
-  width: 100%;
+  /* width: 100%; */
   margin-top: ${(props: any) => props.theme.spacing[3]};
 
   margin-bottom: ${(props: any) => props.theme.spacing[3]};
@@ -157,7 +175,7 @@ const TokenContainer = styled.ScrollView`
   padding: ${(props: any) => props.theme.spacing[4]};
   flex-direction: column;
   background: ${(props: any) => props.theme.gray[800]};
-  height: 100%;
+  /* height: 100%; */
 `;
 
 const WalletValue = styled.Text`
@@ -165,5 +183,5 @@ const WalletValue = styled.Text`
   font-weight: bold;
   font-size: 32px;
   margin-top: ${(props: any) => props.theme.spacing[3]};
-
+  margin-bottom: ${(props: any) => props.theme.spacing[3]};
 `;
