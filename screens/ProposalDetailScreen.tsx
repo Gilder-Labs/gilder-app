@@ -7,6 +7,7 @@ import { Badge, ChatMessage, Button, Loading } from "../components";
 import { format, getUnixTime, formatDistance } from "date-fns";
 import numeral from "numeral";
 import { fetchProposalChat } from "../store/proposalsSlice";
+import { openTransactionModal } from "../store/walletSlice";
 
 interface ProposalDetailScreen {
   route: any;
@@ -156,6 +157,10 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
     };
   };
 
+  const voteYes = () => {
+    dispatch(openTransactionModal(""));
+  };
+
   const quorumData = getQuorum();
 
   const timeLeft = getTimeToVoteEnd();
@@ -246,11 +251,7 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
               <Title>Voting</Title>
               <Divider />
               <VoteButtonContainer>
-                <Button
-                  title="Vote Yes"
-                  onPress={() => {}}
-                  marginRight={true}
-                />
+                <Button title="Vote Yes" onPress={voteYes} marginRight={true} />
                 <Button title="Vote No" onPress={() => {}} />
               </VoteButtonContainer>
             </>

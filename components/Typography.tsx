@@ -11,13 +11,13 @@ interface TypographyProps {
 }
 
 const sizeMapping = {
-  h1: "48px",
-  h2: "36px",
-  h3: "28px",
-  h4: "22px",
-  body: "16px",
-  subtitle: "12px",
-  caption: "10px",
+  h1: 48,
+  h2: 36,
+  h3: 28,
+  h4: 22,
+  body: 16,
+  subtitle: 12,
+  caption: 10,
 };
 
 export const Typography = ({
@@ -41,7 +41,8 @@ const Text = styled.Text<{
   shade: "100" | "200" | "300" | "400" | "500" | "600" | "700" | "800" | "900";
 }>`
   flex-direction: row;
-  font-size: ${(props) => sizeMapping[props.size]};
-  font-weight: ${(props) => (props.bold ? "bold" : "default")};
+  font-size: ${(props) => sizeMapping[props.size]}px;
+  line-height: ${(props) => sizeMapping[props.size] * 1.5}px;
+  font-weight: ${(props) => (props.bold ? "bold" : "normal")};
   color: ${(props) => props.theme.gray[props.shade]};
 `;

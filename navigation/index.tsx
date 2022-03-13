@@ -24,6 +24,7 @@ import LinkingConfiguration from "./LinkingConfiguration";
 import { MemberProfile } from "../screens/MemberProfile";
 import { ProposalDetailScreen } from "../screens/ProposalDetailScreen";
 import { WalletModal } from "../components/WalletModal";
+import { WalletTransactionModal } from "../components/WalletTransactionModal";
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -157,6 +158,7 @@ export default function Navigation({}: {}) {
   return (
     <RootContainer>
       <WalletModal />
+      <WalletTransactionModal />
       <NavigationContainer
         linking={LinkingConfiguration}
         theme={NavigationTheme}

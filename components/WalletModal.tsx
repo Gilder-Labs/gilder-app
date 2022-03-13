@@ -22,9 +22,8 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
   const dispatch = useAppDispatch();
   const [selectedPage, setSelectedPage] = useState(0);
 
-  const { isWalletOpen, publicKey, tokenPriceData, tokens } = useAppSelector(
-    (state) => state.wallet
-  );
+  const { isWalletOpen, publicKey, tokenPriceData, tokens, userInfo } =
+    useAppSelector((state) => state.wallet);
 
   const handleClose = () => {
     dispatch(closeWallet(""));
@@ -76,7 +75,11 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
           </DisconnectButton>
         </Header>
         <IconContainer color={color}>
-          <SvgXml xml={jdenticonSvg} width="52px" height="52px" />
+          {userInfo?.profileImage ? (
+            <ProfileImage source={{ uri: userInfo.profileImage }} />
+          ) : (
+            <SvgXml xml={jdenticonSvg} width="52px" height="52px" />
+          )}
         </IconContainer>
         <PublicKeyTextCopy publicKey={publicKey} />
 
@@ -109,6 +112,11 @@ const styles = StyleSheet.create({
     height: "100%",
   },
 });
+
+const ProfileImage = styled.Image`
+  height: 52px;
+  width: 52px;
+`;
 
 const Header = styled.View`
   height: 64px;
@@ -161,7 +169,7 @@ const IconContainer = styled.View<{ color: string }>`
   flex-direction: row;
   align-items: center;
   overflow: hidden;
-  border: 2px solid ${(props: any) => props.theme.gray[900]};
+  border: 2px solid ${(props: any) => props.theme.gray[700]};
   border-radius: 100px;
   margin-bottom: ${(props) => props.theme.spacing[2]};
 `;

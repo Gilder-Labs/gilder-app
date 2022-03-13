@@ -14,3 +14,4 @@ export * from "./ConnectWalletButton";
 export * from "./SplashScreen";
 export * from "./ChatMessage";
 export * from "./Button";
+export * from "./Typography";

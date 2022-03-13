@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
+import { Typography } from "./Typography";
 // import * as Unicons from "@iconscout/react-native-unicons";
 
 interface ButtonProps {
@@ -22,7 +23,7 @@ export const Button = ({
           color={theme.gray[400]}
           style={{ marginRight: 8 }}
         /> */}
-      <ButtonText>{title}</ButtonText>
+      <Typography text={title} bold={true} />
     </ButtonContainer>
   );
 };
