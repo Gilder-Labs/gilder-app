@@ -3,7 +3,7 @@ import styled from "styled-components/native";
 import { FlatList } from "react-native";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { useTheme } from "styled-components";
-import { Badge, ChatMessage } from "../components";
+import { Badge, ChatMessage, Button } from "../components";
 import { format, getUnixTime, formatDistance } from "date-fns";
 import numeral from "numeral";
 import { fetchProposalChat } from "../store/proposalsSlice";
@@ -232,9 +232,26 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
               <VoteYes percent={quorumData.totalVotesNeededPercentage} />
             </QuorumContainer>
           </Votes>
+          {isVoting && (
+            <>
+              <Title>Voting</Title>
+              <Divider />
+              <VoteButtonContainer>
+                <Button
+                  title="Vote Yes"
+                  onPress={() => {}}
+                  marginRight={true}
+                />
+                <Button title="Vote No" onPress={() => {}} />
+              </VoteButtonContainer>
+            </>
+          )}
+          <Title>Description</Title>
+          <Divider />
+
           <DescriptionText>{description} </DescriptionText>
 
-          <ChatTitle>Discussion</ChatTitle>
+          <Title>Discussion</Title>
           <Divider />
         </Container>
       }
@@ -253,6 +270,11 @@ const ProposalSubData = styled.View`
   padding-right: ${(props: any) => props.theme.spacing[3]};
   margin-bottom: ${(props: any) => props.theme.spacing[4]};
   align-items: flex-start;
+`;
+
+const VoteButtonContainer = styled.View`
+  padding: ${(props: any) => props.theme.spacing[3]};
+  flex-direction: row;
 `;
 
 const ProposalTitle = styled.Text`
@@ -368,11 +390,11 @@ const ApproveText = styled.Text`
   margin-bottom:  ${(props: any) => props.theme.spacing[2]};
 `;
 
-const ChatTitle = styled.Text`
+const Title = styled.Text`
   color: ${(props: any) => props.theme.gray[100]}
   font-weight: bold;
   font-size: 20px;
-  padding-left: ${(props: any) => props.theme.spacing[4]};
+  padding-left: ${(props: any) => props.theme.spacing[3]};
   padding-right: ${(props: any) => props.theme.spacing[4]};
   margin-top: ${(props: any) => props.theme.spacing[4]};
   margin-bottom: ${(props: any) => props.theme.spacing[2]};
@@ -384,4 +406,5 @@ const Divider = styled.View`
   background: ${(props: any) => props.theme.gray[700]};
   margin-left: ${(props: any) => props.theme.spacing[3]};
   margin-right: ${(props: any) => props.theme.spacing[3]};
+  margin-bottom: ${(props: any) => props.theme.spacing[3]};
 `;
