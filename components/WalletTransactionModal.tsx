@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "../hooks/redux";
 // @ts-ignore
 import * as Unicons from "@iconscout/react-native-unicons";
 import { useTheme } from "styled-components";
-import { closeTransactionModal } from "../store/walletSlice";
+import { closeTransactionModal, castVote } from "../store/walletSlice";
 import { Typography } from "./Typography";
 import { Button } from "./Button";
 import { VoteOnProposalTransaction } from "../elements";
@@ -29,6 +29,7 @@ export const WalletTransactionModal = ({}: WalletTransactionModalProps) => {
   // If a user hasn't side approve slider all the way, reset it
   const handleApprove = () => {
     console.log("approving");
+    dispatch(castVote({ publicKey, transactionData }));
   };
 
   const handleClose = () => {

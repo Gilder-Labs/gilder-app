@@ -7,12 +7,19 @@ import {
   Keypair,
   Transaction,
   TransactionInstruction,
+  sendAndConfirmTransaction,
 } from "@solana/web3.js";
+import { RootState } from "./index";
 
 import axios from "axios";
 import { SPL_PUBLIC_KEY, RPC_CONNECTION } from "../constants/Solana";
 import { getTokensInfo } from "../utils";
-import { withCastVote } from "@solana/spl-governance";
+import {
+  withCastVote,
+  CastVoteArgs,
+  RpcContext,
+  Vote,
+} from "@solana/spl-governance";
 
 export interface WalletState {
   publicKey: string;
@@ -135,39 +142,120 @@ export const fetchTokens = createAsyncThunk(
 
 export const castVote = createAsyncThunk(
   "wallet/castVote",
-  async (publicKey: string) => {
-    console.log("TRYING tokens");
-
-    const signers: Keypair[] = [];
-    const instructions: TransactionInstruction[] = [];
-
-    // const governanceAuthority = walletPubkey
-    // const payer = walletPubkey
-
-    // await withCastVote(
-    //   instructions,
-    //   programId,
-    //   programVersion,
-    //   realm.pubkey,
-    //   proposal.account.governance,
-    //   proposal.pubkey,
-    //   proposal.account.tokenOwnerRecord,
-    //   tokeOwnerRecord,
-    //   governanceAuthority,
-    //   proposal.account.governingTokenMint,
-    //   Vote.fromYesNoVote(yesNoVote),
-    //   payer,
-    //   // voterWeight
-    // )
-
-    const transaction = new Transaction();
-    transaction.add(...instructions);
-
-    // await sendTransaction({ transaction, wallet, connection, signers })
-
+  async ({ publicKey, transactionData }: any, { getState }) => {
     try {
+      console.log("TRYING to cast vote", transactionData);
+      const { realms, wallet, members, treasury } = getState() as RootState;
+      const { proposal } = transactionData;
+      const { selectedRealm } = realms;
+      const { governancesMap } = treasury;
+      const walletPubkey = new PublicKey(wallet.publicKey);
+      const tokenOwnerRecord = members.membersMap[wallet.publicKey];
+      console.log("members", members);
+      console.log("wallet pubkey", wallet.publicKey);
+
+      const governanceAuthority = walletPubkey;
+      const payer = walletPubkey;
+
+      const signers: Keypair[] = [];
+      const instructions: TransactionInstruction[] = [];
+
+      // await withCastVote(
+      //   instructions,
+      //   programId,
+      //   programVersion,
+      //   realm.pubkey,
+      //   proposal.account.governance,
+      //   proposal.pubkey,
+      //   proposal.account.tokenOwnerRecord,
+      //   tokeOwnerRecord,
+      //   governanceAuthority,
+      //   proposal.account.governingTokenMint,
+      //   Vote.fromYesNoVote(yesNoVote),
+      //   payer,
+      //   voterWeight
+      // )
+
+      // export const withCastVote = async (
+      //   instructions: TransactionInstruction[],
+      //   programId: PublicKey,
+      //   programVersion: number,
+      //   realm: PublicKey,
+      //   governance: PublicKey,
+      //   proposal: PublicKey,
+      //   proposalOwnerRecord: PublicKey,
+      //   tokenOwnerRecord: PublicKey,
+      //   governanceAuthority: PublicKey,
+      //   governingTokenMint: PublicKey,
+      //   vote: Vote,
+      //   payer: PublicKey,
+      //   voterWeightRecord?: PublicKey,
+      //   maxVoterWeightRecord?: PublicKey,
+      // ) => {
+
+      await withCastVote(
+        instructions,
+        new PublicKey(selectedRealm.governanceId), //  realm/governance PublicKey
+        selectedRealm.accountType, // number, version of realm
+        new PublicKey(selectedRealm.pubKey), // realms publicKey
+        new PublicKey(proposal.governanceId), // proposal governance Public key
+        new PublicKey(proposal.proposalId), // proposal public key
+        new PublicKey(proposal.tokenOwnerRecord), // proposal token owner record, publicKey
+        new PublicKey(tokenOwnerRecord.publicKey), // publicKey of tokenOwnerRecord
+        governanceAuthority, // wallet publicKey
+        new PublicKey(proposal.governingTokenMint), // proposal governanceMint publicKey
+        Vote.fromYesNoVote(1), //??  *Vote* class? 0 = no, 1 = yes
+        payer
+        // voterWeight
+      );
+
+      //   export declare enum YesNoVote {
+      //     Yes = 0,
+      //     No = 1
+      // }
+
+      //   Vote...
+      //   constructor(args: {
+      //     voteType: VoteKind;
+      //     approveChoices: VoteChoice[] | undefined;
+      //     deny: boolean | undefined;
+      // });
+
+      //   export declare enum VoteKind {
+      //     Approve = 0,
+      //     Deny = 1
+      // }
+
+      //   export declare class VoteChoice {
+      //     rank: number;
+      //     weightPercentage: number;
+      //     constructor(args: {
+      //         rank: number;
+      //         weightPercentage: number;
+      //     });
+      // }
+
+      console.log("Instructions??", instructions);
+
+      //   export declare class Vote {
+      //     voteType: VoteKind;
+      //     approveChoices: VoteChoice[] | undefined;
+      //     deny: boolean | undefined;
+      //     constructor(args: {
+      //         voteType: VoteKind;
+      //         approveChoices: VoteChoice[] | undefined;
+      //         deny: boolean | undefined;
+      //     });
+      //     toYesNoVote(): YesNoVote;
+      //     static fromYesNoVote(yesNoVote: YesNoVote): Vote;
+      // }
+
+      // const transaction = new Transaction()
+      // transaction.add(...instructions)
+
+      // await sendTransaction({ transaction, wallet, connection, signers })
     } catch (error) {
-      console.log("error");
+      console.log("error", error);
     }
   }
 );

@@ -16,7 +16,7 @@ import useCachedResources from "./hooks/useCachedResources";
 import Navigation from "./navigation";
 import { LogBox } from "react-native";
 
-// LogBox.ignoreAllLogs();
+LogBox.ignoreAllLogs();
 
 export default function App() {
   const isLoadingComplete = useCachedResources();

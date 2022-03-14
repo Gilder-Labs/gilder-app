@@ -60,6 +60,7 @@ export const fetchRealmProposals = createAsyncThunk(
         isPreVotingState: proposal.account.isPreVotingState(),
         getYesVoteCount: proposal.account.getYesVoteCount().toString(),
         getNoVoteCount: proposal.account.getNoVoteCount().toString(),
+        tokenOwnerRecord: proposal.account.tokenOwnerRecord.toString(),
         // Determines whether council or community token is used for votes
         governingTokenMint: proposal.account.governingTokenMint.toString(),
         // Dates

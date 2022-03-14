@@ -285,6 +285,7 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
 const Container = styled.View`
   flex-direction: column;
   background: ${(props: any) => props.theme.gray[900]};
+  padding-top: ${(props: any) => props.theme.spacing[2]};
 `;
 
 const ProposalSubData = styled.View`
