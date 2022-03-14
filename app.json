@@ -2,7 +2,7 @@
   "expo": {
     "name": "Gilder",
     "slug": "gilder-app",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/DarkIcon.png",
     "scheme": "myapp",
@@ -31,6 +31,8 @@
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
-    }
-  }
+    },
+    "sdkVersion": "44.0.0"
+  },
+  "name": "gilder-app"
 }
