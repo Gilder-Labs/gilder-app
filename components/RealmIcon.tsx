@@ -7,9 +7,10 @@ import * as style from "@dicebear/avatars-jdenticon-sprites";
 
 interface RealmIconProps {
   realmId: string;
+  size?: number;
 }
 
-export const RealmIcon = ({ realmId }: RealmIconProps) => {
+export const RealmIcon = ({ realmId, size = 48 }: RealmIconProps) => {
   const { realmsData } = useAppSelector((state) => state.realms);
 
   // tries to handle all the edge cases in governance-ui realms image list
@@ -34,14 +35,14 @@ export const RealmIcon = ({ realmId }: RealmIconProps) => {
 
     if (isSvgImage && fullFilePath) {
       // if is svg + has a full url to svg
-      return <SvgUri width="36" height="36" uri={realmIconUrl} />;
+      return <SvgUri width={size - 12} height={size - 12} uri={realmIconUrl} />;
     }
 
     iconImage = isSvgImage ? (
       <SvgXml
         key={realmId}
-        width="36"
-        height="36"
+        width={size - 12}
+        height={size - 12}
         // style={{ marginBottom: 12 }}
         xml={jdenticonSvg}
       />
@@ -55,13 +56,12 @@ export const RealmIcon = ({ realmId }: RealmIconProps) => {
     );
     return iconImage;
   };
-  return <Container>{renderRealmIconImage()}</Container>;
+  return <Container size={size - 10}>{renderRealmIconImage()}</Container>;
 };
 
-const Container = styled.View`
-  height: 38px;
-  min-width: 38px;
-  border-radius: 4px;
+const Container = styled.View<{ size: number }>`
+  height: ${(props) => props.size}px;
+  min-width: ${(props) => props.size}px;
   overflow: hidden;
   border-radius: 100px;
   align-items: center;
