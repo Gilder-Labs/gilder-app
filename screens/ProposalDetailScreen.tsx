@@ -56,7 +56,11 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
     dispatch(fetchProposalChat(proposal.proposalId));
   }, [proposal]);
 
-  const governance = governancesMap?.[proposal.governanceId];
+  const governance = governancesMap?.[proposal?.governanceId];
+
+  if (!governance) {
+    return <Loading />;
+  }
 
   const voteThresholdPercentage = governance?.voteThresholdPercentage || 0;
 
@@ -157,8 +161,13 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
     };
   };
 
-  const voteYes = () => {
-    dispatch(openTransactionModal(""));
+  const vote = (type: string) => {
+    dispatch(
+      openTransactionModal({
+        type: "VoteOnProposal",
+        transactionData: { proposal: proposal, action: type },
+      })
+    );
   };
 
   const quorumData = getQuorum();
@@ -251,8 +260,12 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
               <Title>Voting</Title>
               <Divider />
               <VoteButtonContainer>
-                <Button title="Vote Yes" onPress={voteYes} marginRight={true} />
-                <Button title="Vote No" onPress={() => {}} />
+                <Button
+                  title="Vote No"
+                  onPress={() => vote("VoteNo")}
+                  marginRight={true}
+                />
+                <Button title="Vote Yes" onPress={() => vote("VoteYes")} />
               </VoteButtonContainer>
             </>
           )}

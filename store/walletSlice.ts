@@ -4,10 +4,15 @@ import {
   ConfirmedSignatureInfo,
   Connection,
   LAMPORTS_PER_SOL,
+  Keypair,
+  Transaction,
+  TransactionInstruction,
 } from "@solana/web3.js";
+
 import axios from "axios";
 import { SPL_PUBLIC_KEY, RPC_CONNECTION } from "../constants/Solana";
 import { getTokensInfo } from "../utils";
+import { withCastVote } from "@solana/spl-governance";
 
 export interface WalletState {
   publicKey: string;
@@ -18,6 +23,9 @@ export interface WalletState {
   tokens: Array<Token>;
   tokenPriceData: any;
   isTransactionModalOpen: boolean;
+  transactionType: "VoteOnProposal" | "something" | "";
+  transactionData: any;
+  isSendingTransaction: boolean;
 }
 
 const initialState: WalletState = {
@@ -29,6 +37,9 @@ const initialState: WalletState = {
   isLoadingTokens: false,
   tokenPriceData: null,
   isTransactionModalOpen: false,
+  transactionType: "",
+  transactionData: null,
+  isSendingTransaction: false,
 };
 
 let connection = new Connection(RPC_CONNECTION, "confirmed");
@@ -122,6 +133,45 @@ export const fetchTokens = createAsyncThunk(
   }
 );
 
+export const castVote = createAsyncThunk(
+  "wallet/castVote",
+  async (publicKey: string) => {
+    console.log("TRYING tokens");
+
+    const signers: Keypair[] = [];
+    const instructions: TransactionInstruction[] = [];
+
+    // const governanceAuthority = walletPubkey
+    // const payer = walletPubkey
+
+    // await withCastVote(
+    //   instructions,
+    //   programId,
+    //   programVersion,
+    //   realm.pubkey,
+    //   proposal.account.governance,
+    //   proposal.pubkey,
+    //   proposal.account.tokenOwnerRecord,
+    //   tokeOwnerRecord,
+    //   governanceAuthority,
+    //   proposal.account.governingTokenMint,
+    //   Vote.fromYesNoVote(yesNoVote),
+    //   payer,
+    //   // voterWeight
+    // )
+
+    const transaction = new Transaction();
+    transaction.add(...instructions);
+
+    // await sendTransaction({ transaction, wallet, connection, signers })
+
+    try {
+    } catch (error) {
+      console.log("error");
+    }
+  }
+);
+
 export const walletSlice = createSlice({
   name: "wallet",
   initialState,
@@ -145,10 +195,15 @@ export const walletSlice = createSlice({
       state.isWalletOpen = false;
     },
     openTransactionModal: (state, action) => {
+      const { type, transactionData } = action.payload;
       state.isTransactionModalOpen = true;
+      state.transactionType = type;
+      state.transactionData = transactionData;
     },
     closeTransactionModal: (state, action) => {
       state.isTransactionModalOpen = false;
+      state.transactionType = "";
+      state.transactionData = null;
     },
   },
   extraReducers: (builder) => {
@@ -163,6 +218,15 @@ export const walletSlice = createSlice({
         state.isLoadingTokens = false;
         state.tokens = action.payload.tokens;
         state.tokenPriceData = action.payload.tokenPriceData;
+      })
+      .addCase(castVote.pending, (state) => {
+        state.isSendingTransaction = true;
+      })
+      .addCase(castVote.rejected, (state) => {
+        state.isSendingTransaction = false;
+      })
+      .addCase(castVote.fulfilled, (state, action: any) => {
+        state.isSendingTransaction = false;
       });
   },
 });

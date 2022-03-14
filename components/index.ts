@@ -15,3 +15,4 @@ export * from "./SplashScreen";
 export * from "./ChatMessage";
 export * from "./Button";
 export * from "./Typography";
+export * from "./PublicKeyTextCopy";
