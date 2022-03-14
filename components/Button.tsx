@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { Typography } from "./Typography";
 // import * as Unicons from "@iconscout/react-native-unicons";
+import { useTheme } from "styled-components";
 
 interface ButtonProps {
   title: string;
@@ -17,6 +18,7 @@ interface ButtonProps {
     | "purple"
     | "error"
     | "warning";
+  isLoading?: boolean;
 }
 
 export const Button = ({
@@ -26,7 +28,9 @@ export const Button = ({
   marginRight = false,
   shade = "800",
   color = "gray",
+  isLoading = false,
 }: ButtonProps) => {
+  const theme = useTheme();
   return (
     <ButtonContainer
       onPress={onPress}
@@ -39,7 +43,11 @@ export const Button = ({
           color={theme.gray[400]}
           style={{ marginRight: 8 }}
         /> */}
-      <Typography text={title} bold={true} />
+      {isLoading ? (
+        <Loading color={theme.gray[300]} />
+      ) : (
+        <Typography text={title} bold={true} />
+      )}
     </ButtonContainer>
   );
 };
@@ -70,3 +78,5 @@ const ButtonContainer = styled.TouchableOpacity<{
 
   background: ${(props) => props.theme[props.color][props.shade]};
 `;
+
+const Loading = styled.ActivityIndicator``;
