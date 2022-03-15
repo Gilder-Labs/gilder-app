@@ -7,11 +7,13 @@ import { extractLogInfo } from "../utils";
 export interface ActivityState {
   isLoadingActivities: boolean;
   realmActivity: Array<any>;
+  isRefreshingActivities: boolean;
 }
 
 const initialState: ActivityState = {
   isLoadingActivities: false,
   realmActivity: [],
+  isRefreshingActivities: false,
 };
 
 let connection = new Connection(RPC_CONNECTION, "confirmed");
@@ -72,14 +74,19 @@ export const activitySlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchRealmActivity.pending, (state) => {
-        state.isLoadingActivities = true;
+      .addCase(fetchRealmActivity.pending, (state, action) => {
+        if (action?.meta?.arg?.isRefreshing) {
+          state.isRefreshingActivities = true;
+        } else {
+          state.isLoadingActivities = true;
+        }
       })
       .addCase(fetchRealmActivity.rejected, (state) => {
         state.isLoadingActivities = false;
       })
       .addCase(fetchRealmActivity.fulfilled, (state, action: any) => {
         state.isLoadingActivities = false;
+        state.isRefreshingActivities = false;
 
         if (action.payload.fetchedMore) {
           state.realmActivity = [

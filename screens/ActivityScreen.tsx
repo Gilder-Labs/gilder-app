@@ -2,10 +2,11 @@ import { RootTabScreenProps } from "../types";
 import { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { ActivityCard, Loading } from "../components";
-import { FlatList } from "react-native";
+import { FlatList, RefreshControl } from "react-native";
 import { format, differenceInDays } from "date-fns";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { fetchRealmActivity } from "../store/activitySlice";
+import { useTheme } from "styled-components";
 
 // TWO ways to do this.
 // Each separator, check if previous item is the same day
@@ -18,16 +19,12 @@ export default function ActivityScreen({
   navigation,
 }: RootTabScreenProps<"Activity">) {
   const { selectedRealm } = useAppSelector((state) => state.realms);
-  const { realmActivity, isLoadingActivities } = useAppSelector(
-    (state) => state.activities
-  );
+  const { realmActivity, isLoadingActivities, isRefreshingActivities } =
+    useAppSelector((state) => state.activities);
 
+  const theme = useTheme();
   const dispatch = useAppDispatch();
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
-  // Use 1 if it exists because we don't have a way to get it easily from flatlist to check if the second activity is a different day.
-  // @ts-ignore
-  // let dateTracker = realmActivity[1]?.blockTime * 1000;
 
   useEffect(() => {
     // when loading activities is finished we can turn off fetching more
@@ -40,29 +37,18 @@ export default function ActivityScreen({
     return <ActivityCard activity={item} key={item.signature} />;
   };
 
-  // const renderSeparator = (props: any) => {
-  //   const { leadingItem } = props;
-  //   let previousDate = format(leadingItem?.blockTime * 1000, "LLL d, yyyy - p");
-  //   const isDifferentDay = differenceInDays(
-  //     new Date(leadingItem?.blockTime * 1000),
-  //     new Date(dateTracker)
-  //   );
-
-  //   if (isDifferentDay) {
-  //     dateTracker = leadingItem.blocktime * 1000;
-  //     return <DateSeparator> {previousDate}</DateSeparator>;
-  //   }
-
-  //   return <EmptyView />;
-  // };
-
   const handleRefresh = () => {
-    console.log("refreshing", isRefreshing);
-    setIsRefreshing(true);
+    dispatch(
+      fetchRealmActivity({
+        realm: selectedRealm,
+        // get the signature of the last activity we have to get more
+        isRefreshing: true,
+      })
+    );
   };
 
   const onEndReached = () => {
-    if (!isFetchingMore && realmActivity) {
+    if (!isFetchingMore && realmActivity && realmActivity.length > 19) {
       const lastActivity = realmActivity?.slice(-1)[0];
       setIsFetchingMore(true);
       dispatch(
@@ -93,6 +79,16 @@ export default function ActivityScreen({
           initialNumToRender={15}
           onEndReached={onEndReached}
           onEndReachedThreshold={1}
+          onRefresh={handleRefresh}
+          refreshing={isRefreshingActivities}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefreshingActivities}
+              tintColor={theme.gray[300]}
+              onRefresh={handleRefresh}
+              size={18}
+            />
+          }
           // onRefresh={handleRefresh}
           // refreshing={isRefreshing}
           // ItemSeparatorComponent={renderSeparator}
