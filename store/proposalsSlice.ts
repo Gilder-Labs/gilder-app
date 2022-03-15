@@ -14,6 +14,7 @@ export interface ProposalsState {
   proposalsMap: any;
   chatMessages: Array<ChatMessage>;
   isLoadingChatMessages: boolean;
+  isRefreshingProposals: boolean;
 }
 
 const initialState: ProposalsState = {
@@ -22,13 +23,14 @@ const initialState: ProposalsState = {
   proposalsMap: null,
   chatMessages: [],
   isLoadingChatMessages: false,
+  isRefreshingProposals: false,
 };
 
 let connection = new Connection(RPC_CONNECTION, "confirmed");
 
 export const fetchRealmProposals = createAsyncThunk(
   "realms/fetchRealmProposals",
-  async (realm: any) => {
+  async ({ realm, isRefreshing }: any) => {
     let rawProposals;
     const governanceId = new PublicKey(realm.governanceId);
 
@@ -81,7 +83,11 @@ export const fetchRealmProposals = createAsyncThunk(
       (a, b) => b.getStateTimestamp - a.getStateTimestamp
     );
 
-    return { proposals: proposals, proposalsMap: proposalsMap };
+    return {
+      proposals: proposals,
+      proposalsMap: proposalsMap,
+      isRefreshing: isRefreshing,
+    };
   }
 );
 
@@ -125,14 +131,19 @@ export const proposalsSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchRealmProposals.pending, (state) => {
-        state.isLoadingProposals = true;
+      .addCase(fetchRealmProposals.pending, (state, action) => {
+        if (action?.meta?.arg?.isRefreshing) {
+          state.isRefreshingProposals = true;
+        } else {
+          state.isLoadingProposals = true;
+        }
       })
       .addCase(fetchRealmProposals.rejected, (state) => {
         state.isLoadingProposals = false;
       })
       .addCase(fetchRealmProposals.fulfilled, (state, action: any) => {
         state.isLoadingProposals = false;
+        state.isRefreshingProposals = false;
         state.proposals = action.payload.proposals;
         state.proposalsMap = action.payload.proposalsMap;
       })

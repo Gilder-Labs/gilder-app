@@ -137,7 +137,9 @@ export default function Navigation({}: {}) {
           fetchAfterSignature: undefined,
         })
       );
-      dispatch(fetchRealmProposals(selectedRealm));
+      dispatch(
+        fetchRealmProposals({ realm: selectedRealm, isRefreshing: false })
+      );
       dispatch(fetchRealmMembers(selectedRealm));
       dispatch(realmLoaded(""));
     }

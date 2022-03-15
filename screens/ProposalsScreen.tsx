@@ -1,15 +1,21 @@
 import { RootTabScreenProps } from "../types";
 import styled from "styled-components/native";
-import { useAppSelector } from "../hooks/redux";
+import { useAppSelector, useAppDispatch } from "../hooks/redux";
 import { ProposalCard, Loading } from "../components";
 import { FlatList } from "react-native";
+import { fetchRealmProposals } from "../store/proposalsSlice";
+import { RefreshControl } from "react-native";
+import { useTheme } from "styled-components";
 
 export default function ProposalScreen({
   navigation,
 }: RootTabScreenProps<"Proposals">) {
-  const { proposals, isLoadingProposals } = useAppSelector(
-    (state) => state.proposals
-  );
+  const { proposals, isLoadingProposals, isRefreshingProposals } =
+    useAppSelector((state) => state.proposals);
+
+  const theme = useTheme();
+
+  const dispatch = useAppDispatch();
 
   const { governancesMap, isLoadingVaults } = useAppSelector(
     (state) => state.treasury
@@ -26,11 +32,15 @@ export default function ProposalScreen({
     });
   };
 
+  const handleRefresh = () => {
+    dispatch(fetchRealmProposals({ realm: selectedRealm, isRefreshing: true }));
+  };
+
   const renderProposal = ({ item }: any) => {
     const proposalGovernance = governancesMap[item.governanceId];
 
     if (!proposalGovernance) {
-      return;
+      return <EmptyView />;
     }
 
     const { voteThresholdPercentage } = proposalGovernance;
@@ -83,6 +93,16 @@ export default function ProposalScreen({
           scrollIndicatorInsets={{ right: 1 }}
           removeClippedSubviews={true}
           initialNumToRender={10}
+          onRefresh={handleRefresh}
+          refreshing={isRefreshingProposals}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefreshingProposals}
+              tintColor={theme.gray[300]}
+              onRefresh={handleRefresh}
+              size={18}
+            />
+          }
           ListHeaderComponent={
             <HeaderContainer>
               <TreasuryValueContainer>
