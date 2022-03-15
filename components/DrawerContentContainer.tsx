@@ -13,10 +13,12 @@ import { ConnectWalletButton } from "./ConnectWalletButton";
 import { useTheme } from "styled-components";
 import Logo from "../assets/images/GilderLogo.png";
 import * as Unicons from "@iconscout/react-native-unicons";
+import { fetchRealm } from "../store/realmSlice";
 
 export function DrawerContentContainer(props: any) {
   const theme = useTheme();
   const [realmSelectisOpen, setRealmSelectIsOpen] = useState(false);
+  const dispatch = useAppDispatch();
 
   const { selectedRealm, realmsData, realmWatchlist } = useAppSelector(
     (state) => state.realms
@@ -33,6 +35,13 @@ export function DrawerContentContainer(props: any) {
 
   const renderRealmIcon = ({ item }: any) => {
     return <RealmIconButton realmId={item} key={item} />;
+  };
+
+  const handleOnClose = () => {
+    setRealmSelectIsOpen(false);
+    if (!selectedRealm && realmWatchlist.length) {
+      dispatch(fetchRealm(realmWatchlist[0]));
+    }
   };
 
   return (
@@ -76,7 +85,7 @@ export function DrawerContentContainer(props: any) {
       </StyledContainer>
       <RealmSelectModal
         open={realmSelectisOpen}
-        handleOnClose={() => setRealmSelectIsOpen(false)}
+        handleOnClose={handleOnClose}
       />
     </DrawerRootContainer>
   );

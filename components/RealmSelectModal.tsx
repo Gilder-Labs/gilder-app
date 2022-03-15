@@ -54,14 +54,16 @@ export const RealmSelectModal = ({
 
   const handleSearchChange = (newText: string) => {
     setSearchText(newText);
+    const normalizedText = newText.toLowerCase();
 
     if (!newText) {
+      console.log("resetting search");
       setFilteredRealms(realms);
     } else {
       const filtRealms = realms.filter(
         (realm) =>
-          realm.name.toLowerCase().includes(newText.toLowerCase()) ||
-          realm.pubKey === newText
+          realm.name.toLowerCase().includes(normalizedText) ||
+          realm.pubKey.toLowerCase() === normalizedText
       );
 
       setFilteredRealms(filtRealms);
@@ -70,7 +72,7 @@ export const RealmSelectModal = ({
 
   const debouncedChangeHandler = useCallback(
     debounce(handleSearchChange, 300),
-    []
+    [realms]
   );
 
   return (
