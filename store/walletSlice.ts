@@ -203,7 +203,12 @@ export const castVote = createAsyncThunk(
         } sol`
       );
 
-      await sendAndConfirmTransaction(connection, transaction, [walletKeypair]);
+      const response = await sendAndConfirmTransaction(
+        connection,
+        transaction,
+        [walletKeypair]
+      );
+      console.log("response", response);
       return { transactionError: "" };
     } catch (error) {
       console.log("error", error);
@@ -265,12 +270,18 @@ export const walletSlice = createSlice({
         state.isSendingTransaction = true;
       })
       .addCase(castVote.rejected, (state, action: any) => {
+        const error = action.payload.transactionError;
+
         state.isSendingTransaction = false;
         state.transactionState = "error";
+        state.transactionError = error;
       })
       .addCase(castVote.fulfilled, (state, action: any) => {
+        const error = action.payload.transactionError;
+
         state.isSendingTransaction = false;
-        state.transactionState = "success";
+        state.transactionState = error ? "error" : "success";
+        state.transactionError = error;
       });
   },
 });

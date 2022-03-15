@@ -13,7 +13,8 @@ import { createAvatar } from "@dicebear/avatars";
 import { fetchTokens } from "../store/walletSlice";
 import { TokenList } from "./TokenList";
 import numeral from "numeral";
-import PagerView from "react-native-pager-view";
+import PagerView, { PagerViewOnPageScrollEvent } from "react-native-pager-view";
+import { Typography } from "./Typography";
 
 interface RealmSelectModalProps {}
 
@@ -87,18 +88,19 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
 
         <PagerView style={styles.viewPager} initialPage={selectedPage}>
           <TokenContainer key="1">
+            <Typography size="h3" text="Tokens" bold={true} />
             <TokenList
               tokens={tokens}
               tokenPriceData={tokenPriceData}
               hideUnknownTokens={true}
             />
           </TokenContainer>
-          {/* <TokenContainer key="2">
-            <WalletValue>NFTS</WalletValue>
+          <TokenContainer key="2">
+            <Typography size="h3" text="NFTS" bold={true} />
           </TokenContainer>
           <TokenContainer key="3">
-            <WalletValue>Activity</WalletValue>
-          </TokenContainer> */}
+            <Typography size="h3" text="Activity" bold={true} />
+          </TokenContainer>
         </PagerView>
       </Container>
     </Modal>
@@ -176,8 +178,6 @@ const IconContainer = styled.View<{ color: string }>`
 
 const TokenContainer = styled.ScrollView`
   /* width: 100%; */
-  margin-top: ${(props: any) => props.theme.spacing[3]};
-
   margin-bottom: ${(props: any) => props.theme.spacing[3]};
   border-radius: 4px;
   padding: ${(props: any) => props.theme.spacing[4]};
