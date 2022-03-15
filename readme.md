@@ -5,16 +5,16 @@
 ```
 yarn install
 yarn start
+
+Download expo go app from apple store
+Scan QR code with iphone camera and open in expo
+*Should* work
 ```
 
 Reset Cache
 `expo r -c`
 
 ### Debugging
-
-## Not set up currently
-
-- https://blog.expo.dev/developing-react-native-with-expo-and-flipper-8c426bdf995a
 
 ## React native debugger
 
