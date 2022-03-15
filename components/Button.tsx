@@ -19,6 +19,7 @@ interface ButtonProps {
     | "error"
     | "warning";
   isLoading?: boolean;
+  disabled?: boolean;
 }
 
 export const Button = ({
@@ -29,6 +30,7 @@ export const Button = ({
   shade = "800",
   color = "gray",
   isLoading = false,
+  disabled = false,
 }: ButtonProps) => {
   const theme = useTheme();
   return (
@@ -37,6 +39,7 @@ export const Button = ({
       marginRight={marginRight}
       shade={shade}
       color={color}
+      disabled={disabled}
     >
       {/* <Unicons.UilWallet
           size="20"
@@ -58,6 +61,7 @@ const ButtonText = styled.Text`
 
 const ButtonContainer = styled.TouchableOpacity<{
   marginRight: boolean;
+  disabled: boolean;
   shade: "100" | "200" | "300" | "400" | "500" | "600" | "700" | "800" | "900";
   color:
     | "gray"
@@ -77,6 +81,7 @@ const ButtonContainer = styled.TouchableOpacity<{
   margin-right: ${(props) => (props.marginRight ? props.theme.spacing[3] : 0)};
 
   background: ${(props) => props.theme[props.color][props.shade]};
+  opacity: ${(props) => (props.disabled ? 0.5 : 1)};
 `;
 
 const Loading = styled.ActivityIndicator``;

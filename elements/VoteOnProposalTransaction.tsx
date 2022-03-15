@@ -23,7 +23,7 @@ export const VoteOnProposalTransaction = ({}: VoteOnProposalTransaction) => {
   // Type of Vote (needs to be eye catching)
   // balance change/fees
 
-  const isYesVote = transactionData.action === "VoteYes";
+  const isYesVote = transactionData.action === 0;
 
   return (
     <TransactionContainer>

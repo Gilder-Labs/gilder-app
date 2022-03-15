@@ -24,6 +24,7 @@ export const WalletTransactionModal = ({}: WalletTransactionModalProps) => {
     transactionData,
     transactionType,
     isTransactionModalOpen,
+    isSendingTransaction,
   } = useAppSelector((state) => state.wallet);
 
   // If a user hasn't side approve slider all the way, reset it
@@ -68,6 +69,8 @@ export const WalletTransactionModal = ({}: WalletTransactionModalProps) => {
             marginRight={true}
           />
           <Button
+            isLoading={isSendingTransaction}
+            disabled={isSendingTransaction}
             title="Approve"
             onPress={handleApprove}
             shade="800"

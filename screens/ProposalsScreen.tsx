@@ -28,6 +28,11 @@ export default function ProposalScreen({
 
   const renderProposal = ({ item }: any) => {
     const proposalGovernance = governancesMap[item.governanceId];
+
+    if (!proposalGovernance) {
+      return;
+    }
+
     const { voteThresholdPercentage } = proposalGovernance;
     const {
       communityMint,

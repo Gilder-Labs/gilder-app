@@ -19,7 +19,9 @@ import {
   CastVoteArgs,
   RpcContext,
   Vote,
+  getGovernanceProgramVersion,
 } from "@solana/spl-governance";
+import bs58 from "bs58";
 
 export interface WalletState {
   publicKey: string;
@@ -33,6 +35,7 @@ export interface WalletState {
   transactionType: "VoteOnProposal" | "something" | "";
   transactionData: any;
   isSendingTransaction: boolean;
+  transactionError: any;
 }
 
 const initialState: WalletState = {
@@ -47,6 +50,7 @@ const initialState: WalletState = {
   transactionType: "",
   transactionData: null,
   isSendingTransaction: false,
+  transactionError: "",
 };
 
 let connection = new Connection(RPC_CONNECTION, "confirmed");
@@ -145,14 +149,11 @@ export const castVote = createAsyncThunk(
   async ({ publicKey, transactionData }: any, { getState }) => {
     try {
       console.log("TRYING to cast vote", transactionData);
-      const { realms, wallet, members, treasury } = getState() as RootState;
-      const { proposal } = transactionData;
+      const { realms, wallet, members } = getState() as RootState;
+      const { proposal, action } = transactionData;
       const { selectedRealm } = realms;
-      const { governancesMap } = treasury;
       const walletPubkey = new PublicKey(wallet.publicKey);
       const tokenOwnerRecord = members.membersMap[wallet.publicKey];
-      console.log("members", members);
-      console.log("wallet pubkey", wallet.publicKey);
 
       const governanceAuthority = walletPubkey;
       const payer = walletPubkey;
@@ -160,43 +161,15 @@ export const castVote = createAsyncThunk(
       const signers: Keypair[] = [];
       const instructions: TransactionInstruction[] = [];
 
-      // await withCastVote(
-      //   instructions,
-      //   programId,
-      //   programVersion,
-      //   realm.pubkey,
-      //   proposal.account.governance,
-      //   proposal.pubkey,
-      //   proposal.account.tokenOwnerRecord,
-      //   tokeOwnerRecord,
-      //   governanceAuthority,
-      //   proposal.account.governingTokenMint,
-      //   Vote.fromYesNoVote(yesNoVote),
-      //   payer,
-      //   voterWeight
-      // )
-
-      // export const withCastVote = async (
-      //   instructions: TransactionInstruction[],
-      //   programId: PublicKey,
-      //   programVersion: number,
-      //   realm: PublicKey,
-      //   governance: PublicKey,
-      //   proposal: PublicKey,
-      //   proposalOwnerRecord: PublicKey,
-      //   tokenOwnerRecord: PublicKey,
-      //   governanceAuthority: PublicKey,
-      //   governingTokenMint: PublicKey,
-      //   vote: Vote,
-      //   payer: PublicKey,
-      //   voterWeightRecord?: PublicKey,
-      //   maxVoterWeightRecord?: PublicKey,
-      // ) => {
+      const programVersion = await getGovernanceProgramVersion(
+        connection,
+        new PublicKey(selectedRealm.governanceId)
+      );
 
       await withCastVote(
         instructions,
         new PublicKey(selectedRealm.governanceId), //  realm/governance PublicKey
-        selectedRealm.accountType, // number, version of realm
+        programVersion, // number, version of realm
         new PublicKey(selectedRealm.pubKey), // realms publicKey
         new PublicKey(proposal.governanceId), // proposal governance Public key
         new PublicKey(proposal.proposalId), // proposal public key
@@ -204,58 +177,27 @@ export const castVote = createAsyncThunk(
         new PublicKey(tokenOwnerRecord.publicKey), // publicKey of tokenOwnerRecord
         governanceAuthority, // wallet publicKey
         new PublicKey(proposal.governingTokenMint), // proposal governanceMint publicKey
-        Vote.fromYesNoVote(1), //??  *Vote* class? 0 = no, 1 = yes
+        // action: 0 = yes, 1 = no;
+        Vote.fromYesNoVote(action), //??  *Vote* class? 0 = no, 1 = yes
         payer
         // voterWeight
       );
 
-      //   export declare enum YesNoVote {
-      //     Yes = 0,
-      //     No = 1
-      // }
-
-      //   Vote...
-      //   constructor(args: {
-      //     voteType: VoteKind;
-      //     approveChoices: VoteChoice[] | undefined;
-      //     deny: boolean | undefined;
-      // });
-
-      //   export declare enum VoteKind {
-      //     Approve = 0,
-      //     Deny = 1
-      // }
-
-      //   export declare class VoteChoice {
-      //     rank: number;
-      //     weightPercentage: number;
-      //     constructor(args: {
-      //         rank: number;
-      //         weightPercentage: number;
-      //     });
-      // }
+      const privateKey = wallet.privateKey;
+      const walletKeypair = Keypair.fromSecretKey(bs58.decode(privateKey));
+      const recentBlockhash = await connection.getRecentBlockhash();
 
       console.log("Instructions??", instructions);
-
-      //   export declare class Vote {
-      //     voteType: VoteKind;
-      //     approveChoices: VoteChoice[] | undefined;
-      //     deny: boolean | undefined;
-      //     constructor(args: {
-      //         voteType: VoteKind;
-      //         approveChoices: VoteChoice[] | undefined;
-      //         deny: boolean | undefined;
-      //     });
-      //     toYesNoVote(): YesNoVote;
-      //     static fromYesNoVote(yesNoVote: YesNoVote): Vote;
-      // }
-
-      // const transaction = new Transaction()
-      // transaction.add(...instructions)
-
-      // await sendTransaction({ transaction, wallet, connection, signers })
+      const transaction = new Transaction({
+        recentBlockhash: recentBlockhash.blockhash,
+      });
+      transaction.add(...instructions);
+      transaction.sign(walletKeypair);
+      await sendAndConfirmTransaction(connection, transaction, [walletKeypair]);
+      return { transactionError: "" };
     } catch (error) {
       console.log("error", error);
+      return { transactionError: error };
     }
   }
 );
@@ -310,8 +252,9 @@ export const walletSlice = createSlice({
       .addCase(castVote.pending, (state) => {
         state.isSendingTransaction = true;
       })
-      .addCase(castVote.rejected, (state) => {
+      .addCase(castVote.rejected, (state, action: any) => {
         state.isSendingTransaction = false;
+        state.transactionError = action.payload.transactionError;
       })
       .addCase(castVote.fulfilled, (state, action: any) => {
         state.isSendingTransaction = false;

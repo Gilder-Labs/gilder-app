@@ -161,7 +161,7 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
     };
   };
 
-  const vote = (type: string) => {
+  const vote = (type: number) => {
     dispatch(
       openTransactionModal({
         type: "VoteOnProposal",
@@ -262,10 +262,10 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
               <VoteButtonContainer>
                 <Button
                   title="Vote No"
-                  onPress={() => vote("VoteNo")}
+                  onPress={() => vote(1)}
                   marginRight={true}
                 />
-                <Button title="Vote Yes" onPress={() => vote("VoteYes")} />
+                <Button title="Vote Yes" onPress={() => vote(0)} />
               </VoteButtonContainer>
             </>
           )}
