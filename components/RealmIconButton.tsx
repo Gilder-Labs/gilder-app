@@ -22,7 +22,7 @@ export const RealmIconButton = ({
 
   const handleRealmIconClick = () => {
     // if user selects realm they are already on, don't do anything
-    if (selectedRealm.pubKey === realmId) {
+    if (selectedRealm?.pubKey === realmId) {
       return;
     }
 

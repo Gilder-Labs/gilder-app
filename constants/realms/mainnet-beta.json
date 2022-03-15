@@ -431,5 +431,12 @@
     "programId": "Ghope52FuF6HU3AAhJuAAyS2fiqbVhkAotb7YprL5tdS",
     "realmId": "7FMLXrTxwEUKoyMJdumd8A2nWkgq4bToQq5Uqds8kRsu",
     "ogImage": "/realms/XPWizards/img/xpwizlogo.png"
+  },
+  {
+    "symbol": "Gil",
+    "displayName": "Gilder",
+    "programId": "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw",
+    "realmId": "6jydyMWSqV2bFHjCHydEQxa9XfXQWDwjVqAdjBEA1BXx",
+    "ogImage": "https://uploads-ssl.webflow.com/6155dbf133933371fa666e7a/620bc84e6c44fc6b90d44ec5_WebclipDark.png"
   }
 ]

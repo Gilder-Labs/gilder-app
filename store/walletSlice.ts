@@ -268,6 +268,7 @@ export const walletSlice = createSlice({
       })
       .addCase(castVote.pending, (state) => {
         state.isSendingTransaction = true;
+        state.transactionError = "";
       })
       .addCase(castVote.rejected, (state, action: any) => {
         const error = action.payload.transactionError;

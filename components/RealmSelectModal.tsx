@@ -28,6 +28,12 @@ export const RealmSelectModal = ({
   }, [realms]);
 
   useEffect(() => {
+    if (!searchText) {
+      setFilteredRealms(realms);
+    }
+  }, [searchText]);
+
+  useEffect(() => {
     setSearchText("");
     setFilteredRealms(realms);
   }, [open]);
