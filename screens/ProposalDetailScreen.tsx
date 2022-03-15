@@ -276,6 +276,11 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
 
           <Title>Discussion</Title>
           <Divider />
+          {isLoadingChatMessages && (
+            <LoadingContainer>
+              <Loading size={48} />
+            </LoadingContainer>
+          )}
         </Container>
       }
     />
@@ -432,3 +437,5 @@ const Divider = styled.View`
   margin-right: ${(props: any) => props.theme.spacing[3]};
   margin-bottom: ${(props: any) => props.theme.spacing[3]};
 `;
+
+const LoadingContainer = styled.View``;
