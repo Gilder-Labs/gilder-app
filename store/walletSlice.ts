@@ -34,6 +34,7 @@ export interface WalletState {
   isTransactionModalOpen: boolean;
   transactionType: "VoteOnProposal" | "something" | "";
   transactionData: any;
+  transactionState: "none" | "pending" | "success" | "error";
   isSendingTransaction: boolean;
   transactionError: any;
 }
@@ -51,6 +52,7 @@ const initialState: WalletState = {
   transactionData: null,
   isSendingTransaction: false,
   transactionError: "",
+  transactionState: "none",
 };
 
 let connection = new Connection(RPC_CONNECTION, "confirmed");
@@ -72,7 +74,6 @@ export const fetchTokens = createAsyncThunk(
       console.log("solana balance", solanaBalance);
 
       const response = await connection.getParsedTokenAccountsByOwner(
-        // new PublicKey(publicKey),
         new PublicKey(publicKey),
         {
           programId: SPL_PUBLIC_KEY,
@@ -169,7 +170,7 @@ export const castVote = createAsyncThunk(
       await withCastVote(
         instructions,
         new PublicKey(selectedRealm.governanceId), //  realm/governance PublicKey
-        programVersion, // number, version of realm
+        programVersion, // version object, version of realm
         new PublicKey(selectedRealm.pubKey), // realms publicKey
         new PublicKey(proposal.governanceId), // proposal governance Public key
         new PublicKey(proposal.proposalId), // proposal public key
@@ -177,8 +178,7 @@ export const castVote = createAsyncThunk(
         new PublicKey(tokenOwnerRecord.publicKey), // publicKey of tokenOwnerRecord
         governanceAuthority, // wallet publicKey
         new PublicKey(proposal.governingTokenMint), // proposal governanceMint publicKey
-        // action: 0 = yes, 1 = no;
-        Vote.fromYesNoVote(action), //??  *Vote* class? 0 = no, 1 = yes
+        Vote.fromYesNoVote(action), //  *Vote* class? 1 = no, 0 = yes
         payer
         // voterWeight
       );
@@ -191,8 +191,18 @@ export const castVote = createAsyncThunk(
       const transaction = new Transaction({
         recentBlockhash: recentBlockhash.blockhash,
       });
+
       transaction.add(...instructions);
       transaction.sign(walletKeypair);
+
+      console.log(
+        `SOL transfer would cost: ${
+          (transaction.signatures.length *
+            recentBlockhash.feeCalculator.lamportsPerSignature) /
+          LAMPORTS_PER_SOL
+        } sol`
+      );
+
       await sendAndConfirmTransaction(connection, transaction, [walletKeypair]);
       return { transactionError: "" };
     } catch (error) {
@@ -229,11 +239,13 @@ export const walletSlice = createSlice({
       state.isTransactionModalOpen = true;
       state.transactionType = type;
       state.transactionData = transactionData;
+      state.transactionState = "pending";
     },
     closeTransactionModal: (state, action) => {
       state.isTransactionModalOpen = false;
       state.transactionType = "";
       state.transactionData = null;
+      state.transactionState = "none";
     },
   },
   extraReducers: (builder) => {
@@ -254,10 +266,11 @@ export const walletSlice = createSlice({
       })
       .addCase(castVote.rejected, (state, action: any) => {
         state.isSendingTransaction = false;
-        state.transactionError = action.payload.transactionError;
+        state.transactionState = "error";
       })
       .addCase(castVote.fulfilled, (state, action: any) => {
         state.isSendingTransaction = false;
+        state.transactionState = "success";
       });
   },
 });

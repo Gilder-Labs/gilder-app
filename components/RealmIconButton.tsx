@@ -21,6 +21,11 @@ export const RealmIconButton = ({
   const dispatch = useAppDispatch();
 
   const handleRealmIconClick = () => {
+    // if user selects realm they are already on, don't do anything
+    if (selectedRealm.pubKey === realmId) {
+      return;
+    }
+
     dispatch(fetchRealm(realmId));
   };
 
