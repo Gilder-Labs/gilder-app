@@ -41,8 +41,12 @@ export const TransactionCard = ({ transaction }: TransactionCardProps) => {
       </IconContainer>
       <TextContainer>
         <TitleContainer>
-          <Typography text={abbreviatePublicKey(signature)} />
-          <SignatureText>{abbreviatePublicKey(signature)}</SignatureText>
+          <Typography
+            text={abbreviatePublicKey(signature)}
+            size="body"
+            bold={true}
+          />
+          {/* <SignatureText>{abbreviatePublicKey(signature)}</SignatureText> */}
         </TitleContainer>
         <ActivityDate>{transactionDate}</ActivityDate>
       </TextContainer>
@@ -110,5 +114,5 @@ const IconContainer = styled.View<{ color: string }>`
 `;
 
 const TitleContainer = styled.View`
-  margin-bottom: ${(props: any) => props.theme.spacing[3]};
+  /* margin-bottom: ${(props: any) => props.theme.spacing[2]}; */
 `;
