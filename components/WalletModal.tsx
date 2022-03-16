@@ -4,17 +4,22 @@ import styled from "styled-components/native";
 import { getColorType } from "../utils";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import * as Unicons from "@iconscout/react-native-unicons";
-import { closeWallet, disconnectWallet } from "../store/walletSlice";
+import {
+  closeWallet,
+  disconnectWallet,
+  fetchTransactions,
+  fetchTokens,
+} from "../store/walletSlice";
 import * as style from "@dicebear/avatars-jdenticon-sprites";
 import { PublicKeyTextCopy } from "./PublicKeyTextCopy";
 import { SvgXml } from "react-native-svg";
 import { useTheme } from "styled-components";
 import { createAvatar } from "@dicebear/avatars";
-import { fetchTokens } from "../store/walletSlice";
 import { TokenList } from "./TokenList";
 import numeral from "numeral";
 import PagerView, { PagerViewOnPageScrollEvent } from "react-native-pager-view";
 import { Typography } from "./Typography";
+import { TransactionCard } from "../elements";
 
 interface RealmSelectModalProps {}
 
@@ -23,8 +28,14 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
   const dispatch = useAppDispatch();
   const [selectedPage, setSelectedPage] = useState(0);
 
-  const { isWalletOpen, publicKey, tokenPriceData, tokens, userInfo } =
-    useAppSelector((state) => state.wallet);
+  const {
+    isWalletOpen,
+    publicKey,
+    tokenPriceData,
+    tokens,
+    userInfo,
+    transactions,
+  } = useAppSelector((state) => state.wallet);
 
   const handleClose = () => {
     dispatch(closeWallet(""));
@@ -37,6 +48,7 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
   useEffect(() => {
     if (isWalletOpen && publicKey) {
       dispatch(fetchTokens(publicKey));
+      dispatch(fetchTransactions(publicKey));
     }
   }, [isWalletOpen]);
 
@@ -96,10 +108,10 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
             />
           </TokenContainer>
           <TokenContainer key="2">
-            <Typography size="h3" text="NFTS" bold={true} />
-          </TokenContainer>
-          <TokenContainer key="3">
             <Typography size="h3" text="Activity" bold={true} />
+            {transactions.map((transaction: any) => (
+              <TransactionCard transaction={transaction} />
+            ))}
           </TokenContainer>
         </PagerView>
       </Container>

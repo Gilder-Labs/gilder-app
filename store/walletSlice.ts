@@ -37,6 +37,8 @@ export interface WalletState {
   transactionState: "none" | "pending" | "success" | "error";
   isSendingTransaction: boolean;
   transactionError: any;
+  isLoadingTransactions: boolean;
+  transactions: any;
 }
 
 const initialState: WalletState = {
@@ -53,6 +55,8 @@ const initialState: WalletState = {
   isSendingTransaction: false,
   transactionError: "",
   transactionState: "none",
+  isLoadingTransactions: false,
+  transactions: [],
 };
 
 let connection = new Connection(RPC_CONNECTION, "confirmed");
@@ -61,7 +65,6 @@ const TokensInfo = getTokensInfo();
 export const fetchTokens = createAsyncThunk(
   "wallet/fetchTokens",
   async (publicKey: string) => {
-    console.log("TRYING tokens");
     try {
       // TODO: GET THE SOL OF THE ACCOUNT WITH `getBalance`
       // TODO: differentiate between NFTS/tokens
@@ -141,6 +144,49 @@ export const fetchTokens = createAsyncThunk(
     } catch (e) {
       console.log("error", e);
       return { tokens: [] };
+    }
+  }
+);
+
+export const fetchTransactions = createAsyncThunk(
+  "wallet/fetchTransactions",
+  async (publicKey: string) => {
+    try {
+      let rawTransactionsFilled;
+      let transactionsParsed = [];
+
+      console.log("fetching fetchTransactions");
+      let transactions = await connection.getConfirmedSignaturesForAddress2(
+        new PublicKey(publicKey),
+        {
+          limit: 20,
+          // before: fetchAfterSignature ? fetchAfterSignature : undefined,
+        }
+      );
+
+      let signatures = transactions.map((transaction) => {
+        return transaction.signature;
+      });
+
+      rawTransactionsFilled = await connection.getParsedTransactions(
+        signatures
+      );
+
+      transactionsParsed = rawTransactionsFilled?.map((transaction, index) => {
+        return {
+          signature: transactions[index].signature,
+          blockTime: transaction?.blockTime,
+          // @ts-ignore
+          status: transaction?.meta?.status,
+          logs: transaction?.meta?.logMessages,
+          // logsParsed: extractLogInfo(transaction?.meta?.logMessages),
+        };
+      });
+
+      return { transactions: transactionsParsed };
+    } catch (e) {
+      console.log("error", e);
+      return { transactions: [] };
     }
   }
 );
@@ -283,6 +329,16 @@ export const walletSlice = createSlice({
         state.isSendingTransaction = false;
         state.transactionState = error ? "error" : "success";
         state.transactionError = error;
+      })
+      .addCase(fetchTransactions.pending, (state) => {
+        state.isLoadingTransactions = true;
+      })
+      .addCase(fetchTransactions.rejected, (state) => {
+        state.isLoadingTransactions = false;
+      })
+      .addCase(fetchTransactions.fulfilled, (state, action: any) => {
+        state.isLoadingTransactions = false;
+        state.transactions = action.payload.transactions;
       });
   },
 });
