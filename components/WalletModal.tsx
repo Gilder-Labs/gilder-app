@@ -98,7 +98,11 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
 
         <WalletValue>{getTotalValue()}</WalletValue>
 
-        <PagerView style={styles.viewPager} initialPage={selectedPage}>
+        <PagerView
+          style={styles.viewPager}
+          initialPage={selectedPage}
+          pageMargin={20}
+        >
           <TokenContainer key="1">
             <Typography size="h3" text="Tokens" bold={true} />
             <TokenList
@@ -108,7 +112,12 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
             />
           </TokenContainer>
           <TokenContainer key="2">
-            <Typography size="h3" text="Activity" bold={true} />
+            <Typography
+              size="h3"
+              text="Activity"
+              bold={true}
+              marginBottom="3"
+            />
             {transactions.map((transaction: any) => (
               <TransactionCard transaction={transaction} />
             ))}

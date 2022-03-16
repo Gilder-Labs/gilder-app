@@ -16,6 +16,7 @@ interface TypographyProps {
     | "purple"
     | "error"
     | "warning";
+  marginBottom?: "1" | "2" | "3" | "4" | "5";
 }
 
 const sizeMapping = {
@@ -35,6 +36,7 @@ export const Typography = ({
   bold = false,
   shade = "100",
   color = "gray",
+  marginBottom = "1",
 }: TypographyProps) => {
   return (
     <Text
@@ -43,6 +45,7 @@ export const Typography = ({
       bold={bold}
       shade={shade}
       color={color}
+      marginBottom={marginBottom}
     >
       {text}
     </Text>
@@ -54,6 +57,7 @@ const Text = styled.Text<{
   size: "h1" | "h2" | "h3" | "h4" | "body" | "subtitle" | "caption";
   bold: boolean;
   shade: "100" | "200" | "300" | "400" | "500" | "600" | "700" | "800" | "900";
+  marginBottom: "1" | "2" | "3" | "4" | "5";
   color:
     | "gray"
     | "primary"
@@ -68,4 +72,5 @@ const Text = styled.Text<{
   line-height: ${(props) => sizeMapping[props.size] * 1.5}px;
   font-weight: ${(props) => (props.bold ? "bold" : "normal")};
   color: ${(props) => props.theme[props.color][props.shade]};
+  margin-bottom: ${(props) => props.theme.spacing[props.marginBottom]};
 `;
