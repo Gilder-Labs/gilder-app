@@ -17,11 +17,14 @@ import Navigation from "./navigation";
 import { LogBox } from "react-native";
 import * as Sentry from "sentry-expo";
 
-Sentry.init({
-  dsn: "https://ab84075ed2ab481c80a159488d0fdab8@o1171301.ingest.sentry.io/6265617",
-  enableInExpoDevelopment: true,
-  debug: true, // If `true`, Sentry will try to print out useful debugging information if something goes wrong with sending the event. Set it to `false` in production
-});
+// If we are in prod we wanna catch bugs
+if (process.env.NODE_ENV !== "development") {
+  Sentry.init({
+    dsn: "https://ab84075ed2ab481c80a159488d0fdab8@o1171301.ingest.sentry.io/6265617",
+    enableInExpoDevelopment: true,
+    debug: true, // If `true`, Sentry will try to print out useful debugging information if something goes wrong with sending the event. Set it to `false` in production
+  });
+}
 
 LogBox.ignoreAllLogs();
 
