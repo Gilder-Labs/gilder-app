@@ -15,17 +15,8 @@ import { setWallet, openWallet } from "../store/walletSlice";
 
 import { URL } from "react-native-url-polyfill";
 
-// Change this to genesys rpc
-const networks = {
-  mainnet: {
-    url: "https://solana-api.projectserum.com",
-    displayName: "Mainnet Beta",
-  },
-  devnet: { url: clusterApiUrl("devnet"), displayName: "Devnet" },
-  testnet: { url: clusterApiUrl("testnet"), displayName: "Testnet" },
-};
-
-const scheme = "openloginexposdkexampleexpo";
+const scheme = "gilder";
+// should resolve as "gilder://" in ios app
 const resolvedRedirectUrl =
   Constants.appOwnership == AppOwnership.Expo ||
   Constants.appOwnership == AppOwnership.Guest

@@ -74,7 +74,6 @@ export const fetchTokens = createAsyncThunk(
       );
 
       const solanaBalance = solanaLamportsInWallet / LAMPORTS_PER_SOL;
-      console.log("solana balance", solanaBalance);
 
       const response = await connection.getParsedTokenAccountsByOwner(
         new PublicKey(publicKey),
@@ -155,7 +154,6 @@ export const fetchTransactions = createAsyncThunk(
       let rawTransactionsFilled;
       let transactionsParsed = [];
 
-      console.log("fetching fetchTransactions");
       let transactions = await connection.getConfirmedSignaturesForAddress2(
         new PublicKey(publicKey),
         {
