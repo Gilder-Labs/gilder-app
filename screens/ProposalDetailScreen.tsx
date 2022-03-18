@@ -206,9 +206,9 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
               <TimeContainer>
                 <StatusText>Ends in </StatusText>
                 <TimeText>
-                  {`${timeLeft.days}d: `}
-                  {`${timeLeft.hours}h: `}
-                  {`${timeLeft.minutes}m`}
+                  {`${timeLeft.days ? timeLeft.days : 0}d: `}
+                  {`${timeLeft.hours ? timeLeft.hours : 0}h: `}
+                  {`${timeLeft.minutes ? timeLeft.minutes : 0}m`}
                 </TimeText>
               </TimeContainer>
             ) : (
