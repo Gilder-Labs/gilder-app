@@ -61,7 +61,6 @@ export const fetchRealmMembers = createAsyncThunk(
     }
 
     const membersMap = {};
-
     const members = rawTokenOwnerRecords?.map((member) => {
       let memberData = {
         publicKey: member.pubkey.toString(),

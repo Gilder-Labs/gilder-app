@@ -11,6 +11,8 @@ export default function ActivityScreen({
     (state) => state.members
   );
 
+  const { selectedRealm } = useAppSelector((state) => state.realms);
+
   const handleMemberSelect = (member: Member) => {
     //@ts-ignore
     navigation.push("MemberDetails", {
@@ -24,6 +26,7 @@ export default function ActivityScreen({
         key={item.walletId}
         member={item}
         onSelect={() => handleMemberSelect(item)}
+        realm={selectedRealm}
       />
     );
   };

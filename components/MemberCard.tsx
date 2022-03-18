@@ -12,9 +12,10 @@ import { getColorType } from "../utils";
 interface MemberCardProps {
   member: any;
   onSelect: any;
+  realm: any;
 }
 
-export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
+export const MemberCard = ({ member, onSelect, realm }: MemberCardProps) => {
   const theme = useTheme();
 
   let jdenticonSvg = createAvatar(style, {
@@ -23,6 +24,28 @@ export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
   });
 
   const color = getColorType(member.walletId);
+
+  const formatVoteWeight = () => {
+    const {
+      communityMint,
+      communityMintDecimals,
+      councilMintDecimals,
+      councilMint,
+    } = realm;
+
+    // 1: check which mint is governing member.governingTokenMint
+    if (member.governingTokenMint === councilMint) {
+      return numeral(Number(member.depositAmount)).format("0,0");
+    } else {
+      const memberWeightString = member.depositAmount.toString();
+      const formattedWeight = memberWeightString.slice(
+        0,
+        -communityMintDecimals
+      );
+
+      return numeral(Number(formattedWeight)).format("0,0");
+    }
+  };
 
   return (
     <Container onPress={onSelect}>
@@ -47,10 +70,10 @@ export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
             <VotesCast>{member.totalVotesCount}</VotesCast>
           </DetailContainer>
           <DetailContainer>
-            <SubtitleText>Vote Weight</SubtitleText>
-            <VoteWeight>
-              {numeral(Number(member.depositAmount)).format("0.00a")}
-            </VoteWeight>
+            <SubtitleText style={{ textAlign: "right" }}>
+              Vote Weight
+            </SubtitleText>
+            <VoteWeight>{formatVoteWeight()}</VoteWeight>
           </DetailContainer>
         </TextContainer>
       </ContentContainer>

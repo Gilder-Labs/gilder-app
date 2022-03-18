@@ -124,7 +124,7 @@ export const fetchRealm = createAsyncThunk(
       communityMintSupply: communityMintData
         ? communityMintData.value?.data?.parsed?.info?.supply
         : null,
-      councilMint: rawRealm.account?.config?.councilMint?.toString(),
+      councilMint: rawRealm.account?.config?.councilMint?.toString() || null,
       councilMintDecimals: councilMintData
         ? councilMintData.value?.data?.parsed?.info?.decimals
         : null,
