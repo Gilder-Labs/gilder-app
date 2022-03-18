@@ -15,6 +15,13 @@ import { SplashScreen } from "./components";
 import useCachedResources from "./hooks/useCachedResources";
 import Navigation from "./navigation";
 import { LogBox } from "react-native";
+import * as Sentry from "sentry-expo";
+
+Sentry.init({
+  dsn: "https://ab84075ed2ab481c80a159488d0fdab8@o1171301.ingest.sentry.io/6265617",
+  enableInExpoDevelopment: true,
+  debug: true, // If `true`, Sentry will try to print out useful debugging information if something goes wrong with sending the event. Set it to `false` in production
+});
 
 LogBox.ignoreAllLogs();
 

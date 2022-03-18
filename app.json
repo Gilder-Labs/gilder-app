@@ -7,11 +7,23 @@
     "icon": "./assets/images/DarkIcon.png",
     "scheme": "gilder",
     "userInterfaceStyle": "automatic",
-    "plugins": ["expo-community-flipper"],
+    "plugins": ["sentry-expo"],
     "splash": {
       "image": "./assets/images/GilderSplash.png",
       "resizeMode": "contain",
       "backgroundColor": "#000000"
+    },
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "Gilder",
+            "project": "Gilder Sentry",
+            "authToken": "your auth token here"
+          }
+        }
+      ]
     },
     "owner": "gilder",
     "updates": {
