@@ -119,7 +119,10 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
               marginBottom="3"
             />
             {transactions.map((transaction: any) => (
-              <TransactionCard transaction={transaction} />
+              <TransactionCard
+                transaction={transaction}
+                key={transaction.signature}
+              />
             ))}
           </TokenContainer>
         </PagerView>

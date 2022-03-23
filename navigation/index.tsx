@@ -31,7 +31,9 @@ const Stack = createNativeStackNavigator();
 
 function DrawerScreen() {
   const theme = useTheme();
-  const { activeProposals } = useAppSelector((state) => state.treasury);
+  const { activeProposals, isLoadingVaults } = useAppSelector(
+    (state) => state.treasury
+  );
   return (
     <Drawer.Navigator
       initialRouteName="Proposals"
@@ -87,7 +89,7 @@ function DrawerScreen() {
               <DrawerTabText color={color} focused={focused}>
                 Proposals
               </DrawerTabText>
-              {activeProposals > 0 && (
+              {activeProposals > 0 && !isLoadingVaults && (
                 <NotificationContainer>
                   <DrawerTabNotification>
                     {activeProposals}
@@ -124,10 +126,12 @@ export default function Navigation({}: {}) {
   const dispatch = useAppDispatch();
   const { selectedRealm } = useAppSelector((state) => state.realms);
 
+  // fetch realms on devnet toggle
   useEffect(() => {
     dispatch(fetchRealms());
   }, []);
 
+  // fetch everyting on devnet toggle
   useEffect(() => {
     if (selectedRealm?.pubKey) {
       dispatch(fetchVaults(selectedRealm));
@@ -143,7 +147,7 @@ export default function Navigation({}: {}) {
       dispatch(fetchRealmMembers(selectedRealm));
       dispatch(realmLoaded(""));
     }
-  }, [selectedRealm]);
+  }, [selectedRealm?.pubKey]);
 
   const NavigationTheme = {
     dark: false,

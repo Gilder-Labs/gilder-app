@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components/native";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { fetchRealm } from "../store/realmSlice";
+import { fetchRealm, selectRealm } from "../store/realmSlice";
 import { RealmIcon } from "./RealmIcon";
 
 interface RealmIconButtonProps {
@@ -17,7 +17,9 @@ export const RealmIconButton = ({
   showSelected = true,
   size = 48,
 }: RealmIconButtonProps) => {
-  const { realmsData, selectedRealm } = useAppSelector((state) => state.realms);
+  const { realmsMap, selectedRealm, isLoadingSelectedRealm } = useAppSelector(
+    (state) => state.realms
+  );
   const dispatch = useAppDispatch();
 
   const handleRealmIconClick = () => {
@@ -26,6 +28,7 @@ export const RealmIconButton = ({
       return;
     }
 
+    dispatch(selectRealm(realmsMap[realmId]));
     dispatch(fetchRealm(realmId));
   };
 
@@ -36,7 +39,7 @@ export const RealmIconButton = ({
       onPress={handleRealmIconClick}
       key={realmId}
       activeOpacity={0.4}
-      disabled={isDisabled}
+      disabled={isDisabled || isLoadingSelectedRealm}
       isSelected={isSelected}
       showSelected={showSelected}
       size={size}
