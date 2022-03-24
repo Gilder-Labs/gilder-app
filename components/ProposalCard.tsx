@@ -86,6 +86,13 @@ export const ProposalCard = ({
   };
 
   const getQuorum = () => {
+    if (!mintSupply)
+      return {
+        votesNeeded: "0",
+        totalVotesNeededPercentage: 0,
+        hasMetQuorum: false,
+      };
+
     const mintSupplyFormatted =
       mintDecimals === 0 ? mintSupply : mintSupply.slice(0, -mintDecimals);
     const yesVoteFormatted =

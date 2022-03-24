@@ -107,7 +107,7 @@ export default function ProposalScreen({
             <HeaderContainer>
               <TreasuryValueContainer>
                 <SubtitleText> Total Proposals </SubtitleText>
-                <TreasuryText>{proposals.length}</TreasuryText>
+                <TreasuryText>{proposals?.length}</TreasuryText>
               </TreasuryValueContainer>
             </HeaderContainer>
           }
