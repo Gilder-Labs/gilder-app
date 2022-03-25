@@ -43,7 +43,9 @@ export const MemberCard = ({ member, onSelect, realm }: MemberCardProps) => {
         <TextContainer>
           <DetailContainer>
             <SubtitleText>Community Votes</SubtitleText>
-            <VotesCast>{member.totalVotesCommunity}</VotesCast>
+            <VotesCast>
+              {member.totalVotesCommunity ? member.totalVotesCommunity : 0}
+            </VotesCast>
           </DetailContainer>
 
           <DetailContainer>

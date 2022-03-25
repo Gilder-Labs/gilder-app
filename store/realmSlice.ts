@@ -216,7 +216,9 @@ export const realmSlice = createSlice({
         // const realmId = action.meta?.arg;
         state.isLoadingSelectedRealm = true;
       })
-      .addCase(fetchRealm.rejected, (state) => {})
+      .addCase(fetchRealm.rejected, (state) => {
+        state.isLoadingSelectedRealm = false;
+      })
       .addCase(fetchRealm.fulfilled, (state, action: any) => {
         state.selectedRealm = action.payload;
         state.isLoadingSelectedRealm = false;

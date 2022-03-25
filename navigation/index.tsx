@@ -133,7 +133,7 @@ export default function Navigation({}: {}) {
 
   // fetch everyting on devnet toggle
   useEffect(() => {
-    if (selectedRealm?.pubKey) {
+    if (selectedRealm?.pubKey && selectedRealm?.communityMint) {
       dispatch(fetchVaults(selectedRealm));
       dispatch(
         fetchRealmActivity({
@@ -147,7 +147,7 @@ export default function Navigation({}: {}) {
       dispatch(fetchRealmMembers(selectedRealm));
       dispatch(realmLoaded(""));
     }
-  }, [selectedRealm?.pubKey]);
+  }, [selectedRealm]);
 
   const NavigationTheme = {
     dark: false,
