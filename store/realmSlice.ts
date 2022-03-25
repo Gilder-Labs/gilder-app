@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { PublicKey, ConfirmedSignatureInfo } from "@solana/web3.js";
-import { getRealms, getRealm } from "@solana/spl-governance";
+import { getRealms, getRealm, tryGetRealmConfig } from "@solana/spl-governance";
 
 import * as web3 from "@solana/web3.js";
 import {
@@ -9,6 +9,7 @@ import {
   RPC_CONNECTION,
 } from "../constants/Solana";
 import { cleanRealmData, getTokensInfo, extractLogInfo } from "../utils";
+import { RootState } from ".";
 
 export interface realmState {
   realms: Array<any>;
@@ -121,12 +122,21 @@ export const fetchRealm = createAsyncThunk(
 
     if (rawRealm.account.communityMint) {
       communityMintData = await communityMintPromise;
-      console.log("community mint data", communityMintData);
+      // console.log("community mint data", communityMintData);
     }
     if (rawRealm.account.config.councilMint) {
       councilMintData = await councilMintPromise;
-      console.log("council mint data", councilMintData);
+      // console.log("council mint data", councilMintData);
     }
+
+    // NOTE: if a realm has a addin, this will return what addins they have.
+    // IE: mango has "communityVoterWeightAddin"
+    // const realmConfig = await tryGetRealmConfig(
+    //   connection,
+    //   rawRealm?.owner,
+    //   new PublicKey(realmId)
+    // );
+    // console.log("realm config", realmConfig);
 
     return {
       name: rawRealm.account.name,
@@ -182,7 +192,6 @@ export const realmSlice = createSlice({
       }
     },
     selectRealm: (state, action) => {
-      console.log("action payload", action.payload);
       state.selectedRealm = action.payload;
     },
     realmLoaded: (state, action) => {
@@ -201,6 +210,7 @@ export const realmSlice = createSlice({
       .addCase(fetchRealms.fulfilled, (state, action: any) => {
         state.realms = action.payload.realms;
         state.realmsMap = action.payload.realmsMap;
+        state.isLoadingRealms = false;
       })
       .addCase(fetchRealm.pending, (state, action) => {
         // const realmId = action.meta?.arg;
@@ -209,6 +219,7 @@ export const realmSlice = createSlice({
       .addCase(fetchRealm.rejected, (state) => {})
       .addCase(fetchRealm.fulfilled, (state, action: any) => {
         state.selectedRealm = action.payload;
+        state.isLoadingSelectedRealm = false;
       });
   },
 });

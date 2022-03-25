@@ -4,8 +4,14 @@ interface Member {
   totalVotesCount: number;
   outstandingProposalCount: number;
   walletId: string; // wallet address
-  depositAmount: string;
-  governingTokenMint: string;
+  communityTokenVotes: number;
+  communityDepositUiAmount: string;
+  communityDepositAmount: string;
+  communityTokenMint: string;
+  councilTokenVotes: number;
+  councilDepositUiAmount: string;
+  councilDepositAmount: string;
+  councilTokenMint: string;
 }
 
 interface ChatMessage {

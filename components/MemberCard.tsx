@@ -7,7 +7,8 @@ import * as style from "@dicebear/avatars-jdenticon-sprites";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Unicons from "@iconscout/react-native-unicons";
 import numeral from "numeral";
-import { getColorType } from "../utils";
+import { getColorType, abbreviatePublicKey } from "../utils";
+import { formatVoteWeight } from "../utils";
 
 interface MemberCardProps {
   member: any;
@@ -25,28 +26,6 @@ export const MemberCard = ({ member, onSelect, realm }: MemberCardProps) => {
 
   const color = getColorType(member.walletId);
 
-  const formatVoteWeight = () => {
-    const {
-      communityMint,
-      communityMintDecimals,
-      councilMintDecimals,
-      councilMint,
-    } = realm;
-
-    // 1: check which mint is governing member.governingTokenMint
-    if (member.governingTokenMint === councilMint) {
-      return numeral(Number(member.depositAmount)).format("0,0");
-    } else {
-      const memberWeightString = member.depositAmount.toString();
-      const formattedWeight = memberWeightString.slice(
-        0,
-        -communityMintDecimals
-      );
-
-      return numeral(Number(formattedWeight)).format("0,0");
-    }
-  };
-
   return (
     <Container onPress={onSelect}>
       <LinearGradient
@@ -59,10 +38,7 @@ export const MemberCard = ({ member, onSelect, realm }: MemberCardProps) => {
         <SvgXml xml={jdenticonSvg} width="44px" height="44px" />
       </IconContainer>
       <ContentContainer>
-        <MemberName>{`${member.walletId.slice(0, 4)}...${member.walletId.slice(
-          0,
-          4
-        )}`}</MemberName>
+        <MemberName>{abbreviatePublicKey(member.walletId)}</MemberName>
 
         <TextContainer>
           <DetailContainer>
@@ -70,10 +46,22 @@ export const MemberCard = ({ member, onSelect, realm }: MemberCardProps) => {
             <VotesCast>{member.totalVotesCount}</VotesCast>
           </DetailContainer>
           <DetailContainer>
+            <SubtitleText>Council Votes</SubtitleText>
+            <VoteWeight>
+              {member?.councilDepositUiAmount
+                ? member?.councilDepositUiAmount
+                : 0}
+            </VoteWeight>
+          </DetailContainer>
+          <DetailContainer>
             <SubtitleText style={{ textAlign: "right" }}>
-              Vote Weight
+              Community Votes
             </SubtitleText>
-            <VoteWeight>{formatVoteWeight()}</VoteWeight>
+            <VoteWeight>
+              {member?.communityDepositUiAmount
+                ? member?.communityDepositUiAmount
+                : 0}
+            </VoteWeight>
           </DetailContainer>
         </TextContainer>
       </ContentContainer>
