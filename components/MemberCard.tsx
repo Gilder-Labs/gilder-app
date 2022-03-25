@@ -42,20 +42,13 @@ export const MemberCard = ({ member, onSelect, realm }: MemberCardProps) => {
 
         <TextContainer>
           <DetailContainer>
-            <SubtitleText>Total Votes</SubtitleText>
-            <VotesCast>{member.totalVotesCount}</VotesCast>
+            <SubtitleText>Community Votes</SubtitleText>
+            <VotesCast>{member.totalVotesCommunity}</VotesCast>
           </DetailContainer>
-          <DetailContainer>
-            <SubtitleText>Council Votes</SubtitleText>
-            <VoteWeight>
-              {member?.councilDepositUiAmount
-                ? member?.councilDepositUiAmount
-                : 0}
-            </VoteWeight>
-          </DetailContainer>
+
           <DetailContainer>
             <SubtitleText style={{ textAlign: "right" }}>
-              Community Votes
+              Vote Weight
             </SubtitleText>
             <VoteWeight>
               {member?.communityDepositUiAmount
@@ -64,6 +57,18 @@ export const MemberCard = ({ member, onSelect, realm }: MemberCardProps) => {
             </VoteWeight>
           </DetailContainer>
         </TextContainer>
+        {member?.councilDepositUiAmount && (
+          <TextContainer style={{ marginTop: 4 }}>
+            <DetailContainer>
+              <SubtitleText>Council Votes</SubtitleText>
+              <VotesCast>{member.totalVotesCouncil}</VotesCast>
+            </DetailContainer>
+            <DetailContainer>
+              <SubtitleText>Council Vote Weight</SubtitleText>
+              <VoteWeight>{member?.councilDepositUiAmount}</VoteWeight>
+            </DetailContainer>
+          </TextContainer>
+        )}
       </ContentContainer>
     </Container>
   );
