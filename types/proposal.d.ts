@@ -15,4 +15,6 @@ interface Proposal {
   votingCompletedAt: number;
   draftAt: number;
   executingAt: number;
+  governanceId: string;
+  governingTokenMint: string;
 }

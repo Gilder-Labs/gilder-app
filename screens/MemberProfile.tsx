@@ -11,6 +11,7 @@ import { ChatMessage } from "../components/ChatMessage";
 import { getColorType } from "../utils";
 import { MemberProfileHeader } from "../components/MemberProfileHeader";
 import { VoteCard } from "../components/VoteCard";
+import { useQuery, gql } from "@apollo/client";
 
 interface MemberProfileProps {
   open: boolean;
@@ -18,6 +19,19 @@ interface MemberProfileProps {
   route: any;
   navigation: any;
 }
+
+const GET_CYBERCONNECT_IDENTITY = gql`
+  query FullIdentityQuery($publicKey: String!) {
+    identity(address: $publicKey, network: SOLANA) {
+      address
+      domain
+      social {
+        twitter
+      }
+      avatar
+    }
+  }
+`;
 
 export const MemberProfile = ({ route }: MemberProfileProps) => {
   const theme = useTheme();
@@ -28,6 +42,16 @@ export const MemberProfile = ({ route }: MemberProfileProps) => {
   const { proposalsMap } = useAppSelector((state) => state.proposals);
   const { member } = route?.params;
   const [selectedTab, setSelectedTab] = useState("Messages");
+
+  const { loading, error, data } = useQuery(GET_CYBERCONNECT_IDENTITY, {
+    variables: { publicKey: member.walletId },
+  });
+
+  const identityName = data?.identity?.social?.twitter
+    ? data?.identity?.social?.twitter
+    : data?.identity?.domain;
+
+  const avatarUrl = data?.identity?.avatar;
 
   useEffect(() => {
     if (member) {
@@ -53,6 +77,7 @@ export const MemberProfile = ({ route }: MemberProfileProps) => {
         vote={item}
         key={item.proposalId}
         proposal={proposalsMap[item.proposalId]}
+        realm={selectedRealm}
       />
     );
   };
@@ -91,6 +116,7 @@ export const MemberProfile = ({ route }: MemberProfileProps) => {
               onSelectTab={setSelectedTab}
               color={color}
               icon={jdenticonSvg}
+              avatarUrl={avatarUrl}
             />
           }
         />
@@ -111,6 +137,7 @@ export const MemberProfile = ({ route }: MemberProfileProps) => {
               onSelectTab={setSelectedTab}
               color={color}
               icon={jdenticonSvg}
+              avatarUrl={avatarUrl}
             />
           }
         />

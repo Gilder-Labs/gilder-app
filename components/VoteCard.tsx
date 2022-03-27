@@ -4,11 +4,13 @@ import { useTheme } from "styled-components";
 import { Badge } from "../components";
 import numeral from "numeral";
 import * as Unicons from "@iconscout/react-native-unicons";
+import { formatVoteWeight } from "../utils";
 
 interface VoteCardProps {
   vote: MemberVote;
   proposal: Proposal;
   member: Member;
+  realm: any;
 }
 // Vote weight
 // Direction vote is cast
@@ -26,7 +28,7 @@ const proposalStatusKey = {
   Defeated: "error",
 };
 
-export const VoteCard = ({ vote, proposal, member }: VoteCardProps) => {
+export const VoteCard = ({ vote, proposal, member, realm }: VoteCardProps) => {
   const theme = useTheme();
 
   // Vote for proposal not in dao so we hide it.
@@ -35,7 +37,17 @@ export const VoteCard = ({ vote, proposal, member }: VoteCardProps) => {
   }
 
   const { status } = proposal;
-  const { depositAmount } = member;
+  const { councilDepositUiAmount, communityDepositUiAmount } = member;
+
+  const getVoteWeight = () => {
+    const { communityMint, councilMint } = realm;
+
+    if (proposal.governingTokenMint === councilMint) {
+      return councilDepositUiAmount;
+    } else {
+      return communityDepositUiAmount;
+    }
+  };
 
   return (
     <Container>
@@ -44,7 +56,7 @@ export const VoteCard = ({ vote, proposal, member }: VoteCardProps) => {
         <Row>
           <VoteRow>
             <VoteText>Votes -</VoteText>
-            <VoteAmount>{numeral(depositAmount).format("0,0.00a")}</VoteAmount>
+            <VoteAmount>{getVoteWeight()}</VoteAmount>
             <IconContainer isApproved={vote.voteWeightYes ? true : false}>
               {vote.voteWeightYes ? (
                 <Unicons.UilCheck size="18" color={theme.success[400]} />

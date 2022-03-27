@@ -6,12 +6,26 @@ import { createAvatar } from "@dicebear/avatars";
 import * as style from "@dicebear/avatars-jdenticon-sprites";
 import { SvgXml } from "react-native-svg";
 import { getColorType, abbreviatePublicKey } from "../utils";
+import { useQuery, gql } from "@apollo/client";
 
 interface ChatMessageProps {
   message: ChatMessage;
   proposal: Proposal;
   isInProposal?: boolean;
 }
+
+const GET_CYBERCONNECT_IDENTITY = gql`
+  query FullIdentityQuery($publicKey: String!) {
+    identity(address: $publicKey, network: SOLANA) {
+      address
+      domain
+      social {
+        twitter
+      }
+      avatar
+    }
+  }
+`;
 
 export const ChatMessage = ({
   message,
@@ -20,7 +34,9 @@ export const ChatMessage = ({
 }: ChatMessageProps) => {
   const theme = useTheme();
   const { body, postedAt, proposalId, author } = message;
-
+  const { loading, error, data } = useQuery(GET_CYBERCONNECT_IDENTITY, {
+    variables: { publicKey: author },
+  });
   let jdenticonSvg = createAvatar(style, {
     seed: author,
     // ... and other options
@@ -28,20 +44,36 @@ export const ChatMessage = ({
 
   const color = getColorType(author);
 
+  const identityName = data?.identity?.social?.twitter
+    ? data?.identity?.social?.twitter
+    : data?.identity?.domain;
+
+  const avatarUrl = data?.identity?.avatar;
+
   if (!proposal) {
     return <EmptyView />;
   }
 
+  const getDisplayName = () => {
+    if (isInProposal) {
+      return identityName ? identityName : abbreviatePublicKey(author);
+    }
+
+    return proposal?.name;
+  };
+
   return (
     <Container>
       <IconContainer color={color}>
-        <SvgXml xml={jdenticonSvg} width="34px" height="34px" />
+        {avatarUrl ? (
+          <Avatar source={{ uri: avatarUrl }} />
+        ) : (
+          <SvgXml xml={jdenticonSvg} width="34px" height="34px" />
+        )}
       </IconContainer>
 
       <Column>
-        <ProposalName>
-          {isInProposal ? abbreviatePublicKey(author) : proposal?.name}{" "}
-        </ProposalName>
+        <ProposalName>{getDisplayName()}</ProposalName>
         <MessageDate>
           {formatDistance(postedAt * 1000, new Date(), { addSuffix: true })}
         </MessageDate>
@@ -101,3 +133,8 @@ const Column = styled.View`
 `;
 
 const EmptyView = styled.View``;
+
+const Avatar = styled.Image`
+  width: 34px;
+  height: 34px;
+`;

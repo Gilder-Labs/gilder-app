@@ -10,6 +10,7 @@ interface MemberProfileHeaderProps {
   onSelectTab: any;
   color: string;
   icon: any;
+  avatarUrl: string;
 }
 
 export const MemberProfileHeader = ({
@@ -17,6 +18,7 @@ export const MemberProfileHeader = ({
   onSelectTab,
   color,
   icon,
+  avatarUrl,
 }: MemberProfileHeaderProps) => {
   const theme = useTheme();
 
@@ -34,7 +36,11 @@ export const MemberProfileHeader = ({
         start={{ x: 0.1, y: 0.2 }}
       ></LinearGradient>
       <IconContainer color={color}>
-        <SvgXml xml={icon} width="60px" height="60px" />
+        {avatarUrl ? (
+          <Avatar source={{ uri: avatarUrl }} />
+        ) : (
+          <SvgXml xml={icon} width="60px" height="60px" />
+        )}
       </IconContainer>
       <MemberInfoSwitcherContainer>
         {/* <NavIconButton
@@ -137,6 +143,11 @@ const NavIconButton = styled.TouchableOpacity<{
   flex-direction: row;
   justify-content: center;
   align-items: center;
+`;
+
+const Avatar = styled.Image`
+  height: 60px;
+  width: 60px;
 `;
 
 const ButtonText = styled.Text<{ color: string }>`

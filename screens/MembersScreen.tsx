@@ -4,7 +4,7 @@ import { useAppSelector } from "../hooks/redux";
 import { MemberCard, Loading } from "../components";
 import { FlatList } from "react-native";
 
-export default function ActivityScreen({
+export default function MemberScreen({
   navigation,
 }: RootTabScreenProps<"Activity">) {
   const { members, isLoadingMembers } = useAppSelector(
@@ -13,10 +13,14 @@ export default function ActivityScreen({
 
   const { selectedRealm } = useAppSelector((state) => state.realms);
 
-  const handleMemberSelect = (member: Member) => {
+  const handleMemberSelect = (
+    member: Member,
+    memberInfo: { name: string; avatarUrl: string }
+  ) => {
     //@ts-ignore
     navigation.push("MemberDetails", {
       member: member,
+      memberInfo: memberInfo,
     });
   };
 
@@ -25,7 +29,7 @@ export default function ActivityScreen({
       <MemberCard
         key={item.walletId}
         member={item}
-        onSelect={() => handleMemberSelect(item)}
+        onSelect={(memberInfo: any) => handleMemberSelect(item, memberInfo)}
         realm={selectedRealm}
       />
     );

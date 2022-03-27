@@ -34,7 +34,6 @@ export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
   const { loading, error, data } = useQuery(GET_CYBERCONNECT_IDENTITY, {
     variables: { publicKey: member.walletId },
   });
-  console.log("member data", data);
 
   let jdenticonSvg = createAvatar(style, {
     seed: member.walletId,
@@ -47,6 +46,10 @@ export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
     : data?.identity?.domain;
 
   const avatarUrl = data?.identity?.avatar;
+
+  const handleProfileClick = () => {
+    onSelect({ name: identityName, avatarUrl: avatarUrl });
+  };
 
   return (
     <Container>
@@ -70,7 +73,7 @@ export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
           <MemberName>
             {identityName ? identityName : abbreviatePublicKey(member.walletId)}
           </MemberName>
-          <IconButton onPress={onSelect} activeOpacity={0.5}>
+          <IconButton onPress={handleProfileClick} activeOpacity={0.5}>
             <Unicons.UilAngleDoubleRight size="28" color={theme.gray[400]} />
           </IconButton>
         </TitleRow>

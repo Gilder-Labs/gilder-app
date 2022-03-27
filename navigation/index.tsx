@@ -186,10 +186,12 @@ export default function Navigation({}: {}) {
             component={MemberProfile}
             // options={{ headerShown: false }}
             options={({ route }) => ({
-              title: `${route.params.member.walletId.slice(
-                0,
-                4
-              )}...${route.params.member.walletId.slice(-4)}`,
+              title: route.params.memberInfo.name
+                ? route.params.memberInfo.name
+                : `${route.params.member.walletId.slice(
+                    0,
+                    4
+                  )}...${route.params.member.walletId.slice(-4)}`,
             })}
           />
           <Stack.Screen
