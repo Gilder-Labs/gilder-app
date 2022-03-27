@@ -27,7 +27,7 @@ export const MemberCard = ({ member, onSelect, realm }: MemberCardProps) => {
   const color = getColorType(member.walletId);
 
   return (
-    <Container onPress={onSelect}>
+    <Container>
       <LinearGradient
         // Background Linear Gradient
         colors={[`${theme[color][600]}66`, `${theme[color][800]}66`]}
@@ -38,8 +38,12 @@ export const MemberCard = ({ member, onSelect, realm }: MemberCardProps) => {
         <SvgXml xml={jdenticonSvg} width="44px" height="44px" />
       </IconContainer>
       <ContentContainer>
-        <MemberName>{abbreviatePublicKey(member.walletId)}</MemberName>
-
+        <TitleRow>
+          <MemberName>{abbreviatePublicKey(member.walletId)}</MemberName>
+          <IconButton onPress={onSelect} activeOpacity={0.5}>
+            <Unicons.UilAngleDoubleRight size="28" color={theme.gray[400]} />
+          </IconButton>
+        </TitleRow>
         <TextContainer>
           <DetailContainer>
             <SubtitleText>Community Votes</SubtitleText>
@@ -76,7 +80,7 @@ export const MemberCard = ({ member, onSelect, realm }: MemberCardProps) => {
   );
 };
 
-const Container = styled.TouchableOpacity`
+const Container = styled.View`
   margin-bottom: ${(props: any) => props.theme.spacing[3]};
   border-radius: 4px;
   background: ${(props: any) => props.theme.gray[800]};
@@ -140,4 +144,19 @@ const IconContainer = styled.View<{ color: string }>`
   overflow: hidden;
   border: 2px solid ${(props: any) => props.theme.gray[900]};
   border-radius: 100px;
+`;
+
+const IconButton = styled.TouchableOpacity`
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 100px;
+  background: ${(props: any) => props.theme.gray[700]};
+  /* margin-left: ${(props: any) => props.theme.spacing[3]}; */
+`;
+
+const TitleRow = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
 `;

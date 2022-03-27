@@ -3,6 +3,8 @@ import styled from "styled-components/native";
 import { Badge } from "./Badge";
 import { format, getUnixTime, formatDistance } from "date-fns";
 import numeral from "numeral";
+import * as Unicons from "@iconscout/react-native-unicons";
+import { useTheme } from "styled-components";
 
 interface ProposalCardProps {
   proposal: any;
@@ -40,6 +42,8 @@ export const ProposalCard = ({
     isPreVotingState,
     votingAt,
   } = proposal;
+
+  const theme = useTheme();
 
   // @ts-ignore
   const yesVotes = Number(getYesVoteCount);
@@ -120,30 +124,35 @@ export const ProposalCard = ({
   const isVoting = status === "Voting";
 
   return (
-    <Container onPress={onClick}>
+    <Container>
       <TextContainer>
         <ProposalTitle>{name}</ProposalTitle>
         <Badge title={status} type={proposalStatusKey[status]} />
       </TextContainer>
       <ProposalSubData>
-        <DateText>{format(dateTimestamp * 1000, "MMM d, yyyy - p")}</DateText>
-        {isVoting ? (
-          <TimeContainer>
-            <StatusText>Ends in </StatusText>
-            <TimeText>
-              {`${timeLeft.days ? timeLeft.days : 0}d: `}
-              {`${timeLeft.hours ? timeLeft.hours : 0}h: `}
-              {`${timeLeft.minutes ? timeLeft.minutes : 0}m`}
-            </TimeText>
-          </TimeContainer>
-        ) : (
-          <StatusText>
-            {status}{" "}
-            {formatDistance(getStateTimestamp * 1000, new Date(), {
-              addSuffix: true,
-            })}
-          </StatusText>
-        )}
+        <SubtextContainer>
+          <DateText>{format(dateTimestamp * 1000, "MMM d, yyyy - p")}</DateText>
+          {isVoting ? (
+            <TimeContainer>
+              <StatusText>Ends in </StatusText>
+              <TimeText>
+                {`${timeLeft.days ? timeLeft.days : 0}d: `}
+                {`${timeLeft.hours ? timeLeft.hours : 0}h: `}
+                {`${timeLeft.minutes ? timeLeft.minutes : 0}m`}
+              </TimeText>
+            </TimeContainer>
+          ) : (
+            <StatusText>
+              {status}{" "}
+              {formatDistance(getStateTimestamp * 1000, new Date(), {
+                addSuffix: true,
+              })}
+            </StatusText>
+          )}
+        </SubtextContainer>
+        <IconButton onPress={onClick} activeOpacity={0.5}>
+          <Unicons.UilAngleDoubleRight size="28" color={theme.gray[400]} />
+        </IconButton>
       </ProposalSubData>
       {isVoting && (
         <Votes>
@@ -186,7 +195,7 @@ export const ProposalCard = ({
   );
 };
 
-const Container = styled.TouchableOpacity`
+const Container = styled.View`
   /* height: 80px; */
   width: 100%%;
   margin-bottom: ${(props: any) => props.theme.spacing[3]};
@@ -196,11 +205,12 @@ const Container = styled.TouchableOpacity`
 `;
 
 const ProposalSubData = styled.View`
-  justify-content: flex-start;
+  justify-content: space-between;
   padding-left: ${(props: any) => props.theme.spacing[4]};
   padding-right: ${(props: any) => props.theme.spacing[4]};
   margin-bottom: ${(props: any) => props.theme.spacing[3]};
   align-items: flex-start;
+  flex-direction: row;
 `;
 
 const ProposalTitle = styled.Text`
@@ -299,4 +309,18 @@ color: ${(props: any) => props.theme.gray[400]}
   font-weight: bold;
   font-size: 12px;
   margin-bottom:  ${(props: any) => props.theme.spacing[2]};
+`;
+
+const IconButton = styled.TouchableOpacity`
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 100px;
+  background: ${(props: any) => props.theme.gray[700]};
+  /* margin-left: ${(props: any) => props.theme.spacing[3]}; */
+`;
+
+const SubtextContainer = styled.View`
+  flex-direction: column;
 `;
