@@ -4,11 +4,11 @@ interface Member {
   totalVotesCount: number;
   outstandingProposalCount: number;
   walletId: string; // wallet address
-  communityTokenVotes: number;
+  totalVotesCommunity: number;
   communityDepositUiAmount: string;
   communityDepositAmount: string;
   communityTokenMint: string;
-  councilTokenVotes: number;
+  totalVotesCouncil: number;
   councilDepositUiAmount: string;
   councilDepositAmount: string;
   councilTokenMint: string;

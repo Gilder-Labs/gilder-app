@@ -111,7 +111,7 @@ const Column = styled.View`
 
 const IconContainer = styled.View<{ isApproved: boolean }>`
   background: ${(props) =>
-    props.isApproved ? props.theme.success[700] : props.theme.error[700]};
+    props.isApproved ? props.theme.success[700] : props.theme.error[700]}88;
   border-radius: 100px;
   border: 1px solid ${(props) => props.theme.gray[700]}
   padding: ${(props) => props.theme.spacing[1]};

@@ -35,7 +35,10 @@ export default function ActivityScreen({
     let totalVotes = 0;
 
     members.forEach((member: Member) => {
-      totalVotes += member.totalVotesCount;
+      totalVotes += member?.totalVotesCommunity
+        ? member.totalVotesCommunity
+        : 0;
+      totalVotes += member?.totalVotesCouncil ? member.totalVotesCouncil : 0;
     });
     return totalVotes;
   };

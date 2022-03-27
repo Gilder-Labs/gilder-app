@@ -6,9 +6,7 @@ import { createAvatar } from "@dicebear/avatars";
 import * as style from "@dicebear/avatars-jdenticon-sprites";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Unicons from "@iconscout/react-native-unicons";
-import numeral from "numeral";
 import { getColorType, abbreviatePublicKey } from "../utils";
-import { formatVoteWeight } from "../utils";
 
 interface MemberCardProps {
   member: any;
