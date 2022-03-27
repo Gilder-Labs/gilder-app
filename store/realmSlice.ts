@@ -103,73 +103,77 @@ export const fetchRealms = createAsyncThunk("realms/fetchRealms", async () => {
 export const fetchRealm = createAsyncThunk(
   "realms/fetchRealm",
   async (realmId: string) => {
-    const rawRealm = await getRealm(connection, new PublicKey(realmId));
-    let communityMintData = null;
-    let communityMintPromise;
-    let councilMintData = null;
-    let councilMintPromise;
+    try {
+      const rawRealm = await getRealm(connection, new PublicKey(realmId));
+      let communityMintData = null;
+      let communityMintPromise;
+      let councilMintData = null;
+      let councilMintPromise;
 
-    if (rawRealm.account.communityMint) {
-      communityMintPromise = connection.getParsedAccountInfo(
-        new PublicKey(rawRealm.account.communityMint)
-      );
-    }
-    if (rawRealm.account.config.councilMint) {
-      councilMintPromise = connection.getParsedAccountInfo(
-        new PublicKey(rawRealm.account.config.councilMint)
-      );
-    }
+      if (rawRealm.account.communityMint) {
+        communityMintPromise = connection.getParsedAccountInfo(
+          new PublicKey(rawRealm.account.communityMint)
+        );
+      }
+      if (rawRealm.account.config.councilMint) {
+        councilMintPromise = connection.getParsedAccountInfo(
+          new PublicKey(rawRealm.account.config.councilMint)
+        );
+      }
 
-    if (rawRealm.account.communityMint) {
-      communityMintData = await communityMintPromise;
-      // console.log("community mint data", communityMintData);
-    }
-    if (rawRealm.account.config.councilMint) {
-      councilMintData = await councilMintPromise;
-      // console.log("council mint data", councilMintData);
-    }
+      if (rawRealm.account.communityMint) {
+        communityMintData = await communityMintPromise;
+        // console.log("community mint data", communityMintData);
+      }
+      if (rawRealm.account.config.councilMint) {
+        councilMintData = await councilMintPromise;
+        // console.log("council mint data", councilMintData);
+      }
 
-    // NOTE: if a realm has a addin, this will return what addins they have.
-    // IE: mango has "communityVoterWeightAddin"
-    // const realmConfig = await tryGetRealmConfig(
-    //   connection,
-    //   rawRealm?.owner,
-    //   new PublicKey(realmId)
-    // );
-    // console.log("realm config", realmConfig);
+      // NOTE: if a realm has a addin, this will return what addins they have.
+      // IE: mango has "communityVoterWeightAddin"
+      // const realmConfig = await tryGetRealmConfig(
+      //   connection,
+      //   rawRealm?.owner,
+      //   new PublicKey(realmId)
+      // );
+      // console.log("realm config", realmConfig);
 
-    return {
-      name: rawRealm.account.name,
-      pubKey: rawRealm.pubkey.toString(),
-      communityMint: rawRealm.account.communityMint.toString(),
-      communityMintDecimals: communityMintData
-        ? communityMintData.value?.data?.parsed?.info?.decimals
-        : null,
-      communityMintSupply: communityMintData
-        ? communityMintData.value?.data?.parsed?.info?.supply
-        : null,
-      councilMint: rawRealm.account?.config?.councilMint?.toString() || null,
-      councilMintDecimals: councilMintData
-        ? councilMintData.value?.data?.parsed?.info?.decimals
-        : null,
-      councilMintSupply: councilMintData
-        ? councilMintData.value?.data?.parsed?.info?.supply
-        : null,
-      governanceId: rawRealm?.owner.toString(),
-      accountType: rawRealm.account.accountType,
-      votingProposalCount: rawRealm.account.votingProposalCount,
-      maxVoteWeight:
-        rawRealm.account.config.communityMintMaxVoteWeightSource.value.toNumber(),
-      minTokensToCreateGov:
-        rawRealm.account.config.minCommunityTokensToCreateGovernance.toNumber(),
-      fmtSupplyFraction:
-        rawRealm.account.config.communityMintMaxVoteWeightSource.fmtSupplyFractionPercentage(),
-      supplyFraction: rawRealm.account.config.communityMintMaxVoteWeightSource
-        .getSupplyFraction()
-        .toNumber(),
-      isFullSupply:
-        rawRealm.account.config.communityMintMaxVoteWeightSource.isFullSupply(),
-    };
+      return {
+        name: rawRealm.account.name,
+        pubKey: rawRealm.pubkey.toString(),
+        communityMint: rawRealm.account.communityMint.toString(),
+        communityMintDecimals: communityMintData
+          ? communityMintData.value?.data?.parsed?.info?.decimals
+          : null,
+        communityMintSupply: communityMintData
+          ? communityMintData.value?.data?.parsed?.info?.supply
+          : null,
+        councilMint: rawRealm.account?.config?.councilMint?.toString() || null,
+        councilMintDecimals: councilMintData
+          ? councilMintData.value?.data?.parsed?.info?.decimals
+          : null,
+        councilMintSupply: councilMintData
+          ? councilMintData.value?.data?.parsed?.info?.supply
+          : null,
+        governanceId: rawRealm?.owner.toString(),
+        accountType: rawRealm.account.accountType,
+        votingProposalCount: rawRealm.account.votingProposalCount,
+        maxVoteWeight:
+          rawRealm.account.config.communityMintMaxVoteWeightSource.value.toNumber(),
+        minTokensToCreateGov:
+          rawRealm.account.config.minCommunityTokensToCreateGovernance.toNumber(),
+        fmtSupplyFraction:
+          rawRealm.account.config.communityMintMaxVoteWeightSource.fmtSupplyFractionPercentage(),
+        supplyFraction: rawRealm.account.config.communityMintMaxVoteWeightSource
+          .getSupplyFraction()
+          .toNumber(),
+        isFullSupply:
+          rawRealm.account.config.communityMintMaxVoteWeightSource.isFullSupply(),
+      };
+    } catch (error) {
+      console.log("error in fetch realm", error);
+    }
   }
 );
 

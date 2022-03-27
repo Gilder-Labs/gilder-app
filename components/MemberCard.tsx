@@ -7,6 +7,7 @@ import * as style from "@dicebear/avatars-jdenticon-sprites";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Unicons from "@iconscout/react-native-unicons";
 import { getColorType, abbreviatePublicKey } from "../utils";
+import { useQuery, gql } from "@apollo/client";
 
 interface MemberCardProps {
   member: any;
@@ -14,8 +15,26 @@ interface MemberCardProps {
   realm: any;
 }
 
-export const MemberCard = ({ member, onSelect, realm }: MemberCardProps) => {
+const GET_CYBERCONNECT_IDENTITY = gql`
+  query FullIdentityQuery($publicKey: String!) {
+    identity(address: $publicKey, network: SOLANA) {
+      address
+      domain
+      social {
+        twitter
+      }
+      avatar
+    }
+  }
+`;
+
+export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
   const theme = useTheme();
+  // Fetch cyberconnect wallet data
+  const { loading, error, data } = useQuery(GET_CYBERCONNECT_IDENTITY, {
+    variables: { publicKey: member.walletId },
+  });
+  console.log("member data", data);
 
   let jdenticonSvg = createAvatar(style, {
     seed: member.walletId,
@@ -23,6 +42,11 @@ export const MemberCard = ({ member, onSelect, realm }: MemberCardProps) => {
   });
 
   const color = getColorType(member.walletId);
+  const identityName = data?.identity?.social?.twitter
+    ? data?.identity?.social?.twitter
+    : data?.identity?.domain;
+
+  const avatarUrl = data?.identity?.avatar;
 
   return (
     <Container>
@@ -32,12 +56,20 @@ export const MemberCard = ({ member, onSelect, realm }: MemberCardProps) => {
         style={{ height: 48, flex: 1, width: "100%" }}
         start={{ x: 0.1, y: 0.2 }}
       ></LinearGradient>
-      <IconContainer color={color}>
-        <SvgXml xml={jdenticonSvg} width="44px" height="44px" />
-      </IconContainer>
+      {avatarUrl ? (
+        <IconContainer color={color}>
+          <Avatar source={{ uri: avatarUrl }} />
+        </IconContainer>
+      ) : (
+        <IconContainer color={color}>
+          <SvgXml xml={jdenticonSvg} width="44px" height="44px" />
+        </IconContainer>
+      )}
       <ContentContainer>
         <TitleRow>
-          <MemberName>{abbreviatePublicKey(member.walletId)}</MemberName>
+          <MemberName>
+            {identityName ? identityName : abbreviatePublicKey(member.walletId)}
+          </MemberName>
           <IconButton onPress={onSelect} activeOpacity={0.5}>
             <Unicons.UilAngleDoubleRight size="28" color={theme.gray[400]} />
           </IconButton>
@@ -157,4 +189,9 @@ const IconButton = styled.TouchableOpacity`
 const TitleRow = styled.View`
   flex-direction: row;
   justify-content: space-between;
+`;
+
+const Avatar = styled.Image`
+  width: 44px;
+  height: 44px;
 `;

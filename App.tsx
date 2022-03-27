@@ -17,6 +17,8 @@ import Navigation from "./navigation";
 import { LogBox } from "react-native";
 import * as Sentry from "sentry-expo";
 
+import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
+
 // If we are in prod we wanna catch bugs
 if (process.env.NODE_ENV !== "development") {
   Sentry.init({
@@ -27,6 +29,12 @@ if (process.env.NODE_ENV !== "development") {
 }
 
 LogBox.ignoreAllLogs();
+
+// Appolo client for cyberconnect data
+const client = new ApolloClient({
+  uri: "https://api.cybertino.io/connect/",
+  cache: new InMemoryCache(),
+});
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
@@ -40,10 +48,12 @@ export default function App() {
       <SafeAreaProvider>
         <Provider store={store}>
           <ThemeProvider theme={darkTheme}>
-            <PersistGate loading={<SplashScreen />} persistor={persistor}>
-              <StatusBar style="light" />
-              <Navigation />
-            </PersistGate>
+            <ApolloProvider client={client}>
+              <PersistGate loading={<SplashScreen />} persistor={persistor}>
+                <StatusBar style="light" />
+                <Navigation />
+              </PersistGate>
+            </ApolloProvider>
           </ThemeProvider>
         </Provider>
       </SafeAreaProvider>
