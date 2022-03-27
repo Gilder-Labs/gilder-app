@@ -208,7 +208,8 @@ const ProposalSubData = styled.View`
   justify-content: space-between;
   padding-left: ${(props: any) => props.theme.spacing[4]};
   padding-right: ${(props: any) => props.theme.spacing[4]};
-  margin-bottom: ${(props: any) => props.theme.spacing[3]};
+  margin-top: ${(props: any) => props.theme.spacing[2]};
+  margin-bottom: ${(props: any) => props.theme.spacing[4]};
   align-items: flex-start;
   flex-direction: row;
 `;

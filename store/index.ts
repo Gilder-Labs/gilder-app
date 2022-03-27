@@ -29,13 +29,13 @@ const persistConfig = {
 const realmsPersistConfig = {
   key: "realms",
   storage: AsyncStorage,
-  whiteList: ["selectedRealm", "realmWatchlist", "userInfo"],
+  whiteList: ["selectedRealm", "realmWatchlist"],
 };
 
 const walletPersistConfig = {
   key: "wallet",
   storage: AsyncStorage,
-  whiteList: ["publicKey", "privateKey"],
+  whiteList: ["publicKey", "privateKey", "userInfo"],
 };
 
 const rootReducer = combineReducers({

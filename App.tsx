@@ -34,7 +34,8 @@ export default function App() {
     return <SplashScreen />;
   } else {
     let persistor = persistStore(store);
-    //loading={<Loading />}
+    // TODO: purge store whenever there is a new version to make sure we don't have wonky data till release
+    // persistor.purge();
     return (
       <SafeAreaProvider>
         <Provider store={store}>
