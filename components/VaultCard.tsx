@@ -3,6 +3,8 @@ import styled from "styled-components/native";
 import { TokenList } from "./TokenList";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import numeral from "numeral";
+import { abbreviatePublicKey } from "../utils";
+import { PublicKeyTextCopy } from "./PublicKeyTextCopy";
 
 interface VaultCardProps {
   vaultId: string;
@@ -26,9 +28,7 @@ export const VaultCard = ({ vaultId, tokens }: VaultCardProps) => {
   return (
     <Container>
       <TitleContainer>
-        <VaultTitle>
-          {vaultId.slice(0, 4)}...{vaultId.slice(-4)}
-        </VaultTitle>
+        <PublicKeyTextCopy publicKey={vaultId} fontSize={14} />
         <VaultValue>{getVaultTotalValue()}</VaultValue>
       </TitleContainer>
       <TokenList tokens={tokens} tokenPriceData={tokenPriceData} />

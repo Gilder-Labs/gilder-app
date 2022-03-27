@@ -42,7 +42,7 @@ export default function TreasuryScreen({
   const renderVault = ({ item }: any) => {
     return (
       <VaultCard
-        vaultId={item.vaultId}
+        vaultId={item.pubKey}
         tokens={item.tokens}
         key={item.vaultId}
       />

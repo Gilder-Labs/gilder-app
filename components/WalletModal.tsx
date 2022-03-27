@@ -94,7 +94,7 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
             <SvgXml xml={jdenticonSvg} width="52px" height="52px" />
           )}
         </IconContainer>
-        <PublicKeyTextCopy publicKey={publicKey} />
+        <PublicKeyTextCopy publicKey={publicKey} fontSize={14} />
 
         <WalletValue>{getTotalValue()}</WalletValue>
 

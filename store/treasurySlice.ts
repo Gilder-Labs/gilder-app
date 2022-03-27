@@ -74,7 +74,7 @@ export const fetchVaults = createAsyncThunk(
 
     let vaultsParsed = vaultsWithTokensRaw.map((vault, index) => {
       return {
-        pubKey: vaultsInfo[index].pubKey,
+        pubKey: vaultsInfo[index].pubKey, // WALLET ID
         vaultId: vaultsInfo[index].vaultId,
         tokens: vault.value.map((token) => {
           let tokenInfo = tokensData.get(token.account.data.parsed.info.mint);

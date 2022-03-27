@@ -23,7 +23,7 @@ export const PublicKeyTextCopy = ({
   return (
     <Container onPress={copyToClipboard} activeOpacity={0.4}>
       <Text fontSize={fontSize}>{abbreviatePublicKey(publicKey)}</Text>
-      <Unicons.UilCopy size="22" color={theme.gray[400]} />
+      <Unicons.UilCopy size={fontSize + 2} color={theme.gray[400]} />
     </Container>
   );
 };
