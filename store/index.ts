@@ -23,13 +23,25 @@ const persistConfig = {
   key: "root",
   storage: AsyncStorage,
   stateReconciler: autoMergeLevel2, // merge old and new stuff. Will need to blacklist to remove old data.
-  whitelist: ["realms", "wallet"],
+  whitelist: ["solana"], // empty reducer for now
+};
+
+const realmsPersistConfig = {
+  key: "realms",
+  storage: AsyncStorage,
+  whiteList: ["selectedRealm", "realmWatchlist", "userInfo"],
+};
+
+const walletPersistConfig = {
+  key: "wallet",
+  storage: AsyncStorage,
+  whiteList: ["publicKey", "privateKey"],
 };
 
 const rootReducer = combineReducers({
-  realms: realmReducer,
+  realms: persistReducer(realmsPersistConfig, realmReducer),
   solana: solanaReducer,
-  wallet: walletReducer,
+  wallet: persistReducer(walletPersistConfig, walletReducer),
   treasury: treasuryReducer,
   activities: activityReducer,
   proposals: proposalsReducer,
