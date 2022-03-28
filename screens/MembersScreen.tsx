@@ -1,15 +1,20 @@
 import { RootTabScreenProps } from "../types";
 import styled from "styled-components/native";
-import { useAppSelector } from "../hooks/redux";
+import { useAppSelector, useAppDispatch } from "../hooks/redux";
 import { MemberCard, Loading } from "../components";
 import { FlatList } from "react-native";
+import { RefreshControl } from "react-native";
+import { useTheme } from "styled-components";
+import { fetchRealmMembers } from "../store/memberSlice";
 
 export default function MemberScreen({
   navigation,
 }: RootTabScreenProps<"Activity">) {
-  const { members, isLoadingMembers } = useAppSelector(
+  const { members, isLoadingMembers, isRefreshingMembers } = useAppSelector(
     (state) => state.members
   );
+  const dispatch = useAppDispatch();
+  const theme = useTheme();
 
   const { selectedRealm } = useAppSelector((state) => state.realms);
 
@@ -33,6 +38,10 @@ export default function MemberScreen({
         realm={selectedRealm}
       />
     );
+  };
+
+  const handleRefresh = () => {
+    dispatch(fetchRealmMembers({ realm: selectedRealm, isRefreshing: true }));
   };
 
   const getTotalVotes = () => {
@@ -61,6 +70,14 @@ export default function MemberScreen({
           scrollIndicatorInsets={{ right: 1 }}
           removeClippedSubviews={true}
           initialNumToRender={10}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefreshingMembers}
+              tintColor={theme.gray[300]}
+              onRefresh={handleRefresh}
+              size={18}
+            />
+          }
           ListHeaderComponent={
             <HeaderContainer>
               <TextContainer>

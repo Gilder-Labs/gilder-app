@@ -39,110 +39,129 @@ const TokensInfo = getTokensInfo();
 export const fetchVaults = createAsyncThunk(
   "realms/fetchVaults",
   async (realm: any) => {
-    const rawGovernances = await getAllGovernances(
-      connection,
-      new PublicKey(realm.governanceId),
-      new PublicKey(realm.pubKey)
-    );
-    const tokenMap = {};
-    let activeProposals = 0;
+    try {
+      const rawGovernances = await getAllGovernances(
+        connection,
+        new PublicKey(realm.governanceId),
+        new PublicKey(realm.pubKey)
+      );
+      const tokenMap = {};
+      let activeProposals = 0;
 
-    const rawFilteredVaults = rawGovernances.filter(
-      (gov) =>
-        gov.account.accountType === GovernanceAccountType.TokenGovernanceV1 ||
-        gov.account.accountType === GovernanceAccountType.TokenGovernanceV2
-    );
+      const rawFilteredVaults = rawGovernances.filter(
+        (gov) =>
+          gov.account.accountType === GovernanceAccountType.TokenGovernanceV1 ||
+          gov.account.accountType === GovernanceAccountType.TokenGovernanceV2
+      );
 
-    const vaultsInfo = rawFilteredVaults.map((governance) => {
+      const vaultsInfo = rawFilteredVaults.map((governance) => {
+        return {
+          pubKey: governance.pubkey.toString(), // program that controls vault/token account
+          vaultId: governance.account?.governedAccount.toString(), // vault/token account where tokens are held
+        };
+      });
+
+      const vaultsWithTokensRaw = await Promise.all(
+        vaultsInfo.map((vault) =>
+          connection.getParsedTokenAccountsByOwner(
+            new PublicKey(vault.pubKey),
+            {
+              programId: SPL_PUBLIC_KEY,
+            }
+          )
+        )
+      );
+
+      const tokensData = await TokensInfo;
+      const coinGeckoUrl = "https://api.coingecko.com/api/v3/coins/markets";
+      let tokenIds = new Set();
+
+      let vaultsParsed = vaultsWithTokensRaw.map((vault, index) => {
+        return {
+          pubKey: vaultsInfo[index].pubKey, // WALLET ID
+          vaultId: vaultsInfo[index].vaultId,
+          tokens: vault.value.map((token) => {
+            let tokenInfo = tokensData.get(token.account.data.parsed.info.mint);
+            tokenIds.add(tokenInfo?.extensions?.coingeckoId);
+
+            const tokenData = {
+              ...tokenInfo,
+              mint: token.account.data.parsed.info.mint,
+              owner: token.account.data.parsed.info.owner.toString(),
+              tokenAmount: token.account.data.parsed.info.tokenAmount,
+              vaultId: token.pubkey.toString(),
+            };
+            //@ts-ignore
+            tokenMap[tokenData.mint] = tokenData;
+            return tokenData;
+          }),
+        };
+      });
+
+      var config = {
+        method: "get",
+        url: "api-mainnet.magiceden.dev/v2/tokens/4uvpqEL73361hRXCrHqBZQWeqfbKPQw55yKSFZvLQYTq",
+        headers: {},
+      };
+
+      const cyberConnectNfts =
+        "https://api.cybertino.io/querier/getSolNftByAddress?address=DKdBj8KF9sieWq2XWkZVnRPyDrw9PwAHinkCMvjAkRdZ";
+      const nftResponse = await axios.get(cyberConnectNfts);
+
+      // console.log("NFT response", nftResponse);
+
+      const governancesMap = {};
+
+      const governancesParsed = rawGovernances.map((governance, index) => {
+        let governanceId = governance.pubkey.toString();
+        activeProposals += governance.account.votingProposalCount;
+        let data = {
+          governanceId: governanceId,
+          governedAccount: governance.account.governedAccount.toString(),
+          minCommunityTokensToCreateProposal:
+            governance.account.config.minCommunityTokensToCreateProposal.toNumber(),
+          minInstructionHoldUpTime:
+            governance.account.config.minInstructionHoldUpTime,
+          maxVotingTime: governance.account.config.maxVotingTime,
+          voteTipping: governance.account.config.voteTipping,
+          proposalCoolOffTime: governance.account.config.proposalCoolOffTime,
+          minCouncilTokensToCreateProposal:
+            governance.account.config.minCouncilTokensToCreateProposal.toNumber(),
+          totalProposalCount: governance.account.proposalCount,
+          votingProposalCount: governance.account.votingProposalCount,
+          // percentage of total tokens that need to vote for there to be quorum
+          voteThresholdPercentage:
+            governance.account.config.voteThresholdPercentage.value,
+          accountType: governance.account.accountType,
+          isAccountGovernance: governance.account.isAccountGovernance(),
+          isMintGovernance: governance.account.isMintGovernance(),
+          isProgramGovernance: governance.account.isProgramGovernance(),
+          isTokenGovernance: governance.account.isTokenGovernance(),
+        };
+        // @ts-ignore
+        governancesMap[governanceId] = data;
+        return data;
+      });
+
+      const tokenIdsString = Array.from(tokenIds).join();
+      const tokenPriceResponse = await axios.get(coinGeckoUrl, {
+        params: {
+          ids: tokenIdsString,
+          vs_currency: "usd",
+        },
+      });
+
       return {
-        pubKey: governance.pubkey.toString(), // program that controls vault/token account
-        vaultId: governance.account?.governedAccount.toString(), // vault/token account where tokens are held
+        vaults: vaultsParsed,
+        tokenPriceData: tokenPriceResponse.data,
+        governances: governancesParsed,
+        governancesMap: governancesMap,
+        tokenMap: tokenMap,
+        activeProposals: activeProposals,
       };
-    });
-
-    const vaultsWithTokensRaw = await Promise.all(
-      vaultsInfo.map((vault) =>
-        connection.getParsedTokenAccountsByOwner(new PublicKey(vault.pubKey), {
-          programId: SPL_PUBLIC_KEY,
-        })
-      )
-    );
-
-    const tokensData = await TokensInfo;
-    const coinGeckoUrl = "https://api.coingecko.com/api/v3/coins/markets";
-    let tokenIds = new Set();
-
-    let vaultsParsed = vaultsWithTokensRaw.map((vault, index) => {
-      return {
-        pubKey: vaultsInfo[index].pubKey, // WALLET ID
-        vaultId: vaultsInfo[index].vaultId,
-        tokens: vault.value.map((token) => {
-          let tokenInfo = tokensData.get(token.account.data.parsed.info.mint);
-          tokenIds.add(tokenInfo?.extensions?.coingeckoId);
-
-          const tokenData = {
-            ...tokenInfo,
-            mint: token.account.data.parsed.info.mint,
-            owner: token.account.data.parsed.info.owner.toString(),
-            tokenAmount: token.account.data.parsed.info.tokenAmount,
-            vaultId: token.pubkey.toString(),
-          };
-          //@ts-ignore
-          tokenMap[tokenData.mint] = tokenData;
-          return tokenData;
-        }),
-      };
-    });
-
-    const governancesMap = {};
-
-    const governancesParsed = rawGovernances.map((governance, index) => {
-      let governanceId = governance.pubkey.toString();
-      activeProposals += governance.account.votingProposalCount;
-      let data = {
-        governanceId: governanceId,
-        governedAccount: governance.account.governedAccount.toString(),
-        minCommunityTokensToCreateProposal:
-          governance.account.config.minCommunityTokensToCreateProposal.toNumber(),
-        minInstructionHoldUpTime:
-          governance.account.config.minInstructionHoldUpTime,
-        maxVotingTime: governance.account.config.maxVotingTime,
-        voteTipping: governance.account.config.voteTipping,
-        proposalCoolOffTime: governance.account.config.proposalCoolOffTime,
-        minCouncilTokensToCreateProposal:
-          governance.account.config.minCouncilTokensToCreateProposal.toNumber(),
-        totalProposalCount: governance.account.proposalCount,
-        votingProposalCount: governance.account.votingProposalCount,
-        // percentage of total tokens that need to vote for there to be quorum
-        voteThresholdPercentage:
-          governance.account.config.voteThresholdPercentage.value,
-        accountType: governance.account.accountType,
-        isAccountGovernance: governance.account.isAccountGovernance(),
-        isMintGovernance: governance.account.isMintGovernance(),
-        isProgramGovernance: governance.account.isProgramGovernance(),
-        isTokenGovernance: governance.account.isTokenGovernance(),
-      };
-      // @ts-ignore
-      governancesMap[governanceId] = data;
-      return data;
-    });
-
-    const tokenIdsString = Array.from(tokenIds).join();
-    const tokenPriceResponse = await axios.get(coinGeckoUrl, {
-      params: {
-        ids: tokenIdsString,
-        vs_currency: "usd",
-      },
-    });
-
-    return {
-      vaults: vaultsParsed,
-      tokenPriceData: tokenPriceResponse.data,
-      governances: governancesParsed,
-      governancesMap: governancesMap,
-      tokenMap: tokenMap,
-      activeProposals: activeProposals,
-    };
+    } catch (error) {
+      console.log("error", error);
+    }
   }
 );
 

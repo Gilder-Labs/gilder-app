@@ -21,6 +21,7 @@ export interface realmState {
   isLoadingMembers: boolean;
   isLoadingChat: boolean;
   isLoadingVotes: boolean;
+  isRefreshingMembers: boolean;
 }
 
 const initialState: realmState = {
@@ -31,107 +32,97 @@ const initialState: realmState = {
   isLoadingMembers: false,
   isLoadingChat: false,
   isLoadingVotes: false,
+  isRefreshingMembers: false,
 };
 
 let connection = new web3.Connection(RPC_CONNECTION, "confirmed");
 
 export const fetchRealmMembers = createAsyncThunk(
   "realms/fetchRealmMembers",
-  async (realm: any) => {
-    // TODO: handle councilMint tokens
-
-    let rawTokenOwnerRecords;
-
+  async ({ realm }: any) => {
     try {
+      let rawTokenOwnerRecords;
+
       rawTokenOwnerRecords = await getAllTokenOwnerRecords(
         connection,
         new PublicKey(realm.governanceId),
         new PublicKey(realm.pubKey)
       );
+
+      const {
+        councilMint,
+        communityMint,
+        communityMintDecimals,
+        councilMintDecimals,
+      } = realm;
+
+      const membersMap = {};
+      rawTokenOwnerRecords?.map((member) => {
+        // if member does not exist, add member to member map
+        // if member does exist, check which token record this is and add correct attributes to object
+
+        const governingTokenMint = member.account.governingTokenMint.toString();
+        const depositAmount =
+          member.account.governingTokenDepositAmount.toString();
+
+        let memberData = {
+          publicKey: member.pubkey.toString(),
+          owner: member.owner.toString(), // RealmId
+          totalVotesCount: member.account.totalVotesCount, // How many votes they have
+          outstandingProposalCount: member.account.outstandingProposalCount,
+          walletId: member.account.governingTokenOwner.toString(), // Wallet address of owner of dao token
+        };
+
+        if (governingTokenMint === councilMint) {
+          // @ts-ignore
+          memberData["totalVotesCouncil"] = member.account.totalVotesCount;
+          // @ts-ignore
+          memberData["councilTokenMint"] = governingTokenMint;
+          // @ts-ignore
+          memberData["councilDepositAmount"] = depositAmount;
+          // @ts-ignore
+          memberData["councilDepositUiAmount"] = formatVoteWeight(
+            depositAmount,
+            councilMintDecimals
+          );
+        } else {
+          // @ts-ignore
+          memberData["totalVotesCommunity"] = member.account.totalVotesCount;
+          // @ts-ignore
+          memberData["communityTokenMint"] = governingTokenMint;
+          // @ts-ignore
+          memberData["communityDepositAmount"] = depositAmount;
+          //@ts-ignore
+          memberData["communityDepositUiAmount"] = formatVoteWeight(
+            depositAmount,
+            communityMintDecimals
+          );
+        }
+
+        // If we get 2 token owners for the same id, merge them together so we can access both tokens they own
+
+        // @ts-ignore
+        const possibleMember = membersMap[memberData.walletId];
+        // @ts-ignore
+        membersMap[memberData.walletId] = possibleMember
+          ? { ...possibleMember, ...memberData }
+          : memberData;
+
+        return memberData;
+      });
+
+      // console.log("tokenOwnerLength", rawTokenOwnerRecords?.length);
+      // console.log("member map length", Object.keys(membersMap).length);
+      const members = Object.values(membersMap);
+      const sortedMembers = members?.sort(
+        // @ts-ignore
+        (a, b) => b?.totalVotesCount - a?.totalVotesCount
+      );
+
+      return { members: sortedMembers, membersMap: membersMap };
     } catch (error) {
       console.log("error", error);
     }
-
-    // communityTokenVotes: number;
-    // communityDepositAmount: string;
-    // communityTokenMint: string;
-    // councilTokenVotes: number;
-    // councilDepositAmount: string;
-    // councilTokenMint: string;
-
-    console.log("realm in fetch members", realm);
-
-    const {
-      councilMint,
-      communityMint,
-      communityMintDecimals,
-      councilMintDecimals,
-    } = realm;
-
-    const membersMap = {};
-    rawTokenOwnerRecords?.map((member) => {
-      // if member does not exist, add member to member map
-      // if member does exist, check which token record this is and add correct attributes to object
-
-      const governingTokenMint = member.account.governingTokenMint.toString();
-      const depositAmount =
-        member.account.governingTokenDepositAmount.toString();
-
-      let memberData = {
-        publicKey: member.pubkey.toString(),
-        owner: member.owner.toString(), // RealmId
-        totalVotesCount: member.account.totalVotesCount, // How many votes they have
-        outstandingProposalCount: member.account.outstandingProposalCount,
-        walletId: member.account.governingTokenOwner.toString(), // Wallet address of owner of dao token
-      };
-
-      if (governingTokenMint === councilMint) {
-        // @ts-ignore
-        memberData["totalVotesCouncil"] = member.account.totalVotesCount;
-        // @ts-ignore
-        memberData["councilTokenMint"] = governingTokenMint;
-        // @ts-ignore
-        memberData["councilDepositAmount"] = depositAmount;
-        // @ts-ignore
-        memberData["councilDepositUiAmount"] = formatVoteWeight(
-          depositAmount,
-          councilMintDecimals
-        );
-      } else {
-        // @ts-ignore
-        memberData["totalVotesCommunity"] = member.account.totalVotesCount;
-        // @ts-ignore
-        memberData["communityTokenMint"] = governingTokenMint;
-        // @ts-ignore
-        memberData["communityDepositAmount"] = depositAmount;
-        //@ts-ignore
-        memberData["communityDepositUiAmount"] = formatVoteWeight(
-          depositAmount,
-          communityMintDecimals
-        );
-      }
-
-      // If we get 2 token owners for the same id, merge them together so we can access both tokens they own
-
-      // @ts-ignore
-      const possibleMember = membersMap[memberData.walletId];
-      // @ts-ignore
-      membersMap[memberData.walletId] = possibleMember
-        ? { ...possibleMember, ...memberData }
-        : memberData;
-
-      return memberData;
-    });
-
-    // console.log("tokenOwnerLength", rawTokenOwnerRecords?.length);
-    // console.log("member map length", Object.keys(membersMap).length);
-    const members = Object.values(membersMap);
-    const sortedMembers = members?.sort(
-      // @ts-ignore
-      (a, b) => b?.totalVotesCount - a?.totalVotesCount
-    );
-
-    return { members: sortedMembers, membersMap: membersMap };
   }
 );
 
@@ -209,14 +200,19 @@ export const memberSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchRealmMembers.pending, (state) => {
-        state.isLoadingMembers = true;
+      .addCase(fetchRealmMembers.pending, (state, action) => {
+        if (action?.meta?.arg?.isRefreshing) {
+          state.isRefreshingMembers = true;
+        } else {
+          state.isLoadingMembers = true;
+        }
       })
       .addCase(fetchRealmMembers.rejected, (state) => {
         state.isLoadingMembers = false;
       })
       .addCase(fetchRealmMembers.fulfilled, (state, action: any) => {
         state.isLoadingMembers = false;
+        state.isRefreshingMembers = false;
         state.membersMap = action.payload.membersMap;
         state.members = action.payload.members;
       })

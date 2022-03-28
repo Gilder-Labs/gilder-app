@@ -39,7 +39,7 @@ function DrawerScreen() {
       initialRouteName="Proposals"
       drawerContent={(props) => <DrawerContentContainer {...props} />}
       screenOptions={{
-        drawerActiveBackgroundColor: theme?.gray[800],
+        drawerActiveBackgroundColor: `${theme?.gray[800]}aa`,
         drawerActiveTintColor: theme?.gray[300],
         drawerInactiveTintColor: theme?.gray[500],
         drawerStyle: {
@@ -125,15 +125,19 @@ export default function Navigation({}: {}) {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const { selectedRealm } = useAppSelector((state) => state.realms);
+  const pubKey = selectedRealm?.pubKey;
 
   // fetch realms on devnet toggle
   useEffect(() => {
     dispatch(fetchRealms());
   }, []);
 
-  // fetch everyting on devnet toggle
+  //TODO: This runs twice rn, need to optimize
   useEffect(() => {
-    if (selectedRealm?.pubKey && selectedRealm?.communityMint) {
+    if (
+      selectedRealm?.pubKey &&
+      (selectedRealm?.communityMint || selectedRealm?.councilMint)
+    ) {
       dispatch(fetchVaults(selectedRealm));
       dispatch(
         fetchRealmActivity({
@@ -144,7 +148,7 @@ export default function Navigation({}: {}) {
       dispatch(
         fetchRealmProposals({ realm: selectedRealm, isRefreshing: false })
       );
-      dispatch(fetchRealmMembers(selectedRealm));
+      dispatch(fetchRealmMembers({ realm: selectedRealm }));
       dispatch(realmLoaded(""));
     }
   }, [selectedRealm]);
