@@ -38,7 +38,6 @@ export default function MemberScreen({
         key={item.walletId}
         member={item}
         onSelect={(memberInfo: any) => handleMemberSelect(item, memberInfo)}
-        realm={selectedRealm}
       />
     );
   };

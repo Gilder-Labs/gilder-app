@@ -12,7 +12,6 @@ import { useQuery, gql } from "@apollo/client";
 interface MemberCardProps {
   member: any;
   onSelect: any;
-  realm: any;
 }
 
 const GET_CYBERCONNECT_IDENTITY = gql`
@@ -50,6 +49,8 @@ export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
   const handleProfileClick = () => {
     onSelect({ name: identityName, avatarUrl: avatarUrl });
   };
+
+  // console.log("member", member);
 
   return (
     <Container>

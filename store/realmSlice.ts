@@ -219,7 +219,6 @@ export const realmSlice = createSlice({
         state.isLoadingRealms = false;
       })
       .addCase(fetchRealm.pending, (state, action) => {
-        console.log("action.meta?.arg", action.meta?.arg);
         state.selectedRealmId = action.meta?.arg;
         state.isLoadingSelectedRealm = true;
       })
