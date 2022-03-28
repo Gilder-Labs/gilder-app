@@ -8,6 +8,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import * as Unicons from "@iconscout/react-native-unicons";
 import { getColorType, abbreviatePublicKey } from "../utils";
 import { useQuery, gql } from "@apollo/client";
+import { Typography } from "../components";
 
 interface MemberCardProps {
   member: any;
@@ -71,13 +72,25 @@ export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
       )}
       <ContentContainer>
         <TitleRow>
-          <MemberName>
-            {identityName ? identityName : abbreviatePublicKey(member.walletId)}
-          </MemberName>
+          <Column>
+            <MemberName>
+              {identityName
+                ? identityName
+                : abbreviatePublicKey(member.walletId)}
+            </MemberName>
+            {identityName ? (
+              <Typography
+                text={abbreviatePublicKey(member.walletId)}
+                shade="500"
+                size="subtitle"
+              />
+            ) : null}
+          </Column>
           <IconButton onPress={handleProfileClick} activeOpacity={0.5}>
             <Unicons.UilAngleDoubleRight size="28" color={theme.gray[400]} />
           </IconButton>
         </TitleRow>
+
         <TextContainer>
           <DetailContainer>
             <SubtitleText>Community Votes</SubtitleText>
@@ -138,13 +151,15 @@ const MemberName = styled.Text`
   font-weight: bold;
   font-size: 18px;
   margin-top:${(props: any) => props.theme.spacing[4]};
-  margin-bottom: ${(props: any) => props.theme.spacing[3]};
-
 `;
 
 const TextContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
+`;
+
+const Column = styled.View`
+  margin-bottom: ${(props: any) => props.theme.spacing[3]};
 `;
 
 const VotesCast = styled.Text`

@@ -25,8 +25,8 @@ const sizeMapping = {
   h3: 28,
   h4: 22,
   body: 16,
-  subtitle: 12,
-  caption: 10,
+  subtitle: 14,
+  caption: 12,
 };
 
 export const Typography = ({
