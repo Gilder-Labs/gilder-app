@@ -83,6 +83,7 @@ export const fetchRealms = createAsyncThunk("realms/fetchRealms", async () => {
         name: realm.account.name,
         pubKey: realm.pubkey.toString(),
         communityMint: realm.account.communityMint.toString(),
+        councilMint: realm.account?.config?.councilMint?.toString() || null,
         governanceId: realm?.owner.toString(),
         accountType: realm.account.accountType,
         votingProposalCount: realm.account.votingProposalCount,

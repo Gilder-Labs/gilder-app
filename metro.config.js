@@ -6,8 +6,9 @@ module.exports = {
   ...defaultConfig,
   transformer: {
     ...defaultConfig.transformer,
-    getTransformOptions: async () => ({
+    getTransformOptions: () => ({
       transform: {
+        ...defaultConfig.transformer.transform,
         experimentalImportSupport: false,
         inlineRequires: true,
       },
