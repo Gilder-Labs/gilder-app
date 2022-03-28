@@ -124,8 +124,9 @@ function DrawerScreen() {
 export default function Navigation({}: {}) {
   const theme = useTheme();
   const dispatch = useAppDispatch();
-  const { selectedRealm } = useAppSelector((state) => state.realms);
-  const pubKey = selectedRealm?.pubKey;
+  const { selectedRealm, selectedRealmId } = useAppSelector(
+    (state) => state.realms
+  );
 
   // fetch realms on devnet toggle
   useEffect(() => {
@@ -134,10 +135,7 @@ export default function Navigation({}: {}) {
 
   //TODO: This runs twice rn, need to optimize
   useEffect(() => {
-    if (
-      selectedRealm?.pubKey &&
-      (selectedRealm?.communityMint || selectedRealm?.councilMint)
-    ) {
+    if (selectedRealm?.pubKey === selectedRealmId) {
       dispatch(fetchVaults(selectedRealm));
       dispatch(
         fetchRealmActivity({
@@ -149,9 +147,8 @@ export default function Navigation({}: {}) {
         fetchRealmProposals({ realm: selectedRealm, isRefreshing: false })
       );
       dispatch(fetchRealmMembers({ realm: selectedRealm }));
-      dispatch(realmLoaded(""));
     }
-  }, [selectedRealm]);
+  }, [selectedRealmId]);
 
   const NavigationTheme = {
     dark: false,

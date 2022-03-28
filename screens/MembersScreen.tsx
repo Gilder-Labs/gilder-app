@@ -13,10 +13,13 @@ export default function MemberScreen({
   const { members, isLoadingMembers, isRefreshingMembers } = useAppSelector(
     (state) => state.members
   );
+  const { isLoadingVaults } = useAppSelector((state) => state.treasury);
+  const { selectedRealm, isLoadingSelectedRealm } = useAppSelector(
+    (state) => state.realms
+  );
+
   const dispatch = useAppDispatch();
   const theme = useTheme();
-
-  const { selectedRealm } = useAppSelector((state) => state.realms);
 
   const handleMemberSelect = (
     member: Member,
@@ -56,9 +59,12 @@ export default function MemberScreen({
     return totalVotes;
   };
 
+  const isLoading =
+    isLoadingMembers || isLoadingSelectedRealm || isLoadingVaults;
+
   return (
     <Container>
-      {isLoadingMembers ? (
+      {isLoading ? (
         <Loading />
       ) : (
         <FlatList

@@ -15,6 +15,7 @@ export interface realmState {
   realms: Array<any>;
   realmsMap: any;
   selectedRealm: any;
+  selectedRealmId: string;
   realmsData: any;
   realmWatchlist: Array<string>;
   isLoadingRealms: boolean;
@@ -35,6 +36,7 @@ const initialState: realmState = {
   realms: [],
   selectedRealm: null,
   realmsData: cleanedRealmData,
+  selectedRealmId: "",
   realmWatchlist: [],
   isLoadingRealms: false,
   isLoadingSelectedRealm: false,
@@ -217,7 +219,8 @@ export const realmSlice = createSlice({
         state.isLoadingRealms = false;
       })
       .addCase(fetchRealm.pending, (state, action) => {
-        // const realmId = action.meta?.arg;
+        console.log("action.meta?.arg", action.meta?.arg);
+        state.selectedRealmId = action.meta?.arg;
         state.isLoadingSelectedRealm = true;
       })
       .addCase(fetchRealm.rejected, (state) => {
