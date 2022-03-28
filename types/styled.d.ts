@@ -14,6 +14,7 @@ declare module "styled-components" {
     aqua: Color;
     blue: Color;
     spacing: {
+      0: string;
       1: string;
       2: string;
       3: string;

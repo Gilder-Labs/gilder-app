@@ -49,15 +49,11 @@ export const Button = ({
       {isLoading ? (
         <Loading color={theme.gray[300]} />
       ) : (
-        <Typography text={title} bold={true} />
+        <Typography text={title} bold={true} marginBottom="0" />
       )}
     </ButtonContainer>
   );
 };
-
-const ButtonText = styled.Text`
-  color: ${(props) => props.theme.gray[200]};
-`;
 
 const ButtonContainer = styled.TouchableOpacity<{
   marginRight: boolean;
