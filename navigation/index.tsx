@@ -133,9 +133,12 @@ export default function Navigation({}: {}) {
     dispatch(fetchRealms());
   }, []);
 
-  //TODO: This runs twice rn, need to optimize
+  // Run immediately if we have communityMint/councilMint, otherwies for custom daos we wait till we get a response
   useEffect(() => {
-    if (selectedRealm?.pubKey === selectedRealmId) {
+    if (
+      selectedRealm?.pubKey === selectedRealmId &&
+      (selectedRealm?.communityMint || selectedRealm?.councilMint)
+    ) {
       dispatch(fetchVaults(selectedRealm));
       dispatch(
         fetchRealmActivity({
@@ -148,7 +151,7 @@ export default function Navigation({}: {}) {
       );
       dispatch(fetchRealmMembers({ realm: selectedRealm }));
     }
-  }, [selectedRealmId]);
+  }, [selectedRealm?.pubKey, selectedRealm?.communityMint]);
 
   const NavigationTheme = {
     dark: false,
