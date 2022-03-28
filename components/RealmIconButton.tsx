@@ -17,14 +17,14 @@ export const RealmIconButton = ({
   showSelected = true,
   size = 48,
 }: RealmIconButtonProps) => {
-  const { realmsMap, selectedRealm, isLoadingSelectedRealm } = useAppSelector(
+  const { realmsMap, selectedRealmId, isLoadingSelectedRealm } = useAppSelector(
     (state) => state.realms
   );
   const dispatch = useAppDispatch();
 
   const handleRealmIconClick = () => {
     // if user selects realm they are already on, don't do anything
-    if (selectedRealm?.pubKey === realmId) {
+    if (selectedRealmId === realmId) {
       return;
     }
 
@@ -32,7 +32,7 @@ export const RealmIconButton = ({
     dispatch(fetchRealm(realmId));
   };
 
-  const isSelected = selectedRealm?.pubKey === realmId;
+  const isSelected = selectedRealmId === realmId;
 
   return (
     <ContainerButton

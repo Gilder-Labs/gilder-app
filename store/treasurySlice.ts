@@ -104,9 +104,9 @@ export const fetchVaults = createAsyncThunk(
         headers: {},
       };
 
-      const cyberConnectNfts =
-        "https://api.cybertino.io/querier/getSolNftByAddress?address=DKdBj8KF9sieWq2XWkZVnRPyDrw9PwAHinkCMvjAkRdZ";
-      const nftResponse = await axios.get(cyberConnectNfts);
+      // const cyberConnectNfts =
+      //   "https://api.cybertino.io/querier/getSolNftByAddress?address=DKdBj8KF9sieWq2XWkZVnRPyDrw9PwAHinkCMvjAkRdZ";
+      // const nftResponse = await axios.get(cyberConnectNfts);
 
       // console.log("NFT response", nftResponse);
 
