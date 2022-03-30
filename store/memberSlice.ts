@@ -100,7 +100,6 @@ export const fetchRealmMembers = createAsyncThunk(
         }
 
         // If we get 2 token owners for the same id, merge them together so we can access both tokens they own
-
         // @ts-ignore
         const possibleMember = membersMap[memberData.walletId];
         // @ts-ignore

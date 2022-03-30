@@ -1,5 +1,5 @@
-import { useEffect, useState, useCallback } from "react";
-import { NavigationContainer, DarkTheme } from "@react-navigation/native";
+import { useEffect } from "react";
+import { NavigationContainer } from "@react-navigation/native";
 import * as React from "react";
 import { DrawerContentContainer } from "../components/DrawerContentContainer";
 import { createDrawerNavigator } from "@react-navigation/drawer";
@@ -8,7 +8,7 @@ import * as Unicons from "@iconscout/react-native-unicons";
 
 import { useTheme } from "styled-components";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { fetchRealms, realmLoaded } from "../store/realmSlice";
+import { fetchRealms } from "../store/realmSlice";
 import { fetchRealmMembers } from "../store/memberSlice";
 import { fetchRealmProposals } from "../store/proposalsSlice";
 import { fetchRealmActivity } from "../store/activitySlice";
@@ -48,6 +48,7 @@ function DrawerScreen() {
         headerTintColor: "#f4f4f5", //Set Header text color
         swipeEdgeWidth: 500, // Allows user to open drawer swiping left with on any part of screen
       }}
+      useLegacyImplementation={false}
       // screenOptions={{
       //   drawerType: Layout.window.width >= 768 ? "permanent" : "front",
       // }}
