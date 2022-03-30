@@ -55,8 +55,6 @@ export const VoteCard = ({ vote, proposal, member, realm }: VoteCardProps) => {
         <ProposalName>{proposal?.name} </ProposalName>
         <Row>
           <VoteRow>
-            <VoteText>Votes -</VoteText>
-            <VoteAmount>{getVoteWeight()}</VoteAmount>
             <IconContainer isApproved={vote.voteWeightYes ? true : false}>
               {vote.voteWeightYes ? (
                 <Unicons.UilCheck size="18" color={theme.success[400]} />
@@ -64,6 +62,8 @@ export const VoteCard = ({ vote, proposal, member, realm }: VoteCardProps) => {
                 <Unicons.UilTimes size="18" color={theme.error[400]} />
               )}
             </IconContainer>
+            <VoteText>Votes -</VoteText>
+            <VoteAmount>{getVoteWeight()}</VoteAmount>
           </VoteRow>
           <Badge title={status} type={proposalStatusKey[status]} />
         </Row>
@@ -98,10 +98,6 @@ const VoteRow = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  background: ${(props) => props.theme.gray[1000]};
-  padding: ${(props) => props.theme.spacing[1]};
-  padding-left: ${(props) => props.theme.spacing[2]};
-  padding-right: ${(props) => props.theme.spacing[2]};
   align-items: center;
   border-radius: 8px;
 `;
@@ -125,8 +121,8 @@ const IconContainer = styled.View<{ isApproved: boolean }>`
   background: ${(props) =>
     props.isApproved ? props.theme.success[700] : props.theme.error[700]}88;
   border-radius: 100px;
-  border: 1px solid ${(props) => props.theme.gray[700]}
   padding: ${(props) => props.theme.spacing[1]};
+  margin-right: ${(props) => props.theme.spacing[3]};
 `;
 
 const EmptyView = styled.View``;
