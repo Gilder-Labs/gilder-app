@@ -33,6 +33,7 @@ export const PublicKeyTextCopy = ({
       <Toast
         visible={showToast}
         position={"bottom"}
+        preset="success"
         message="Public key copied."
         onDismiss={() => setShowToast(false)}
         autoDismiss={1000}
@@ -40,7 +41,9 @@ export const PublicKeyTextCopy = ({
         zIndex={100}
         messageStyle={{
           color: theme.gray[400],
+          marginLeft: -8,
         }}
+        elevation={0}
         centerMessage={true}
         // showDismiss={showDismiss}
         // action={{label: 'Undo', onPress: () => console.log('undo')}}
