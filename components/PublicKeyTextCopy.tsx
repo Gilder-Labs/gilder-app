@@ -39,6 +39,12 @@ export const PublicKeyTextCopy = ({
         autoDismiss={1000}
         backgroundColor={theme.gray[1000]}
         zIndex={100}
+        containerStyle={{
+          // backgroundColor: "red",
+          width: 240,
+          marginLeft: "auto",
+          marginRight: "auto",
+        }}
         messageStyle={{
           color: theme.gray[400],
           marginLeft: -8,
