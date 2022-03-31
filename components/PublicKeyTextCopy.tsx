@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components/native";
 import { abbreviatePublicKey } from "../utils";
 import * as Unicons from "@iconscout/react-native-unicons";
 import { useTheme } from "styled-components";
 import * as Clipboard from "expo-clipboard";
+import { Incubator } from "react-native-ui-lib";
+const { Toast } = Incubator;
 
 interface PublicKeyTextCopyProps {
   fontSize?: number;
@@ -15,16 +17,35 @@ export const PublicKeyTextCopy = ({
   publicKey,
 }: PublicKeyTextCopyProps) => {
   const theme = useTheme();
+  const [showToast, setShowToast] = useState(false);
 
   const copyToClipboard = () => {
     Clipboard.setString(publicKey);
+    setShowToast(true);
   };
 
   return (
-    <Container onPress={copyToClipboard} activeOpacity={0.4}>
-      <Text fontSize={fontSize}>{abbreviatePublicKey(publicKey)}</Text>
-      <Unicons.UilCopy size={fontSize + 2} color={theme.gray[400]} />
-    </Container>
+    <>
+      <Container activeOpacity={0.4} onPress={copyToClipboard}>
+        <Text fontSize={fontSize}>{abbreviatePublicKey(publicKey)}</Text>
+        <Unicons.UilCopy size={fontSize + 2} color={theme.gray[400]} />
+      </Container>
+      <Toast
+        visible={showToast}
+        position={"bottom"}
+        message="Public key copied."
+        onDismiss={() => setShowToast(false)}
+        autoDismiss={1000}
+        backgroundColor={theme.gray[1000]}
+        zIndex={100}
+        messageStyle={{
+          color: theme.gray[400],
+        }}
+        centerMessage={true}
+        // showDismiss={showDismiss}
+        // action={{label: 'Undo', onPress: () => console.log('undo')}}
+      />
+    </>
   );
 };
 
