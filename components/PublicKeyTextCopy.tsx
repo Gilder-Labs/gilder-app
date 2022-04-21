@@ -47,7 +47,7 @@ export const PublicKeyTextCopy = ({
         }}
         messageStyle={{
           color: theme.gray[400],
-          marginLeft: -8,
+          // marginLeft: -8,
         }}
         elevation={0}
         centerMessage={true}

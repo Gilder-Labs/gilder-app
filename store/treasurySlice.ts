@@ -21,6 +21,7 @@ export interface TreasuryState {
   governancesMap: any;
   tokenMap: any;
   activeProposals: number;
+  vaultsNfts: any;
 }
 
 const initialState: TreasuryState = {
@@ -31,6 +32,7 @@ const initialState: TreasuryState = {
   governancesMap: null,
   tokenMap: null,
   activeProposals: 0,
+  vaultsNfts: null,
 };
 
 let connection = new Connection(RPC_CONNECTION, "confirmed");
@@ -61,7 +63,7 @@ export const fetchVaults = createAsyncThunk(
         };
       });
 
-      const vaultsWithTokensRaw = await Promise.all(
+      const vaultsWithTokensPromise = Promise.all(
         vaultsInfo.map((vault) =>
           connection.getParsedTokenAccountsByOwner(
             new PublicKey(vault.pubKey),
@@ -72,6 +74,31 @@ export const fetchVaults = createAsyncThunk(
         )
       );
 
+      const vaultNftsPromise = Promise.all(
+        vaultsInfo.map((vault) =>
+          axios.get("https://api.cybertino.io/querier/getSolNftByAddress", {
+            params: {
+              address: vault.pubKey,
+            },
+          })
+        )
+      );
+
+      const vaultNfts = await vaultNftsPromise;
+      const vaultNftsMap = {};
+
+      vaultNfts.forEach(
+        (vault) =>
+          // @ts-ignore
+          (vaultNftsMap[vault.config.params.address] = vault.data.results)
+      );
+
+      const vaultsWithTokensRaw = await vaultsWithTokensPromise;
+      console.log("cybertino NFTS??", vaultNfts);
+
+      //  map through nfts vaults reponse
+      // config.params.address = vault public key
+
       const tokensData = await TokensInfo;
       const coinGeckoUrl = "https://api.coingecko.com/api/v3/coins/markets";
       let tokenIds = new Set();
@@ -80,6 +107,7 @@ export const fetchVaults = createAsyncThunk(
         return {
           pubKey: vaultsInfo[index].pubKey, // WALLET ID
           vaultId: vaultsInfo[index].vaultId,
+          // nfts: vaultNftsMap[vault]
           tokens: vault.value.map((token) => {
             let tokenInfo = tokensData.get(token.account.data.parsed.info.mint);
             tokenIds.add(tokenInfo?.extensions?.coingeckoId);
@@ -153,6 +181,7 @@ export const fetchVaults = createAsyncThunk(
 
       return {
         vaults: vaultsParsed,
+        vaultsNfts: vaultNftsMap,
         tokenPriceData: tokenPriceResponse.data,
         governances: governancesParsed,
         governancesMap: governancesMap,
@@ -185,6 +214,7 @@ export const treasurySlice = createSlice({
           tokenPriceObject[token.id] = token;
         });
 
+        state.vaultsNfts = action.payload.vaultsNfts;
         state.vaults = action.payload.vaults;
         state.isLoadingVaults = false;
         state.tokenPriceData = tokenPriceObject;

@@ -255,20 +255,20 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
               <VoteYes percent={quorumData.totalVotesNeededPercentage} />
             </QuorumContainer>
           </Votes>
-          {isVoting && isMember && (
-            <>
-              <Title>Voting</Title>
-              <Divider />
-              <VoteButtonContainer>
-                <Button
-                  title="Vote No"
-                  onPress={() => vote(1)}
-                  marginRight={true}
-                />
-                <Button title="Vote Yes" onPress={() => vote(0)} />
-              </VoteButtonContainer>
-            </>
-          )}
+          {/* {isVoting && isMember && ( */}
+          <>
+            <Title>Voting</Title>
+            <Divider />
+            <VoteButtonContainer>
+              <Button
+                title="Vote No"
+                onPress={() => vote(1)}
+                marginRight={true}
+              />
+              <Button title="Vote Yes" onPress={() => vote(0)} />
+            </VoteButtonContainer>
+          </>
+          {/* )} */}
           <Title>Description</Title>
           <Divider />
 
