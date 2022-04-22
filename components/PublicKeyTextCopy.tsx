@@ -67,7 +67,6 @@ const Container = styled.TouchableOpacity`
   padding: ${(props) => props.theme.spacing[1]};
   padding-left: ${(props) => props.theme.spacing[2]};
   padding-right: ${(props) => props.theme.spacing[2]};
-
   border-radius: 8px;
 `;
 

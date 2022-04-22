@@ -33,7 +33,7 @@ export const NftList = ({ nfts }: NftListProps) => {
       keyExtractor={(item) => item.id}
       numColumns={2}
       scrollEnabled={false}
-      style={{ padding: 8 }}
+      style={{ paddingTop: 8 }}
       columnWrapperStyle={{ marginBottom: 8 }}
       scrollIndicatorInsets={{ right: 1 }}
       removeClippedSubviews={true}

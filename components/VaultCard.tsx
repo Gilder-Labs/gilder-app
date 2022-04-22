@@ -3,9 +3,12 @@ import styled from "styled-components/native";
 import { TokenList } from "./TokenList";
 import { NftList } from "./NftList";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
+import { Typography } from "./Typography";
 import numeral from "numeral";
-import { abbreviatePublicKey } from "../utils";
 import { PublicKeyTextCopy } from "./PublicKeyTextCopy";
+import { ExpandableSection } from "react-native-ui-lib";
+import * as Unicons from "@iconscout/react-native-unicons";
+import { useTheme } from "styled-components";
 
 interface VaultCardProps {
   vaultId: string;
@@ -16,6 +19,9 @@ export const VaultCard = ({ vaultId, tokens }: VaultCardProps) => {
   const { tokenPriceData, vaultsNfts } = useAppSelector(
     (state) => state.treasury
   );
+  const [nftSectionOpen, setNftSectionOpen] = useState(true);
+  const [tokenSectionOpen, setTokenSectionOpen] = useState(true);
+  const theme = useTheme();
 
   const getVaultTotalValue = () => {
     let totalValue = 0;
@@ -39,12 +45,53 @@ export const VaultCard = ({ vaultId, tokens }: VaultCardProps) => {
         <VaultValue>{getVaultTotalValue()}</VaultValue>
       </TitleContainer>
 
-      <NftList nfts={nfts} />
-      <TokenList
-        tokens={tokens}
-        tokenPriceData={tokenPriceData}
-        hideUnknownTokens={true}
-      />
+      {tokens.length > 0 && (
+        <SectionContainer>
+          <ExpandableSection
+            top={false}
+            expanded={tokenSectionOpen}
+            sectionHeader={
+              <SectionHeaderContainer>
+                <Typography text="Tokens" size="h3" bold={true} />
+                {tokenSectionOpen ? (
+                  <Unicons.UilAngleDown size="28" color={theme.gray[300]} />
+                ) : (
+                  <Unicons.UilAngleRight size="28" color={theme.gray[300]} />
+                )}
+              </SectionHeaderContainer>
+            }
+            onPress={() => setTokenSectionOpen(!tokenSectionOpen)}
+          >
+            <TokenList
+              tokens={tokens}
+              tokenPriceData={tokenPriceData}
+              hideUnknownTokens={true}
+            />
+          </ExpandableSection>
+        </SectionContainer>
+      )}
+
+      {nfts.length > 0 && (
+        <SectionContainer>
+          <ExpandableSection
+            top={false}
+            expanded={nftSectionOpen}
+            sectionHeader={
+              <SectionHeaderContainer>
+                <Typography text="Nfts" size="h3" bold={true} />
+                {nftSectionOpen ? (
+                  <Unicons.UilAngleDown size="28" color={theme.gray[300]} />
+                ) : (
+                  <Unicons.UilAngleRight size="28" color={theme.gray[300]} />
+                )}
+              </SectionHeaderContainer>
+            }
+            onPress={() => setNftSectionOpen(!nftSectionOpen)}
+          >
+            <NftList nfts={nfts} />
+          </ExpandableSection>
+        </SectionContainer>
+      )}
     </Container>
   );
 };
@@ -58,10 +105,8 @@ const Container = styled.View`
   flex-direction: column;
 `;
 
-const VaultTitle = styled.Text`
-  color: ${(props: any) => props.theme.gray[400]}
-  font-weight: bold;
-  font-size: 14px;
+const SectionContainer = styled.View`
+  margin-bottom: ${(props: any) => props.theme.spacing[3]};
 `;
 
 const VaultValue = styled.Text`
@@ -75,4 +120,12 @@ const TitleContainer = styled.View`
   justify-content: space-between;
   align-items: center;
   margin-bottom: ${(props: any) => props.theme.spacing[4]};
+  margin-left: -${(props: any) => props.theme.spacing[2]}; // hidden padding of copy
+`;
+
+const SectionHeaderContainer = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  border-bottom-color: ${(props) => props.theme.gray[700]};
+  border-bottom-width: 1px;
 `;
