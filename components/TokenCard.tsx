@@ -137,3 +137,5 @@ const CoinPercentText = styled.Text<{ isNegative: boolean }>`
   color: ${(props: any) =>
     props.isNegative ? props.theme.error[500] : props.theme.success[500]};
 `;
+
+const EmptyView = styled.View``;

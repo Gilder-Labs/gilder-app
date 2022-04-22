@@ -16,3 +16,4 @@ export * from "./ChatMessage";
 export * from "./Button";
 export * from "./Typography";
 export * from "./PublicKeyTextCopy";
+export * from "./NftList";
