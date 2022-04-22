@@ -9,6 +9,7 @@ import * as Unicons from "@iconscout/react-native-unicons";
 import { getColorType, abbreviatePublicKey } from "../utils";
 import { useQuery, gql } from "@apollo/client";
 import { Typography } from "../components";
+import { AnimatedImage } from "react-native-ui-lib";
 
 interface MemberCardProps {
   member: any;
@@ -63,7 +64,16 @@ export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
       ></LinearGradient>
       {avatarUrl ? (
         <IconContainer color={color}>
-          <Avatar source={{ uri: avatarUrl }} />
+          <AnimatedImage
+            style={{
+              width: 44,
+              height: 44,
+              overflow: "hidden",
+            }}
+            source={{
+              uri: avatarUrl,
+            }}
+          />
         </IconContainer>
       ) : (
         <IconContainer color={color}>
@@ -208,9 +218,4 @@ const IconButton = styled.TouchableOpacity`
 const TitleRow = styled.View`
   flex-direction: row;
   justify-content: space-between;
-`;
-
-const Avatar = styled.Image`
-  width: 44px;
-  height: 44px;
 `;
