@@ -4,7 +4,7 @@ import numeral from "numeral";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { createAvatar } from "@dicebear/avatars";
 import * as style from "@dicebear/avatars-jdenticon-sprites";
-import { SvgXml } from "react-native-svg";
+import { AnimatedImage } from "react-native-ui-lib";
 
 interface TokenCardProps {
   token: any;
@@ -29,20 +29,16 @@ export const TokenCard = ({
   return (
     <CoinCard key={token.mint + token.owner}>
       <CoinImageContainer>
-        {token.logoURI ? (
-          <CoinIcon
-            source={{
-              uri: token.logoURI,
-            }}
-          />
-        ) : (
-          <SvgXml
-            width="40"
-            height="40"
-            style={{ overflow: "hidden" }}
-            xml={jdenticonSvg}
-          />
-        )}
+        <AnimatedImage
+          style={{
+            width: 40,
+            height: 40,
+            overflow: "hidden",
+          }}
+          source={{
+            uri: token.logoURI,
+          }}
+        />
       </CoinImageContainer>
       <CoinTextContainer>
         <CoinTitleContainer>

@@ -4,6 +4,7 @@ import { useAppSelector } from "../hooks/redux";
 import { SvgXml, SvgUri } from "react-native-svg";
 import { createAvatar } from "@dicebear/avatars";
 import * as style from "@dicebear/avatars-jdenticon-sprites";
+import { AnimatedImage } from "react-native-ui-lib";
 
 interface RealmIconProps {
   realmId: string;
@@ -38,7 +39,18 @@ export const RealmIcon = ({ realmId, size = 48 }: RealmIconProps) => {
 
     if (isSvgImage && isFullFilePath) {
       // if is svg + has a full url to svg
-      return <SvgUri width={size - 12} height={size - 12} uri={realmIconUrl} />;
+      return (
+        <AnimatedImage
+          style={{
+            width: 38,
+            height: 38,
+            overflow: "hidden",
+          }}
+          source={{
+            uri: realmIconUrl,
+          }}
+        />
+      );
     }
 
     iconImage = isSvgImage ? (
@@ -50,8 +62,12 @@ export const RealmIcon = ({ realmId, size = 48 }: RealmIconProps) => {
         xml={jdenticonSvg}
       />
     ) : (
-      <RealmIconImage
-        key={realmId}
+      <AnimatedImage
+        style={{
+          width: 38,
+          height: 38,
+          overflow: "hidden",
+        }}
         source={{
           uri: realmIconUrl,
         }}
@@ -69,14 +85,4 @@ const Container = styled.View<{ size: number }>`
   border-radius: 100px;
   align-items: center;
   justify-content: center;
-`;
-
-const RealmIconImage = styled.Image`
-  width: 38px;
-  min-width: 38px;
-  height: 38px;
-  min-height: 38px;
-  justify-content: center;
-  align-self: center;
-  overflow: hidden;
 `;
