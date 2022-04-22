@@ -14,8 +14,10 @@ module.exports = {
       },
     }),
   },
+  babelTransformerPath: require.resolve("react-native-svg-transformer"),
   resolver: {
     ...defaultConfig.resolver,
+    assetExts: defaultConfig.resolver.assetExts.filter((ext) => ext !== "svg"),
     sourceExts: [...defaultConfig.resolver.sourceExts, "cjs"],
     extraNodeModules: require("expo-crypto-polyfills"),
   },

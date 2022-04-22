@@ -65,7 +65,7 @@ export const VaultCard = ({ vaultId, tokens }: VaultCardProps) => {
             <TokenList
               tokens={tokens}
               tokenPriceData={tokenPriceData}
-              hideUnknownTokens={true}
+              // hideUnknownTokens={true}
             />
           </ExpandableSection>
         </SectionContainer>

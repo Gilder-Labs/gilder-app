@@ -16,8 +16,6 @@ Reset Cache
 
 ### Debugging
 
-## React native debugger
-
 `open "rndebugger://set-debugger-loc?host=localhost&port=19000"`
 
 ### Things to try if all else fails

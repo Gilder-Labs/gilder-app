@@ -4,7 +4,8 @@ import numeral from "numeral";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { createAvatar } from "@dicebear/avatars";
 import * as style from "@dicebear/avatars-jdenticon-sprites";
-import { AnimatedImage } from "react-native-ui-lib";
+import { AnimatedImage, Image } from "react-native-ui-lib";
+import { SvgXml } from "react-native-svg";
 
 interface TokenCardProps {
   token: any;
@@ -29,16 +30,30 @@ export const TokenCard = ({
   return (
     <CoinCard key={token.mint + token.owner}>
       <CoinImageContainer>
-        <AnimatedImage
-          style={{
-            width: 40,
-            height: 40,
-            overflow: "hidden",
-          }}
-          source={{
-            uri: token.logoURI,
-          }}
-        />
+        {token?.logoURI ? (
+          <AnimatedImage
+            style={{
+              width: 40,
+              height: 40,
+              overflow: "hidden",
+            }}
+            source={{
+              uri: token.logoURI,
+            }}
+          />
+        ) : (
+          <SvgXml xml={jdenticonSvg} width="40px" height="40px" />
+          // <AnimatedImage
+          //   style={{
+          //     width: 40,
+          //     height: 40,
+          //     overflow: "hidden",
+          //   }}
+          //   source={{
+          //     uri: `https://gradientjoy.com/300x400?id=${token.mint[0]}`,
+          //   }}
+          // />
+        )}
       </CoinImageContainer>
       <CoinTextContainer>
         <CoinTitleContainer>
