@@ -52,11 +52,11 @@ export const VaultCard = ({ vaultId, tokens }: VaultCardProps) => {
             expanded={tokenSectionOpen}
             sectionHeader={
               <SectionHeaderContainer>
-                <Typography text="Tokens" size="h3" bold={true} />
+                <Typography text="Tokens" size="h4" bold={true} shade="400" />
                 {tokenSectionOpen ? (
                   <Unicons.UilAngleDown size="28" color={theme.gray[300]} />
                 ) : (
-                  <Unicons.UilAngleRight size="28" color={theme.gray[300]} />
+                  <Unicons.UilAngleRight size="28" color={theme.gray[600]} />
                 )}
               </SectionHeaderContainer>
             }
@@ -78,11 +78,11 @@ export const VaultCard = ({ vaultId, tokens }: VaultCardProps) => {
             expanded={nftSectionOpen}
             sectionHeader={
               <SectionHeaderContainer>
-                <Typography text="Nfts" size="h3" bold={true} />
+                <Typography text="Nfts" size="h4" bold={true} shade="400" />
                 {nftSectionOpen ? (
                   <Unicons.UilAngleDown size="28" color={theme.gray[300]} />
                 ) : (
-                  <Unicons.UilAngleRight size="28" color={theme.gray[300]} />
+                  <Unicons.UilAngleRight size="28" color={theme.gray[600]} />
                 )}
               </SectionHeaderContainer>
             }
