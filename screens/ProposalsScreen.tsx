@@ -1,7 +1,7 @@
 import { RootTabScreenProps } from "../types";
 import styled from "styled-components/native";
 import { useAppSelector, useAppDispatch } from "../hooks/redux";
-import { ProposalCard, Loading } from "../components";
+import { ProposalCard, Loading, Typography } from "../components";
 import { FlatList } from "react-native";
 import { fetchRealmProposals } from "../store/proposalsSlice";
 import { RefreshControl } from "react-native";
@@ -14,7 +14,6 @@ export default function ProposalScreen({
     useAppSelector((state) => state.proposals);
 
   const theme = useTheme();
-
   const dispatch = useAppDispatch();
 
   const { governancesMap, isLoadingVaults } = useAppSelector(
@@ -34,6 +33,18 @@ export default function ProposalScreen({
 
   const handleRefresh = () => {
     dispatch(fetchRealmProposals({ realm: selectedRealm, isRefreshing: true }));
+  };
+
+  const getActiveProposals = () => {
+    let activeProposals = 0;
+
+    proposals.forEach((proposal) => {
+      if (proposal.status === "Voting") {
+        activeProposals += 1;
+      }
+    });
+
+    return activeProposals;
   };
 
   const renderProposal = ({ item }: any) => {
@@ -105,10 +116,37 @@ export default function ProposalScreen({
           }
           ListHeaderComponent={
             <HeaderContainer>
-              <TreasuryValueContainer>
-                <SubtitleText> Total Proposals </SubtitleText>
-                <TreasuryText>{proposals?.length}</TreasuryText>
-              </TreasuryValueContainer>
+              <HeaderTextContainer>
+                <Typography
+                  size="body"
+                  shade="400"
+                  text="Active Proposals"
+                  marginBottom="0"
+                />
+                <Typography
+                  bold={true}
+                  size="h2"
+                  shade="100"
+                  text={getActiveProposals()}
+                  marginBottom="0"
+                />
+              </HeaderTextContainer>
+              <HeaderTextContainer>
+                <Typography
+                  size="body"
+                  shade="400"
+                  text="Total Proposals"
+                  marginBottom="0"
+                />
+                <Typography
+                  bold={true}
+                  size="h2"
+                  shade="100"
+                  textAlign="right"
+                  text={proposals?.length}
+                  marginBottom="0"
+                />
+              </HeaderTextContainer>
             </HeaderContainer>
           }
         />
@@ -122,24 +160,12 @@ const Container = styled.View`
   flex: 1;
 `;
 
-const TreasuryText = styled.Text`
-  color: ${(props: any) => props.theme.gray[100]};
-  font-size: 40px;
-  font-weight: bold;
-  text-align: right;
-`;
-
-const TreasuryValueContainer = styled.View``;
-
-const SubtitleText = styled.Text`
-  text-align: right;
-
-  color: ${(props: any) => props.theme.gray[400]};
-  font-size: 16px;
-`;
+const HeaderTextContainer = styled.View``;
 
 const HeaderContainer = styled.View`
   margin-bottom: ${(props: any) => props.theme.spacing[4]};
+  flex-direction: row;
+  justify-content: space-between;
 `;
 
 const EmptyView = styled.View`

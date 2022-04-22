@@ -3,7 +3,7 @@ import styled from "styled-components/native";
 // import * as Unicons from "@iconscout/react-native-unicons";
 
 interface TypographyProps {
-  text: string;
+  text: string | number;
   size?: "h1" | "h2" | "h3" | "h4" | "body" | "subtitle" | "caption";
   textAlign?: "center" | "left" | "right";
   bold?: boolean;
@@ -69,8 +69,9 @@ const Text = styled.Text<{
 }>`
   flex-direction: row;
   font-size: ${(props) => sizeMapping[props.size]}px;
-  line-height: ${(props) => sizeMapping[props.size] * 1.5}px;
+  line-height: ${(props) => sizeMapping[props.size] * 1.3}px;
   font-weight: ${(props) => (props.bold ? "bold" : "normal")};
   color: ${(props) => props.theme[props.color][props.shade]};
   margin-bottom: ${(props) => props.theme.spacing[props.marginBottom]};
+  text-align: ${(props) => props.textAlign};
 `;
