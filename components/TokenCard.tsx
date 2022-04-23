@@ -2,10 +2,10 @@ import React from "react";
 import styled from "styled-components/native";
 import numeral from "numeral";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { createAvatar } from "@dicebear/avatars";
-import * as style from "@dicebear/avatars-jdenticon-sprites";
 import { AnimatedImage, Image } from "react-native-ui-lib";
-import { SvgXml } from "react-native-svg";
+import { LinearGradient } from "expo-linear-gradient";
+import { useTheme } from "styled-components";
+import { getColorType } from "../utils";
 
 interface TokenCardProps {
   token: any;
@@ -18,14 +18,15 @@ export const TokenCard = ({
   tokenPriceData,
   hideUnknownTokens,
 }: TokenCardProps) => {
-  let jdenticonSvg = createAvatar(style, {
-    seed: token.mint,
-  });
   const coinGeckoId = token?.extensions?.coingeckoId;
+  const theme = useTheme();
 
   if (!token.name && hideUnknownTokens) {
     return null;
   }
+
+  const color = getColorType(token.mint);
+  const color2 = getColorType(token.owner);
 
   return (
     <CoinCard key={token.mint + token.owner}>
@@ -42,17 +43,12 @@ export const TokenCard = ({
             }}
           />
         ) : (
-          <SvgXml xml={jdenticonSvg} width="40px" height="40px" />
-          // <AnimatedImage
-          //   style={{
-          //     width: 40,
-          //     height: 40,
-          //     overflow: "hidden",
-          //   }}
-          //   source={{
-          //     uri: `https://gradientjoy.com/300x400?id=${token.mint[0]}`,
-          //   }}
-          // />
+          <LinearGradient
+            // Background Linear Gradient
+            colors={[`${theme[color][600]}`, `${theme[color2][900]}`]}
+            style={{ height: 40, width: 40 }}
+            start={{ x: 0.1, y: 0.2 }}
+          />
         )}
       </CoinImageContainer>
       <CoinTextContainer>

@@ -42,6 +42,8 @@ export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
   });
 
   const color = getColorType(member.walletId);
+  const color2 = getColorType(member.publicKey);
+
   const identityName = data?.identity?.social?.twitter
     ? data?.identity?.social?.twitter
     : data?.identity?.domain;
@@ -58,7 +60,7 @@ export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
     <Container>
       <LinearGradient
         // Background Linear Gradient
-        colors={[`${theme[color][600]}66`, `${theme[color][800]}66`]}
+        colors={[`${theme[color][600]}44`, `${theme[color2][800]}66`]}
         style={{ height: 48, flex: 1, width: "100%" }}
         start={{ x: 0.1, y: 0.2 }}
       ></LinearGradient>
@@ -77,7 +79,12 @@ export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
         </IconContainer>
       ) : (
         <IconContainer color={color}>
-          <SvgXml xml={jdenticonSvg} width="44px" height="44px" />
+          <LinearGradient
+            // Background Linear Gradient
+            colors={[`${theme[color][600]}`, `${theme[color2][800]}`]}
+            style={{ height: 44, width: 44 }}
+            start={{ x: 0.1, y: 0.2 }}
+          ></LinearGradient>
         </IconContainer>
       )}
       <ContentContainer>

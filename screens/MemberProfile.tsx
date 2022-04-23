@@ -88,6 +88,7 @@ export const MemberProfile = ({ route }: MemberProfileProps) => {
   });
 
   const color = getColorType(member.walletId);
+  const color2 = getColorType(member.publicKey);
 
   return (
     <Container>
@@ -105,7 +106,6 @@ export const MemberProfile = ({ route }: MemberProfileProps) => {
           data={memberChat}
           renderItem={renderChatMessage}
           keyExtractor={(item) => item.postedAt.toString()}
-          style={{}}
           ListFooterComponent={<EmptyView />}
           scrollIndicatorInsets={{ right: 1 }}
           removeClippedSubviews={true}
@@ -115,6 +115,7 @@ export const MemberProfile = ({ route }: MemberProfileProps) => {
               selectedTab={selectedTab}
               onSelectTab={setSelectedTab}
               color={color}
+              color2={color2}
               icon={jdenticonSvg}
               avatarUrl={avatarUrl}
             />
@@ -126,7 +127,6 @@ export const MemberProfile = ({ route }: MemberProfileProps) => {
           data={memberVotes}
           renderItem={renderVotes}
           keyExtractor={(item) => item.proposalId}
-          style={{}}
           ListFooterComponent={<EmptyView />}
           scrollIndicatorInsets={{ right: 1 }}
           removeClippedSubviews={true}
@@ -136,6 +136,7 @@ export const MemberProfile = ({ route }: MemberProfileProps) => {
               selectedTab={selectedTab}
               onSelectTab={setSelectedTab}
               color={color}
+              color2={color2}
               icon={jdenticonSvg}
               avatarUrl={avatarUrl}
             />

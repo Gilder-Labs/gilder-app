@@ -9,6 +9,7 @@ interface MemberProfileHeaderProps {
   selectedTab: string;
   onSelectTab: any;
   color: string;
+  color2: string;
   icon: any;
   avatarUrl: string;
 }
@@ -17,6 +18,7 @@ export const MemberProfileHeader = ({
   selectedTab = "Messages",
   onSelectTab,
   color,
+  color2,
   icon,
   avatarUrl,
 }: MemberProfileHeaderProps) => {
@@ -25,7 +27,7 @@ export const MemberProfileHeader = ({
   return (
     <HeaderContainer>
       <LinearGradient
-        colors={[`${theme[color][600]}66`, `${theme[color][800]}66`]}
+        colors={[`${theme[color][600]}44`, `${theme[color2][800]}66`]}
         style={{
           height: 80,
           // flex: 1,
@@ -39,7 +41,12 @@ export const MemberProfileHeader = ({
         {avatarUrl ? (
           <Avatar source={{ uri: avatarUrl }} />
         ) : (
-          <SvgXml xml={icon} width="60px" height="60px" />
+          <LinearGradient
+            // Background Linear Gradient
+            colors={[`${theme[color][600]}`, `${theme[color2][800]}`]}
+            style={{ height: 60, width: 60 }}
+            start={{ x: 0.1, y: 0.2 }}
+          />
         )}
       </IconContainer>
       <MemberInfoSwitcherContainer>

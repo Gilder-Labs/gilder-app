@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { useAppSelector } from "../hooks/redux";
-import { SvgXml, SvgUri } from "react-native-svg";
-import { createAvatar } from "@dicebear/avatars";
-import * as style from "@dicebear/avatars-jdenticon-sprites";
 import { AnimatedImage } from "react-native-ui-lib";
+import { LinearGradient } from "expo-linear-gradient";
+import { getColorType } from "../utils";
+import { useTheme } from "styled-components";
 
 interface RealmIconProps {
   realmId: string;
@@ -13,14 +13,14 @@ interface RealmIconProps {
 
 export const RealmIcon = ({ realmId, size = 48 }: RealmIconProps) => {
   const { realmsData } = useAppSelector((state) => state.realms);
+  const color = getColorType(realmId);
+  const color2 = getColorType(realmId.charAt(realmId.length - 1));
+  const theme = useTheme();
 
   // tries to handle all the edge cases in governance-ui realms image list
   const renderRealmIconImage = () => {
     let iconImage;
     let isSvgImage = true;
-    let jdenticonSvg = createAvatar(style, {
-      seed: realmId,
-    });
 
     let realmIconUrl = realmsData[realmId]?.ogImage;
     let isFullFilePath = realmIconUrl?.slice(0, 5) === "https";
@@ -54,12 +54,12 @@ export const RealmIcon = ({ realmId, size = 48 }: RealmIconProps) => {
     }
 
     iconImage = isSvgImage ? (
-      <SvgXml
-        key={realmId}
-        width={size - 12}
-        height={size - 12}
-        // style={{ marginBottom: 12 }}
-        xml={jdenticonSvg}
+      <LinearGradient
+        // Background Linear Gradient
+        // @ts-ignore
+        colors={[`${theme[color][600]}`, `${theme[color2][900]}`]}
+        style={{ height: size - 12, width: size - 12 }}
+        start={{ x: 0.1, y: 0.2 }}
       />
     ) : (
       <AnimatedImage
