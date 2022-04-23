@@ -58,7 +58,7 @@ export const RealmIcon = ({ realmId, size = 48 }: RealmIconProps) => {
         // Background Linear Gradient
         // @ts-ignore
         colors={[`${theme[color][600]}`, `${theme[color2][900]}`]}
-        style={{ height: size - 12, width: size - 12 }}
+        style={{ height: size - 10, width: size - 10 }}
         start={{ x: 0.1, y: 0.2 }}
       />
     ) : (
