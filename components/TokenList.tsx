@@ -39,7 +39,6 @@ export const TokenList = ({
       scrollEnabled={isScrollable}
       // columnWrapperStyle={{ marginBottom: 8 }}
       scrollIndicatorInsets={{ right: 1 }}
-      removeClippedSubviews={true}
       initialNumToRender={10}
     />
   );

@@ -136,11 +136,12 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
               tokenPriceData={tokenPriceData}
               hideUnknownTokens={false}
               isScrollable={true}
+              vaultId={publicKey}
             />
           </TokenContainer>
           <TokenContainer key="2">
             <Typography size="h3" text="Nfts" bold={true} />
-            <NftList nfts={nfts} isScrollable={true} />
+            <NftList nfts={nfts} isScrollable={true} vaultId={publicKey} />
           </TokenContainer>
           <TokenContainer key="3">
             <Typography

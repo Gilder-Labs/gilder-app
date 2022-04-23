@@ -19,9 +19,9 @@ export const NftList = ({
       <AnimatedImage
         key={item.id}
         style={{
-          minHeight: 140,
-          minWidth: "50%",
-          marginRight: 8,
+          minHeight: 160,
+          height: "auto",
+          minWidth: "48%",
           // maxWidth: "50%",
           borderRadius: 8,
         }}
@@ -41,9 +41,8 @@ export const NftList = ({
       numColumns={2}
       scrollEnabled={isScrollable}
       style={{ paddingTop: 8 }}
-      columnWrapperStyle={{ marginBottom: 8 }}
+      columnWrapperStyle={{ marginBottom: 8, justifyContent: "space-around" }}
       scrollIndicatorInsets={{ right: 1 }}
-      removeClippedSubviews={true}
       initialNumToRender={10}
     />
   );
