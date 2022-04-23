@@ -20,6 +20,9 @@ import TreasuryScreen from "../screens/TreasuryScreen";
 import MembersScreen from "../screens/MembersScreen";
 import ProposalsScreen from "../screens/ProposalsScreen";
 
+// Test lab, remove before prod.
+import TestLabScreen from "../screens/TestLabScreen";
+
 import LinkingConfiguration from "./LinkingConfiguration";
 import { MemberProfile } from "../screens/MemberProfile";
 import { ProposalDetailScreen } from "../screens/ProposalDetailScreen";
@@ -118,6 +121,22 @@ function DrawerScreen() {
           ),
         }}
       />
+      {/* Comment out before going to prod.  */}
+      <Drawer.Screen
+        name="TestLab"
+        component={TestLabScreen}
+        options={{
+          drawerLabel: ({ focused, color }) => (
+            <DrawerTabText color={color} focused={focused}>
+              Test Lab
+            </DrawerTabText>
+          ),
+          drawerIcon: ({ focused, color, size }) => (
+            <Unicons.UilFlask size="28" color={color} />
+          ),
+        }}
+      />
+      {/* End comment out before prod */}
     </Drawer.Navigator>
   );
 }

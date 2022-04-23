@@ -69,13 +69,13 @@ const ButtonContainer = styled.TouchableOpacity<{
     | "warning";
 }>`
   flex-direction: row;
-  height: 48px;
+  min-height: 48px;
   flex: 1;
   align-items: center;
   justify-content: center;
   border-radius: 4px;
   margin-right: ${(props) => (props.marginRight ? props.theme.spacing[3] : 0)};
-
+  padding: ${(props: any) => props.theme.spacing[2]};
   background: ${(props) => props.theme[props.color][props.shade]};
   opacity: ${(props) => (props.disabled ? 0.5 : 1)};
 `;
