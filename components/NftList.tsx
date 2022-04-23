@@ -5,9 +5,10 @@ import { AnimatedImage } from "react-native-ui-lib";
 
 interface NftListProps {
   nfts: Array<any>;
+  vaultId?: string;
 }
 
-export const NftList = ({ nfts }: NftListProps) => {
+export const NftList = ({ nfts, vaultId = "" }: NftListProps) => {
   const renderNft = ({ item }) => {
     return (
       <AnimatedImage
@@ -28,6 +29,7 @@ export const NftList = ({ nfts }: NftListProps) => {
 
   return (
     <FlatList
+      listKey={"nft" + vaultId}
       data={nfts}
       renderItem={renderNft}
       keyExtractor={(item) => item.id}

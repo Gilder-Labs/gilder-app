@@ -39,7 +39,7 @@ export default function TreasuryScreen({
   // * get token prices
   // * get total treasury prices
 
-  const renderVault = ({ item }: any) => {
+  const renderVault = ({ item, index }: any) => {
     return (
       <VaultCard
         vaultId={item.pubKey}

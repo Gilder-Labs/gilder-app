@@ -38,6 +38,22 @@ export const VaultCard = ({ vaultId, tokens }: VaultCardProps) => {
 
   const nfts = vaultsNfts[vaultId];
 
+  const getFilteredTokens = () => {
+    let filteredTokens = [];
+    let nftsMintMap = {};
+    nfts.forEach((nft: any) => {
+      // @ts-ignore
+      nftsMintMap[nft.mintAddress] = nft;
+    });
+
+    // @ts-ignore
+    filteredTokens = tokens.filter((token) => !nftsMintMap[token.mint]);
+
+    return filteredTokens;
+  };
+
+  const filteredTokens = getFilteredTokens();
+
   return (
     <Container>
       <TitleContainer>
@@ -52,7 +68,12 @@ export const VaultCard = ({ vaultId, tokens }: VaultCardProps) => {
             expanded={tokenSectionOpen}
             sectionHeader={
               <SectionHeaderContainer>
-                <Typography text="Tokens" size="h4" bold={true} shade="400" />
+                <Typography
+                  text={`Tokens (${filteredTokens.length})`}
+                  size="h4"
+                  bold={true}
+                  shade="400"
+                />
                 {tokenSectionOpen ? (
                   <Unicons.UilAngleDown size="28" color={theme.gray[300]} />
                 ) : (
@@ -63,8 +84,9 @@ export const VaultCard = ({ vaultId, tokens }: VaultCardProps) => {
             onPress={() => setTokenSectionOpen(!tokenSectionOpen)}
           >
             <TokenList
-              tokens={tokens}
+              tokens={getFilteredTokens()}
               tokenPriceData={tokenPriceData}
+              vaultId={vaultId}
               // hideUnknownTokens={true}
             />
           </ExpandableSection>
@@ -78,7 +100,12 @@ export const VaultCard = ({ vaultId, tokens }: VaultCardProps) => {
             expanded={nftSectionOpen}
             sectionHeader={
               <SectionHeaderContainer>
-                <Typography text="Nfts" size="h4" bold={true} shade="400" />
+                <Typography
+                  text={`Nfts (${nfts.length})`}
+                  size="h4"
+                  bold={true}
+                  shade="400"
+                />
                 {nftSectionOpen ? (
                   <Unicons.UilAngleDown size="28" color={theme.gray[300]} />
                 ) : (
@@ -88,7 +115,7 @@ export const VaultCard = ({ vaultId, tokens }: VaultCardProps) => {
             }
             onPress={() => setNftSectionOpen(!nftSectionOpen)}
           >
-            <NftList nfts={nfts} />
+            <NftList nfts={nfts} vaultId={vaultId} />
           </ExpandableSection>
         </SectionContainer>
       )}
