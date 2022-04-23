@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Modal, FlatList, View, StyleSheet, Animated } from "react-native";
 import styled from "styled-components/native";
-import { getColorType } from "../utils";
+import { getColorType, getFilteredTokens } from "../utils";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import * as Unicons from "@iconscout/react-native-unicons";
 import {
@@ -9,6 +9,7 @@ import {
   disconnectWallet,
   fetchTransactions,
   fetchTokens,
+  fetchNfts,
 } from "../store/walletSlice";
 import * as style from "@dicebear/avatars-jdenticon-sprites";
 import { PublicKeyTextCopy } from "./PublicKeyTextCopy";
@@ -16,10 +17,14 @@ import { SvgXml } from "react-native-svg";
 import { useTheme } from "styled-components";
 import { createAvatar } from "@dicebear/avatars";
 import { TokenList } from "./TokenList";
+import { NftList } from "./NftList";
 import numeral from "numeral";
-import PagerView, { PagerViewOnPageScrollEvent } from "react-native-pager-view";
+import PagerView, {
+  PagerViewOnPageSelectedEvent,
+} from "react-native-pager-view";
 import { Typography } from "./Typography";
 import { TransactionCard } from "../elements";
+import { PageControl, SegmentedControl } from "react-native-ui-lib";
 
 interface RealmSelectModalProps {}
 
@@ -35,6 +40,7 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
     tokens,
     userInfo,
     transactions,
+    nfts,
   } = useAppSelector((state) => state.wallet);
 
   const handleClose = () => {
@@ -48,6 +54,7 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
   useEffect(() => {
     if (isWalletOpen && publicKey) {
       dispatch(fetchTokens(publicKey));
+      dispatch(fetchNfts(publicKey));
       dispatch(fetchTransactions(publicKey));
     }
   }, [isWalletOpen]);
@@ -68,6 +75,16 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
     });
     return numeral(totalValue).format("$0,0.00");
   };
+
+  const handlePageScroll = (event: PagerViewOnPageSelectedEvent) => {
+    const index = event.nativeEvent.position;
+    console.log(index, "PAGE IDX");
+    setSelectedPage(index);
+  };
+
+  console.log("nfts", nfts);
+
+  const filteredTokens = getFilteredTokens(nfts, tokens);
 
   return (
     <Modal
@@ -98,20 +115,34 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
 
         <WalletValue>{getTotalValue()}</WalletValue>
 
+        <PageControl
+          numOfPages={3}
+          currentPage={selectedPage}
+          inactiveColor={theme.gray[600]}
+          color={theme.gray[200]}
+          containerStyle={{ marginBottom: 16 }}
+        />
+
         <PagerView
           style={styles.viewPager}
           initialPage={selectedPage}
           pageMargin={20}
+          onPageSelected={handlePageScroll}
         >
           <TokenContainer key="1">
             <Typography size="h3" text="Tokens" bold={true} />
             <TokenList
-              tokens={tokens}
+              tokens={filteredTokens}
               tokenPriceData={tokenPriceData}
-              hideUnknownTokens={true}
+              hideUnknownTokens={false}
+              isScrollable={true}
             />
           </TokenContainer>
           <TokenContainer key="2">
+            <Typography size="h3" text="Nfts" bold={true} />
+            <NftList nfts={nfts} isScrollable={true} />
+          </TokenContainer>
+          <TokenContainer key="3">
             <Typography
               size="h3"
               text="Activity"
@@ -200,7 +231,7 @@ const IconContainer = styled.View<{ color: string }>`
   margin-bottom: ${(props) => props.theme.spacing[2]};
 `;
 
-const TokenContainer = styled.ScrollView`
+const TokenContainer = styled.View`
   /* width: 100%; */
   margin-bottom: ${(props: any) => props.theme.spacing[3]};
   border-radius: 4px;

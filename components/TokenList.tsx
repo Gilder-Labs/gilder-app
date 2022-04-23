@@ -8,14 +8,16 @@ interface TokenCardProps {
   tokens: Array<any>;
   tokenPriceData: any;
   hideUnknownTokens?: boolean;
-  vaultId: string;
+  vaultId?: string;
+  isScrollable?: boolean;
 }
 
 export const TokenList = ({
   tokens,
   tokenPriceData,
   hideUnknownTokens = false,
-  vaultId,
+  vaultId = "",
+  isScrollable = false,
 }: TokenCardProps) => {
   const renderToken = ({ item }) => {
     return (
@@ -34,7 +36,7 @@ export const TokenList = ({
       data={tokens}
       renderItem={renderToken}
       keyExtractor={(item) => item.mint}
-      scrollEnabled={false}
+      scrollEnabled={isScrollable}
       // columnWrapperStyle={{ marginBottom: 8 }}
       scrollIndicatorInsets={{ right: 1 }}
       removeClippedSubviews={true}

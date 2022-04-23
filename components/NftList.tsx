@@ -6,9 +6,14 @@ import { AnimatedImage } from "react-native-ui-lib";
 interface NftListProps {
   nfts: Array<any>;
   vaultId?: string;
+  isScrollable?: boolean;
 }
 
-export const NftList = ({ nfts, vaultId = "" }: NftListProps) => {
+export const NftList = ({
+  nfts,
+  vaultId = "",
+  isScrollable = false,
+}: NftListProps) => {
   const renderNft = ({ item }) => {
     return (
       <AnimatedImage
@@ -34,7 +39,7 @@ export const NftList = ({ nfts, vaultId = "" }: NftListProps) => {
       renderItem={renderNft}
       keyExtractor={(item) => item.id}
       numColumns={2}
-      scrollEnabled={false}
+      scrollEnabled={isScrollable}
       style={{ paddingTop: 8 }}
       columnWrapperStyle={{ marginBottom: 8 }}
       scrollIndicatorInsets={{ right: 1 }}

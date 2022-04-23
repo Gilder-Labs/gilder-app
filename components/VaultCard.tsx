@@ -9,6 +9,7 @@ import { PublicKeyTextCopy } from "./PublicKeyTextCopy";
 import { ExpandableSection } from "react-native-ui-lib";
 import * as Unicons from "@iconscout/react-native-unicons";
 import { useTheme } from "styled-components";
+import { getFilteredTokens } from "../utils";
 
 interface VaultCardProps {
   vaultId: string;
@@ -38,21 +39,7 @@ export const VaultCard = ({ vaultId, tokens }: VaultCardProps) => {
 
   const nfts = vaultsNfts[vaultId];
 
-  const getFilteredTokens = () => {
-    let filteredTokens = [];
-    let nftsMintMap = {};
-    nfts.forEach((nft: any) => {
-      // @ts-ignore
-      nftsMintMap[nft.mintAddress] = nft;
-    });
-
-    // @ts-ignore
-    filteredTokens = tokens.filter((token) => !nftsMintMap[token.mint]);
-
-    return filteredTokens;
-  };
-
-  const filteredTokens = getFilteredTokens();
+  const filteredTokens = getFilteredTokens(nfts, tokens);
 
   return (
     <Container>
@@ -84,7 +71,7 @@ export const VaultCard = ({ vaultId, tokens }: VaultCardProps) => {
             onPress={() => setTokenSectionOpen(!tokenSectionOpen)}
           >
             <TokenList
-              tokens={getFilteredTokens()}
+              tokens={filteredTokens}
               tokenPriceData={tokenPriceData}
               vaultId={vaultId}
               // hideUnknownTokens={true}

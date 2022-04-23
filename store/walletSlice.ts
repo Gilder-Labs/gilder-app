@@ -29,7 +29,9 @@ export interface WalletState {
   userInfo: any;
   isWalletOpen: boolean;
   isLoadingTokens: boolean;
+  isLoadingNfts: boolean;
   tokens: Array<Token>;
+  nfts: Array<any>;
   tokenPriceData: any;
   isTransactionModalOpen: boolean;
   transactionType: "VoteOnProposal" | "something" | "";
@@ -47,7 +49,9 @@ const initialState: WalletState = {
   userInfo: null,
   isWalletOpen: false,
   tokens: [],
+  nfts: [],
   isLoadingTokens: false,
+  isLoadingNfts: false,
   tokenPriceData: null,
   isTransactionModalOpen: false,
   transactionType: "",
@@ -147,6 +151,27 @@ export const fetchTokens = createAsyncThunk(
   }
 );
 
+export const fetchNfts = createAsyncThunk(
+  "wallet/fetchNfts",
+  async (publicKey: string) => {
+    try {
+      const nftResponse = await axios.get(
+        "https://api.cybertino.io/querier/getSolNftByAddress",
+        {
+          params: {
+            address: publicKey,
+          },
+        }
+      );
+
+      return { nfts: nftResponse.data.results };
+    } catch (e) {
+      console.log("error", e);
+      return { nfts: [] };
+    }
+  }
+);
+
 export const fetchTransactions = createAsyncThunk(
   "wallet/fetchTransactions",
   async (publicKey: string) => {
@@ -198,7 +223,17 @@ export const castVote = createAsyncThunk(
       const { proposal, action } = transactionData;
       const { selectedRealm } = realms;
       const walletPubkey = new PublicKey(wallet.publicKey);
+      // Update this to handle delegate voting
       const tokenOwnerRecord = members.membersMap[wallet.publicKey];
+      // const tokenOwnerRecord =
+      //   members.membersMap["EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i"];
+
+      // EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i
+      // 1. Check if current wallet is member and has token to be voted with
+      // 2. If it does, do vote with that token
+      // 3. If not check if current wallet is delegated from an token owner record
+      // 4. if it is, check if it has the token for the proposal
+      // 5. if it does, attempt vote
 
       const governanceAuthority = walletPubkey;
       const payer = walletPubkey;
@@ -309,6 +344,16 @@ export const walletSlice = createSlice({
         state.isLoadingTokens = false;
         state.tokens = action.payload.tokens;
         state.tokenPriceData = action.payload.tokenPriceData;
+      })
+      .addCase(fetchNfts.pending, (state) => {
+        state.isLoadingNfts = true;
+      })
+      .addCase(fetchNfts.rejected, (state) => {
+        state.isLoadingNfts = false;
+      })
+      .addCase(fetchNfts.fulfilled, (state, action: any) => {
+        state.isLoadingNfts = false;
+        state.nfts = action.payload.nfts;
       })
       .addCase(castVote.pending, (state) => {
         state.isSendingTransaction = true;
