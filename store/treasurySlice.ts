@@ -94,11 +94,6 @@ export const fetchVaults = createAsyncThunk(
       );
 
       const vaultsWithTokensRaw = await vaultsWithTokensPromise;
-      console.log("cybertino NFTS??", vaultNfts);
-
-      //  map through nfts vaults reponse
-      // config.params.address = vault public key
-
       const tokensData = await TokensInfo;
       const coinGeckoUrl = "https://api.coingecko.com/api/v3/coins/markets";
       let tokenIds = new Set();

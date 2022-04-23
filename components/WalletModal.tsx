@@ -78,11 +78,8 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
 
   const handlePageScroll = (event: PagerViewOnPageSelectedEvent) => {
     const index = event.nativeEvent.position;
-    console.log(index, "PAGE IDX");
     setSelectedPage(index);
   };
-
-  console.log("nfts", nfts);
 
   const filteredTokens = getFilteredTokens(nfts, tokens);
 

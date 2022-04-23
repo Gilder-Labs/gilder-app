@@ -35,10 +35,7 @@ export const VaultCard = ({ vaultId, tokens }: VaultCardProps) => {
     return numeral(totalValue).format("$0,0");
   };
 
-  console.log("NFTS for vault", vaultsNfts[vaultId]);
-
   const nfts = vaultsNfts[vaultId];
-
   const filteredTokens = getFilteredTokens(nfts, tokens);
 
   return (
