@@ -22,6 +22,7 @@ export interface TreasuryState {
   tokenMap: any;
   activeProposals: number;
   vaultsNfts: any;
+  // nftCollectionData: any;
 }
 
 const initialState: TreasuryState = {
@@ -33,6 +34,7 @@ const initialState: TreasuryState = {
   tokenMap: null,
   activeProposals: 0,
   vaultsNfts: null,
+  // nftCollectionData: null,
 };
 
 let connection = new Connection(RPC_CONNECTION, "confirmed");
@@ -84,14 +86,28 @@ export const fetchVaults = createAsyncThunk(
         )
       );
 
+      // const collectionPromise = axios.get(
+      //   "https://api-mainnet.magiceden.io/all_collections_with_escrow_data?edge_cache=true"
+      // );
+      // // https://api-mainnet.magiceden.io/all_collections?edge_cache=true
+      // const collectionResponse = await collectionPromise;
+      // const collectionData = collectionResponse.data.collections;
+
       const vaultNfts = await vaultNftsPromise;
       const vaultNftsMap = {};
+      // const collectionMap = {};
 
       vaultNfts.forEach(
         (vault) =>
           // @ts-ignore
           (vaultNftsMap[vault.config.params.address] = vault.data.results)
       );
+
+      // collectionData.forEach(
+      //   (nftCollection: any) =>
+      //     // @ts-ignore
+      //     (collectionMap[nftCollection.symbol] = nftCollection)
+      // );
 
       const vaultsWithTokensRaw = await vaultsWithTokensPromise;
       const tokensData = await TokensInfo;
@@ -182,6 +198,7 @@ export const fetchVaults = createAsyncThunk(
         governancesMap: governancesMap,
         tokenMap: tokenMap,
         activeProposals: activeProposals,
+        // nftCollectionData: collectionMap,
       };
     } catch (error) {
       console.log("error", error);
@@ -217,6 +234,7 @@ export const treasurySlice = createSlice({
         state.governancesMap = action.payload.governancesMap;
         state.tokenMap = action.payload.tokenMap;
         state.activeProposals = action.payload.activeProposals;
+        // state.nftCollectionData = action.payload.nftCollectionData;
       });
   },
 });
