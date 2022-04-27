@@ -223,10 +223,17 @@ export const castVote = createAsyncThunk(
       const { proposal, action } = transactionData;
       const { selectedRealm } = realms;
       const walletPubkey = new PublicKey(wallet.publicKey);
-      // Update this to handle delegate voting
-      const tokenOwnerRecord = members.membersMap[wallet.publicKey];
-      // const tokenOwnerRecord =
-      //   members.membersMap["EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i"];
+      let tokenOwnerRecord;
+      const governanceAuthority = walletPubkey;
+
+      // if Member has a token, use their own token
+      if (members.membersMap[wallet.publicKey]) {
+        tokenOwnerRecord = members.membersMap[wallet.publicKey];
+      } else {
+        // else get the token from the tokens that have been delegated to them
+        tokenOwnerRecord =
+          members.delegateMap[wallet.publicKey].councilMembers[0];
+      }
 
       // EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i
       // 1. Check if current wallet is member and has token to be voted with
@@ -235,7 +242,6 @@ export const castVote = createAsyncThunk(
       // 4. if it is, check if it has the token for the proposal
       // 5. if it does, attempt vote
 
-      const governanceAuthority = walletPubkey;
       const payer = walletPubkey;
 
       const signers: Keypair[] = [];
