@@ -57,7 +57,7 @@ export function DrawerContentContainer(props: any) {
             renderItem={renderRealmIcon}
             keyExtractor={(item) => item}
             style={{ padding: 8 }}
-            scrollIndicatorInsets={{ right: 1 }}
+            scrollIndicatorInsets={{ right: -2 }}
             ListFooterComponent={
               <View>
                 <Divider />
@@ -67,6 +67,7 @@ export function DrawerContentContainer(props: any) {
                 >
                   <Unicons.UilPlus size="20" color={theme.gray[500]} />
                 </AddRealmButtonContainer>
+                <EmptyView />
               </View>
             }
           />
@@ -177,4 +178,8 @@ const BetaBadge = styled.Text`
   border: 1px solid ${(props) => props.theme.gray[400]};
   color: ${(props) => props.theme.gray[400]};
   background: ${(props) => props.theme.gray[700]}44;
+`;
+
+const EmptyView = styled.View`
+  height: 200px;
 `;
