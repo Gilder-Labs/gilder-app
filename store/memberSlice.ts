@@ -22,6 +22,7 @@ export interface realmState {
   isLoadingChat: boolean;
   isLoadingVotes: boolean;
   isRefreshingMembers: boolean;
+  delegateMap: any;
 }
 
 const initialState: realmState = {
@@ -33,6 +34,7 @@ const initialState: realmState = {
   isLoadingChat: false,
   isLoadingVotes: false,
   isRefreshingMembers: false,
+  delegateMap: {},
 };
 
 let connection = new web3.Connection(RPC_CONNECTION, "confirmed");
@@ -57,6 +59,7 @@ export const fetchRealmMembers = createAsyncThunk(
       } = realm;
 
       const membersMap = {};
+      const delegateMap = {};
       rawTokenOwnerRecords?.map((member) => {
         // if member does not exist, add member to member map
         // if member does exist, check which token record this is and add correct attributes to object
@@ -74,6 +77,10 @@ export const fetchRealmMembers = createAsyncThunk(
         };
 
         if (governingTokenMint === councilMint) {
+          const delegateWalletId =
+            member?.account?.governanceDelegate?.toBase58();
+          // @ts-ignore
+          memberData["councilDelegate"] = delegateWalletId;
           // @ts-ignore
           memberData["totalVotesCouncil"] = member.account.totalVotesCount;
           // @ts-ignore
@@ -85,7 +92,27 @@ export const fetchRealmMembers = createAsyncThunk(
             depositAmount,
             councilMintDecimals
           );
+
+          if (delegateWalletId) {
+            if (delegateMap[delegateWalletId]) {
+              const oldCouncilRecords =
+                delegateMap[delegateWalletId]?.councilMembers || [];
+
+              delegateMap[delegateWalletId] = {
+                councilMembers: [...oldCouncilRecords, memberData],
+              };
+            } else {
+              delegateMap[delegateWalletId] = {
+                councilMembers: [memberData],
+              };
+            }
+          }
         } else {
+          const delegateWalletId =
+            member?.account?.governanceDelegate?.toBase58();
+
+          // @ts-ignore
+          memberData["communityDelegate"] = delegateWalletId;
           // @ts-ignore
           memberData["totalVotesCommunity"] = member.account.totalVotesCount;
           // @ts-ignore
@@ -97,6 +124,21 @@ export const fetchRealmMembers = createAsyncThunk(
             depositAmount,
             communityMintDecimals
           );
+
+          if (delegateWalletId) {
+            if (delegateMap[delegateWalletId]) {
+              const oldCommunityRecords =
+                delegateMap[delegateWalletId]?.communityMembers || [];
+
+              delegateMap[delegateWalletId] = {
+                councilMembers: [...oldCommunityRecords, memberData],
+              };
+            } else {
+              delegateMap[delegateWalletId] = {
+                councilMembers: [memberData],
+              };
+            }
+          }
         }
 
         // If we get 2 token owners for the same id, merge them together so we can access both tokens they own
@@ -118,7 +160,11 @@ export const fetchRealmMembers = createAsyncThunk(
         (a, b) => b?.totalVotesCount - a?.totalVotesCount
       );
 
-      return { members: sortedMembers, membersMap: membersMap };
+      return {
+        members: sortedMembers,
+        membersMap: membersMap,
+        delegateMap: delegateMap,
+      };
     } catch (error) {
       console.log("error", error);
     }
@@ -214,6 +260,7 @@ export const memberSlice = createSlice({
         state.isRefreshingMembers = false;
         state.membersMap = action.payload.membersMap;
         state.members = action.payload.members;
+        state.delegateMap = action.payload.delegateMap;
       })
       .addCase(fetchMemberChat.pending, (state) => {
         state.isLoadingChat = true;
