@@ -17,6 +17,7 @@ interface TypographyProps {
     | "error"
     | "warning";
   marginBottom?: "0" | "1" | "2" | "3" | "4" | "5";
+  maxLength?: number;
 }
 
 const sizeMapping = {
@@ -37,7 +38,19 @@ export const Typography = ({
   shade = "100",
   color = "gray",
   marginBottom = "1",
+  maxLength = 10000,
 }: TypographyProps) => {
+  const formattedText = () => {
+    let strText = text.toString();
+
+    strText =
+      strText.length > maxLength
+        ? `${strText.slice(0, maxLength)}...`
+        : strText;
+
+    return strText;
+  };
+
   return (
     <Text
       textAlign={textAlign}
@@ -47,7 +60,7 @@ export const Typography = ({
       color={color}
       marginBottom={marginBottom}
     >
-      {text}
+      {formattedText()}
     </Text>
   );
 };
