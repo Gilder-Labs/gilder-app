@@ -1,14 +1,17 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import * as React from "react";
 import { DrawerContentContainer } from "../components/DrawerContentContainer";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as Unicons from "@iconscout/react-native-unicons";
+import * as Device from "expo-device";
+import * as Notifications from "expo-notifications";
+import { useNavigation } from "@react-navigation/native";
 
 import { useTheme } from "styled-components";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { fetchRealms } from "../store/realmSlice";
+import { fetchRealms, fetchRealm } from "../store/realmSlice";
 import { fetchRealmMembers } from "../store/memberSlice";
 import { fetchRealmProposals } from "../store/proposalsSlice";
 import { fetchRealmActivity } from "../store/activitySlice";
@@ -38,6 +41,34 @@ function DrawerScreen() {
   const { activeProposals, isLoadingVaults } = useAppSelector(
     (state) => state.treasury
   );
+  const navigation = useNavigation();
+  const dispatch = useAppDispatch();
+
+  const responseListener = useRef();
+
+  useEffect(() => {
+    registerForPushNotificationsAsync();
+
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        const data = response.notification.request.content.data;
+        console.log("response:", response);
+        console.log("Data", response.notification.request.content.data);
+
+        if (data.realmId) {
+          // @ts-ignore
+          dispatch(fetchRealm(data?.realmId));
+        }
+
+        //@ts-ignore
+        navigation.navigate("Root", { screen: "Proposals" });
+      });
+
+    return () => {
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, []);
+
   return (
     <Drawer.Navigator
       initialRouteName="Proposals"
@@ -238,6 +269,28 @@ export default function Navigation({}: {}) {
     </RootContainer>
   );
 }
+
+const registerForPushNotificationsAsync = async () => {
+  let token;
+  if (Device.isDevice) {
+    const { status: existingStatus } =
+      await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== "granted") {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== "granted") {
+      alert("Failed to get push token for push notification!");
+      return;
+    }
+    token = (await Notifications.getExpoPushTokenAsync()).data;
+    return token;
+  } else {
+    alert("Must use physical device for Push Notifications");
+  }
+  return token;
+};
 
 const DrawerTabText = styled.Text<{ color: string; focused: boolean }>`
   color: ${(props) => props.color};
