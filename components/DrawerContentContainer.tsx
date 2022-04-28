@@ -88,6 +88,7 @@ export function DrawerContentContainer(props: any) {
                 bold={true}
                 shade="300"
                 marginBottom="0"
+                maxLength={14}
                 text={realmDisplayName ? realmDisplayName : selectedRealm?.name}
               />
               <IconButton onPress={handleSettingsPress}>
