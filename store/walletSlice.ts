@@ -320,9 +320,11 @@ export const walletSlice = createSlice({
     },
     openWallet: (state, action) => {
       state.isWalletOpen = true;
+      state.isSendingTransaction = false;
     },
     closeWallet: (state, action) => {
       state.isWalletOpen = false;
+      state.isSendingTransaction = false;
     },
     openTransactionModal: (state, action) => {
       const { type, transactionData } = action.payload;

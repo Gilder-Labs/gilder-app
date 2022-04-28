@@ -27,7 +27,7 @@ export default function ProposalScreen({
   const handleProposalSelect = (proposal: Proposal) => {
     //@ts-ignore
     navigation.push("ProposalDetail", {
-      proposal: proposal,
+      proposalId: proposal.proposalId,
     });
   };
 

@@ -38,8 +38,16 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
   const { membersMap } = useAppSelector((state) => state.members);
 
   const { publicKey } = useAppSelector((state) => state.wallet);
+  const { proposalsMap } = useAppSelector((state) => state.proposals);
 
-  const { proposal } = route?.params;
+  // const { proposal } = route?.params;
+  const { proposalId } = route?.params;
+
+  if (!proposalId || !proposalsMap[proposalId]) {
+    return <Loading />;
+  }
+
+  const proposal = proposalsMap[proposalId];
   const {
     status,
     name,
@@ -52,9 +60,9 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
     governingTokenMint,
   } = proposal;
 
-  useEffect(() => {
-    dispatch(fetchProposalChat(proposal.proposalId));
-  }, [proposal]);
+  // useEffect(() => {
+  //   dispatch(fetchProposalChat(proposal.proposalId));
+  // }, [proposal]);
 
   const governance = governancesMap?.[proposal?.governanceId];
 

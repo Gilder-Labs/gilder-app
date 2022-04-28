@@ -59,9 +59,12 @@ function DrawerScreen() {
           // @ts-ignore
           dispatch(fetchRealm(data?.realmId));
         }
-
+        // @ts-ignore
+        navigation.push("ProposalDetail", {
+          proposalId: data.proposalId,
+        });
         //@ts-ignore
-        navigation.navigate("Root", { screen: "Proposals" });
+        // navigation.navigate("Root", { screen: "Proposals" });
       });
 
     return () => {
