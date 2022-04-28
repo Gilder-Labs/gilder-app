@@ -14,11 +14,14 @@ import { useTheme } from "styled-components";
 import Logo from "../assets/images/GilderLogo.png";
 import * as Unicons from "@iconscout/react-native-unicons";
 import { fetchRealm } from "../store/realmSlice";
+import { Typography } from "./Typography";
+import { useNavigation } from "@react-navigation/native";
 
 export function DrawerContentContainer(props: any) {
   const theme = useTheme();
   const [realmSelectisOpen, setRealmSelectIsOpen] = useState(false);
   const dispatch = useAppDispatch();
+  const navigation = useNavigation();
 
   const { selectedRealm, realmsData, realmWatchlist } = useAppSelector(
     (state) => state.realms
@@ -35,6 +38,11 @@ export function DrawerContentContainer(props: any) {
 
   const renderRealmIcon = ({ item }: any) => {
     return <RealmIconButton realmId={item} key={item} />;
+  };
+
+  const handleSettingsPress = () => {
+    // @ts-ignore
+    navigation.push("RealmSettings", {});
   };
 
   const handleOnClose = () => {
@@ -75,9 +83,16 @@ export function DrawerContentContainer(props: any) {
         <DrawerContentContainerWrapper>
           <Content>
             <RealmNameContainer>
-              <StyledRealmName>
-                {realmDisplayName ? realmDisplayName : selectedRealm?.name}
-              </StyledRealmName>
+              <Typography
+                size="h4"
+                bold={true}
+                shade="300"
+                marginBottom="0"
+                text={realmDisplayName ? realmDisplayName : selectedRealm?.name}
+              />
+              <IconButton onPress={handleSettingsPress}>
+                <Unicons.UilSetting size="24" color={theme.gray[600]} />
+              </IconButton>
             </RealmNameContainer>
             <DrawerItemList {...props} />
           </Content>
@@ -96,19 +111,21 @@ const DrawerRootContainer = styled.View`
   padding-top: 52px;
 `;
 
-const StyledRealmName = styled.Text`
-  color: ${(props) => props.theme.gray[200]};
-  font-size: 20px;
-  font-weight: 700;
+const IconButton = styled.TouchableOpacity`
+  border-radius: 100px;
+  padding: ${(props) => props.theme.spacing[1]};
+  /* background: ${(props) => props.theme.gray[800]}; */
 `;
 
 const RealmNameContainer = styled.View`
   margin-left: ${(props) => props.theme.spacing[4]};
   margin-right: ${(props) => props.theme.spacing[4]};
-  padding-top: ${(props) => props.theme.spacing[3]};
-  padding-bottom: ${(props) => props.theme.spacing[2]};
+  padding-top: ${(props) => props.theme.spacing[4]};
+  padding-bottom: ${(props) => props.theme.spacing[4]};
   margin-bottom: ${(props) => props.theme.spacing[2]};
-
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   border-bottom-color: ${(props) => props.theme.gray[800]};
   border-bottom-width: 1px;
 `;

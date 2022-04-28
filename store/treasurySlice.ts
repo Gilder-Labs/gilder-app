@@ -86,12 +86,18 @@ export const fetchVaults = createAsyncThunk(
         )
       );
 
-      // const collectionPromise = axios.get(
-      //   "https://api-mainnet.magiceden.io/all_collections_with_escrow_data?edge_cache=true"
+      // const collectionPromise = await axios.get(
+      //   "https://api-mainnet.magiceden.dev/v2/collections/runcible/stats"
       // );
+      // console.log("Collections", collectionPromise.data);
       // // https://api-mainnet.magiceden.io/all_collections?edge_cache=true
+      //         "https://api-mainnet.magiceden.io/all_collections_with_escrow_data?edge_cache=true"
+
       // const collectionResponse = await collectionPromise;
       // const collectionData = collectionResponse.data.collections;
+
+      // SOLSCAN api for nft floor
+      //https://api.solscan.io/collection?sortBy=volume&offset=0&limit=24
 
       const vaultNfts = await vaultNftsPromise;
       const vaultNftsMap = {};
@@ -136,18 +142,6 @@ export const fetchVaults = createAsyncThunk(
           }),
         };
       });
-
-      var config = {
-        method: "get",
-        url: "api-mainnet.magiceden.dev/v2/tokens/4uvpqEL73361hRXCrHqBZQWeqfbKPQw55yKSFZvLQYTq",
-        headers: {},
-      };
-
-      // const cyberConnectNfts =
-      //   "https://api.cybertino.io/querier/getSolNftByAddress?address=DKdBj8KF9sieWq2XWkZVnRPyDrw9PwAHinkCMvjAkRdZ";
-      // const nftResponse = await axios.get(cyberConnectNfts);
-
-      // console.log("NFT response", nftResponse);
 
       const governancesMap = {};
 

@@ -21,6 +21,7 @@ export type RootStackParamList = {
   Modal: undefined;
   NotFound: undefined;
   MemberDetails: undefined;
+  RealmSettings: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =

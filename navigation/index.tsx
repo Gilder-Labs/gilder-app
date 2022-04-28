@@ -28,6 +28,7 @@ import { MemberProfile } from "../screens/MemberProfile";
 import { ProposalDetailScreen } from "../screens/ProposalDetailScreen";
 import { WalletModal } from "../components/WalletModal";
 import { WalletTransactionModal } from "../components/WalletTransactionModal";
+import RealmSettingsScreen from "../screens/RealmSettingsScreen";
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -39,7 +40,7 @@ function DrawerScreen() {
   );
   return (
     <Drawer.Navigator
-      initialRouteName="Treasury"
+      initialRouteName="Proposals"
       drawerContent={(props) => <DrawerContentContainer {...props} />}
       screenOptions={{
         drawerActiveBackgroundColor: `${theme?.gray[800]}aa`,
@@ -216,6 +217,13 @@ export default function Navigation({}: {}) {
                     0,
                     4
                   )}...${route.params.member.walletId.slice(-4)}`,
+            })}
+          />
+          <Stack.Screen
+            name="RealmSettings"
+            component={RealmSettingsScreen}
+            options={({ route }) => ({
+              title: "Realm Settings", // update to realm name
             })}
           />
           <Stack.Screen

@@ -42,8 +42,8 @@ export const RealmIcon = ({ realmId, size = 48 }: RealmIconProps) => {
       return (
         <AnimatedImage
           style={{
-            width: 38,
-            height: 38,
+            width: size - 8,
+            height: size - 8,
             overflow: "hidden",
           }}
           source={{
@@ -64,8 +64,8 @@ export const RealmIcon = ({ realmId, size = 48 }: RealmIconProps) => {
     ) : (
       <AnimatedImage
         style={{
-          width: 38,
-          height: 38,
+          width: size - 8,
+          height: size - 8,
           overflow: "hidden",
         }}
         source={{
