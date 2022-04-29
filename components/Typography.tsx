@@ -60,7 +60,7 @@ export const Typography = ({
       color={color}
       marginBottom={marginBottom}
     >
-      {formattedText()}
+      {text ? formattedText() : ""}
     </Text>
   );
 };

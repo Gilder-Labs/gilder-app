@@ -157,7 +157,7 @@ function DrawerScreen() {
         }}
       />
       {/* Comment out before going to prod.  */}
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name="TestLab"
         component={TestLabScreen}
         options={{
@@ -170,7 +170,7 @@ function DrawerScreen() {
             <Unicons.UilFlask size="28" color={color} />
           ),
         }}
-      />
+      /> */}
       {/* End comment out before prod */}
     </Drawer.Navigator>
   );
