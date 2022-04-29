@@ -10,6 +10,8 @@ import { getColorType, abbreviatePublicKey } from "../utils";
 import { useQuery, gql } from "@apollo/client";
 import { Typography } from "../components";
 import { AnimatedImage } from "react-native-ui-lib";
+import { formatVoteWeight } from "../utils";
+import { useAppSelector } from "../hooks/redux";
 
 interface MemberCardProps {
   member: any;
@@ -35,6 +37,8 @@ export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
   const { loading, error, data } = useQuery(GET_CYBERCONNECT_IDENTITY, {
     variables: { publicKey: member.walletId },
   });
+  const { selectedRealm } = useAppSelector((state) => state.realms);
+  const { communityMintDecimals } = selectedRealm;
 
   let jdenticonSvg = createAvatar(style, {
     seed: member.walletId,
@@ -121,8 +125,11 @@ export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
               Vote Weight
             </SubtitleText>
             <VoteWeight>
-              {member?.communityDepositUiAmount
-                ? member?.communityDepositUiAmount
+              {member?.communityDepositAmount
+                ? formatVoteWeight(
+                    member.communityDepositAmount,
+                    communityMintDecimals
+                  )
                 : 0}
             </VoteWeight>
           </DetailContainer>
