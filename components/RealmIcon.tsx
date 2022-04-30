@@ -25,6 +25,7 @@ export const RealmIcon = ({ realmId, size = 48 }: RealmIconProps) => {
     let realmIconUrl = realmsData[realmId]?.ogImage;
     let isFullFilePath = realmIconUrl?.slice(0, 5) === "https";
     // image is a png, render regular image component
+
     if (
       realmIconUrl?.slice(-3) === "png" ||
       realmIconUrl?.slice(-3) === "jpg"
@@ -44,11 +45,22 @@ export const RealmIcon = ({ realmId, size = 48 }: RealmIconProps) => {
           style={{
             width: size - 8,
             height: size - 8,
+            maxWidth: size - 8,
+            maxHeight: size - 8,
             overflow: "hidden",
           }}
           source={{
             uri: realmIconUrl,
           }}
+          loader={
+            <LinearGradient
+              // Background Linear Gradient
+              // @ts-ignore
+              colors={[`${theme[color][600]}`, `${theme[color2][900]}`]}
+              style={{ height: size - 8, width: size - 8 }}
+              start={{ x: 0.1, y: 0.2 }}
+            />
+          }
         />
       );
     }
@@ -66,11 +78,22 @@ export const RealmIcon = ({ realmId, size = 48 }: RealmIconProps) => {
         style={{
           width: size - 8,
           height: size - 8,
+          maxWidth: size - 8,
+          maxHeight: size - 8,
           overflow: "hidden",
         }}
         source={{
           uri: realmIconUrl,
         }}
+        loader={
+          <LinearGradient
+            // Background Linear Gradient
+            // @ts-ignore
+            colors={[`${theme[color][600]}`, `${theme[color2][900]}`]}
+            style={{ height: size - 8, width: size - 8 }}
+            start={{ x: 0.1, y: 0.2 }}
+          />
+        }
       />
     );
     return iconImage;

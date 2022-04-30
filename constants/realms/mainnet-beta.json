@@ -679,5 +679,12 @@
     "ogImage": "https://raw.githubusercontent.com/Exonft/SquatchDAO/main/SquatchDAO.jpg",
     "website": "www.squatchdao.com",
     "twitter": "@Squatch_DAO"
+  },
+  {
+    "symbol": "Gil",
+    "displayName": "Gilder",
+    "programId": "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw",
+    "realmId": "6jydyMWSqV2bFHjCHydEQxa9XfXQWDwjVqAdjBEA1BXx",
+    "ogImage": "https://uploads-ssl.webflow.com/6155dbf133933371fa666e7a/620bc84e6c44fc6b90d44ec5_WebclipDark.png"
   }
 ]
