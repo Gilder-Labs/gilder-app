@@ -23,7 +23,7 @@ import PagerView, {
   PagerViewOnPageSelectedEvent,
 } from "react-native-pager-view";
 import { Typography } from "./Typography";
-import { TransactionCard } from "../elements";
+import { TransactionList } from "../elements";
 import { PageControl, SegmentedControl } from "react-native-ui-lib";
 
 interface RealmSelectModalProps {}
@@ -147,12 +147,7 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
               bold={true}
               marginBottom="3"
             />
-            {transactions.map((transaction: any) => (
-              <TransactionCard
-                transaction={transaction}
-                key={transaction.signature}
-              />
-            ))}
+            <TransactionList />
           </TokenContainer>
         </PagerView>
       </Container>

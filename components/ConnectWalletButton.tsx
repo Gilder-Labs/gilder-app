@@ -55,7 +55,6 @@ export const ConnectWalletButton = ({}: ConnectWalletProps) => {
       });
       // get social login user info
       const userInfo = await state.userInfo;
-      console.log("state", state);
       // web3auth private key
       setKey(state.privKey || "no key");
 
