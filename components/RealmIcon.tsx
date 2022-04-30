@@ -52,15 +52,15 @@ export const RealmIcon = ({ realmId, size = 48 }: RealmIconProps) => {
           source={{
             uri: realmIconUrl,
           }}
-          loader={
-            <LinearGradient
-              // Background Linear Gradient
-              // @ts-ignore
-              colors={[`${theme[color][600]}`, `${theme[color2][900]}`]}
-              style={{ height: size - 8, width: size - 8 }}
-              start={{ x: 0.1, y: 0.2 }}
-            />
-          }
+          // loader={
+          //   <LinearGradient
+          //     // Background Linear Gradient
+          //     // @ts-ignore
+          //     colors={[`${theme.gray[600]}`, `${theme.gray[900]}`]}
+          //     style={{ height: size - 8, width: size - 8 }}
+          //     start={{ x: 0.1, y: 0.2 }}
+          //   />
+          // }
         />
       );
     }
@@ -85,15 +85,15 @@ export const RealmIcon = ({ realmId, size = 48 }: RealmIconProps) => {
         source={{
           uri: realmIconUrl,
         }}
-        loader={
-          <LinearGradient
-            // Background Linear Gradient
-            // @ts-ignore
-            colors={[`${theme[color][600]}`, `${theme[color2][900]}`]}
-            style={{ height: size - 8, width: size - 8 }}
-            start={{ x: 0.1, y: 0.2 }}
-          />
-        }
+        // loader={
+        //   <LinearGradient
+        //     // Background Linear Gradient
+        //     // @ts-ignore
+        //     colors={[`${theme.gray[600]}`, `${theme.gray[900]}`]}
+        //     style={{ height: size - 8, width: size - 8 }}
+        //     start={{ x: 0.1, y: 0.2 }}
+        //   />
+        // }
       />
     );
     return iconImage;
