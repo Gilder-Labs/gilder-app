@@ -60,8 +60,8 @@ export const fetchVaults = createAsyncThunk(
 
       const vaultsInfo = rawFilteredVaults.map((governance) => {
         return {
-          pubKey: governance.pubkey.toString(), // program that controls vault/token account
-          vaultId: governance.account?.governedAccount.toString(), // vault/token account where tokens are held
+          pubKey: governance.pubkey.toBase58(), // program that controls vault/token account
+          vaultId: governance.account?.governedAccount.toBase58(), // vault/token account where tokens are held
         };
       });
 
@@ -146,11 +146,11 @@ export const fetchVaults = createAsyncThunk(
       const governancesMap = {};
 
       const governancesParsed = rawGovernances.map((governance, index) => {
-        let governanceId = governance.pubkey.toString();
+        let governanceId = governance.pubkey.toBase58();
         activeProposals += governance.account.votingProposalCount;
         let data = {
           governanceId: governanceId,
-          governedAccount: governance.account.governedAccount.toString(),
+          governedAccount: governance.account.governedAccount.toBase58(),
           minCommunityTokensToCreateProposal:
             governance.account.config.minCommunityTokensToCreateProposal.toNumber(),
           minInstructionHoldUpTime:
