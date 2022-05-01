@@ -6,6 +6,7 @@ import * as Unicons from "@iconscout/react-native-unicons";
 import { debounce, filter } from "lodash";
 import { useTheme } from "styled-components";
 import { RealmCard } from "./RealmCard";
+import { Loading } from "./Loading";
 
 interface RealmSelectModalProps {
   open: boolean;
@@ -18,9 +19,8 @@ export const RealmSelectModal = ({
 }: RealmSelectModalProps) => {
   const theme = useTheme();
   const [searchText, setSearchText] = useState("");
-  const { realmsData, realms, realmWatchlist } = useAppSelector(
-    (state) => state.realms
-  );
+  const { realmsData, realms, realmWatchlist, isLoadingRealms } =
+    useAppSelector((state) => state.realms);
   const [filteredRealms, setFilteredRealms] = useState(realms);
 
   useEffect(() => {
@@ -97,34 +97,41 @@ export const RealmSelectModal = ({
 
       {/* Input to filter by name or public key */}
       {/* <SearchBar /> */}
-      <SearchBarContainer>
-        <SearchBar
-          placeholder="Search by name or public key"
-          onChangeText={debouncedChangeHandler}
-          placeholderTextColor={theme.gray[400]}
-          selectionColor={theme.gray[200]}
-        />
-      </SearchBarContainer>
 
-      <RealmContainer>
-        <FlatList
-          data={filteredRealms}
-          renderItem={renderRealmCard}
-          numColumns={2}
-          keyExtractor={(item) => item.pubKey}
-          style={{
-            paddingTop: 16,
-            paddingLeft: 8,
-            paddingRight: 8,
-            // height: "100%",
-          }}
-          scrollIndicatorInsets={{ right: 1 }}
-          ListFooterComponent={<EmptyView />}
-          ListEmptyComponent={
-            <EmptyText>No DAO's match that name or public key.</EmptyText>
-          }
-        />
-      </RealmContainer>
+      {isLoadingRealms ? (
+        <Loading />
+      ) : (
+        <>
+          <SearchBarContainer>
+            <SearchBar
+              placeholder="Search by name or public key"
+              onChangeText={debouncedChangeHandler}
+              placeholderTextColor={theme.gray[400]}
+              selectionColor={theme.gray[200]}
+            />
+          </SearchBarContainer>
+
+          <RealmContainer>
+            <FlatList
+              data={filteredRealms}
+              renderItem={renderRealmCard}
+              numColumns={2}
+              keyExtractor={(item) => item.pubKey}
+              style={{
+                paddingTop: 16,
+                paddingLeft: 8,
+                paddingRight: 8,
+                // height: "100%",
+              }}
+              scrollIndicatorInsets={{ right: 1 }}
+              ListFooterComponent={<EmptyView />}
+              ListEmptyComponent={
+                <EmptyText>No DAO's match that name or public key.</EmptyText>
+              }
+            />
+          </RealmContainer>
+        </>
+      )}
     </Modal>
   );
 };

@@ -127,7 +127,7 @@ export default function ProposalScreen({
                   bold={true}
                   size="h2"
                   shade="100"
-                  text={getActiveProposals()}
+                  text={getActiveProposals() || "0"}
                   marginBottom="0"
                 />
               </HeaderTextContainer>
