@@ -6,6 +6,7 @@ import treasuryReducer from "./treasurySlice";
 import activityReducer from "./activitySlice";
 import proposalsReducer from "./proposalsSlice";
 import memberReducer from "./memberSlice";
+import notificationReducer from "./notificationSlice";
 import {
   persistStore,
   persistReducer,
@@ -46,6 +47,7 @@ const rootReducer = combineReducers({
   activities: activityReducer,
   proposals: proposalsReducer,
   members: memberReducer,
+  notifications: notificationReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

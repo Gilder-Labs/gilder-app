@@ -119,8 +119,8 @@ const IconButton = styled.TouchableOpacity`
 `;
 
 const RealmNameContainer = styled.View`
-  margin-left: ${(props) => props.theme.spacing[4]};
-  margin-right: ${(props) => props.theme.spacing[4]};
+  margin-left: ${(props) => props.theme.spacing[3]};
+  margin-right: ${(props) => props.theme.spacing[3]};
   padding-top: ${(props) => props.theme.spacing[4]};
   padding-bottom: ${(props) => props.theme.spacing[4]};
   margin-bottom: ${(props) => props.theme.spacing[2]};

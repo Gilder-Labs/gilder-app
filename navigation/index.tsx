@@ -16,6 +16,10 @@ import { fetchRealmMembers } from "../store/memberSlice";
 import { fetchRealmProposals } from "../store/proposalsSlice";
 import { fetchRealmActivity } from "../store/activitySlice";
 import { fetchVaults } from "../store/treasurySlice";
+import {
+  fetchNotificationSettings,
+  setToken,
+} from "../store/notificationSlice";
 import styled from "styled-components/native";
 
 import ActivityScreen from "../screens/ActivityScreen";
@@ -41,30 +45,37 @@ function DrawerScreen() {
   const { activeProposals, isLoadingVaults } = useAppSelector(
     (state) => state.treasury
   );
+  const { selectedRealm } = useAppSelector((state) => state.realms);
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
 
   const responseListener = useRef();
 
   useEffect(() => {
-    registerForPushNotificationsAsync();
+    const getPushToken = async () => {
+      const token = await registerForPushNotificationsAsync();
 
+      dispatch(setToken(token));
+    };
+
+    getPushToken();
+
+    // @ts-ignore
     responseListener.current =
       Notifications.addNotificationResponseReceivedListener((response) => {
         const data = response.notification.request.content.data;
         console.log("response:", response);
         console.log("Data", response.notification.request.content.data);
 
-        if (data.realmId) {
-          // @ts-ignore
-          dispatch(fetchRealm(data?.realmId));
+        // @ts-ignore
+        dispatch(fetchRealm(data?.realmId));
+        if (selectedRealm.pubKey === data?.realmId) {
+          fetchRealmProposals({ realm: selectedRealm, isRefreshing: false });
         }
         // @ts-ignore
         navigation.push("ProposalDetail", {
           proposalId: data.proposalId,
         });
-        //@ts-ignore
-        // navigation.navigate("Root", { screen: "Proposals" });
       });
 
     return () => {
@@ -182,6 +193,7 @@ export default function Navigation({}: {}) {
   const { selectedRealm, selectedRealmId } = useAppSelector(
     (state) => state.realms
   );
+  const { pushToken } = useAppSelector((state) => state.notifications);
 
   // fetch realms on devnet toggle
   useEffect(() => {
@@ -207,6 +219,16 @@ export default function Navigation({}: {}) {
       dispatch(fetchRealmMembers({ realm: selectedRealm }));
     }
   }, [selectedRealm?.pubKey, selectedRealm?.communityMint]);
+
+  useEffect(() => {
+    if (pushToken) {
+      dispatch(
+        fetchNotificationSettings({
+          pushToken: pushToken,
+        })
+      );
+    }
+  }, [pushToken]);
 
   const NavigationTheme = {
     dark: false,

@@ -1,33 +1,70 @@
-import { Text, View, Platform } from "../components/Themed";
 import { RootStackScreenProps } from "../types";
 import styled from "styled-components/native";
 import { useState, useRef, useEffect } from "react";
-import { Button, Typography, RealmIcon } from "../components";
+import { Button, Typography, RealmIcon, Loading } from "../components";
 import { Switch } from "react-native-ui-lib";
 import { useTheme } from "styled-components";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
+import {
+  fetchNotificationSettings,
+  subscribeToNotifications,
+} from "../store/notificationSlice";
+
 export default function RealmSettingsScreen({
   navigation,
 }: RootStackScreenProps<"RealmSettings">) {
-  const [notifyOnCreate, setNotifyOnCreate] = useState(false);
-  const [notifyOnCreate2, setNotifyOnCreate2] = useState(false);
-
   const theme = useTheme();
   const dispatch = useAppDispatch();
-
   const { selectedRealm } = useAppSelector((state) => state.realms);
+  const [notifyOnCreate, setNotifyOnCreate] = useState(false);
+
+  const { pushToken, notificationSettings } = useAppSelector(
+    (state) => state.notifications
+  );
+
+  useEffect(() => {
+    dispatch(
+      fetchNotificationSettings({
+        pushToken: pushToken,
+      })
+    );
+  }, []);
+
+  useEffect(() => {
+    if (notificationSettings && selectedRealm) {
+      const isSubscribed = notificationSettings[selectedRealm.pubKey];
+      setNotifyOnCreate(isSubscribed);
+    }
+  }, [notificationSettings]);
+
+  const onCreateChange = (value: boolean) => {
+    if (value) {
+      dispatch(
+        subscribeToNotifications({
+          pushToken: pushToken,
+          realmId: selectedRealm.pubKey,
+        })
+      );
+    }
+
+    setNotifyOnCreate(value);
+  };
+
+  if (!selectedRealm) {
+    return <Loading />;
+  }
 
   return (
     <Container>
       <HeaderRow>
         <IconContainer size={64}>
-          <RealmIcon size={64} realmId={selectedRealm.pubKey} />
+          <RealmIcon size={64} realmId={selectedRealm?.pubKey || ""} />
         </IconContainer>
         <Typography
           bold={true}
           size="h3"
           shade="300"
-          text={selectedRealm.name}
+          text={selectedRealm?.name || ""}
           marginBottom="2"
         />
       </HeaderRow>
@@ -55,21 +92,8 @@ export default function RealmSettingsScreen({
           height={32}
           thumbSize={28}
           width={60}
-          thumbColor={notifyOnCreate2 ? theme.gray[500] : theme.gray[300]}
-          onValueChange={() => setNotifyOnCreate(!notifyOnCreate)}
-        />
-      </Row>
-      <Row>
-        <Typography size="body" bold shade="300" text={"On Finalize"} />
-        <Switch
-          value={notifyOnCreate2}
-          onColor={theme.secondary[800]}
-          offColor={theme.gray[700]}
-          height={32}
-          thumbSize={28}
-          width={60}
-          thumbColor={theme.gray[300]}
-          onValueChange={() => setNotifyOnCreate2(!notifyOnCreate2)}
+          thumbColor={notifyOnCreate ? theme.gray[300] : theme.gray[300]}
+          onValueChange={onCreateChange}
         />
       </Row>
     </Container>
