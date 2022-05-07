@@ -11,6 +11,7 @@ import * as Unicons from "@iconscout/react-native-unicons";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { closeTransactionModal, castVote } from "../store/walletSlice";
 import { useTheme } from "styled-components";
+import { fetchRealmProposals } from "../store/proposalsSlice";
 
 interface VoteOnProposalTransaction {}
 
@@ -28,14 +29,17 @@ export const VoteOnProposalTransaction = ({}: VoteOnProposalTransaction) => {
 
   const { selectedRealm } = useAppSelector((state) => state.realms);
   const { proposal } = transactionData;
-  // Realm image
-  // Type: Proposal Vote
-  // Approve Vote?
-  // Type of Vote (needs to be eye catching)
-  // balance change/fees
+
+  useEffect(() => {
+    // refresh proposals after attempting to vote
+    if (transactionState === "success" || transactionState === "error") {
+      dispatch(
+        fetchRealmProposals({ realm: selectedRealm, isRefreshing: true })
+      );
+    }
+  }, [transactionState]);
 
   const handleApprove = () => {
-    console.log("approving");
     dispatch(castVote({ publicKey, transactionData }));
   };
 
