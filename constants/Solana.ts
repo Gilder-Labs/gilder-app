@@ -1,4 +1,5 @@
 import { PublicKey } from "@solana/web3.js";
+import Constants from "expo-constants";
 
 export const REALM_GOVERNANCE_PROGRAM_ID =
   "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw";
@@ -14,7 +15,8 @@ export const SPL_PUBLIC_KEY = new PublicKey(
   devent: wss://psytrbhymqlkfrhudd.dev.genesysgo.net:8900/
 */
 
-export const RPC_CONNECTION = "https://ssc-dao.genesysgo.net/";
+export const RPC_CONNECTION =
+  Constants?.manifest?.extra?.rpcNetwork || "https://ssc-dao.genesysgo.net/";
 
 // backup in case genesysgo has issues
 // export const RPC_CONNECTION = "https://solana-api.projectserum.com";
