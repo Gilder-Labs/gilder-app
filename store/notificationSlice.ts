@@ -21,8 +21,6 @@ export const fetchNotificationSettings = createAsyncThunk(
   "notifications/fetchNotificationSettings",
   async ({ pushToken }: any) => {
     try {
-      console.log("Fetching settings @", pushToken);
-
       const response = await axios.post(
         `${API_URL}/notifyMe/listSubscriptions`,
         {
@@ -52,14 +50,13 @@ export const fetchNotificationSettings = createAsyncThunk(
 
 export const subscribeToNotifications = createAsyncThunk(
   "notifications/subscribeToSettings",
-  async ({ pushToken, realmId }: any) => {
+  async ({ pushToken, realmId, isSubscribing }: any) => {
     try {
-      console.log("subscribing", pushToken);
-
       const response = await axios.post(`${API_URL}/notifyMe`, {
         type: "newProposals",
         mobileToken: pushToken,
         realm: realmId,
+        unsubscribe: !isSubscribing,
       });
 
       console.log("SUBSCRIBE response", response);

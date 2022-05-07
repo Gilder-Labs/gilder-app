@@ -38,14 +38,13 @@ export default function RealmSettingsScreen({
   }, [notificationSettings]);
 
   const onCreateChange = (value: boolean) => {
-    if (value) {
-      dispatch(
-        subscribeToNotifications({
-          pushToken: pushToken,
-          realmId: selectedRealm.pubKey,
-        })
-      );
-    }
+    dispatch(
+      subscribeToNotifications({
+        pushToken: pushToken,
+        realmId: selectedRealm.pubKey,
+        isSubscribing: value,
+      })
+    );
 
     setNotifyOnCreate(value);
   };

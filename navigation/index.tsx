@@ -64,18 +64,20 @@ function DrawerScreen() {
     responseListener.current =
       Notifications.addNotificationResponseReceivedListener((response) => {
         const data = response.notification.request.content.data;
-        console.log("response:", response);
-        console.log("Data", response.notification.request.content.data);
 
         // @ts-ignore
-        dispatch(fetchRealm(data?.realmId));
+        if (data?.realmId) {
+          dispatch(fetchRealm(data?.realmId));
+        }
         if (selectedRealm.pubKey === data?.realmId) {
           fetchRealmProposals({ realm: selectedRealm, isRefreshing: false });
         }
-        // @ts-ignore
-        navigation.push("ProposalDetail", {
-          proposalId: data.proposalId,
-        });
+        if (data.proposalId) {
+          // @ts-ignore
+          navigation.push("ProposalDetail", {
+            proposalId: data.proposalId,
+          });
+        }
       });
 
     return () => {
