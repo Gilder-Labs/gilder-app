@@ -27,7 +27,9 @@ const proposalStatusKey = {
 export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
-  const { selectedRealm } = useAppSelector((state) => state.realms);
+  const { selectedRealm, isLoadingRealms } = useAppSelector(
+    (state) => state.realms
+  );
   const { governancesMap, isLoadingVaults } = useAppSelector(
     (state) => state.treasury
   );
@@ -43,7 +45,13 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
   // const { proposal } = route?.params;
   const { proposalId } = route?.params;
 
-  if (!proposalId || !proposalsMap[proposalId]) {
+  if (
+    !proposalId ||
+    !proposalsMap[proposalId] ||
+    !selectedRealm ||
+    isLoadingRealms ||
+    isLoadingVaults
+  ) {
     return <Loading />;
   }
 
@@ -71,11 +79,6 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
   }
 
   const voteThresholdPercentage = governance?.voteThresholdPercentage || 0;
-
-  // Return empty view till we have loaded
-  if (!selectedRealm) {
-    return <VoteColumn />;
-  }
 
   const {
     communityMint,

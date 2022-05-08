@@ -63,16 +63,16 @@ function DrawerScreen() {
     // @ts-ignore
     responseListener.current =
       Notifications.addNotificationResponseReceivedListener((response) => {
-        const data = response.notification.request.content.data;
+        const data = response?.notification?.request?.content?.data;
 
         // @ts-ignore
         if (data?.realmId) {
           dispatch(fetchRealm(data?.realmId));
         }
-        if (selectedRealm.pubKey === data?.realmId) {
+        if (selectedRealm && selectedRealm?.pubKey === data?.realmId) {
           fetchRealmProposals({ realm: selectedRealm, isRefreshing: false });
         }
-        if (data.proposalId) {
+        if (data?.proposalId) {
           // @ts-ignore
           navigation.push("ProposalDetail", {
             proposalId: data.proposalId,
