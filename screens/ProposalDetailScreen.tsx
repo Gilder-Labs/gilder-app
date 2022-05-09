@@ -42,15 +42,16 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
   const { publicKey } = useAppSelector((state) => state.wallet);
   const { proposalsMap } = useAppSelector((state) => state.proposals);
 
-  // const { proposal } = route?.params;
   const { proposalId } = route?.params;
 
   if (
     !proposalId ||
-    !proposalsMap[proposalId] ||
     !selectedRealm ||
     isLoadingRealms ||
-    isLoadingVaults
+    isLoadingVaults ||
+    isLoadingMembers ||
+    !proposalsMap ||
+    !proposalsMap?.[proposalId]
   ) {
     return <Loading />;
   }
@@ -67,10 +68,6 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
     description,
     governingTokenMint,
   } = proposal;
-
-  // useEffect(() => {
-  //   dispatch(fetchProposalChat(proposal.proposalId));
-  // }, [proposal]);
 
   const governance = governancesMap?.[proposal?.governanceId];
 
@@ -186,10 +183,6 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
   const timeLeft = getTimeToVoteEnd();
   const isVoting = status === "Voting";
   const isMember = membersMap[publicKey];
-
-  if (isLoadingVaults || isLoadingMembers) {
-    return <Loading />;
-  }
 
   return (
     <FlatList

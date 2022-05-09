@@ -1,7 +1,6 @@
 import numeral from "numeral";
 
 export * from "./cleanData";
-export * from "./setupWalletConnect";
 export * from "./member";
 
 export const abbreviatePublicKey = (publicKey: string) => {
