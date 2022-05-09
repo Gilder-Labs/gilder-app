@@ -10,7 +10,6 @@ interface MemberProfileHeaderProps {
   onSelectTab: any;
   color: string;
   color2: string;
-  icon: any;
   avatarUrl: string;
 }
 
@@ -19,7 +18,6 @@ export const MemberProfileHeader = ({
   onSelectTab,
   color,
   color2,
-  icon,
   avatarUrl,
 }: MemberProfileHeaderProps) => {
   const theme = useTheme();

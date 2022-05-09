@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
-import { SvgXml } from "react-native-svg";
 import { useTheme } from "styled-components";
-import { createAvatar } from "@dicebear/avatars";
-import * as style from "@dicebear/avatars-jdenticon-sprites";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Unicons from "@iconscout/react-native-unicons";
 import { getColorType, abbreviatePublicKey } from "../utils";
@@ -39,11 +36,6 @@ export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
   });
   const { selectedRealm } = useAppSelector((state) => state.realms);
   const { communityMintDecimals } = selectedRealm;
-
-  let jdenticonSvg = createAvatar(style, {
-    seed: member.walletId,
-    // ... and other options
-  });
 
   const color = getColorType(member.walletId);
   const color2 = getColorType(member?.walletId.slice(-1) || "string");

@@ -82,11 +82,6 @@ export const MemberProfile = ({ route }: MemberProfileProps) => {
     );
   };
 
-  let jdenticonSvg = createAvatar(style, {
-    seed: member.walletId,
-    // ... and other options
-  });
-
   const color = getColorType(member.walletId);
   const color2 = getColorType(member.publicKey);
 
@@ -116,7 +111,6 @@ export const MemberProfile = ({ route }: MemberProfileProps) => {
               onSelectTab={setSelectedTab}
               color={color}
               color2={color2}
-              icon={jdenticonSvg}
               avatarUrl={avatarUrl}
             />
           }
@@ -137,7 +131,6 @@ export const MemberProfile = ({ route }: MemberProfileProps) => {
               onSelectTab={setSelectedTab}
               color={color}
               color2={color2}
-              icon={jdenticonSvg}
               avatarUrl={avatarUrl}
             />
           }

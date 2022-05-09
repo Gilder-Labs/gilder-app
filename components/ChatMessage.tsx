@@ -2,8 +2,6 @@ import React from "react";
 import styled from "styled-components/native";
 import { useTheme } from "styled-components";
 import { format, formatDistance } from "date-fns";
-import { createAvatar } from "@dicebear/avatars";
-import * as style from "@dicebear/avatars-jdenticon-sprites";
 import { getColorType, abbreviatePublicKey } from "../utils";
 import { useQuery, gql } from "@apollo/client";
 import { LinearGradient } from "expo-linear-gradient";
