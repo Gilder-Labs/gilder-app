@@ -27,7 +27,7 @@ export const MemberProfileHeader = ({
   return (
     <HeaderContainer>
       <LinearGradient
-        colors={[`${theme[color][600]}44`, `${theme[color2][800]}66`]}
+        colors={[`${theme[color][500]}44`, `${theme[color][700]}aa`]}
         style={{
           height: 80,
           // flex: 1,
@@ -43,7 +43,7 @@ export const MemberProfileHeader = ({
         ) : (
           <LinearGradient
             // Background Linear Gradient
-            colors={[`${theme[color][600]}`, `${theme[color2][800]}`]}
+            colors={[`${theme[color][500]}`, `${theme[color2][900]}`]}
             style={{ height: 60, width: 60 }}
             start={{ x: 0.1, y: 0.2 }}
           />

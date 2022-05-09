@@ -4,9 +4,9 @@ import { useTheme } from "styled-components";
 import { format, formatDistance } from "date-fns";
 import { createAvatar } from "@dicebear/avatars";
 import * as style from "@dicebear/avatars-jdenticon-sprites";
-import { SvgXml } from "react-native-svg";
 import { getColorType, abbreviatePublicKey } from "../utils";
 import { useQuery, gql } from "@apollo/client";
+import { LinearGradient } from "expo-linear-gradient";
 
 interface ChatMessageProps {
   message: ChatMessage;
@@ -37,12 +37,9 @@ export const ChatMessage = ({
   const { loading, error, data } = useQuery(GET_CYBERCONNECT_IDENTITY, {
     variables: { publicKey: author },
   });
-  let jdenticonSvg = createAvatar(style, {
-    seed: author,
-    // ... and other options
-  });
 
   const color = getColorType(author);
+  const color2 = getColorType(author.slice(-1) || "string");
 
   const identityName = data?.identity?.social?.twitter
     ? data?.identity?.social?.twitter
@@ -68,7 +65,12 @@ export const ChatMessage = ({
         {avatarUrl ? (
           <Avatar source={{ uri: avatarUrl }} />
         ) : (
-          <SvgXml xml={jdenticonSvg} width="34px" height="34px" />
+          <LinearGradient
+            // Background Linear Gradient
+            colors={[`${theme[color][500]}`, `${theme[color2][900]}`]}
+            style={{ height: 34, width: 34 }}
+            start={{ x: 0.1, y: 0.2 }}
+          />
         )}
       </IconContainer>
 
