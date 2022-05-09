@@ -22,7 +22,6 @@ export const TransactionList = () => {
         style={{ minWidth: "100%" }}
         ListFooterComponent={<EmptyView />}
         scrollIndicatorInsets={{ right: -8 }}
-        removeClippedSubviews={true}
         initialNumToRender={20}
         // onEndReached={onEndReached}
         // onEndReachedThreshold={1}

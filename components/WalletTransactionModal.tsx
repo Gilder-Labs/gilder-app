@@ -49,7 +49,7 @@ export const WalletTransactionModal = ({}: WalletTransactionModalProps) => {
 const Container = styled.View`
   background: ${(props) => props.theme.gray[900]};
   border-radius: 20px;
-  height: 50%;
+  height: 60%;
   margin-top: auto;
   border-radius: 20px;
   align-items: center;

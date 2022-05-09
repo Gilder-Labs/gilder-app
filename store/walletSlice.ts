@@ -216,7 +216,10 @@ export const fetchTransactions = createAsyncThunk(
 
 export const castVote = createAsyncThunk(
   "wallet/castVote",
-  async ({ publicKey, transactionData }: any, { getState }) => {
+  async (
+    { publicKey, transactionData, selectedDelegate, isCommunityVote }: any,
+    { getState }
+  ) => {
     try {
       console.log("TRYING to cast vote", transactionData);
       const { realms, wallet, members } = getState() as RootState;
@@ -227,20 +230,27 @@ export const castVote = createAsyncThunk(
       const governanceAuthority = walletPubkey;
 
       // if Member has a token, use their own token
-      if (members.membersMap[wallet.publicKey]) {
+      if (members.membersMap[wallet.publicKey] && !selectedDelegate) {
         tokenOwnerRecord = members.membersMap[wallet.publicKey];
       } else {
         // else get the token from the tokens that have been delegated to them
-        tokenOwnerRecord =
-          members.delegateMap[wallet.publicKey].councilMembers[0];
+        console.log("IS COMMUNITY?", isCommunityVote);
+        tokenOwnerRecord = members.membersMap[selectedDelegate];
+        console.log("Token owner record", tokenOwnerRecord);
       }
 
+      // each member can have a token record for community or council.
+      let tokenRecordPublicKey = isCommunityVote
+        ? tokenOwnerRecord.communityPublicKey
+        : tokenOwnerRecord.councilPublicKey;
       // EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i
       // 1. Check if current wallet is member and has token to be voted with
       // 2. If it does, do vote with that token
       // 3. If not check if current wallet is delegated from an token owner record
       // 4. if it is, check if it has the token for the proposal
       // 5. if it does, attempt vote
+
+      console.log("PUBLIC KEY?", tokenRecordPublicKey);
 
       const payer = walletPubkey;
 
@@ -260,7 +270,7 @@ export const castVote = createAsyncThunk(
         new PublicKey(proposal.governanceId), // proposal governance Public key
         new PublicKey(proposal.proposalId), // proposal public key
         new PublicKey(proposal.tokenOwnerRecord), // proposal token owner record, publicKey
-        new PublicKey(tokenOwnerRecord.publicKey), // publicKey of tokenOwnerRecord
+        new PublicKey(tokenRecordPublicKey), // publicKey of tokenOwnerRecord
         governanceAuthority, // wallet publicKey
         new PublicKey(proposal.governingTokenMint), // proposal governanceMint publicKey
         Vote.fromYesNoVote(action), //  *Vote* class? 1 = no, 0 = yes
@@ -272,7 +282,6 @@ export const castVote = createAsyncThunk(
       const walletKeypair = Keypair.fromSecretKey(bs58.decode(privateKey));
       const recentBlockhash = await connection.getRecentBlockhash();
 
-      console.log("Instructions??", instructions);
       const transaction = new Transaction({
         recentBlockhash: recentBlockhash.blockhash,
       });

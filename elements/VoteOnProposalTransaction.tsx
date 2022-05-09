@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { closeTransactionModal, castVote } from "../store/walletSlice";
 import { useTheme } from "styled-components";
 import { fetchRealmProposals } from "../store/proposalsSlice";
+import { abbreviatePublicKey } from "../utils";
 
 interface VoteOnProposalTransaction {}
 
@@ -26,9 +27,12 @@ export const VoteOnProposalTransaction = ({}: VoteOnProposalTransaction) => {
   } = useAppSelector((state) => state.wallet);
   const dispatch = useAppDispatch();
   const theme = useTheme();
-
+  const { delegateMap, membersMap } = useAppSelector((state) => state.members);
   const { selectedRealm } = useAppSelector((state) => state.realms);
   const { proposal } = transactionData;
+  const [selectedDelegate, setSelectedDelegate] = useState("");
+  const isCommunityVote =
+    selectedRealm?.communityMint === proposal?.governingTokenMint;
 
   useEffect(() => {
     // refresh proposals after attempting to vote
@@ -40,7 +44,14 @@ export const VoteOnProposalTransaction = ({}: VoteOnProposalTransaction) => {
   }, [transactionState]);
 
   const handleApprove = () => {
-    dispatch(castVote({ publicKey, transactionData }));
+    dispatch(
+      castVote({
+        publicKey,
+        transactionData,
+        selectedDelegate,
+        isCommunityVote,
+      })
+    );
   };
 
   const handleClose = () => {
@@ -59,6 +70,19 @@ export const VoteOnProposalTransaction = ({}: VoteOnProposalTransaction) => {
     return;
   };
 
+  const getDelegateMembers = () => {
+    if (publicKey && selectedRealm && delegateMap && delegateMap[publicKey]) {
+      const walletDelegates = isCommunityVote
+        ? delegateMap[publicKey].communityMembers
+        : delegateMap[publicKey].councilMembers;
+      return walletDelegates;
+    }
+
+    return [];
+  };
+
+  const delegatesToVoteWith = getDelegateMembers();
+
   return (
     <ContentContainer>
       {transactionState === "pending" && (
@@ -68,15 +92,17 @@ export const VoteOnProposalTransaction = ({}: VoteOnProposalTransaction) => {
             alignItems: "center",
           }}
         >
-          <RealmIconButton
-            realmId={selectedRealm.pubKey}
-            isDisabled={true}
-            showSelected={false}
-            size={64}
-          />
-          <TitleContainer>
-            <Typography text={"Vote on proposal"} bold={true} size="h3" />
-          </TitleContainer>
+          <TitleRow>
+            <RealmIconButton
+              realmId={selectedRealm.pubKey}
+              isDisabled={true}
+              showSelected={false}
+              size={48}
+            />
+            <TitleContainer>
+              <Typography text={"Vote on proposal"} bold={true} size="h4" />
+            </TitleContainer>
+          </TitleRow>
           <Row>
             <Typography text={"Vote:"} shade={"500"} />
             {/* <Typography
@@ -89,18 +115,64 @@ export const VoteOnProposalTransaction = ({}: VoteOnProposalTransaction) => {
               type={isYesVote ? "success" : "error"}
             />
           </Row>
+
           <Row>
             <Typography text={"Proposal Title:"} shade={"500"} />
-            <Typography text={proposal.name} bold={false} shade={"300"} />
+            <Typography
+              maxLength={24}
+              text={proposal.name}
+              bold={false}
+              shade={"300"}
+            />
           </Row>
           <Row>
             <Typography text={"Realm:"} shade={"500"} />
-            <Typography text={selectedRealm.name} bold={false} shade={"300"} />
+            <Typography
+              maxLength={24}
+              text={selectedRealm.name}
+              bold={false}
+              shade={"300"}
+            />
           </Row>
           <Row>
-            <Typography text={"Realm ID"} shade={"500"} />
-            <PublicKeyTextCopy publicKey={selectedRealm.pubKey} />
+            <Typography text={"Realm ID:"} shade={"500"} />
+            <PublicKeyTextCopy
+              noPadding={true}
+              publicKey={selectedRealm.pubKey}
+            />
           </Row>
+          {delegatesToVoteWith.length > 0 && (
+            <>
+              <Row>
+                <Typography text={"Delegate To Vote as:"} shade={"500"} />
+              </Row>
+              <DelegateScrollView horizontal={true}>
+                {membersMap?.[publicKey] && (
+                  <DelegateButton
+                    isSelected={selectedDelegate === publicKey}
+                    onPress={() => setSelectedDelegate(publicKey)}
+                  >
+                    <Typography
+                      text={abbreviatePublicKey(publicKey)}
+                      shade={"300"}
+                    />
+                  </DelegateButton>
+                )}
+
+                {delegatesToVoteWith.map((delegate: Member) => (
+                  <DelegateButton
+                    isSelected={selectedDelegate === delegate?.walletId}
+                    onPress={() => setSelectedDelegate(delegate.walletId)}
+                  >
+                    <Typography
+                      text={abbreviatePublicKey(delegate?.walletId)}
+                      shade={"300"}
+                    />
+                  </DelegateButton>
+                ))}
+              </DelegateScrollView>
+            </>
+          )}
         </TransactionContainer>
       )}
       {transactionState === "success" && (
@@ -117,7 +189,12 @@ export const VoteOnProposalTransaction = ({}: VoteOnProposalTransaction) => {
             size={64}
           />
           <TitleContainer>
-            <Typography text={"Vote on proposal"} bold={true} size="h3" />
+            <Typography
+              text={"Vote on proposal"}
+              bold={true}
+              size="h3"
+              marginBottom="0"
+            />
           </TitleContainer>
           <Typography text={"Successfully voted!"} shade={"300"} />
           <IconContainer isSuccessful={true}>
@@ -165,7 +242,7 @@ export const VoteOnProposalTransaction = ({}: VoteOnProposalTransaction) => {
               disabled={isSendingTransaction}
               title="Approve"
               onPress={handleApprove}
-              shade="800"
+              shade="900"
               color="secondary"
             />
           </>
@@ -206,15 +283,23 @@ const TransactionContainer = styled.ScrollView`
 
 const Row = styled.View`
   flex-direction: row;
-  margin-bottom: ${(props) => props.theme.spacing[2]};
+  margin-bottom: ${(props) => props.theme.spacing[1]};
   justify-content: space-between;
   width: 100%;
   align-items: center;
   min-height: 32px;
 `;
 
+const TitleRow = styled.View`
+  flex-direction: row;
+  margin-bottom: ${(props) => props.theme.spacing[2]};
+  width: 100%;
+  align-items: center;
+  min-height: 32px;
+`;
+
 const TitleContainer = styled.View`
-  margin-top: -${(props) => props.theme.spacing[2]};
+  margin-left: ${(props) => props.theme.spacing[3]};
   margin-bottom: ${(props) => props.theme.spacing[2]};
 `;
 
@@ -249,4 +334,25 @@ const IconContainer = styled.View<{ isSuccessful: boolean }>`
 
   background: ${(props: any) =>
     props.isSuccessful ? props.theme.success[400] : props.theme.error[400]}44;
+`;
+
+const DelegateScrollView = styled.ScrollView`
+  width: 100%;
+  padding-bottom: ${(props: any) => props.theme.spacing[3]};
+`;
+
+const DelegateButton = styled.TouchableOpacity<{ isSelected: boolean }>`
+  height: 80px;
+  width: 120px;
+  margin-left: ${(props: any) => props.theme.spacing[1]};
+  margin-right: ${(props: any) => props.theme.spacing[1]};
+  border-radius: 4px;
+  justify-content: center;
+  align-items: center;
+  background: ${(props: any) => props.theme.gray[900]};
+  padding: ${(props: any) => props.theme.spacing[2]};
+  border: ${(props: any) =>
+    props.isSelected
+      ? `2px solid  ${props.theme.secondary[700]}`
+      : "2px solid transparent"};
 `;

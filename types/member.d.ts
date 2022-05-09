@@ -1,5 +1,7 @@
 interface Member {
   publicKey: string;
+  councilPublicKey: string;
+  communityPublicKey: string;
   owner: string;
   totalVotesCount: number;
   outstandingProposalCount: number;

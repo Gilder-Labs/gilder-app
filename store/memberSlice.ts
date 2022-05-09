@@ -68,6 +68,7 @@ export const fetchRealmMembers = createAsyncThunk(
         const depositAmount =
           member.account.governingTokenDepositAmount.toString();
 
+        //TODO TWO PUBLIC KEYS FOR EACH TOKEN RECORD
         let memberData = {
           publicKey: member.pubkey.toString(),
           owner: member.owner.toString(), // RealmId
@@ -79,6 +80,8 @@ export const fetchRealmMembers = createAsyncThunk(
         if (governingTokenMint === councilMint) {
           const delegateWalletId =
             member?.account?.governanceDelegate?.toBase58();
+          // @ts-ignore
+          memberData["councilPublicKey"] = member.pubkey.toString();
           // @ts-ignore
           memberData["councilDelegate"] = delegateWalletId;
           // @ts-ignore
@@ -99,6 +102,7 @@ export const fetchRealmMembers = createAsyncThunk(
                 delegateMap[delegateWalletId]?.councilMembers || [];
 
               delegateMap[delegateWalletId] = {
+                ...delegateMap[delegateWalletId],
                 councilMembers: [...oldCouncilRecords, memberData],
               };
             } else {
@@ -111,6 +115,8 @@ export const fetchRealmMembers = createAsyncThunk(
           const delegateWalletId =
             member?.account?.governanceDelegate?.toBase58();
 
+          //@ts-ignore
+          memberData["communityPublicKey"] = member.pubkey.toString();
           // @ts-ignore
           memberData["communityDelegate"] = delegateWalletId;
           // @ts-ignore
@@ -131,11 +137,12 @@ export const fetchRealmMembers = createAsyncThunk(
                 delegateMap[delegateWalletId]?.communityMembers || [];
 
               delegateMap[delegateWalletId] = {
-                councilMembers: [...oldCommunityRecords, memberData],
+                ...delegateMap[delegateWalletId],
+                communityMembers: [...oldCommunityRecords, memberData],
               };
             } else {
               delegateMap[delegateWalletId] = {
-                councilMembers: [memberData],
+                communityMembers: [memberData],
               };
             }
           }
