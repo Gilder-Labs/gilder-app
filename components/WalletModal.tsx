@@ -26,7 +26,9 @@ import PagerView, {
 } from "react-native-pager-view";
 import { Typography } from "./Typography";
 import { TransactionList } from "../elements";
-import { PageControl, SegmentedControl } from "react-native-ui-lib";
+import { PageControl } from "react-native-ui-lib";
+import * as Haptics from "expo-haptics";
+
 import { Incubator } from "react-native-ui-lib";
 const { Toast } = Incubator;
 
@@ -49,11 +51,13 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
   const { isShowingToast } = useAppSelector((state) => state.utility);
 
   const handleClose = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     dispatch(closeWallet(""));
   };
 
   const handleDisconnect = () => {
     dispatch(disconnectWallet(""));
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
   };
 
   useEffect(() => {
@@ -97,7 +101,6 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
       animationType="slide"
       visible={isWalletOpen}
       onRequestClose={handleClose}
-      onDismiss={handleClose}
       presentationStyle="pageSheet"
       // transparent={true}
     >

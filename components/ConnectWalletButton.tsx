@@ -12,6 +12,7 @@ import { getED25519Key } from "@toruslabs/openlogin-ed25519";
 import bs58 from "bs58";
 import { abbreviatePublicKey } from "../utils";
 import { setWallet, openWallet } from "../store/walletSlice";
+import * as Haptics from "expo-haptics";
 
 import { URL } from "react-native-url-polyfill";
 
@@ -34,6 +35,8 @@ export const ConnectWalletButton = ({}: ConnectWalletProps) => {
 
   const login = async () => {
     try {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+
       const openlogin = new OpenLogin({
         clientId:
           "BAuRcQ4h95bd4sIZ1gy1iRVCGAGzn0JK30mbgzEN404myjo02xKOw0t0B7ImCY_jNhl5XGOT7T1Q1cQ9wi-BkUQ",
@@ -81,6 +84,7 @@ export const ConnectWalletButton = ({}: ConnectWalletProps) => {
 
   const handleOpenWallet = () => {
     dispatch(openWallet(""));
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
   };
 
   return (

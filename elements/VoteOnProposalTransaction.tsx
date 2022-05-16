@@ -250,7 +250,7 @@ export const VoteOnProposalTransaction = ({}: VoteOnProposalTransaction) => {
             />
             <Button
               isLoading={isSendingTransaction}
-              disabled={isSendingTransaction}
+              disabled={isSendingTransaction || !selectedDelegate}
               title="Approve"
               onPress={handleApprove}
               shade="900"
