@@ -11,6 +11,8 @@ import {
   fetchTokens,
   fetchNfts,
 } from "../store/walletSlice";
+import { setShowToast } from "../store/utilitySlice";
+
 import * as style from "@dicebear/avatars-jdenticon-sprites";
 import { PublicKeyTextCopy } from "./PublicKeyTextCopy";
 import { SvgXml } from "react-native-svg";
@@ -25,6 +27,8 @@ import PagerView, {
 import { Typography } from "./Typography";
 import { TransactionList } from "../elements";
 import { PageControl, SegmentedControl } from "react-native-ui-lib";
+import { Incubator } from "react-native-ui-lib";
+const { Toast } = Incubator;
 
 interface RealmSelectModalProps {}
 
@@ -42,6 +46,7 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
     transactions,
     nfts,
   } = useAppSelector((state) => state.wallet);
+  const { isShowingToast } = useAppSelector((state) => state.utility);
 
   const handleClose = () => {
     dispatch(closeWallet(""));
@@ -74,6 +79,10 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
           token.tokenAmount.uiAmount || 0;
     });
     return numeral(totalValue).format("$0,0.00");
+  };
+
+  const handleDismiss = () => {
+    dispatch(setShowToast(false));
   };
 
   const handlePageScroll = (event: PagerViewOnPageSelectedEvent) => {
@@ -151,6 +160,26 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
           </TokenContainer>
         </PagerView>
       </Container>
+      <Toast
+        visible={isShowingToast}
+        position={"bottom"}
+        preset="success"
+        message="Public key copied."
+        onDismiss={handleDismiss}
+        autoDismiss={1000}
+        backgroundColor={theme.gray[1000]}
+        zIndex={10000}
+        containerStyle={{
+          width: 240,
+          marginLeft: "auto",
+          marginRight: "auto",
+        }}
+        messageStyle={{
+          color: theme.gray[400],
+        }}
+        elevation={0}
+        centerMessage={true}
+      />
     </Modal>
   );
 };

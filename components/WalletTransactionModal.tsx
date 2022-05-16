@@ -8,16 +8,25 @@ import { useTheme } from "styled-components";
 import { closeTransactionModal, castVote } from "../store/walletSlice";
 import { Typography } from "./Typography";
 import { VoteOnProposalTransaction } from "../elements";
+import { Incubator } from "react-native-ui-lib";
+import { setShowToast } from "../store/utilitySlice";
+
+const { Toast } = Incubator;
 
 interface WalletTransactionModalProps {}
 
 export const WalletTransactionModal = ({}: WalletTransactionModalProps) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
+  const { isShowingToast } = useAppSelector((state) => state.utility);
 
   const { transactionType, isTransactionModalOpen } = useAppSelector(
     (state) => state.wallet
   );
+
+  const handleDismiss = () => {
+    dispatch(setShowToast(false));
+  };
 
   const handleClose = () => {
     dispatch(closeTransactionModal(""));
@@ -42,6 +51,26 @@ export const WalletTransactionModal = ({}: WalletTransactionModalProps) => {
         {false && <Typography text="info info info" />}
         {false && <Typography text="info info info" />}
       </Container>
+      <Toast
+        visible={isShowingToast}
+        position={"bottom"}
+        preset="success"
+        message="Public key copied."
+        onDismiss={handleDismiss}
+        autoDismiss={1000}
+        backgroundColor={theme.gray[1000]}
+        zIndex={10000}
+        containerStyle={{
+          width: 240,
+          marginLeft: "auto",
+          marginRight: "auto",
+        }}
+        messageStyle={{
+          color: theme.gray[400],
+        }}
+        elevation={0}
+        centerMessage={true}
+      />
     </Modal>
   );
 };

@@ -16,6 +16,7 @@ import { fetchRealmMembers } from "../store/memberSlice";
 import { fetchRealmProposals } from "../store/proposalsSlice";
 import { fetchRealmActivity } from "../store/activitySlice";
 import { fetchVaults } from "../store/treasurySlice";
+import { setShowToast } from "../store/utilitySlice";
 import {
   fetchNotificationSettings,
   setToken,
@@ -26,16 +27,14 @@ import ActivityScreen from "../screens/ActivityScreen";
 import TreasuryScreen from "../screens/TreasuryScreen";
 import MembersScreen from "../screens/MembersScreen";
 import ProposalsScreen from "../screens/ProposalsScreen";
-
-// Test lab, remove before prod.
-import TestLabScreen from "../screens/TestLabScreen";
-
 import LinkingConfiguration from "./LinkingConfiguration";
 import { MemberProfile } from "../screens/MemberProfile";
 import { ProposalDetailScreen } from "../screens/ProposalDetailScreen";
 import { WalletModal } from "../components/WalletModal";
 import { WalletTransactionModal } from "../components/WalletTransactionModal";
 import RealmSettingsScreen from "../screens/RealmSettingsScreen";
+import { Incubator } from "react-native-ui-lib";
+const { Toast } = Incubator;
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -195,6 +194,8 @@ export default function Navigation({}: {}) {
   const { selectedRealm, selectedRealmId } = useAppSelector(
     (state) => state.realms
   );
+  const { isShowingToast } = useAppSelector((state) => state.utility);
+
   const { pushToken } = useAppSelector((state) => state.notifications);
 
   // fetch realms on devnet toggle
@@ -232,6 +233,10 @@ export default function Navigation({}: {}) {
     }
   }, [pushToken]);
 
+  const handleDismiss = () => {
+    dispatch(setShowToast(false));
+  };
+
   const NavigationTheme = {
     dark: false,
     colors: {
@@ -246,6 +251,26 @@ export default function Navigation({}: {}) {
 
   return (
     <RootContainer>
+      <Toast
+        visible={isShowingToast}
+        position={"bottom"}
+        preset="success"
+        message="Public key copied."
+        onDismiss={handleDismiss}
+        autoDismiss={1000}
+        backgroundColor={theme.gray[1000]}
+        zIndex={100000}
+        containerStyle={{
+          width: 240,
+          marginLeft: "auto",
+          marginRight: "auto",
+        }}
+        messageStyle={{
+          color: theme.gray[400],
+        }}
+        elevation={0}
+        centerMessage={true}
+      />
       <WalletModal />
       <WalletTransactionModal />
       <NavigationContainer

@@ -243,7 +243,6 @@ export const castVote = createAsyncThunk(
       let tokenRecordPublicKey = isCommunityVote
         ? tokenOwnerRecord.communityPublicKey
         : tokenOwnerRecord.councilPublicKey;
-      // EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i
       // 1. Check if current wallet is member and has token to be voted with
       // 2. If it does, do vote with that token
       // 3. If not check if current wallet is delegated from an token owner record
@@ -275,7 +274,7 @@ export const castVote = createAsyncThunk(
         new PublicKey(proposal.governingTokenMint), // proposal governanceMint publicKey
         Vote.fromYesNoVote(action), //  *Vote* class? 1 = no, 0 = yes
         payer
-        // voterWeight
+        // TODO: handle plugin stuff here.
       );
 
       const privateKey = wallet.privateKey;
