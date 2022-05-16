@@ -9,6 +9,7 @@ import { Typography } from "../components";
 import { AnimatedImage } from "react-native-ui-lib";
 import { formatVoteWeight } from "../utils";
 import { useAppSelector } from "../hooks/redux";
+import { PublicKeyTextCopy } from "./PublicKeyTextCopy";
 
 interface MemberCardProps {
   member: any;
@@ -86,18 +87,35 @@ export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
       <ContentContainer>
         <TitleRow>
           <Column>
-            <MemberName>
-              {identityName
-                ? identityName
-                : abbreviatePublicKey(member.walletId)}
-            </MemberName>
-            {identityName ? (
-              <Typography
-                text={abbreviatePublicKey(member.walletId)}
-                shade="500"
-                size="subtitle"
-              />
-            ) : null}
+            <MemberNameContainer>
+              {identityName ? (
+                <Typography
+                  text={identityName}
+                  shade="300"
+                  size="h4"
+                  bold={true}
+                  marginBottom={"0"}
+                />
+              ) : (
+                <PublicKeyTextCopy
+                  shade="300"
+                  size="h4"
+                  publicKey={member.walletId}
+                  noPadding={true}
+                  hideIcon={true}
+                  bold={true}
+                />
+              )}
+              {identityName ? (
+                <PublicKeyTextCopy
+                  shade="500"
+                  size="subtitle"
+                  publicKey={member.walletId}
+                  noPadding={true}
+                  hideIcon={true}
+                />
+              ) : null}
+            </MemberNameContainer>
           </Column>
           <IconButton onPress={handleProfileClick} activeOpacity={0.5}>
             <Unicons.UilAngleDoubleRight size="28" color={theme.gray[400]} />
@@ -162,11 +180,9 @@ const ContentContainer = styled.View`
   /* justify-content: space-between; */
 `;
 
-const MemberName = styled.Text`
-  color: ${(props: any) => props.theme.gray[300]}
-  font-weight: bold;
-  font-size: 18px;
-  margin-top:${(props: any) => props.theme.spacing[4]};
+const MemberNameContainer = styled.View`
+  margin-top: ${(props: any) => props.theme.spacing[4]};
+  align-items: flex-start;
 `;
 
 const TextContainer = styled.View`
@@ -176,6 +192,7 @@ const TextContainer = styled.View`
 
 const Column = styled.View`
   margin-bottom: ${(props: any) => props.theme.spacing[3]};
+  align-items: flex-start;
 `;
 
 const VotesCast = styled.Text`
