@@ -7,6 +7,7 @@ import * as Clipboard from "expo-clipboard";
 import { Typography } from "./Typography";
 import { useAppDispatch } from "../hooks/redux";
 import { setShowToast } from "../store/utilitySlice";
+import * as Haptics from "expo-haptics";
 
 interface PublicKeyTextCopyProps {
   fontSize?: number;
@@ -34,6 +35,7 @@ export const PublicKeyTextCopy = ({
   const copyToClipboard = () => {
     Clipboard.setString(publicKey);
     dispatch(setShowToast(true));
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   };
 
   return (

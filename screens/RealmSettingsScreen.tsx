@@ -9,6 +9,7 @@ import {
   fetchNotificationSettings,
   subscribeToNotifications,
 } from "../store/notificationSlice";
+import * as Haptics from "expo-haptics";
 
 export default function RealmSettingsScreen({
   navigation,
@@ -45,6 +46,7 @@ export default function RealmSettingsScreen({
         isSubscribing: value,
       })
     );
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
 
     setNotifyOnCreate(value);
   };

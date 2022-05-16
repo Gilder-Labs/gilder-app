@@ -8,6 +8,7 @@ import { format, getUnixTime, formatDistance } from "date-fns";
 import numeral from "numeral";
 import { fetchProposalChat } from "../store/proposalsSlice";
 import { openTransactionModal } from "../store/walletSlice";
+import * as Haptics from "expo-haptics";
 
 interface ProposalDetailScreen {
   route: any;
@@ -178,6 +179,7 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
         transactionData: { proposal: proposal, action: type },
       })
     );
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   };
 
   const quorumData = getQuorum();

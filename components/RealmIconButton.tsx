@@ -3,6 +3,7 @@ import styled from "styled-components/native";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { fetchRealm, selectRealm } from "../store/realmSlice";
 import { RealmIcon } from "./RealmIcon";
+import * as Haptics from "expo-haptics";
 
 interface RealmIconButtonProps {
   realmId: string;
@@ -30,6 +31,7 @@ export const RealmIconButton = ({
 
     dispatch(selectRealm(realmsMap[realmId]));
     dispatch(fetchRealm(realmId));
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
   };
 
   const isSelected = selectedRealmId === realmId;

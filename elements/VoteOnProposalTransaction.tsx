@@ -13,6 +13,7 @@ import { closeTransactionModal, castVote } from "../store/walletSlice";
 import { useTheme } from "styled-components";
 import { fetchRealmProposals } from "../store/proposalsSlice";
 import { abbreviatePublicKey } from "../utils";
+import * as Haptics from "expo-haptics";
 
 interface VoteOnProposalTransaction {}
 
@@ -52,10 +53,12 @@ export const VoteOnProposalTransaction = ({}: VoteOnProposalTransaction) => {
         isCommunityVote,
       })
     );
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
   };
 
   const handleClose = () => {
     dispatch(closeTransactionModal(""));
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
   };
 
   const isYesVote = transactionData.action === 0;
@@ -79,6 +82,11 @@ export const VoteOnProposalTransaction = ({}: VoteOnProposalTransaction) => {
     }
 
     return [];
+  };
+
+  const handleSelectDelegate = (delegateId: string) => {
+    setSelectedDelegate(delegateId);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   };
 
   const delegatesToVoteWith = getDelegateMembers();
@@ -146,11 +154,14 @@ export const VoteOnProposalTransaction = ({}: VoteOnProposalTransaction) => {
               <Row>
                 <Typography text={"Delegate To Vote as:"} shade={"500"} />
               </Row>
-              <DelegateScrollView horizontal={true}>
+              <DelegateScrollView
+                horizontal={true}
+                contentContainerStyle={{ justifyContent: "center" }}
+              >
                 {membersMap?.[publicKey] && (
                   <DelegateButton
                     isSelected={selectedDelegate === publicKey}
-                    onPress={() => setSelectedDelegate(publicKey)}
+                    onPress={() => handleSelectDelegate(publicKey)}
                   >
                     <Typography
                       text={abbreviatePublicKey(publicKey)}
@@ -162,7 +173,7 @@ export const VoteOnProposalTransaction = ({}: VoteOnProposalTransaction) => {
                 {delegatesToVoteWith.map((delegate: Member) => (
                   <DelegateButton
                     isSelected={selectedDelegate === delegate?.walletId}
-                    onPress={() => setSelectedDelegate(delegate.walletId)}
+                    onPress={() => handleSelectDelegate(delegate.walletId)}
                   >
                     <Typography
                       text={abbreviatePublicKey(delegate?.walletId)}
@@ -338,7 +349,13 @@ const IconContainer = styled.View<{ isSuccessful: boolean }>`
 
 const DelegateScrollView = styled.ScrollView`
   width: 100%;
-  padding-bottom: ${(props: any) => props.theme.spacing[3]};
+  padding-bottom: ${(props: any) => props.theme.spacing[2]};
+  padding-top: ${(props: any) => props.theme.spacing[2]};
+  padding-left: ${(props: any) => props.theme.spacing[2]};
+  padding-right: ${(props: any) => props.theme.spacing[4]};
+
+  border-radius: 8px;
+  background: ${(props) => props.theme.gray[700]};
 `;
 
 const DelegateButton = styled.TouchableOpacity<{ isSelected: boolean }>`
