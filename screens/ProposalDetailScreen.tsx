@@ -44,6 +44,12 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
 
   const { proposalId } = route?.params;
 
+  useEffect(() => {
+    if (proposalId && proposalsMap?.[proposalId]) {
+      dispatch(fetchProposalChat(proposalId));
+    }
+  }, [proposalId, proposalsMap]);
+
   if (
     !proposalId ||
     !selectedRealm ||
@@ -70,14 +76,6 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
   } = proposal;
 
   const governance = governancesMap?.[proposal?.governanceId];
-
-  if (!governance) {
-    return <Loading />;
-  }
-
-  useEffect(() => {
-    dispatch(fetchProposalChat(proposalId));
-  }, []);
 
   const voteThresholdPercentage = governance?.voteThresholdPercentage || 0;
 
