@@ -10,7 +10,11 @@ import {
 } from "@solana/spl-governance";
 
 import * as web3 from "@solana/web3.js";
-import { REALM_GOVERNANCE_PKEY, RPC_CONNECTION } from "../constants/Solana";
+import {
+  REALM_GOVERNANCE_PKEY,
+  RPC_CONNECTION,
+  INDEX_RPC_CONNECTION,
+} from "../constants/Solana";
 import { formatVoteWeight } from "../utils";
 
 export interface realmState {
@@ -38,6 +42,7 @@ const initialState: realmState = {
 };
 
 let connection = new web3.Connection(RPC_CONNECTION, "confirmed");
+const indexConnection = new web3.Connection(INDEX_RPC_CONNECTION, "recent");
 
 export const fetchRealmMembers = createAsyncThunk(
   "realms/fetchRealmMembers",
@@ -46,7 +51,7 @@ export const fetchRealmMembers = createAsyncThunk(
       let rawTokenOwnerRecords;
 
       rawTokenOwnerRecords = await getAllTokenOwnerRecords(
-        connection,
+        indexConnection,
         new PublicKey(realm.governanceId),
         new PublicKey(realm.pubKey)
       );
@@ -185,7 +190,7 @@ export const fetchMemberChat = createAsyncThunk(
 
     try {
       rawChatMesssages = await getGovernanceChatMessagesByVoter(
-        connection,
+        indexConnection,
         GOVERNANCE_CHAT_PROGRAM_ID,
         new PublicKey(member.walletId)
       );
@@ -222,7 +227,7 @@ export const fetchMemberVotes = createAsyncThunk(
 
     try {
       rawVoteRecords = await getVoteRecordsByVoter(
-        connection,
+        indexConnection,
         new PublicKey(realm.governanceId), // change this based on the dao program id
         new PublicKey(member.walletId)
       );

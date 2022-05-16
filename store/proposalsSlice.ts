@@ -6,7 +6,7 @@ import {
   getGovernanceChatMessages,
   GOVERNANCE_CHAT_PROGRAM_ID,
 } from "@solana/spl-governance";
-import { RPC_CONNECTION } from "../constants/Solana";
+import { RPC_CONNECTION, INDEX_RPC_CONNECTION } from "../constants/Solana";
 
 export interface ProposalsState {
   isLoadingProposals: boolean;
@@ -27,6 +27,7 @@ const initialState: ProposalsState = {
 };
 
 let connection = new Connection(RPC_CONNECTION, "confirmed");
+const indexConnection = new Connection(INDEX_RPC_CONNECTION, "recent");
 
 export const fetchRealmProposals = createAsyncThunk(
   "realms/fetchRealmProposals",
@@ -36,7 +37,7 @@ export const fetchRealmProposals = createAsyncThunk(
 
     try {
       rawProposals = await getAllProposals(
-        connection,
+        indexConnection,
         governanceId,
         new PublicKey(realm.pubKey)
       );
@@ -98,7 +99,7 @@ export const fetchProposalChat = createAsyncThunk(
 
     try {
       rawChatMesssages = await getGovernanceChatMessages(
-        connection,
+        indexConnection,
         GOVERNANCE_CHAT_PROGRAM_ID,
         new PublicKey(proposalId)
       );

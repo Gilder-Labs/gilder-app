@@ -75,6 +75,10 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
     return <Loading />;
   }
 
+  useEffect(() => {
+    dispatch(fetchProposalChat(proposalId));
+  }, []);
+
   const voteThresholdPercentage = governance?.voteThresholdPercentage || 0;
 
   const {

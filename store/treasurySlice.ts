@@ -10,6 +10,7 @@ import {
   SPL_PUBLIC_KEY,
   REALM_GOVERNANCE_PKEY,
   RPC_CONNECTION,
+  INDEX_RPC_CONNECTION,
 } from "../constants/Solana";
 import { getTokensInfo } from "../utils";
 
@@ -38,6 +39,8 @@ const initialState: TreasuryState = {
 };
 
 let connection = new Connection(RPC_CONNECTION, "confirmed");
+const indexConnection = new Connection(INDEX_RPC_CONNECTION, "recent");
+
 const TokensInfo = getTokensInfo();
 
 export const fetchVaults = createAsyncThunk(
@@ -45,7 +48,7 @@ export const fetchVaults = createAsyncThunk(
   async (realm: any) => {
     try {
       const rawGovernances = await getAllGovernances(
-        connection,
+        indexConnection,
         new PublicKey(realm.governanceId),
         new PublicKey(realm.pubKey)
       );

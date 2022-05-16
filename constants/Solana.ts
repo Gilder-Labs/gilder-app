@@ -18,5 +18,5 @@ export const SPL_PUBLIC_KEY = new PublicKey(
 export const RPC_CONNECTION =
   Constants?.manifest?.extra?.rpcNetwork || "https://ssc-dao.genesysgo.net/";
 
-// backup in case genesysgo has issues
-// export const RPC_CONNECTION = "https://solana-api.projectserum.com";
+export const INDEX_RPC_CONNECTION =
+  Constants?.manifest?.extra?.indexRPC || "https://ssc-dao.genesysgo.net/";

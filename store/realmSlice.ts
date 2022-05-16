@@ -7,6 +7,7 @@ import {
   SPL_PUBLIC_KEY,
   REALM_GOVERNANCE_PKEY,
   RPC_CONNECTION,
+  INDEX_RPC_CONNECTION,
 } from "../constants/Solana";
 import { cleanRealmData, getTokensInfo, extractLogInfo } from "../utils";
 import { RootState } from ".";
@@ -44,13 +45,14 @@ const initialState: realmState = {
 
 // getMultipleAccounts - gets account info of a bunch of accounts in 1 api request
 
-let connection = new web3.Connection(RPC_CONNECTION, "confirmed");
+const connection = new web3.Connection(RPC_CONNECTION, "confirmed");
+const indexConnection = new web3.Connection(INDEX_RPC_CONNECTION, "recent");
 
 export const fetchRealms = createAsyncThunk("realms/fetchRealms", async () => {
   try {
     let realms;
     let realmsMap = {};
-    const realmsRaw = await getRealms(connection, REALM_GOVERNANCE_PKEY);
+    const realmsRaw = await getRealms(indexConnection, REALM_GOVERNANCE_PKEY);
 
     // get realms with unique program id
     let realmDataKeys = Object.keys(cleanedRealmData);
@@ -107,19 +109,19 @@ export const fetchRealm = createAsyncThunk(
   "realms/fetchRealm",
   async (realmId: string) => {
     try {
-      const rawRealm = await getRealm(connection, new PublicKey(realmId));
+      const rawRealm = await getRealm(indexConnection, new PublicKey(realmId));
       let communityMintData = null;
       let communityMintPromise;
       let councilMintData = null;
       let councilMintPromise;
 
       if (rawRealm.account.communityMint) {
-        communityMintPromise = connection.getParsedAccountInfo(
+        communityMintPromise = indexConnection.getParsedAccountInfo(
           new PublicKey(rawRealm.account.communityMint)
         );
       }
       if (rawRealm.account.config.councilMint) {
-        councilMintPromise = connection.getParsedAccountInfo(
+        councilMintPromise = indexConnection.getParsedAccountInfo(
           new PublicKey(rawRealm.account.config.councilMint)
         );
       }

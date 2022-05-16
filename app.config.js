@@ -37,6 +37,7 @@ export default {
     extra: {
       // Add your extra configs here
       rpcNetwork: process.env.MAINNET_RPC || "https://ssc-dao.genesysgo.net/",
+      indexRPC: process.env.INDEX_RPC || "https://ssc-dao.genesysgo.net/",
     },
     sdkVersion: "44.0.0",
   },

@@ -76,6 +76,6 @@ const Container = styled.TouchableOpacity<{ noPadding: boolean }>`
 `;
 
 const IconContainer = styled.View`
-  padding: ${(props) => props.theme.spacing[1]};
-  margin-top: -${(props) => props.theme.spacing[1]};
+  padding-bottom: ${(props) => props.theme.spacing[1]};
+  padding-left: ${(props) => props.theme.spacing[1]};
 `;
