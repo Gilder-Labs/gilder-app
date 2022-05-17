@@ -108,7 +108,12 @@ export const VoteOnProposalTransaction = ({}: VoteOnProposalTransaction) => {
               size={48}
             />
             <TitleContainer>
-              <Typography text={"Vote on proposal"} bold={true} size="h4" />
+              <Typography
+                text={`${proposal.name}`}
+                bold={true}
+                maxLength={48}
+                size="h4"
+              />
             </TitleContainer>
           </TitleRow>
           <Row>
@@ -124,15 +129,6 @@ export const VoteOnProposalTransaction = ({}: VoteOnProposalTransaction) => {
             />
           </Row>
 
-          <Row>
-            <Typography text={"Proposal Title:"} shade={"500"} />
-            <Typography
-              maxLength={24}
-              text={proposal.name}
-              bold={false}
-              shade={"300"}
-            />
-          </Row>
           <Row>
             <Typography text={"Realm:"} shade={"500"} />
             <Typography
@@ -250,7 +246,7 @@ export const VoteOnProposalTransaction = ({}: VoteOnProposalTransaction) => {
             />
             <Button
               isLoading={isSendingTransaction}
-              disabled={isSendingTransaction || !selectedDelegate}
+              disabled={isSendingTransaction}
               title="Approve"
               onPress={handleApprove}
               shade="900"
@@ -349,8 +345,8 @@ const IconContainer = styled.View<{ isSuccessful: boolean }>`
 
 const DelegateScrollView = styled.ScrollView`
   width: 100%;
-  padding-bottom: ${(props: any) => props.theme.spacing[2]};
-  padding-top: ${(props: any) => props.theme.spacing[2]};
+  padding-bottom: ${(props: any) => props.theme.spacing[3]};
+  padding-top: ${(props: any) => props.theme.spacing[3]};
   padding-left: ${(props: any) => props.theme.spacing[2]};
   padding-right: ${(props: any) => props.theme.spacing[4]};
 
@@ -370,6 +366,6 @@ const DelegateButton = styled.TouchableOpacity<{ isSelected: boolean }>`
   padding: ${(props: any) => props.theme.spacing[2]};
   border: ${(props: any) =>
     props.isSelected
-      ? `2px solid  ${props.theme.secondary[700]}`
+      ? `2px solid  ${props.theme.secondary[600]}`
       : "2px solid transparent"};
 `;

@@ -3,6 +3,7 @@ import styled from "styled-components/native";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { toggleRealmInWatchlist } from "../store/realmSlice";
 import { RealmIcon } from "./RealmIcon";
+import * as Haptics from "expo-haptics";
 
 interface RealmCardProps {
   realm: any;
@@ -16,6 +17,7 @@ export const RealmCard = ({ realm, onClick }: RealmCardProps) => {
   const dispatch = useAppDispatch();
 
   const handleRealmClick = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     dispatch(toggleRealmInWatchlist(realm.pubKey));
     // onClick();
   };

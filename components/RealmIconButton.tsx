@@ -31,7 +31,7 @@ export const RealmIconButton = ({
 
     dispatch(selectRealm(realmsMap[realmId]));
     dispatch(fetchRealm(realmId));
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
   };
 
   const isSelected = selectedRealmId === realmId;
