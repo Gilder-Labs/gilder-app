@@ -17,3 +17,4 @@ export * from "./Button";
 export * from "./Typography";
 export * from "./PublicKeyTextCopy";
 export * from "./NftList";
+export * from "./DelegateButton";

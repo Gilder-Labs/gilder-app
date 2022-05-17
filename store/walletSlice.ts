@@ -221,7 +221,6 @@ export const castVote = createAsyncThunk(
     { getState }
   ) => {
     try {
-      console.log("TRYING to cast vote", transactionData);
       const { realms, wallet, members } = getState() as RootState;
       const { proposal, action } = transactionData;
       const { selectedRealm } = realms;
@@ -234,9 +233,7 @@ export const castVote = createAsyncThunk(
         tokenOwnerRecord = members.membersMap[wallet.publicKey];
       } else {
         // else get the token from the tokens that have been delegated to them
-        console.log("IS COMMUNITY?", isCommunityVote);
         tokenOwnerRecord = members.membersMap[selectedDelegate];
-        console.log("Token owner record", tokenOwnerRecord);
       }
 
       // each member can have a token record for community or council.

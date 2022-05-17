@@ -14,6 +14,7 @@ import { useTheme } from "styled-components";
 import { fetchRealmProposals } from "../store/proposalsSlice";
 import { abbreviatePublicKey } from "../utils";
 import * as Haptics from "expo-haptics";
+import { DelegateButton } from "../components";
 
 interface VoteOnProposalTransaction {}
 
@@ -158,25 +159,22 @@ export const VoteOnProposalTransaction = ({}: VoteOnProposalTransaction) => {
                   <DelegateButton
                     isSelected={selectedDelegate === publicKey}
                     onPress={() => handleSelectDelegate(publicKey)}
-                  >
-                    <Typography
-                      text={abbreviatePublicKey(publicKey)}
-                      shade={"300"}
-                    />
-                  </DelegateButton>
+                    memberPublicKey={publicKey}
+                    delegate={membersMap?.[publicKey]}
+                    isCommunityVote={isCommunityVote}
+                  />
                 )}
 
                 {delegatesToVoteWith.map((delegate: Member) => (
                   <DelegateButton
                     isSelected={selectedDelegate === delegate?.walletId}
                     onPress={() => handleSelectDelegate(delegate.walletId)}
-                  >
-                    <Typography
-                      text={abbreviatePublicKey(delegate?.walletId)}
-                      shade={"300"}
-                    />
-                  </DelegateButton>
+                    memberPublicKey={delegate.walletId}
+                    delegate={delegate}
+                    isCommunityVote={isCommunityVote}
+                  />
                 ))}
+                <EmptyView />
               </DelegateScrollView>
             </>
           )}
@@ -246,7 +244,7 @@ export const VoteOnProposalTransaction = ({}: VoteOnProposalTransaction) => {
             />
             <Button
               isLoading={isSendingTransaction}
-              disabled={isSendingTransaction}
+              disabled={isSendingTransaction || !publicKey}
               title="Approve"
               onPress={handleApprove}
               shade="900"
@@ -354,18 +352,8 @@ const DelegateScrollView = styled.ScrollView`
   background: ${(props) => props.theme.gray[700]};
 `;
 
-const DelegateButton = styled.TouchableOpacity<{ isSelected: boolean }>`
+const EmptyView = styled.View`
+  width: 80px;
   height: 80px;
-  width: 120px;
-  margin-left: ${(props: any) => props.theme.spacing[1]};
-  margin-right: ${(props: any) => props.theme.spacing[1]};
-  border-radius: 4px;
-  justify-content: center;
-  align-items: center;
-  background: ${(props: any) => props.theme.gray[900]};
-  padding: ${(props: any) => props.theme.spacing[2]};
-  border: ${(props: any) =>
-    props.isSelected
-      ? `2px solid  ${props.theme.secondary[600]}`
-      : "2px solid transparent"};
+  background: transparent;
 `;

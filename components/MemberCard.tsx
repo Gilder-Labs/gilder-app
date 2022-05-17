@@ -3,7 +3,7 @@ import styled from "styled-components/native";
 import { useTheme } from "styled-components";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Unicons from "@iconscout/react-native-unicons";
-import { getColorType, abbreviatePublicKey } from "../utils";
+import { getColorType } from "../utils";
 import { useQuery, gql } from "@apollo/client";
 import { Typography } from "../components";
 import { AnimatedImage } from "react-native-ui-lib";
