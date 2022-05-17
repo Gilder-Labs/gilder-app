@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { PublicKey, ConfirmedSignatureInfo } from "@solana/web3.js";
+import { PublicKey, ConfirmedSignatureInfo, Connection } from "@solana/web3.js";
 import {
   getRealms,
   getRealm,
@@ -9,7 +9,6 @@ import {
   GOVERNANCE_CHAT_PROGRAM_ID,
 } from "@solana/spl-governance";
 
-import * as web3 from "@solana/web3.js";
 import {
   REALM_GOVERNANCE_PKEY,
   RPC_CONNECTION,
@@ -41,8 +40,8 @@ const initialState: realmState = {
   delegateMap: {},
 };
 
-let connection = new web3.Connection(RPC_CONNECTION, "confirmed");
-const indexConnection = new web3.Connection(INDEX_RPC_CONNECTION, "recent");
+let connection = new Connection(RPC_CONNECTION, "confirmed");
+const indexConnection = new Connection(INDEX_RPC_CONNECTION, "recent");
 
 export const fetchRealmMembers = createAsyncThunk(
   "realms/fetchRealmMembers",

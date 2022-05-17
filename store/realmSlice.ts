@@ -1,8 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { PublicKey, ConfirmedSignatureInfo } from "@solana/web3.js";
+import { PublicKey, Connection } from "@solana/web3.js";
 import { getRealms, getRealm, tryGetRealmConfig } from "@solana/spl-governance";
 
-import * as web3 from "@solana/web3.js";
 import {
   SPL_PUBLIC_KEY,
   REALM_GOVERNANCE_PKEY,
@@ -45,8 +44,8 @@ const initialState: realmState = {
 
 // getMultipleAccounts - gets account info of a bunch of accounts in 1 api request
 
-const connection = new web3.Connection(RPC_CONNECTION, "confirmed");
-const indexConnection = new web3.Connection(INDEX_RPC_CONNECTION, "recent");
+const connection = new Connection(RPC_CONNECTION, "confirmed");
+const indexConnection = new Connection(INDEX_RPC_CONNECTION, "recent");
 
 export const fetchRealms = createAsyncThunk("realms/fetchRealms", async () => {
   try {

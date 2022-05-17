@@ -4,7 +4,7 @@ export default {
   expo: {
     name: "Gilder",
     slug: "gilder-app",
-    version: "1.0.9",
+    version: "1.0.10",
     orientation: "portrait",
     icon: "./assets/images/DarkIcon.png",
     scheme: "gilder",
@@ -38,6 +38,18 @@ export default {
       // Add your extra configs here
       rpcNetwork: process.env.MAINNET_RPC || "https://ssc-dao.genesysgo.net/",
       indexRPC: process.env.INDEX_RPC || "https://ssc-dao.genesysgo.net/",
+    },
+    hooks: {
+      postPublish: [
+        {
+          file: "sentry-expo/upload-sourcemaps",
+          config: {
+            organization: "Gilder",
+            project: "Gilder",
+            authToken: process.env.SENTRY_API_TOKEN,
+          },
+        },
+      ],
     },
     sdkVersion: "44.0.0",
   },
