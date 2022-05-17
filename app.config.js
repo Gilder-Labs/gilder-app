@@ -44,8 +44,8 @@ export default {
         {
           file: "sentry-expo/upload-sourcemaps",
           config: {
-            organization: "Gilder",
-            project: "Gilder",
+            organization: "gilder",
+            project: "gilder",
             authToken: process.env.SENTRY_API_TOKEN,
           },
         },

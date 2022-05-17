@@ -80,7 +80,7 @@ export const DelegateButton = ({
           identityName ? identityName : abbreviatePublicKey(memberPublicKey)
         }
         size="caption"
-        shade={"300"}
+        shade={"400"}
       />
       <Typography
         text={`${
@@ -92,6 +92,7 @@ export const DelegateButton = ({
         textAlign="center"
         size="body"
         bold={true}
+        marginBottom="0"
         shade={"300"}
       />
     </DelegateButtonContainer>
@@ -117,9 +118,9 @@ const DelegateButtonContainer = styled.TouchableOpacity<{
   margin-right: ${(props: any) => props.theme.spacing[1]};
   border-radius: 4px;
   align-items: center;
-  justify-content: center;
   background: ${(props: any) => props.theme.gray[900]};
   padding: ${(props: any) => props.theme.spacing[2]};
+  padding-top: ${(props: any) => props.theme.spacing[4]};
   border: ${(props: any) =>
     props.isSelected
       ? `1px solid  ${props.theme.secondary[500]}`
