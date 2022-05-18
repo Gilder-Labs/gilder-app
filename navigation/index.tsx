@@ -30,6 +30,7 @@ import ProposalsScreen from "../screens/ProposalsScreen";
 import LinkingConfiguration from "./LinkingConfiguration";
 import { MemberProfile } from "../screens/MemberProfile";
 import { ProposalDetailScreen } from "../screens/ProposalDetailScreen";
+import { SplashScreen } from "../components";
 import { WalletModal } from "../components/WalletModal";
 import { WalletTransactionModal } from "../components/WalletTransactionModal";
 import RealmSettingsScreen from "../screens/RealmSettingsScreen";
@@ -191,14 +192,13 @@ function DrawerScreen() {
 export default function Navigation({}: {}) {
   const theme = useTheme();
   const dispatch = useAppDispatch();
-  const { selectedRealm, selectedRealmId } = useAppSelector(
+  const { selectedRealm, selectedRealmId, isLoadingRealms } = useAppSelector(
     (state) => state.realms
   );
   const { isShowingToast } = useAppSelector((state) => state.utility);
 
   const { pushToken } = useAppSelector((state) => state.notifications);
 
-  // fetch realms on devnet toggle
   useEffect(() => {
     dispatch(fetchRealms());
   }, []);
@@ -248,6 +248,10 @@ export default function Navigation({}: {}) {
       notification: theme?.gray[700],
     },
   };
+
+  if (isLoadingRealms) {
+    return <SplashScreen />;
+  }
 
   return (
     <RootContainer>
