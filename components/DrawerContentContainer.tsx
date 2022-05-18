@@ -16,6 +16,7 @@ import * as Unicons from "@iconscout/react-native-unicons";
 import { fetchRealm } from "../store/realmSlice";
 import { Typography } from "./Typography";
 import { useNavigation } from "@react-navigation/native";
+import * as Haptics from "expo-haptics";
 
 export function DrawerContentContainer(props: any) {
   const theme = useTheme();
@@ -52,6 +53,11 @@ export function DrawerContentContainer(props: any) {
     }
   };
 
+  const handleAddRealmOpen = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    setRealmSelectIsOpen(true);
+  };
+
   return (
     <DrawerRootContainer {...props} style={{ backgroundColor: "#131313" }}>
       <StyledHeader>
@@ -70,7 +76,7 @@ export function DrawerContentContainer(props: any) {
               <View>
                 <Divider />
                 <AddRealmButtonContainer
-                  onPress={() => setRealmSelectIsOpen(true)}
+                  onPress={handleAddRealmOpen}
                   activeOpacity={0.4}
                 >
                   <Unicons.UilPlus size="20" color={theme.gray[500]} />

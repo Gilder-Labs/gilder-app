@@ -16,6 +16,10 @@ import {
 } from "../constants/Solana";
 import { formatVoteWeight } from "../utils";
 
+interface genericObj {
+  [key: string]: any;
+}
+
 export interface realmState {
   members: Array<Member>;
   membersMap: any;
@@ -26,6 +30,7 @@ export interface realmState {
   isLoadingVotes: boolean;
   isRefreshingMembers: boolean;
   delegateMap: any;
+  tokenRecordToWalletMap: genericObj;
 }
 
 const initialState: realmState = {
@@ -38,10 +43,14 @@ const initialState: realmState = {
   isLoadingVotes: false,
   isRefreshingMembers: false,
   delegateMap: {},
+  tokenRecordToWalletMap: {},
 };
 
 let connection = new Connection(RPC_CONNECTION, "confirmed");
 const indexConnection = new Connection(INDEX_RPC_CONNECTION, "recent");
+
+// TODO: map tokenRecord -> walletid
+//
 
 export const fetchRealmMembers = createAsyncThunk(
   "realms/fetchRealmMembers",
@@ -64,6 +73,8 @@ export const fetchRealmMembers = createAsyncThunk(
 
       const membersMap = {};
       const delegateMap = {};
+      const tokenRecordToWalletMap = {} as genericObj;
+
       rawTokenOwnerRecords?.map((member) => {
         // if member does not exist, add member to member map
         // if member does exist, check which token record this is and add correct attributes to object
@@ -72,7 +83,6 @@ export const fetchRealmMembers = createAsyncThunk(
         const depositAmount =
           member.account.governingTokenDepositAmount.toString();
 
-        //TODO TWO PUBLIC KEYS FOR EACH TOKEN RECORD
         let memberData = {
           publicKey: member.pubkey.toString(),
           owner: member.owner.toString(), // RealmId
@@ -80,6 +90,8 @@ export const fetchRealmMembers = createAsyncThunk(
           outstandingProposalCount: member.account.outstandingProposalCount,
           walletId: member.account.governingTokenOwner.toString(), // Wallet address of owner of dao token
         };
+        tokenRecordToWalletMap[member.pubkey.toString()] =
+          member.account.governingTokenOwner.toString();
 
         if (governingTokenMint === councilMint) {
           const delegateWalletId =
@@ -175,6 +187,7 @@ export const fetchRealmMembers = createAsyncThunk(
         members: sortedMembers,
         membersMap: membersMap,
         delegateMap: delegateMap,
+        tokenRecordToWalletMap: tokenRecordToWalletMap,
       };
     } catch (error) {
       console.log("error", error);
@@ -272,6 +285,7 @@ export const memberSlice = createSlice({
         state.membersMap = action.payload.membersMap;
         state.members = action.payload.members;
         state.delegateMap = action.payload.delegateMap;
+        state.tokenRecordToWalletMap = action.payload.tokenRecordToWalletMap;
       })
       .addCase(fetchMemberChat.pending, (state) => {
         state.isLoadingChat = true;

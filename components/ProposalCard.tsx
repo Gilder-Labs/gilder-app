@@ -5,6 +5,8 @@ import { format, getUnixTime, formatDistance } from "date-fns";
 import numeral from "numeral";
 import * as Unicons from "@iconscout/react-native-unicons";
 import { useTheme } from "styled-components";
+import { WalletIdentity } from "./WalletIdentity";
+import { Typography } from "./Typography";
 
 interface ProposalCardProps {
   proposal: any;
@@ -13,6 +15,7 @@ interface ProposalCardProps {
   mintSupply: string;
   mintDecimals: number;
   voteThresholdPercentage: number;
+  creatorWalletId: string;
 }
 
 const proposalStatusKey = {
@@ -32,6 +35,7 @@ export const ProposalCard = ({
   mintSupply,
   mintDecimals,
   voteThresholdPercentage,
+  creatorWalletId,
 }: ProposalCardProps) => {
   const {
     status,
@@ -154,6 +158,15 @@ export const ProposalCard = ({
           <Unicons.UilAngleDoubleRight size="28" color={theme.gray[400]} />
         </IconButton>
       </ProposalSubData>
+      {creatorWalletId && (
+        <CreatorRow>
+          <WalletIdentity
+            memberPublicKey={creatorWalletId}
+            size="subtitle"
+            shade="100"
+          />
+        </CreatorRow>
+      )}
       {isVoting && (
         <Votes>
           <VoteCountRow>
@@ -209,7 +222,8 @@ const ProposalSubData = styled.View`
   padding-left: ${(props: any) => props.theme.spacing[4]};
   padding-right: ${(props: any) => props.theme.spacing[4]};
   margin-top: ${(props: any) => props.theme.spacing[2]};
-  margin-bottom: ${(props: any) => props.theme.spacing[4]};
+  margin-bottom: ${(props: any) => props.theme.spacing[1]};
+
   align-items: flex-start;
   flex-direction: row;
 `;
@@ -324,4 +338,14 @@ const IconButton = styled.TouchableOpacity`
 
 const SubtextContainer = styled.View`
   flex-direction: column;
+`;
+
+const CreatorRow = styled.View`
+  padding: ${(props: any) => props.theme.spacing[1]};
+  padding-left: ${(props: any) => props.theme.spacing[4]};
+  padding-right: ${(props: any) => props.theme.spacing[4]};
+
+  margin-bottom: ${(props: any) => props.theme.spacing[2]};
+  align-items: center;
+  flex-direction: row;
 `;

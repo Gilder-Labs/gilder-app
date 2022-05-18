@@ -13,6 +13,8 @@ export default function ProposalScreen({
   const { proposals, isLoadingProposals, isRefreshingProposals } =
     useAppSelector((state) => state.proposals);
 
+  const { tokenRecordToWalletMap } = useAppSelector((state) => state.members);
+
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
@@ -83,6 +85,7 @@ export default function ProposalScreen({
             : councilMintDecimals
         }
         voteThresholdPercentage={voteThresholdPercentage}
+        creatorWalletId={tokenRecordToWalletMap[item.tokenOwnerRecord]}
       />
     );
   };
