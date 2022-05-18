@@ -266,7 +266,7 @@ export default function Navigation({}: {}) {
           marginRight: "auto",
         }}
         messageStyle={{
-          color: theme.gray[400],
+          color: theme?.gray[400],
         }}
         elevation={0}
         centerMessage={true}
@@ -294,12 +294,12 @@ export default function Navigation({}: {}) {
             component={MemberProfile}
             // options={{ headerShown: false }}
             options={({ route }) => ({
-              title: route.params.memberInfo.name
-                ? route.params.memberInfo.name
-                : `${route.params.member.walletId.slice(
+              title: route?.params?.memberInfo?.name
+                ? route?.params?.memberInfo?.name
+                : `${route?.params?.member?.walletId?.slice(
                     0,
                     4
-                  )}...${route.params.member.walletId.slice(-4)}`,
+                  )}...${route?.params?.member?.walletId?.slice(-4)}`,
             })}
           />
           <Stack.Screen

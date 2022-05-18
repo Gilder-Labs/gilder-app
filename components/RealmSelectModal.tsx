@@ -84,7 +84,7 @@ export const RealmSelectModal = ({
     >
       <Header>
         {/* if a user has no realms, don't let them close modal till they pick one */}
-        {realmWatchlist.length ? (
+        {realmWatchlist?.length ? (
           <CloseIconButton onPress={handleOnClose} activeOpacity={0.5}>
             <Unicons.UilTimes size="20" color={theme.gray[200]} />
           </CloseIconButton>

@@ -45,14 +45,14 @@ export default function App() {
     return (
       <SafeAreaProvider>
         <Provider store={store}>
-          <ThemeProvider theme={darkTheme}>
+          <PersistGate loading={<SplashScreen />} persistor={persistor}>
             <ApolloProvider client={client}>
-              <PersistGate loading={<SplashScreen />} persistor={persistor}>
+              <ThemeProvider theme={darkTheme}>
                 <StatusBar style="light" />
                 <Navigation />
-              </PersistGate>
+              </ThemeProvider>
             </ApolloProvider>
-          </ThemeProvider>
+          </PersistGate>
         </Provider>
       </SafeAreaProvider>
     );
