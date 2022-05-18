@@ -48,6 +48,7 @@ function DrawerScreen() {
   const { selectedRealm } = useAppSelector((state) => state.realms);
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
+  const { pushToken } = useAppSelector((state) => state.notifications);
 
   const responseListener = useRef();
 
@@ -84,6 +85,16 @@ function DrawerScreen() {
       Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, []);
+
+  useEffect(() => {
+    if (pushToken) {
+      dispatch(
+        fetchNotificationSettings({
+          pushToken: pushToken,
+        })
+      );
+    }
+  }, [pushToken]);
 
   return (
     <Drawer.Navigator
@@ -197,8 +208,6 @@ export default function Navigation({}: {}) {
   );
   const { isShowingToast } = useAppSelector((state) => state.utility);
 
-  const { pushToken } = useAppSelector((state) => state.notifications);
-
   useEffect(() => {
     dispatch(fetchRealms());
   }, []);
@@ -222,16 +231,6 @@ export default function Navigation({}: {}) {
       dispatch(fetchRealmMembers({ realm: selectedRealm }));
     }
   }, [selectedRealm?.pubKey, selectedRealm?.communityMint]);
-
-  useEffect(() => {
-    if (pushToken) {
-      dispatch(
-        fetchNotificationSettings({
-          pushToken: pushToken,
-        })
-      );
-    }
-  }, [pushToken]);
 
   const handleDismiss = () => {
     dispatch(setShowToast(false));
@@ -343,7 +342,7 @@ const registerForPushNotificationsAsync = async () => {
     token = (await Notifications.getExpoPushTokenAsync()).data;
     return token;
   } else {
-    alert("Must use physical device for Push Notifications");
+    // alert("Must use physical device for Push Notifications");
   }
   return token;
 };
