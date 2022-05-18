@@ -3,7 +3,13 @@ import styled from "styled-components/native";
 import { FlatList } from "react-native";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { useTheme } from "styled-components";
-import { Badge, ChatMessage, Button, Loading } from "../components";
+import {
+  Badge,
+  ChatMessage,
+  Button,
+  Loading,
+  WalletIdentity,
+} from "../components";
 import { format, getUnixTime, formatDistance } from "date-fns";
 import numeral from "numeral";
 import { fetchProposalChat } from "../store/proposalsSlice";
@@ -34,7 +40,9 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
   const { governancesMap, isLoadingVaults } = useAppSelector(
     (state) => state.treasury
   );
-  const { isLoadingMembers } = useAppSelector((state) => state.members);
+  const { isLoadingMembers, tokenRecordToWalletMap } = useAppSelector(
+    (state) => state.members
+  );
   const { chatMessages, isLoadingChatMessages } = useAppSelector(
     (state) => state.proposals
   );
@@ -228,6 +236,18 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
               </StatusText>
             )}
           </ProposalSubData>
+          {tokenRecordToWalletMap &&
+            tokenRecordToWalletMap[proposal.tokenOwnerRecord] && (
+              <CreatorRow>
+                <WalletIdentity
+                  memberPublicKey={
+                    tokenRecordToWalletMap[proposal.tokenOwnerRecord]
+                  }
+                  size="subtitle"
+                  shade="100"
+                />
+              </CreatorRow>
+            )}
           <Votes>
             <VoteCountRow>
               <VoteColumn>
@@ -305,7 +325,7 @@ const ProposalSubData = styled.View`
   justify-content: flex-start;
   padding-left: ${(props: any) => props.theme.spacing[3]};
   padding-right: ${(props: any) => props.theme.spacing[3]};
-  margin-bottom: ${(props: any) => props.theme.spacing[4]};
+  margin-bottom: ${(props: any) => props.theme.spacing[1]};
   align-items: flex-start;
 `;
 
@@ -447,3 +467,13 @@ const Divider = styled.View`
 `;
 
 const LoadingContainer = styled.View``;
+
+const CreatorRow = styled.View`
+  padding: ${(props: any) => props.theme.spacing[1]};
+  padding-left: ${(props: any) => props.theme.spacing[3]};
+  padding-right: ${(props: any) => props.theme.spacing[3]};
+
+  margin-bottom: ${(props: any) => props.theme.spacing[2]};
+  align-items: center;
+  flex-direction: row;
+`;

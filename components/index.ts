@@ -18,3 +18,4 @@ export * from "./Typography";
 export * from "./PublicKeyTextCopy";
 export * from "./NftList";
 export * from "./DelegateButton";
+export * from "./WalletIdentity";
