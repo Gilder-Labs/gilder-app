@@ -16,19 +16,22 @@ export const NftList = ({
 }: NftListProps) => {
   const renderNft = ({ item }) => {
     return (
-      <AnimatedImage
-        key={item.id}
-        style={{
-          minHeight: 160,
-          height: "auto",
-          minWidth: "48%",
-          // maxWidth: "50%",
-          borderRadius: 8,
-        }}
-        source={{
-          uri: item.img,
-        }}
-      />
+      <ImageContainer>
+        <AnimatedImage
+          key={item.id}
+          style={{
+            minHeight: 160,
+            height: "auto",
+            minWidth: "48%",
+            // maxWidth: "50%",
+            borderRadius: 8,
+          }}
+          source={{
+            // uri: "",
+            uri: item.img,
+          }}
+        />
+      </ImageContainer>
     );
   };
 
@@ -50,4 +53,9 @@ export const NftList = ({
 
 const Container = styled.View`
   flex: 1;
+`;
+
+const ImageContainer = styled.View`
+  background: ${(props) => props.theme.gray[900]};
+  border-radius: 8px;
 `;
