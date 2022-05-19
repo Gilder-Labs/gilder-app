@@ -36,7 +36,6 @@ export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
     variables: { publicKey: member.walletId },
   });
   const { selectedRealm } = useAppSelector((state) => state.realms);
-  const { communityMintDecimals } = selectedRealm;
 
   const color = getColorType(member.walletId);
   const color2 = getColorType(member?.walletId.slice(-1) || "string");
@@ -135,10 +134,11 @@ export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
               Vote Weight
             </SubtitleText>
             <VoteWeight>
-              {member?.communityDepositAmount
+              {member?.communityDepositAmount &&
+              selectedRealm?.communityMintDecimals
                 ? formatVoteWeight(
                     member.communityDepositAmount,
-                    communityMintDecimals
+                    selectedRealm?.communityMintDecimals
                   )
                 : 0}
             </VoteWeight>
