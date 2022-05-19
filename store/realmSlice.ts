@@ -34,6 +34,7 @@ const cleanedRealmData = cleanRealmData();
 
 const initialState: realmState = {
   realms: [],
+  realmsMap: {},
   selectedRealm: null,
   realmsData: cleanedRealmData,
   selectedRealmId: "",

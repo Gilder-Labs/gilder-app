@@ -90,10 +90,18 @@ export default function RealmSettingsScreen({
           value={notifyOnCreate}
           onColor={theme.secondary[800]}
           offColor={theme.gray[700]}
+          disabledColor={theme.gray[700]}
           height={32}
           thumbSize={28}
           width={60}
-          thumbColor={notifyOnCreate ? theme.gray[300] : theme.gray[300]}
+          disabled={!pushToken}
+          thumbColor={
+            !pushToken
+              ? theme.gray[800]
+              : notifyOnCreate
+              ? theme.gray[300]
+              : theme.gray[300]
+          }
           onValueChange={onCreateChange}
         />
       </Row>

@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { toggleRealmInWatchlist } from "../store/realmSlice";
 import { RealmIcon } from "./RealmIcon";
 import * as Haptics from "expo-haptics";
+import { subscribeToNotifications } from "../store/notificationSlice";
 
 interface RealmCardProps {
   realm: any;
@@ -15,15 +16,24 @@ export const RealmCard = ({ realm, onClick }: RealmCardProps) => {
     (state) => state.realms
   );
   const dispatch = useAppDispatch();
+  const { pushToken } = useAppSelector((state) => state.notifications);
+
+  const realmInfo = realmsData[realm.pubKey];
+  const isSelected = realmWatchlist.includes(realm.pubKey);
 
   const handleRealmClick = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     dispatch(toggleRealmInWatchlist(realm.pubKey));
-    // onClick();
+    if (pushToken) {
+      dispatch(
+        subscribeToNotifications({
+          pushToken: pushToken,
+          realmId: realm.pubKey,
+          isSubscribing: !isSelected,
+        })
+      );
+    }
   };
-
-  const realmInfo = realmsData[realm.pubKey];
-  const isSelected = realmWatchlist.includes(realm.pubKey);
 
   return (
     <ContainerButton
