@@ -44,6 +44,7 @@ export const ConnectWalletButton = ({}: ConnectWalletProps) => {
         clientId:
           "BAuRcQ4h95bd4sIZ1gy1iRVCGAGzn0JK30mbgzEN404myjo02xKOw0t0B7ImCY_jNhl5XGOT7T1Q1cQ9wi-BkUQ",
         network: OPENLOGIN_NETWORK.MAINNET,
+        whiteLabel: { dark: true },
       });
 
       const state = await web3auth.login({
