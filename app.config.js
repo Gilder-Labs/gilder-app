@@ -51,7 +51,6 @@ export default {
         },
       ],
     },
-    sdkVersion: "44.0.0",
   },
   name: "gilder-app",
 };
