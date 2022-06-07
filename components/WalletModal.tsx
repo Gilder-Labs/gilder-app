@@ -12,12 +12,10 @@ import {
   fetchNfts,
 } from "../store/walletSlice";
 import { setShowToast } from "../store/utilitySlice";
+import { AnimatedImage } from "react-native-ui-lib";
 
-import * as style from "@dicebear/avatars-jdenticon-sprites";
 import { PublicKeyTextCopy } from "./PublicKeyTextCopy";
-import { SvgXml } from "react-native-svg";
 import { useTheme } from "styled-components";
-import { createAvatar } from "@dicebear/avatars";
 import { TokenList } from "./TokenList";
 import { NftList } from "./NftList";
 import numeral from "numeral";
@@ -68,10 +66,6 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
     }
   }, [isWalletOpen]);
 
-  let jdenticonSvg = createAvatar(style, {
-    seed: publicKey,
-    // ... and other options
-  });
   const color = getColorType(publicKey);
 
   const getTotalValue = () => {
@@ -114,11 +108,16 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
           </DisconnectButton>
         </Header>
         <IconContainer color={color}>
-          {userInfo?.profileImage ? (
-            <ProfileImage source={{ uri: userInfo.profileImage }} />
-          ) : (
-            <SvgXml xml={jdenticonSvg} width="52px" height="52px" />
-          )}
+          <AnimatedImage
+            style={{
+              width: 52,
+              height: 52,
+              overflow: "hidden",
+            }}
+            source={{
+              uri: userInfo?.profileImage,
+            }}
+          />
         </IconContainer>
         <PublicKeyTextCopy publicKey={publicKey} fontSize={14} />
 
@@ -194,11 +193,6 @@ const styles = StyleSheet.create({
     height: "100%",
   },
 });
-
-const ProfileImage = styled.Image`
-  height: 52px;
-  width: 52px;
-`;
 
 const Header = styled.View`
   height: 64px;

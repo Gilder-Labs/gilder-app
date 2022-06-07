@@ -3,8 +3,6 @@ import { FlatList } from "react-native";
 import styled from "styled-components/native";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { useTheme } from "styled-components";
-import { createAvatar } from "@dicebear/avatars";
-import * as style from "@dicebear/avatars-jdenticon-sprites";
 
 import { fetchMemberChat, fetchMemberVotes } from "../store/memberSlice";
 import { ChatMessage } from "../components/ChatMessage";
