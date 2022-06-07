@@ -2921,52 +2921,53 @@
   optionalDependencies:
     secp256k1 "^3.8.0"
 
-"@toruslabs/http-helpers@^2.2.0":
-  version "2.2.0"
-  resolved "https://registry.npmjs.org/@toruslabs/http-helpers/-/http-helpers-2.2.0.tgz"
-  integrity sha512-xkzZZuE+DmWmJBTYneCrMJY24izNQCOdoJMpsXKQx20Va/rTQvNPbdkpx9LBf/pisk8jOwETNAfFQ8YTBc/bZw==
+"@toruslabs/http-helpers@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@toruslabs/http-helpers/-/http-helpers-3.0.0.tgz#e25df35921c603fece838bd3553ad0e85b34f839"
+  integrity sha512-nO6f1szn9SxWtbeAHGdgdIqCQe7PvA1dLFcjienk/cU/MxKVtVgI4IBhAZYt7SRxBI/NB+S2WHvqiIpCOu2Tuw==
   dependencies:
     lodash.merge "^4.6.2"
     loglevel "^1.8.0"
 
-"@toruslabs/openlogin-ed25519@^1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@toruslabs/openlogin-ed25519/-/openlogin-ed25519-1.7.0.tgz#82055e2e53e72ad4b96f06f38a1b0432f8e8ce36"
-  integrity sha512-pFDnNxdkIkiGfyv037C4MqRV9gdGv08f3A5rRGoFI3BQynMdtQAozCyX3Q8MF5EgKO7foPJPQPxnjKhohtVrTQ==
+"@toruslabs/openlogin-ed25519@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@toruslabs/openlogin-ed25519/-/openlogin-ed25519-2.0.0.tgz#234fb9658fd318505b1b936ad27604cf807bdf42"
+  integrity sha512-gz00QpMHbSVaZFKATxbsCbtO2uRyF7xIvetuzOCfbfcjkTz0Wonr/8B44uiIDe4j2ddv4Hx8HvnBikFDLQQrZA==
   dependencies:
     "@toruslabs/tweetnacl-js" "^1.0.3"
 
-"@toruslabs/openlogin-jrpc@^1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@toruslabs/openlogin-jrpc/-/openlogin-jrpc-1.7.0.tgz#c0b1b0aadd205c1a200331120ff4d1b777e7671b"
-  integrity sha512-9RLJldRol35gsynRjDhFnhGh9QMiNuwr/qGPnQB3xyHWfZi9jlHoVRNYOOHngEMF1ZtfwCo3ksC9VqEFD0giZw==
+"@toruslabs/openlogin-jrpc@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@toruslabs/openlogin-jrpc/-/openlogin-jrpc-2.0.0.tgz#3cd8282c97af55e04b62d111c03b8587c960178e"
+  integrity sha512-3UzNoxKHjy/uqCIsBwbyw9aYH6hu29q4n+uTDtWt0dO8Oic8FMGQ0pGW/NFyVywmL817jG7WNSvQ2OBWrLkN6Q==
   dependencies:
-    "@toruslabs/openlogin-utils" "^1.7.0"
+    "@toruslabs/openlogin-utils" "^2.0.0"
     end-of-stream "^1.4.4"
+    eth-rpc-errors "^4.0.3"
     events "^3.3.0"
     fast-safe-stringify "^2.1.1"
     once "^1.4.0"
     pump "^3.0.0"
     readable-stream "^3.6.0"
 
-"@toruslabs/openlogin-utils@^1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@toruslabs/openlogin-utils/-/openlogin-utils-1.7.0.tgz#1762e2f1f67590d0c6cb8e4c4ade82d59ba13a18"
-  integrity sha512-y+j22v+h6EfzN4sfFnmtmMrcxEdkScdJOAgbtvX42BpUYOuFa1Tv0SZjdtsGGDE4g5szmL3rb9NGMHdBF1rZtg==
+"@toruslabs/openlogin-utils@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@toruslabs/openlogin-utils/-/openlogin-utils-2.0.0.tgz#fe9687322f708717c6f0b4057fca64b31ec9db71"
+  integrity sha512-diPGgTtp3zk9sdSBp3hBLBylH6MYAdbgB/LPZq3eAgyuqJZW/A+Yy843UGX34GEiXDBu3S7+H8fubwycrDgKrg==
   dependencies:
     base64url "^3.0.1"
     keccak "^3.0.2"
     randombytes "^2.1.0"
 
-"@toruslabs/openlogin@^1.7.1":
-  version "1.7.1"
-  resolved "https://registry.yarnpkg.com/@toruslabs/openlogin/-/openlogin-1.7.1.tgz#84c9f6549f62e5d52cf69634fe1850ca5fb74f55"
-  integrity sha512-h2E1IEOAX7Ee/ysEMg/cigKcMc7o9UqsFdSkfkSPwBJcnMbDzQAhhSC+bTlr6gY8/cQV0LqwhbB6kjYoZh6nmA==
+"@toruslabs/openlogin@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@toruslabs/openlogin/-/openlogin-2.0.1.tgz#369315cd4e1fb344501443d35901e8935c46cf56"
+  integrity sha512-D9wWE+wMlL4Wh4f2JAau0xHOXfZebigvi02cRWJy5mGNF61tU7WxEa0p5B5fERBMq0IyuYfKqJBWeJRoqrMB2A==
   dependencies:
     "@toruslabs/eccrypto" "^1.1.8"
-    "@toruslabs/http-helpers" "^2.2.0"
-    "@toruslabs/openlogin-jrpc" "^1.7.0"
-    "@toruslabs/openlogin-utils" "^1.7.0"
+    "@toruslabs/http-helpers" "^3.0.0"
+    "@toruslabs/openlogin-jrpc" "^2.0.0"
+    "@toruslabs/openlogin-utils" "^2.0.0"
     lodash.merge "^4.6.2"
     loglevel "^1.8.0"
     pump "^3.0.0"
@@ -3397,6 +3398,16 @@
   integrity sha512-9eFvmJxIKCC3YWOL97SgRkKhlyGXkrHwamfechmqszbypFspaSk+t2jQXAEU7YClHF6Qjw5eYOmy1//zFi9/GA==
   dependencies:
     "@walletconnect/window-getters" "^1.0.0"
+
+"@web3auth/react-native-sdk@^3.0.1":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@web3auth/react-native-sdk/-/react-native-sdk-3.0.1.tgz#44c6d7c5292aa31e14f63950f9c3c1469dff5ad8"
+  integrity sha512-Is722R89dqt50F+O4Z1V23yETc6PSR2jKsSE+Ms/GU8ay8hoRDP8FIuhJmfIShs2eX1ge8o5WdlI8jCqFkxhFQ==
+  dependencies:
+    base64url "^3.0.1"
+    buffer "^6.0.3"
+    loglevel "^1.8.0"
+    react-native-url-polyfill "^1.3.0"
 
 "@wry/context@^0.6.0":
   version "0.6.1"
@@ -5745,6 +5756,13 @@ etag@~1.8.1:
   resolved "https://registry.npmjs.org/etag/-/etag-1.8.1.tgz"
   integrity sha1-Qa4u62XvpiJorr/qg6x9eSmbCIc=
 
+eth-rpc-errors@^4.0.3:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/eth-rpc-errors/-/eth-rpc-errors-4.0.3.tgz#6ddb6190a4bf360afda82790bb7d9d5e724f423a"
+  integrity sha512-Z3ymjopaoft7JDoxZcEb3pwdGh7yiYMhOwm2doUt6ASXlMavpNlK6Cre0+IMl2VSGyEU9rkiperQhp5iRxn5Pg==
+  dependencies:
+    fast-safe-stringify "^2.0.6"
+
 event-stream@=3.3.4:
   version "3.3.4"
   resolved "https://registry.npmjs.org/event-stream/-/event-stream-3.3.4.tgz"
@@ -5904,22 +5922,6 @@ expo-community-flipper@^44.0.1:
     "@expo/config-plugins" "^4.0.15"
     resolve-from "^5.0.0"
 
-expo-constants@^13.0.0:
-  version "13.0.2"
-  resolved "https://registry.npmjs.org/expo-constants/-/expo-constants-13.0.2.tgz"
-  integrity sha512-vGs/kI65vplPFvG8z4W1ariGEtVHHp9Avl28G0zJprt2v/q1E/BnXjwvFSBPc1GB+Zb/7crWSHWRwjaFULBjsg==
-  dependencies:
-    "@expo/config" "^6.0.6"
-    uuid "^3.3.2"
-
-expo-constants@~13.0.0:
-  version "13.0.0"
-  resolved "https://registry.npmjs.org/expo-constants/-/expo-constants-13.0.0.tgz"
-  integrity sha512-DwElzs1k6KljlZln/X2O9b5K4bXlDk8nzF5nzSLgI+Ibg/xUoIL5QKM41Y9RDJfTzlDlV7nmeS/Xar+nP5KjMA==
-  dependencies:
-    "@expo/config" "^6.0.6"
-    uuid "^3.3.2"
-
 expo-constants@~13.1.0, expo-constants@~13.1.1:
   version "13.1.1"
   resolved "https://registry.yarnpkg.com/expo-constants/-/expo-constants-13.1.1.tgz#78c26c760cc63cd5608bc4b51bd159d7339d8054"
@@ -6004,16 +6006,6 @@ expo-linear-gradient@~11.3.0:
   version "11.3.0"
   resolved "https://registry.yarnpkg.com/expo-linear-gradient/-/expo-linear-gradient-11.3.0.tgz#855f470c9684f5b979c3c1be0ed1fe1943d57158"
   integrity sha512-gm0cULqE5cTP39HZHi+eCGgQ2qMcwym92DwSzRpA5nA4Ah5oKksV+PwD7zzo6YJt3X3lgqrTYEqts9VQISCTgw==
-
-expo-linking@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.npmjs.org/expo-linking/-/expo-linking-3.0.0.tgz"
-  integrity sha512-TgRB4JTdhMRo79rTu9E9zwzWyBUJxHpSbHFlv0ZfMAwU+qFCsL9zZsL44R/yj7xrvcLOjqbCVmBszLQ0pFOt1g==
-  dependencies:
-    expo-constants "~13.0.0"
-    invariant "^2.2.4"
-    qs "^6.9.1"
-    url-parse "^1.4.4"
 
 expo-linking@~3.1.0:
   version "3.1.0"
@@ -6112,13 +6104,6 @@ expo-updates@~0.13.2:
     fbemitter "^3.0.0"
     resolve-from "^5.0.0"
     uuid "^3.4.0"
-
-expo-web-browser@^10.1.0:
-  version "10.1.1"
-  resolved "https://registry.npmjs.org/expo-web-browser/-/expo-web-browser-10.1.1.tgz"
-  integrity sha512-SRG7TzqLgsDjL9PzLppdUdBi49r2xos2aLD63+zB6ZAvNQTszmCfddkPMQH8vSq7m2fg7YReotVdWwcZtR/YZA==
-  dependencies:
-    compare-urls "^2.0.0"
 
 expo-web-browser@~10.2.1:
   version "10.2.1"
@@ -6250,7 +6235,7 @@ fast-redact@^3.0.0:
   resolved "https://registry.npmjs.org/fast-redact/-/fast-redact-3.1.0.tgz"
   integrity sha512-dir8LOnvialLxiXDPESMDHGp82CHi6ZEYTVkcvdn5d7psdv9ZkkButXrOeXST4aqreIRR+N7CYlsrwFuorurVg==
 
-fast-safe-stringify@^2.0.7, fast-safe-stringify@^2.0.8, fast-safe-stringify@^2.1.1:
+fast-safe-stringify@^2.0.6, fast-safe-stringify@^2.0.7, fast-safe-stringify@^2.0.8, fast-safe-stringify@^2.1.1:
   version "2.1.1"
   resolved "https://registry.npmjs.org/fast-safe-stringify/-/fast-safe-stringify-2.1.1.tgz"
   integrity sha512-W+KJc2dmILlPplD/H4K9l9LcAHAfPtP6BY84uVLXQ6Evcz9Lcg33Y2z1IVblT6xdY54PXYVHEv+0Wpq8Io6zkA==
@@ -7892,11 +7877,6 @@ joycon@^2.2.5:
   resolved "https://registry.npmjs.org/joycon/-/joycon-2.2.5.tgz"
   integrity sha512-YqvUxoOcVPnCp0VU1/56f+iKSdvIRJYPznH22BdXV3xMk75SFXhWeJkZ8C9XxUWt1b5x2X1SxuFygW1U0FmkEQ==
 
-js-base64@^3.7.2:
-  version "3.7.2"
-  resolved "https://registry.npmjs.org/js-base64/-/js-base64-3.7.2.tgz"
-  integrity sha512-NnRs6dsyqUXejqk/yv2aiXlAvOs56sLkX6nUdeaNezI5LFFLlsZjOThmwnrcwh5ZZRwZlCMnVAY3CvhIhoVEKQ==
-
 js-sha3@^0.8.0:
   version "0.8.0"
   resolved "https://registry.npmjs.org/js-sha3/-/js-sha3-0.8.0.tgz"
@@ -9271,17 +9251,6 @@ open@^8.0.4, open@^8.3.0:
     define-lazy-prop "^2.0.0"
     is-docker "^2.1.1"
     is-wsl "^2.2.0"
-
-openlogin-expo-sdk@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/openlogin-expo-sdk/-/openlogin-expo-sdk-0.0.2.tgz#bf9789f2fc8bd45620f459f82a90f9fce70c053e"
-  integrity sha512-m/yQRISdqGWfXwAyB55QwUkHS5N3w8ppvpUQZc5JWCsOXvbAt23uoqRcpblj69ruRuYHI/HQp4TnzT7jugBWNw==
-  dependencies:
-    expo-constants "^13.0.0"
-    expo-linking "^3.0.0"
-    expo-web-browser "^10.1.0"
-    js-base64 "^3.7.2"
-    react-native-url-polyfill "^1.3.0"
 
 opn@^5.4.0:
   version "5.5.0"
@@ -11956,14 +11925,6 @@ url-parse@^1.2.0, url-parse@^1.5.9:
   version "1.5.10"
   resolved "https://registry.yarnpkg.com/url-parse/-/url-parse-1.5.10.tgz#9d3c2f736c1d75dd3bd2be507dcc111f1e2ea9c1"
   integrity sha512-WypcfiRhfeUP9vvF0j6rw0J3hrWrw6iZv3+22h6iRMJ/8z1Tj6XfLP4DsUix5MhMPnXpiHDoKyoZ/bdCkwBCiQ==
-  dependencies:
-    querystringify "^2.1.1"
-    requires-port "^1.0.0"
-
-url-parse@^1.4.4:
-  version "1.5.4"
-  resolved "https://registry.npmjs.org/url-parse/-/url-parse-1.5.4.tgz"
-  integrity sha512-ITeAByWWoqutFClc/lRZnFplgXgEZr3WJ6XngMM/N9DMIm4K8zXPCZ1Jdu0rERwO84w1WC5wkle2ubwTA4NTBg==
   dependencies:
     querystringify "^2.1.1"
     requires-port "^1.0.0"

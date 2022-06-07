@@ -2,10 +2,8 @@ import React, { useState } from "react";
 import styled from "styled-components/native";
 import { useTheme } from "styled-components";
 import * as Unicons from "@iconscout/react-native-unicons";
-import { Connection, clusterApiUrl, Keypair, PublicKey } from "@solana/web3.js";
-import { RPC_CONNECTION } from "../constants/Solana";
+import { Keypair } from "@solana/web3.js";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import OpenLogin, { LoginProvider, Network } from "openlogin-expo-sdk";
 import Constants, { AppOwnership } from "expo-constants";
 import * as Linking from "expo-linking";
 import { getED25519Key } from "@toruslabs/openlogin-ed25519";
@@ -13,6 +11,11 @@ import bs58 from "bs58";
 import { abbreviatePublicKey } from "../utils";
 import { setWallet, openWallet } from "../store/walletSlice";
 import * as Haptics from "expo-haptics";
+import * as WebBrowser from "expo-web-browser";
+import Web3Auth, {
+  LOGIN_PROVIDER,
+  OPENLOGIN_NETWORK,
+} from "@web3auth/react-native-sdk";
 
 import { URL } from "react-native-url-polyfill";
 
@@ -21,8 +24,8 @@ const scheme = "gilder";
 const resolvedRedirectUrl =
   Constants.appOwnership == AppOwnership.Expo ||
   Constants.appOwnership == AppOwnership.Guest
-    ? new URL(Linking.createURL("openlogin", {}))
-    : new URL(Linking.createURL("openlogin", { scheme: scheme }));
+    ? Linking.createURL("web3auth", {})
+    : Linking.createURL("web3auth", { scheme: scheme });
 
 interface ConnectWalletProps {}
 
@@ -37,31 +40,21 @@ export const ConnectWalletButton = ({}: ConnectWalletProps) => {
     try {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 
-      const openlogin = new OpenLogin({
+      const web3auth = new Web3Auth(WebBrowser, {
         clientId:
           "BAuRcQ4h95bd4sIZ1gy1iRVCGAGzn0JK30mbgzEN404myjo02xKOw0t0B7ImCY_jNhl5XGOT7T1Q1cQ9wi-BkUQ",
-        network: Network.MAINNET,
-        // @ts-ignore
-        // redirectUrl only applies for Android SDK, it is designated by iOS SDK in iOS, which is \(bundleId)://auth
-        // redirectUrl: 'com.example.openloginreactnativesdk://auth',
+        network: OPENLOGIN_NETWORK.MAINNET,
       });
-      const state = await openlogin.login({
-        loginProvider: LoginProvider.ANY,
+
+      const state = await web3auth.login({
+        // loginProvider: LOGIN_PROVIDER.TWITTER,
         redirectUrl: resolvedRedirectUrl,
-        // Need to be  paying customer for white label
-        // extraLoginOptions: {
-        //   whiteLabelData: {
-        //     name: "Hello world",
-        //     dark: true,
-        //   },
-        // },
       });
-      // get social login user info
       const userInfo = await state.userInfo;
       // web3auth private key
       setKey(state.privKey || "no key");
 
-      // generate our solana secret from web3auth and create new solana wallet
+      // generate our solana secret from web3auth and create new solana wallet if one doesn't exist
       // @ts-ignore
       const { sk } = getED25519Key(state.privKey);
       const keyPair = Keypair.fromSecretKey(sk);
@@ -89,13 +82,6 @@ export const ConnectWalletButton = ({}: ConnectWalletProps) => {
 
   return (
     <ConnectWalletContainer>
-      {/* <StyledText>Key: {key}</StyledText>
-      <StyledText>Error: {errorMsg}</StyledText>
-      <StyledText>Linking URL: {resolvedRedirectUrl.href}</StyledText>
-      <StyledText>appOwnership: {Constants.appOwnership}</StyledText>
-      <StyledText>
-        executionEnvironment: {Constants.executionEnvironment}
-      </StyledText> */}
       <ConnectButton onPress={publicKey ? handleOpenWallet : login}>
         <Unicons.UilWallet
           size="20"
@@ -132,8 +118,4 @@ const ConnectButton = styled.TouchableOpacity`
   margin-bottom: 80px;
 
   background: ${(props) => props.theme.gray[800]};
-`;
-
-const StyledText = styled.Text`
-  color: white;
 `;
