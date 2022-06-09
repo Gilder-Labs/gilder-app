@@ -27,15 +27,23 @@ import ActivityScreen from "../screens/ActivityScreen";
 import TreasuryScreen from "../screens/TreasuryScreen";
 import MembersScreen from "../screens/MembersScreen";
 import ProposalsScreen from "../screens/ProposalsScreen";
+import ChatScreen from "../screens/ChatScreen";
 import LinkingConfiguration from "./LinkingConfiguration";
 import { MemberProfile } from "../screens/MemberProfile";
 import { ProposalDetailScreen } from "../screens/ProposalDetailScreen";
+import ChannelScreen from "../screens/ChannelScreen";
 import { SplashScreen } from "../components";
 import { WalletModal } from "../components/WalletModal";
 import { WalletTransactionModal } from "../components/WalletTransactionModal";
 import RealmSettingsScreen from "../screens/RealmSettingsScreen";
 import { Incubator } from "react-native-ui-lib";
 const { Toast } = Incubator;
+import { chatApiKey } from "../constants/Chat";
+import { StreamChat } from "stream-chat";
+import { Chat } from "stream-chat-expo"; // Or stream-chat-expo
+import ThreadScreen from "../screens/ThreadScreen";
+
+const chatClient = StreamChat.getInstance(chatApiKey);
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -100,7 +108,7 @@ function DrawerScreen() {
 
   return (
     <Drawer.Navigator
-      initialRouteName="Proposals"
+      initialRouteName="Chat"
       drawerContent={(props) => <DrawerContentContainer {...props} />}
       screenOptions={{
         drawerActiveBackgroundColor: `${theme?.gray[800]}aa`,
@@ -182,6 +190,20 @@ function DrawerScreen() {
           ),
         }}
       />
+      <Drawer.Screen
+        name="Chat"
+        component={ChatScreen}
+        options={{
+          drawerLabel: ({ focused, color }) => (
+            <DrawerTabText color={color} focused={focused}>
+              Chat
+            </DrawerTabText>
+          ),
+          drawerIcon: ({ focused, color, size }) => (
+            <Unicons.UilComment size="28" color={color} />
+          ),
+        }}
+      />
       {/* Comment out before going to prod.  */}
       {/* <Drawer.Screen
         name="TestLab"
@@ -250,9 +272,9 @@ export default function Navigation({}: {}) {
     },
   };
 
-  if (isLoadingRealms) {
-    return <SplashScreen />;
-  }
+  // if (isLoadingRealms) {
+  //   return <SplashScreen />;
+  // }
 
   return (
     <RootContainer>
@@ -278,51 +300,55 @@ export default function Navigation({}: {}) {
       />
       <WalletModal />
       <WalletTransactionModal />
-      <NavigationContainer
-        linking={LinkingConfiguration}
-        theme={NavigationTheme}
-      >
-        <Stack.Navigator
-          screenOptions={{
-            fullScreenGestureEnabled: true,
-            headerTintColor: "#f4f4f5", //Set Header text color
-          }}
-          initialRouteName="Root"
+      <Chat client={chatClient}>
+        <NavigationContainer
+          linking={LinkingConfiguration}
+          theme={NavigationTheme}
         >
-          <Stack.Screen
-            name="Root"
-            component={DrawerScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="MemberDetails"
-            component={MemberProfile}
-            // options={{ headerShown: false }}
-            options={({ route }) => ({
-              title: route?.params?.memberInfo?.name
-                ? route?.params?.memberInfo?.name
-                : `${route?.params?.member?.walletId?.slice(
-                    0,
-                    4
-                  )}...${route?.params?.member?.walletId?.slice(-4)}`,
-            })}
-          />
-          <Stack.Screen
-            name="RealmSettings"
-            component={RealmSettingsScreen}
-            options={({ route }) => ({
-              title: "Realm Settings", // update to realm name
-            })}
-          />
-          <Stack.Screen
-            name="ProposalDetail"
-            component={ProposalDetailScreen}
-            options={({ route }) => ({
-              title: "Proposal Details",
-            })}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+          <Stack.Navigator
+            screenOptions={{
+              fullScreenGestureEnabled: true,
+              headerTintColor: "#f4f4f5", //Set Header text color
+            }}
+            initialRouteName="Root"
+          >
+            <Stack.Screen
+              name="Root"
+              component={DrawerScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="MemberDetails"
+              component={MemberProfile}
+              // options={{ headerShown: false }}
+              options={({ route }) => ({
+                title: route?.params?.memberInfo?.name
+                  ? route?.params?.memberInfo?.name
+                  : `${route?.params?.member?.walletId?.slice(
+                      0,
+                      4
+                    )}...${route?.params?.member?.walletId?.slice(-4)}`,
+              })}
+            />
+            <Stack.Screen
+              name="RealmSettings"
+              component={RealmSettingsScreen}
+              options={({ route }) => ({
+                title: "Realm Settings", // update to realm name
+              })}
+            />
+            <Stack.Screen
+              name="ProposalDetail"
+              component={ProposalDetailScreen}
+              options={({ route }) => ({
+                title: "Proposal Details",
+              })}
+            />
+            <Stack.Screen name="ChannelScreen" component={ChannelScreen} />
+            <Stack.Screen name="ThreadScreen" component={ThreadScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </Chat>
     </RootContainer>
   );
 }

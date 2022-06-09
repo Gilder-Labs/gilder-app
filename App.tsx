@@ -16,6 +16,8 @@ import useCachedResources from "./hooks/useCachedResources";
 import Navigation from "./navigation";
 import { LogBox } from "react-native";
 import * as Sentry from "sentry-expo";
+import { OverlayProvider } from "stream-chat-expo"; // Or stream-chat-expo
+import { defaultTheme as ChatTheme } from "./constants/ChatTheme";
 
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 
@@ -48,8 +50,10 @@ export default function App() {
           <PersistGate loading={<SplashScreen />} persistor={persistor}>
             <ApolloProvider client={client}>
               <ThemeProvider theme={darkTheme}>
-                <StatusBar style="light" />
-                <Navigation />
+                <OverlayProvider value={{ style: ChatTheme }}>
+                  <StatusBar style="light" />
+                  <Navigation />
+                </OverlayProvider>
               </ThemeProvider>
             </ApolloProvider>
           </PersistGate>
