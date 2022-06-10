@@ -6,13 +6,13 @@ import { darkTheme } from "./Theme";
 export const DEFAULT_STATUS_ICON_SIZE = 16;
 
 export const Colors = {
-  accent_blue: darkTheme.blue[600],
+  accent_blue: darkTheme.blue[400],
   accent_green: darkTheme.success[500],
   accent_red: darkTheme.error[500],
   bg_gradient_end: darkTheme.gray[700],
   bg_gradient_start: darkTheme.gray[900],
   black: darkTheme.gray[50],
-  blue_alice: "#00193D",
+  blue_alice: darkTheme.gray[800],
   border: darkTheme.gray[800],
   grey: darkTheme.gray[500],
   grey_gainsboro: darkTheme.gray[700], // message color
