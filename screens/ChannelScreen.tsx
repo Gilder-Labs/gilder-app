@@ -28,6 +28,7 @@ export default function ChannelScreen(props: any) {
           channel={route?.params?.channel}
           keyboardVerticalOffset={headerHeight}
           enableMessageGroupingByUser={true}
+          forceAlignMessages={"left"}
         >
           <MessageList
             onThreadSelect={(message) => {

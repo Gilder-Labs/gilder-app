@@ -6,7 +6,7 @@ import { darkTheme } from "./Theme";
 export const DEFAULT_STATUS_ICON_SIZE = 16;
 
 export const Colors = {
-  accent_blue: darkTheme.blue[400],
+  accent_blue: darkTheme.blue[700],
   accent_green: darkTheme.success[500],
   accent_red: darkTheme.error[500],
   bg_gradient_end: darkTheme.gray[700],
@@ -629,8 +629,12 @@ export const defaultTheme: Theme = {
     ...Colors,
   },
   dateHeader: {
-    container: {},
-    text: {},
+    container: {
+      backgroundColor: darkTheme.gray[800],
+    },
+    text: {
+      color: darkTheme.gray[400],
+    },
   },
   emptyStateIndicator: {
     channelContainer: {},
@@ -686,8 +690,12 @@ export const defaultTheme: Theme = {
     },
   },
   inlineDateSeparator: {
-    container: {},
-    text: {},
+    container: {
+      backgroundColor: darkTheme.gray[800],
+    },
+    text: {
+      color: darkTheme.gray[400],
+    },
   },
   loadingDots: {
     container: {},
@@ -867,7 +875,7 @@ export const defaultTheme: Theme = {
         borderRadiusL: 16,
         borderRadiusS: 0,
       },
-      containerInner: {},
+      containerInner: {}, // chat styles here
       deletedContainer: {},
       deletedContainerInner: {},
       deletedMetaText: {
