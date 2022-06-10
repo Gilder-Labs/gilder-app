@@ -53,7 +53,7 @@ export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
   // console.log("member", member);
 
   return (
-    <Container>
+    <Container onLongPress={handleProfileClick} activeOpacity={0.5}>
       <LinearGradient
         // Background Linear Gradient
         colors={[`${theme[color][500]}44`, `${theme[color][700]}aa`]}
@@ -161,7 +161,7 @@ export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
   );
 };
 
-const Container = styled.View`
+const Container = styled.TouchableOpacity`
   margin-bottom: ${(props: any) => props.theme.spacing[3]};
   border-radius: 4px;
   background: ${(props: any) => props.theme.gray[800]};

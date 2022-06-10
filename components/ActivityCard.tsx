@@ -154,7 +154,7 @@ export const ActivityCard = ({ activity }: ActivityCardProps) => {
   };
 
   return (
-    <Container>
+    <Container onLongPress={handleActivityClick} activeOpacity={0.5}>
       {renderActivityIcon()}
       <TextContainer>
         <TitleContainer>
@@ -175,7 +175,7 @@ export const ActivityCard = ({ activity }: ActivityCardProps) => {
   );
 };
 
-const Container = styled.View`
+const Container = styled.TouchableOpacity`
   /* height: 80px; */
   width: 100%;
   margin-bottom: ${(props: any) => props.theme.spacing[3]};

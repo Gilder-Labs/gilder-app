@@ -128,7 +128,7 @@ export const ProposalCard = ({
   const isVoting = status === "Voting";
 
   return (
-    <Container>
+    <Container onLongPress={onClick} activeOpacity={0.5}>
       <TextContainer>
         <ProposalTitle>{name}</ProposalTitle>
         <Badge title={status} type={proposalStatusKey[status]} />
@@ -208,7 +208,7 @@ export const ProposalCard = ({
   );
 };
 
-const Container = styled.View`
+const Container = styled.TouchableOpacity`
   /* height: 80px; */
   width: 100%%;
   margin-bottom: ${(props: any) => props.theme.spacing[3]};
