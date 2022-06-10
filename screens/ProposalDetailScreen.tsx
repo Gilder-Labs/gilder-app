@@ -300,7 +300,7 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
           <Title>Description</Title>
           <Divider />
 
-          <DescriptionText>{description} </DescriptionText>
+          <DescriptionText selectable={true}>{description} </DescriptionText>
 
           <Title>Discussion</Title>
           <Divider />

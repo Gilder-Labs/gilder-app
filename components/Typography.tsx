@@ -18,6 +18,7 @@ interface TypographyProps {
     | "warning";
   marginBottom?: "0" | "1" | "2" | "3" | "4" | "5";
   maxLength?: number;
+  selectable?: boolean;
 }
 
 const sizeMapping = {
@@ -39,6 +40,7 @@ export const Typography = ({
   color = "gray",
   marginBottom = "1",
   maxLength = 10000,
+  selectable = false,
 }: TypographyProps) => {
   const formattedText = () => {
     let strText = text.toString();
@@ -59,6 +61,7 @@ export const Typography = ({
       shade={shade}
       color={color}
       marginBottom={marginBottom}
+      selectable={selectable}
     >
       {text ? formattedText() : ""}
     </Text>
