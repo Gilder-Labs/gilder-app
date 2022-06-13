@@ -36,6 +36,8 @@ export const TokenCard = ({
             style={{
               width: 40,
               height: 40,
+              maxWidth: 40,
+              maxHeight: 40,
               overflow: "hidden",
             }}
             source={{

@@ -344,8 +344,20 @@ export default function Navigation({}: {}) {
                 title: "Proposal Details",
               })}
             />
-            <Stack.Screen name="ChannelScreen" component={ChannelScreen} />
-            <Stack.Screen name="ThreadScreen" component={ThreadScreen} />
+            <Stack.Screen
+              name="ChannelScreen"
+              component={ChannelScreen}
+              options={({ route }) => ({
+                title: route?.params?.channel?.data?.name,
+              })}
+            />
+            <Stack.Screen
+              name="ThreadScreen"
+              component={ThreadScreen}
+              options={({ route }) => ({
+                title: "Thread",
+              })}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </Chat>
