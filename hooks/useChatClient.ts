@@ -47,5 +47,6 @@ export const useChatClient = () => {
 
   return {
     clientIsReady,
+    chatClient,
   };
 };

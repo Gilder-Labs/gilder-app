@@ -17,6 +17,7 @@ interface TypographyProps {
     | "error"
     | "warning";
   marginBottom?: "0" | "1" | "2" | "3" | "4" | "5";
+  marginRight?: "0" | "1" | "2" | "3" | "4" | "5";
   maxLength?: number;
   selectable?: boolean;
 }
@@ -41,6 +42,7 @@ export const Typography = ({
   marginBottom = "1",
   maxLength = 10000,
   selectable = false,
+  marginRight = "0",
 }: TypographyProps) => {
   const formattedText = () => {
     let strText = text.toString();
@@ -62,6 +64,7 @@ export const Typography = ({
       color={color}
       marginBottom={marginBottom}
       selectable={selectable}
+      marginRight={marginRight}
     >
       {text ? formattedText() : ""}
     </Text>
@@ -74,6 +77,7 @@ const Text = styled.Text<{
   bold: boolean;
   shade: "100" | "200" | "300" | "400" | "500" | "600" | "700" | "800" | "900";
   marginBottom: "0" | "1" | "2" | "3" | "4" | "5";
+  marginRight: "0" | "1" | "2" | "3" | "4" | "5";
   color:
     | "gray"
     | "primary"
@@ -89,5 +93,6 @@ const Text = styled.Text<{
   font-weight: ${(props) => (props.bold ? "bold" : "normal")};
   color: ${(props) => props.theme[props.color][props.shade]};
   margin-bottom: ${(props) => props.theme.spacing[props.marginBottom]};
+  margin-right: ${(props) => props.theme.spacing[props.marginRight]};
   text-align: ${(props) => props.textAlign};
 `;

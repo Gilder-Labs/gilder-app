@@ -3,11 +3,14 @@ import {
   MessageList,
   MessageInput,
   useAttachmentPickerContext,
+  ReactionList,
 } from "stream-chat-expo"; // Or stream-chat-expo
-import { StyleSheet, Text, SafeAreaView } from "react-native";
+import { StyleSheet, Text, SafeAreaView, View } from "react-native";
 import styled from "styled-components";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { useEffect } from "react";
+import { useChatClient } from "../hooks/useChatClient";
+import { Typography } from "../components";
 
 export default function ChannelScreen(props: any) {
   const { route, navigation } = props;
@@ -16,6 +19,7 @@ export default function ChannelScreen(props: any) {
   } = route;
   const headerHeight = useHeaderHeight();
   const { setTopInset } = useAttachmentPickerContext();
+  const { chatClient } = useChatClient();
 
   useEffect(() => {
     setTopInset(headerHeight);
@@ -28,7 +32,39 @@ export default function ChannelScreen(props: any) {
           channel={route?.params?.channel}
           keyboardVerticalOffset={headerHeight}
           enableMessageGroupingByUser={true}
-          forceAlignMessages={"left"}
+          // forceAlignMessages={"left"}
+          // ReactionList={ReactionList}
+          MessageFooter={() => null}
+          deletedMessagesVisibilityType={"never"}
+          // MessageHeader={(props) => (
+          //   <View
+          //     style={{
+          //       flexDirection: "row",
+          //       // backgroundColor: "green",
+          //       justifyContent: "center",
+          //       alignItems: "flex-end",
+          //     }}
+          //   >
+          //     <Typography
+          //       text={props?.message?.user?.name || ""}
+          //       size="subtitle"
+          //       color="gray"
+          //       shade="400"
+          //       bold={true}
+          //       marginRight="1"
+          //       marginBottom="1"
+          //     />
+          //     <Typography
+          //       text={props?.formattedDate || ""}
+          //       size="caption"
+          //       color="gray"
+          //       shade="600"
+          //       bold={true}
+          //       marginRight="1"
+          //       marginBottom="1"
+          //     />
+          //   </View>
+          // )}
         >
           <MessageList
             onThreadSelect={(message) => {
