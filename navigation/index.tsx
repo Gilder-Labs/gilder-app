@@ -108,7 +108,7 @@ function DrawerScreen() {
 
   return (
     <Drawer.Navigator
-      initialRouteName="Chat"
+      initialRouteName="Proposals"
       drawerContent={(props) => <DrawerContentContainer {...props} />}
       screenOptions={{
         drawerActiveBackgroundColor: `${theme?.gray[800]}aa`,
@@ -190,7 +190,7 @@ function DrawerScreen() {
           ),
         }}
       />
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name="Chat"
         component={ChatScreen}
         options={{
@@ -203,23 +203,7 @@ function DrawerScreen() {
             <Unicons.UilComment size="28" color={color} />
           ),
         }}
-      />
-      {/* Comment out before going to prod.  */}
-      {/* <Drawer.Screen
-        name="TestLab"
-        component={TestLabScreen}
-        options={{
-          drawerLabel: ({ focused, color }) => (
-            <DrawerTabText color={color} focused={focused}>
-              Test Lab
-            </DrawerTabText>
-          ),
-          drawerIcon: ({ focused, color, size }) => (
-            <Unicons.UilFlask size="28" color={color} />
-          ),
-        }}
       /> */}
-      {/* End comment out before prod */}
     </Drawer.Navigator>
   );
 }

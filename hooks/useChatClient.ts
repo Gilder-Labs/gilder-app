@@ -1,5 +1,3 @@
-// useChatClient.js
-
 import { useEffect, useState } from "react";
 import { StreamChat } from "stream-chat";
 import { chatApiKey } from "../constants/Chat";
@@ -7,10 +5,7 @@ import { chatApiKey } from "../constants/Chat";
 // TODO: Get chat auth token from our backend middleware
 export const chatUserToken =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZ2lsZGVyLXRlc3QifQ.sNSNzApt4nlHLkXje_3WimFMfvGFmIoyoFEXIOAYyMo";
-// TODO: get chat username to be either social login handle OR cyberconnect name
 export const chatUserName = "gilder-test";
-
-// TODO replace chat user id wth public key
 export const chatUserId = "gilder-test";
 const user = {
   id: chatUserId,

@@ -6,7 +6,7 @@ import { darkTheme } from "./Theme";
 export const DEFAULT_STATUS_ICON_SIZE = 16;
 
 export const Colors = {
-  accent_blue: darkTheme.blue[700],
+  accent_blue: darkTheme.blue[500],
   accent_green: darkTheme.success[500],
   accent_red: darkTheme.error[500],
   bg_gradient_end: darkTheme.gray[700],
