@@ -152,7 +152,15 @@ export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
             </DetailContainer>
             <DetailContainer>
               <SubtitleText>Council Vote Weight</SubtitleText>
-              <VoteWeight>{member?.councilDepositUiAmount}</VoteWeight>
+              <VoteWeight>
+                {member?.councilDepositUiAmount &&
+                selectedRealm?.councilMintDecimals
+                  ? formatVoteWeight(
+                      member.councilDepositAmount,
+                      selectedRealm?.communityMintDecimals
+                    )
+                  : 0}
+              </VoteWeight>
             </DetailContainer>
           </TextContainer>
         )}

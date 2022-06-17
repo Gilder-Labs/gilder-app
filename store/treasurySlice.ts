@@ -12,7 +12,8 @@ import {
   RPC_CONNECTION,
   INDEX_RPC_CONNECTION,
 } from "../constants/Solana";
-import { getTokensInfo } from "../utils";
+import { getTokensInfo, formatVoteWeight } from "../utils";
+import { RootState } from "./index";
 
 export interface TreasuryState {
   isLoadingVaults: boolean;
@@ -45,7 +46,11 @@ const TokensInfo = getTokensInfo();
 
 export const fetchVaults = createAsyncThunk(
   "realms/fetchVaults",
-  async (realm: any) => {
+  async (realm: any, { getState }) => {
+    // get state
+    const { realms } = getState() as RootState;
+    const { selectedRealm } = realms;
+
     try {
       const rawGovernances = await getAllGovernances(
         indexConnection,
@@ -148,26 +153,39 @@ export const fetchVaults = createAsyncThunk(
 
       const governancesMap = {};
 
+      // formatVoteWeight(tokenAmt, decimals);
+
       const governancesParsed = rawGovernances.map((governance, index) => {
         let governanceId = governance.pubkey.toBase58();
         activeProposals += governance.account.votingProposalCount;
         let data = {
           governanceId: governanceId,
           governedAccount: governance.account.governedAccount.toBase58(),
-          minCommunityTokensToCreateProposal:
-            governance.account.config.minCommunityTokensToCreateProposal.toNumber(),
+          minCommunityTokensToCreateProposal: governance?.account?.config
+            ?.minCommunityTokensToCreateProposal
+            ? formatVoteWeight(
+                governance.account.config.minCommunityTokensToCreateProposal.toString(),
+                selectedRealm.communityMintDecimals
+              )
+            : undefined,
           minInstructionHoldUpTime:
             governance.account.config.minInstructionHoldUpTime,
           maxVotingTime: governance.account.config.maxVotingTime,
           voteTipping: governance.account.config.voteTipping,
           proposalCoolOffTime: governance.account.config.proposalCoolOffTime,
-          minCouncilTokensToCreateProposal:
-            governance.account.config.minCouncilTokensToCreateProposal.toNumber(),
+          minCouncilTokensToCreateProposal: governance?.account?.config
+            ?.minCouncilTokensToCreateProposal
+            ? formatVoteWeight(
+                governance.account.config.minCouncilTokensToCreateProposal.toString(),
+                selectedRealm.communityMintDecimals
+              )
+            : undefined,
+
           totalProposalCount: governance.account.proposalCount,
           votingProposalCount: governance.account.votingProposalCount,
           // percentage of total tokens that need to vote for there to be quorum
           voteThresholdPercentage:
-            governance.account.config.voteThresholdPercentage.value,
+            governance.account.config.voteThresholdPercentage.value.toString(),
           accountType: governance.account.accountType,
           isAccountGovernance: governance.account.isAccountGovernance(),
           isMintGovernance: governance.account.isMintGovernance(),

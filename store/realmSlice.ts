@@ -14,7 +14,7 @@ import { RootState } from ".";
 export interface realmState {
   realms: Array<any>;
   realmsMap: any;
-  selectedRealm: any;
+  selectedRealm: Realm | null;
   selectedRealmId: string;
   realmsData: any;
   realmWatchlist: Array<string>;
@@ -167,7 +167,7 @@ export const fetchRealm = createAsyncThunk(
         maxVoteWeight:
           rawRealm.account.config.communityMintMaxVoteWeightSource.value.toNumber(),
         minTokensToCreateGov:
-          rawRealm.account.config.minCommunityTokensToCreateGovernance.toNumber(),
+          rawRealm.account.config.minCommunityTokensToCreateGovernance,
         fmtSupplyFraction:
           rawRealm.account.config.communityMintMaxVoteWeightSource.fmtSupplyFractionPercentage(),
         supplyFraction: rawRealm.account.config.communityMintMaxVoteWeightSource
