@@ -76,6 +76,19 @@
       "tags": ["TOOL"]
     },
     {
+      "symbol": "Nation",
+      "displayName": "Nation",
+      "realmId": "",
+      "website": "https://nation.io",
+      "twitter": "buildwithnation",
+      "discord": "http://http://discord.gg/nationio",
+      "ogImage": "https://pbs.twimg.com/profile_images/1498369290579460103/zetDxGXp_400x400.jpg",
+      "description": "description",
+      "howToJoin": "how to join",
+      "nftMarketPlace": "",
+      "tags": ["TOOL"]
+    },
+    {
       "symbol": "GRAPE",
       "displayName": "Grape Art",
       "realmId": "By2sVGZXwfQq6rAiAM3rNPJ9iQfb5e2QhnF4YjJ4Bip",
@@ -87,6 +100,19 @@
       "howToJoin": "how to join",
       "nftMarketPlace": "",
       "tags": ["TOOL", "DAO", "NFT"]
+    },
+    {
+      "symbol": "",
+      "displayName": "Dialect",
+      "realmId": "",
+      "ogImage": "https://pbs.twimg.com/profile_images/1497705404977094656/UK4iQ0_C_400x400.jpg",
+      "website": "https:/dialect.to/",
+      "twitter": "saydialect",
+      "discord": "discord.gg/UqS39ygksN",
+      "description": "description",
+      "howToJoin": "how to join",
+      "nftMarketPlace": "",
+      "tags": ["TOOL"]
     },
     {
       "symbol": "",
@@ -109,19 +135,6 @@
       "twitter": "uniquevcs",
       "discord": "http://http://discord.gg/uniquevcs",
       "ogImage": "https://pbs.twimg.com/profile_images/1503831774304083969/JtKY3CUN_400x400.jpg",
-      "description": "description",
-      "howToJoin": "how to join",
-      "nftMarketPlace": "",
-      "tags": ["TOOL"]
-    },
-    {
-      "symbol": "Nation",
-      "displayName": "Nation",
-      "realmId": "",
-      "website": "https://nation.io",
-      "twitter": "buildwithnation",
-      "discord": "http://http://discord.gg/nationio",
-      "ogImage": "https://pbs.twimg.com/profile_images/1498369290579460103/zetDxGXp_400x400.jpg",
       "description": "description",
       "howToJoin": "how to join",
       "nftMarketPlace": "",

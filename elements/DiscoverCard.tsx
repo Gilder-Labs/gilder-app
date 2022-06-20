@@ -6,7 +6,7 @@ import * as Haptics from "expo-haptics";
 import { subscribeToNotifications } from "../store/notificationSlice";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTheme } from "styled-components";
-import { RealmIcon } from "../components";
+import { RealmIcon, Typography } from "../components";
 import { AnimatedImage } from "react-native-ui-lib";
 import { ImageBackground } from "react-native";
 import TransparentImage from "../assets/images/transparent.png";
@@ -20,7 +20,7 @@ interface DiscoverCardProps {
 export const DiscoverCard = ({
   data,
   isHorizontal = false,
-  useBackgroundImage = true,
+  useBackgroundImage = false,
 }: DiscoverCardProps) => {
   const theme = useTheme();
   const {
@@ -39,16 +39,20 @@ export const DiscoverCard = ({
     color2,
   } = data;
 
+  const handleCardClick = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+  };
+
   return (
     <ContainerButton
-      onPress={() => {}}
+      onPress={handleCardClick}
       activeOpacity={0.4}
       isHorizontal={isHorizontal}
     >
       <LinearGradient
         colors={[
-          color1 ? color1 : theme.gray[700],
-          color2 ? color2 : theme.gray[900],
+          color1 ? color1 : theme.gray[600],
+          color2 ? color2 : theme.gray[800],
         ]}
         style={{ flex: 1, height: 140, borderRadius: 8 }}
         start={{ x: 0.1, y: 0.2 }}
@@ -56,24 +60,44 @@ export const DiscoverCard = ({
         <ImageBackground
           source={useBackgroundImage ? { uri: ogImage } : TransparentImage}
           resizeMode="cover"
-          blurRadius={"40"}
+          blurRadius={40}
         >
           <Container>
-            <IconContainer>
-              <AnimatedImage
-                style={{
-                  width: 48,
-                  height: 48,
-                  overflow: "hidden",
-                  borderRadius: 100,
-                }}
-                source={{
-                  uri: ogImage,
-                }}
+            <Row>
+              <IconContainer>
+                <AnimatedImage
+                  style={{
+                    width: 40,
+                    height: 40,
+                    overflow: "hidden",
+                    borderRadius: 100,
+                  }}
+                  source={{
+                    uri: ogImage,
+                  }}
+                />
+              </IconContainer>
+              <Typography
+                text={displayName}
+                marginLeft={"2"}
+                size="h3"
+                bold={true}
+                marginBottom={"0"}
+                hasTextShadow={true}
               />
-            </IconContainer>
-
-            <RealmName>{displayName}</RealmName>
+            </Row>
+            <RowEnd>
+              {tags.map((tag) => (
+                <BadgeContainer>
+                  <Typography
+                    text={tag}
+                    marginBottom="0"
+                    size="caption"
+                    shade="300"
+                  />
+                </BadgeContainer>
+              ))}
+            </RowEnd>
           </Container>
         </ImageBackground>
       </LinearGradient>
@@ -92,24 +116,34 @@ const ContainerButton = styled.TouchableOpacity<{ isHorizontal: boolean }>`
     props.isHorizontal ? props.theme.spacing[3] : "0px"};
 `;
 
-const RealmName = styled.Text`
-  margin-top: ${(props: any) => props.theme.spacing[3]}
-  color: ${(props: any) => props.theme.gray[100]};
-  font-size: 16px;
-  font-weight: bold;
-  text-align: center;
-`;
-
 const Container = styled.View`
-  justify-content: center;
-  align-items: center;
   height: 140px;
   border-radius: 8px;
+  justify-content: space-between;
+  padding: ${(props: any) => props.theme.spacing[2]};
+`;
+
+const Row = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
+
+const RowEnd = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
 `;
 
 const IconContainer = styled.View`
-  margin-bottom: ${(props: any) => props.theme.spacing[4]};
   border-radius: 100px;
-  padding: ${(props: any) => props.theme.spacing[2]};
+  padding: ${(props: any) => props.theme.spacing[1]};
   background: ${(props: any) => props.theme.gray[900]};
+`;
+
+const BadgeContainer = styled.View`
+  border-radius: 4px;
+  border: 1px solid ${(props) => props.theme.gray[300]};
+  background: ${(props) => props.theme.gray[900]}88;
+  padding: ${(props: any) => props.theme.spacing[1]};
+  margin-left: ${(props: any) => props.theme.spacing[1]};
 `;

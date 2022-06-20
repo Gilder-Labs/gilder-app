@@ -18,8 +18,10 @@ interface TypographyProps {
     | "warning";
   marginBottom?: "0" | "1" | "2" | "3" | "4" | "5";
   marginRight?: "0" | "1" | "2" | "3" | "4" | "5";
+  marginLeft?: "0" | "1" | "2" | "3" | "4" | "5";
   maxLength?: number;
   selectable?: boolean;
+  hasTextShadow?: boolean;
 }
 
 const sizeMapping = {
@@ -43,6 +45,8 @@ export const Typography = ({
   maxLength = 10000,
   selectable = false,
   marginRight = "0",
+  marginLeft = "0",
+  hasTextShadow = false,
 }: TypographyProps) => {
   const formattedText = () => {
     let strText = text.toString();
@@ -65,6 +69,8 @@ export const Typography = ({
       marginBottom={marginBottom}
       selectable={selectable}
       marginRight={marginRight}
+      marginLeft={marginLeft}
+      hasTextShadow={hasTextShadow}
     >
       {text ? formattedText() : ""}
     </Text>
@@ -78,6 +84,7 @@ const Text = styled.Text<{
   shade: "100" | "200" | "300" | "400" | "500" | "600" | "700" | "800" | "900";
   marginBottom: "0" | "1" | "2" | "3" | "4" | "5";
   marginRight: "0" | "1" | "2" | "3" | "4" | "5";
+  marginLeft: "0" | "1" | "2" | "3" | "4" | "5";
   color:
     | "gray"
     | "primary"
@@ -86,6 +93,7 @@ const Text = styled.Text<{
     | "purple"
     | "error"
     | "warning";
+  hasTextShadow: boolean;
 }>`
   flex-direction: row;
   font-size: ${(props) => sizeMapping[props.size]}px;
@@ -94,5 +102,10 @@ const Text = styled.Text<{
   color: ${(props) => props.theme[props.color][props.shade]};
   margin-bottom: ${(props) => props.theme.spacing[props.marginBottom]};
   margin-right: ${(props) => props.theme.spacing[props.marginRight]};
+  margin-left: ${(props) => props.theme.spacing[props.marginLeft]};
   text-align: ${(props) => props.textAlign};
+  text-shadow: ${(props) =>
+    props.hasTextShadow
+      ? "0px 1px 2px rgba(0, 0, 0, 0.75);"
+      : "0px 1px 2px rgba(0, 0, 0, 0);"};
 `;

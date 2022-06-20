@@ -47,10 +47,13 @@ export default function DiscoverScreen({
         bold={true}
         size="h4"
         shade="100"
-        text={"DAO Tooling"}
+        text={"Tools"}
         marginBottom="4"
       />
-      <HorizontalScrollView horizontal={true}>
+      <HorizontalScrollView
+        horizontal={true}
+        scrollIndicatorInsets={{ bottom: -10 }}
+      >
         {tooling.map((feature) => (
           <DiscoverCard
             data={feature as Feature}
@@ -66,7 +69,10 @@ export default function DiscoverScreen({
         text={"Treasury Management"}
         marginBottom="4"
       />
-      <HorizontalScrollView horizontal={true}>
+      <HorizontalScrollView
+        horizontal={true}
+        scrollIndicatorInsets={{ bottom: -10 }}
+      >
         {treasury.map((feature) => (
           <DiscoverCard
             data={feature as Feature}
