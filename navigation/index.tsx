@@ -42,6 +42,7 @@ import { chatApiKey } from "../constants/Chat";
 import { StreamChat } from "stream-chat";
 import { Chat } from "stream-chat-expo"; // Or stream-chat-expo
 import ThreadScreen from "../screens/ThreadScreen";
+import DiscoverScreen from "../screens/DiscoverScreen";
 
 const chatClient = StreamChat.getInstance(chatApiKey);
 
@@ -340,6 +341,13 @@ export default function Navigation({}: {}) {
               component={ThreadScreen}
               options={({ route }) => ({
                 title: "Thread",
+              })}
+            />
+            <Stack.Screen
+              name="Discover"
+              component={DiscoverScreen}
+              options={({ route }) => ({
+                title: "Discover", // update to realm name
               })}
             />
           </Stack.Navigator>

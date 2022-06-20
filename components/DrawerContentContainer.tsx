@@ -13,7 +13,7 @@ import { ConnectWalletButton } from "./ConnectWalletButton";
 import { useTheme } from "styled-components";
 import Logo from "../assets/images/GilderLogo.png";
 import * as Unicons from "@iconscout/react-native-unicons";
-import { fetchRealm } from "../store/realmSlice";
+import { fetchRealm, selectRealm } from "../store/realmSlice";
 import { Typography } from "./Typography";
 import { useNavigation } from "@react-navigation/native";
 import * as Haptics from "expo-haptics";
@@ -58,11 +58,17 @@ export function DrawerContentContainer(props: any) {
     setRealmSelectIsOpen(true);
   };
 
+  const handleDiscoverPress = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    //@ts-ignore
+    navigation.push("Discover");
+  };
+
   return (
     <DrawerRootContainer {...props} style={{ backgroundColor: "#131313" }}>
       <StyledHeader>
         <GilderLogo source={Logo} />
-        <BetaBadge> BETA </BetaBadge>
+        {/* <BetaBadge> BETA </BetaBadge> */}
       </StyledHeader>
       <StyledContainer>
         <RealmScrollContainer>
@@ -74,12 +80,12 @@ export function DrawerContentContainer(props: any) {
             scrollIndicatorInsets={{ right: -2 }}
             ListHeaderComponent={
               <View>
-                <ViewFeaturedButton
-                  onPress={handleAddRealmOpen}
+                <DiscoverButton
+                  onPress={handleDiscoverPress}
                   activeOpacity={0.4}
                 >
                   <Unicons.UilApps size="20" color={theme.gray[400]} />
-                </ViewFeaturedButton>
+                </DiscoverButton>
                 <Divider />
               </View>
             }
@@ -145,7 +151,7 @@ const RealmNameContainer = styled.View`
   justify-content: space-between;
   align-items: center;
   border-bottom-color: ${(props) => props.theme.gray[800]};
-  border-bottom-width: 1px;
+  border-bottom-width: 2px;
 `;
 
 const StyledContainer = styled.View`
@@ -173,7 +179,7 @@ const AddRealmButtonContainer = styled.TouchableOpacity`
   border: 2px dashed ${(props) => props.theme.gray[600]};
 `;
 
-const ViewFeaturedButton = styled.TouchableOpacity`
+const DiscoverButton = styled.TouchableOpacity`
   width: 48px;
   height: 48px;
   border-radius: 100px;
@@ -188,8 +194,11 @@ const Divider = styled.View`
   /* width: 48px; */
   height: 2px;
   max-height: 2px;
-  background-color: ${(props) => props.theme.gray[600]};
+  border-radius: 4px;
+  background-color: ${(props) => props.theme.gray[700]};
   margin-bottom: ${(props) => props.theme.spacing[3]};
+  margin-left: ${(props) => props.theme.spacing[1]};
+  margin-right: ${(props) => props.theme.spacing[1]};
 `;
 
 const DrawerContentContainerWrapper = styled.View`
@@ -218,13 +227,13 @@ const StyledHeader = styled.View`
 
 const Content = styled.View``;
 
-const BetaBadge = styled.Text`
-  font-size: 12px;
-  border-radius: 4px;
-  border: 1px solid ${(props) => props.theme.gray[400]};
-  color: ${(props) => props.theme.gray[400]};
-  background: ${(props) => props.theme.gray[700]}44;
-`;
+// const BetaBadge = styled.Text`
+//   font-size: 12px;
+//   border-radius: 4px;
+//   border: 1px solid ${(props) => props.theme.gray[400]};
+//   color: ${(props) => props.theme.gray[400]};
+//   background: ${(props) => props.theme.gray[700]}44;
+// `;
 
 const EmptyView = styled.View`
   height: 200px;
