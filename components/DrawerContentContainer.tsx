@@ -72,6 +72,17 @@ export function DrawerContentContainer(props: any) {
             keyExtractor={(item) => item}
             style={{ padding: 8 }}
             scrollIndicatorInsets={{ right: -2 }}
+            ListHeaderComponent={
+              <View>
+                <ViewFeaturedButton
+                  onPress={handleAddRealmOpen}
+                  activeOpacity={0.4}
+                >
+                  <Unicons.UilApps size="20" color={theme.gray[400]} />
+                </ViewFeaturedButton>
+                <Divider />
+              </View>
+            }
             ListFooterComponent={
               <View>
                 <Divider />
@@ -158,8 +169,19 @@ const AddRealmButtonContainer = styled.TouchableOpacity`
   border-radius: 100px;
   align-items: center;
   justify-content: center;
-  /* background: ${(props) => props.theme.gray[900]}; */
-  border: 2px dashed ${(props) => props.theme.gray[500]};
+  background: ${(props) => props.theme.gray[900]};
+  border: 2px dashed ${(props) => props.theme.gray[600]};
+`;
+
+const ViewFeaturedButton = styled.TouchableOpacity`
+  width: 48px;
+  height: 48px;
+  border-radius: 100px;
+  align-items: center;
+  justify-content: center;
+  background: ${(props) => props.theme.gray[900]};
+  /* border: 2px dashed ${(props) => props.theme.gray[500]}; */
+  margin-bottom: ${(props) => props.theme.spacing[2]};
 `;
 
 const Divider = styled.View`

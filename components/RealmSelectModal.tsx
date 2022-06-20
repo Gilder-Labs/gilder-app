@@ -91,7 +91,7 @@ export const RealmSelectModal = ({
         ) : (
           <View style={{ width: 48 }} />
         )}
-        <HeaderTitle> Add Realm</HeaderTitle>
+        <HeaderTitle> Add DAO</HeaderTitle>
         <View style={{ width: 48, height: 48 }} />
       </Header>
 
