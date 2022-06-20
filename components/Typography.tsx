@@ -106,6 +106,6 @@ const Text = styled.Text<{
   text-align: ${(props) => props.textAlign};
   text-shadow: ${(props) =>
     props.hasTextShadow
-      ? "0px 1px 2px rgba(0, 0, 0, 0.75);"
+      ? "0px 1px 4px rgba(0, 0, 0, 0.5);"
       : "0px 1px 2px rgba(0, 0, 0, 0);"};
 `;
