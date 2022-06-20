@@ -96,7 +96,7 @@ export function DrawerContentContainer(props: any) {
                   onPress={handleAddRealmOpen}
                   activeOpacity={0.4}
                 >
-                  <Unicons.UilPlus size="20" color={theme.gray[500]} />
+                  <Unicons.UilPlus size="20" color={theme.gray[400]} />
                 </AddRealmButtonContainer>
                 <EmptyView />
               </View>
@@ -176,7 +176,7 @@ const AddRealmButtonContainer = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
   background: ${(props) => props.theme.gray[900]};
-  border: 2px dashed ${(props) => props.theme.gray[600]};
+  border: 2px dashed ${(props) => props.theme.gray[500]};
 `;
 
 const DiscoverButton = styled.TouchableOpacity`

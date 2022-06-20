@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import * as React from "react";
 import { DrawerContentContainer } from "../components/DrawerContentContainer";
@@ -22,7 +22,6 @@ import {
   setToken,
 } from "../store/notificationSlice";
 import styled from "styled-components/native";
-
 import ActivityScreen from "../screens/ActivityScreen";
 import TreasuryScreen from "../screens/TreasuryScreen";
 import MembersScreen from "../screens/MembersScreen";
@@ -32,7 +31,6 @@ import LinkingConfiguration from "./LinkingConfiguration";
 import { MemberProfile } from "../screens/MemberProfile";
 import { ProposalDetailScreen } from "../screens/ProposalDetailScreen";
 import ChannelScreen from "../screens/ChannelScreen";
-import { SplashScreen } from "../components";
 import { WalletModal } from "../components/WalletModal";
 import { WalletTransactionModal } from "../components/WalletTransactionModal";
 import RealmSettingsScreen from "../screens/RealmSettingsScreen";
@@ -43,6 +41,7 @@ import { StreamChat } from "stream-chat";
 import { Chat } from "stream-chat-expo"; // Or stream-chat-expo
 import ThreadScreen from "../screens/ThreadScreen";
 import DiscoverScreen from "../screens/DiscoverScreen";
+import DiscoverDetailsScreen from "../screens/DiscoverDetailsScreen";
 
 const chatClient = StreamChat.getInstance(chatApiKey);
 
@@ -216,6 +215,7 @@ export default function Navigation({}: {}) {
     (state) => state.realms
   );
   const { isShowingToast } = useAppSelector((state) => state.utility);
+  const [infoDialogOpen, setInfoDialogOpen] = useState(false);
 
   useEffect(() => {
     dispatch(fetchRealms());
@@ -283,7 +283,6 @@ export default function Navigation({}: {}) {
         elevation={0}
         centerMessage={true}
       />
-      <WalletModal />
       <WalletTransactionModal />
       <Chat client={chatClient}>
         <NavigationContainer
@@ -347,7 +346,27 @@ export default function Navigation({}: {}) {
               name="Discover"
               component={DiscoverScreen}
               options={({ route }) => ({
-                title: "Discover", // update to realm name
+                title: "Discover",
+                headerRight: () => {
+                  return (
+                    <InfoButton onPress={() => setInfoDialogOpen(true)}>
+                      <Unicons.UilInfoCircle
+                        size="20"
+                        color={theme.gray[300]}
+                      />
+                    </InfoButton>
+                  );
+                },
+              })}
+            />
+            <Stack.Screen
+              name="DiscoverDetails"
+              component={DiscoverDetailsScreen}
+              options={({ route }) => ({
+                title: "",
+                headerBackTitle: "Back",
+                presentation: "modal",
+                headerTransparent: true,
               })}
             />
           </Stack.Navigator>
@@ -412,4 +431,8 @@ const DrawerLabelContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+`;
+
+const InfoButton = styled.TouchableOpacity`
+  padding: ${(props) => props.theme.spacing[1]};
 `;

@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
-import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { toggleRealmInWatchlist } from "../store/realmSlice";
 import * as Haptics from "expo-haptics";
-import { subscribeToNotifications } from "../store/notificationSlice";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTheme } from "styled-components";
-import { RealmIcon, Typography } from "../components";
+import { Typography } from "../components";
 import { AnimatedImage } from "react-native-ui-lib";
 import { ImageBackground } from "react-native";
 import TransparentImage from "../assets/images/transparent.png";
+import { useNavigation } from "@react-navigation/native";
 
 interface DiscoverCardProps {
   data: Feature;
@@ -23,6 +21,7 @@ export const DiscoverCard = ({
   useBackgroundImage = false,
 }: DiscoverCardProps) => {
   const theme = useTheme();
+  const navigation = useNavigation();
   const {
     symbol,
     displayName,
@@ -41,6 +40,9 @@ export const DiscoverCard = ({
 
   const handleCardClick = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    navigation.push("DiscoverDetails", {
+      data: data,
+    });
   };
 
   return (
@@ -60,7 +62,7 @@ export const DiscoverCard = ({
         <ImageBackground
           source={useBackgroundImage ? { uri: ogImage } : TransparentImage}
           resizeMode="cover"
-          blurRadius={40}
+          blurRadius={120}
         >
           <Container>
             <Row>

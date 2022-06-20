@@ -99,7 +99,7 @@
       "description": "description",
       "howToJoin": "how to join",
       "nftMarketPlace": "",
-      "tags": ["TOOL", "DAO", "NFT"]
+      "tags": ["TOOL", "DAO"]
     },
     {
       "symbol": "",
@@ -143,19 +143,6 @@
   ],
   "treasury": [
     {
-      "symbol": "MNGO",
-      "displayName": "Mango DAO",
-      "realmId": "DPiH3H3c7t47BMxqTxLsuPQpEC6Kne8GA9VXbxpnZxFE",
-      "website": "https://mango.markets",
-      "twitter": "mangomarkets",
-      "discord": "https://discord.gg/mangomarkets",
-      "ogImage": "https://pbs.twimg.com/profile_images/1461014736674435079/w83QozhN_400x400.jpg",
-      "description": "description",
-      "howToJoin": "how to join",
-      "nftMarketPlace": "",
-      "tags": ["PROTOCOL", "DAO", "TOOL"]
-    },
-    {
       "symbol": "",
       "displayName": "Castle Finance",
       "realmId": "",
@@ -180,6 +167,19 @@
       "howToJoin": "how to join",
       "nftMarketPlace": "",
       "tags": ["TREASURY", "TOOL"]
+    },
+    {
+      "symbol": "MNGO",
+      "displayName": "Mango DAO",
+      "realmId": "DPiH3H3c7t47BMxqTxLsuPQpEC6Kne8GA9VXbxpnZxFE",
+      "website": "https://mango.markets",
+      "twitter": "mangomarkets",
+      "discord": "https://discord.gg/mangomarkets",
+      "ogImage": "https://pbs.twimg.com/profile_images/1461014736674435079/w83QozhN_400x400.jpg",
+      "description": "description",
+      "howToJoin": "how to join",
+      "nftMarketPlace": "",
+      "tags": ["PROTOCOL", "DAO", "TOOL"]
     },
     {
       "symbol": "SLND",

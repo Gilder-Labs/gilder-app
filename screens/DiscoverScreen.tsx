@@ -41,7 +41,11 @@ export default function DiscoverScreen({
         marginBottom="4"
       />
       {featured.map((feature) => (
-        <DiscoverCard data={feature as Feature} useBackgroundImage={false} />
+        <DiscoverCard
+          data={feature as Feature}
+          useBackgroundImage={false}
+          key={feature.displayName}
+        />
       ))}
       <Typography
         bold={true}
@@ -59,6 +63,7 @@ export default function DiscoverScreen({
             data={feature as Feature}
             isHorizontal={true}
             useBackgroundImage={true}
+            key={feature.displayName}
           />
         ))}
       </HorizontalScrollView>
@@ -78,6 +83,7 @@ export default function DiscoverScreen({
             data={feature as Feature}
             isHorizontal={true}
             useBackgroundImage={true}
+            key={feature.displayName}
           />
         ))}
       </HorizontalScrollView>
