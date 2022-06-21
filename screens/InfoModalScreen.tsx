@@ -35,7 +35,7 @@ export default function InfoModalScreen({ navigation }: any) {
           size="body"
           shade="400"
           text={
-            "The discover tab is for featuring awesome DAO's and tools for daos. We will be regularly updating this page to help spread the word around your community or tool."
+            "The discover tab is for featuring awesome DAO's and tools for DAO's. We will be regularly updating this page to help spread the word around your community or tool."
           }
           marginBottom="2"
         />

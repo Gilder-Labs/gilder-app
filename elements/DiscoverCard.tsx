@@ -83,6 +83,7 @@ export const DiscoverCard = ({
                 text={displayName}
                 marginLeft={"2"}
                 size="h3"
+                shade="100"
                 bold={true}
                 marginBottom={"0"}
                 hasTextShadow={true}
@@ -109,7 +110,8 @@ export const DiscoverCard = ({
 
 const ContainerButton = styled.TouchableOpacity<{ isHorizontal: boolean }>`
   height: 140px;
-  margin-bottom: ${(props: any) => props.theme.spacing[3]};
+  margin-bottom: ${(props: any) =>
+    !props.isHorizontal ? props.theme.spacing[3] : "0px"};
   border-radius: 4px;
   background: ${(props: any) => props.theme.gray[800]};
   border-radius: 8;

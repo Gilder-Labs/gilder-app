@@ -13,4 +13,5 @@ interface Feature {
   tags: Array<string>;
   color1: string;
   color2: string;
+  screenshots: Array<string>;
 }

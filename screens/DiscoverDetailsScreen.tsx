@@ -41,6 +41,7 @@ export default function DiscoverDetailsScreen({
     features,
     color1,
     color2,
+    screenshots,
   } = data as Feature;
 
   const handleWebClick = async () => {
@@ -68,6 +69,8 @@ export default function DiscoverDetailsScreen({
     dispatch(fetchRealm(realmId));
     navigation.popToTop();
   };
+
+  const isNFTDao = tags.includes("NFT");
 
   return (
     <Container>
@@ -146,7 +149,7 @@ export default function DiscoverDetailsScreen({
           </HeaderRow>
         </ImageBackground>
       </LinearGradient>
-      <ContentContainer>
+      <ContentContainer contentContainerStyle={{ padding: 16 }}>
         <Row>
           <Typography
             size="h4"
@@ -207,6 +210,38 @@ export default function DiscoverDetailsScreen({
             />
           </>
         )}
+        {!!screenshots.length && (
+          <>
+            <Typography
+              size="h4"
+              bold={true}
+              shade="100"
+              text={isNFTDao ? "NFTs" : "Product"}
+              marginBottom="3"
+            />
+            <HorizontalScrollView
+              horizontal={true}
+              scrollIndicatorInsets={{ bottom: -16 }}
+              contentContainerStyle={{ padding: 12 }}
+            >
+              {screenshots.map((url) => (
+                <ImageContainer>
+                  <AnimatedImage
+                    source={{ uri: url }}
+                    cover={isNFTDao ? false : true}
+                    style={{
+                      width: 240,
+                      // maxWidth: 320,
+                      height: 240,
+                      overflow: "hidden",
+                      borderRadius: 8,
+                    }}
+                  />
+                </ImageContainer>
+              ))}
+            </HorizontalScrollView>
+          </>
+        )}
       </ContentContainer>
     </Container>
   );
@@ -252,9 +287,7 @@ const IconContainerButton = styled.TouchableOpacity`
   background: ${(props: any) => props.theme.gray[900]};
 `;
 
-const ContentContainer = styled.View`
-  padding: ${(props: any) => props.theme.spacing[4]};
-`;
+const ContentContainer = styled.ScrollView``;
 
 const DaoViewButton = styled.TouchableOpacity`
   padding: ${(props: any) => props.theme.spacing[1]};
@@ -288,4 +321,16 @@ const FloatingBar = styled.View`
   background: #ffffff88;
   top: 0;
   border-radius: 8;
+`;
+
+const HorizontalScrollView = styled.ScrollView`
+  margin-bottom: ${(props) => props.theme.spacing[3]};
+  border-radius: 8px;
+  background: ${(props: any) => props.theme.gray[1000]};
+`;
+
+const ImageContainer = styled.View`
+  overflow: hidden;
+  border-radius: 8px;
+  margin-right: 12;
 `;

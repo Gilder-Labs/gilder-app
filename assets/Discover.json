@@ -14,7 +14,12 @@
       "nftMarketPlace": "",
       "tags": ["PROTOCOL", "DAO", "TOOL"],
       "color1": "#E54033",
-      "color2": "#EEB91B"
+      "color2": "#EEB91B",
+      "screenshots": [
+        "https://mango.markets/img/borrow.png",
+        "https://mango.markets/img/borrow.png",
+        "https://mango.markets/img/borrow.png"
+      ]
     },
     {
       "symbol": "GRAPE",
@@ -30,7 +35,8 @@
       "nftMarketPlace": "",
       "tags": ["TOOL", "DAO"],
       "color1": "#984fac",
-      "color2": "#44279c"
+      "color2": "#44279c",
+      "screenshots": []
     },
     {
       "symbol": "",
@@ -47,7 +53,8 @@
       "nftMarketPlace": "https://magiceden.io/marketplace/solana_monkey_business",
       "tags": ["NFT", "DAO"],
       "color1": "#498D5E",
-      "color2": "#184623"
+      "color2": "#184623",
+      "screenshots": []
     },
     {
       "symbol": "",
@@ -64,7 +71,13 @@
       "nftMarketPlace": "https://grape.art/collection/bearsreloaded",
       "tags": ["NFT", "DAO"],
       "color1": "#421779",
-      "color2": "#6F0397"
+      "color2": "#6F0397",
+      "screenshots": [
+        "https://pbs.twimg.com/media/FVqgrX4XEAAGg9M?format=jpg&name=small",
+        "https://pbs.twimg.com/media/FVaysq6VUAAlatF?format=jpg&name=small",
+        "https://pbs.twimg.com/media/FVGkW2ZUcAAHrvC?format=jpg&name=small",
+        "https://pbs.twimg.com/media/FU7qJrRUsAA99Or?format=png&name=small"
+      ]
     }
   ],
   "tooling": [
@@ -80,7 +93,12 @@
       "howToJoin": "",
       "features": "stuff stuff stuff",
       "nftMarketPlace": "",
-      "tags": ["TOOL"]
+      "tags": ["TOOL"],
+      "screenshots": [
+        "https://pbs.twimg.com/media/FVsGrwKX0AUyUyu?format=jpg&name=4096x4096",
+        "https://pbs.twimg.com/media/FVsGrwKX0AUyUyu?format=jpg&name=4096x4096",
+        "https://pbs.twimg.com/media/FVsGrwKX0AUyUyu?format=jpg&name=4096x4096"
+      ]
     },
     {
       "symbol": "Nation",
@@ -95,23 +113,10 @@
       "features": "",
 
       "nftMarketPlace": "",
-      "tags": ["TOOL"]
+      "tags": ["TOOL"],
+      "screenshots": []
     },
-    {
-      "symbol": "GRAPE",
-      "displayName": "Grape Art",
-      "realmId": "By2sVGZXwfQq6rAiAM3rNPJ9iQfb5e2QhnF4YjJ4Bip",
-      "ogImage": "https://realms.today/realms/Grape/img/grape.png",
-      "website": "https://grape.art/",
-      "twitter": "grapeprotocol",
-      "discord": "https://discord.gg/greatape",
-      "description": "description",
-      "howToJoin": "how to join",
-      "features": "",
 
-      "nftMarketPlace": "",
-      "tags": ["TOOL", "DAO"]
-    },
     {
       "symbol": "",
       "displayName": "Dialect",
@@ -123,9 +128,9 @@
       "description": "description",
       "howToJoin": "how to join",
       "features": "",
-
       "nftMarketPlace": "",
-      "tags": ["TOOL"]
+      "tags": ["TOOL"],
+      "screenshots": []
     },
     {
       "symbol": "",
@@ -138,7 +143,8 @@
       "description": "description",
       "howToJoin": "how to join",
       "nftMarketPlace": "",
-      "tags": ["TOOL"]
+      "tags": ["TOOL"],
+      "screenshots": []
     },
     {
       "symbol": "UNQ",
@@ -151,9 +157,9 @@
       "description": "description",
       "howToJoin": "how to join",
       "features": "",
-
       "nftMarketPlace": "",
-      "tags": ["TOOL"]
+      "tags": ["TOOL"],
+      "screenshots": []
     }
   ],
   "treasury": [
@@ -170,7 +176,8 @@
       "features": "",
 
       "nftMarketPlace": "",
-      "tags": ["TREASURY", "TOOL"]
+      "tags": ["TREASURY", "TOOL"],
+      "screenshots": []
     },
     {
       "symbol": "",
@@ -185,22 +192,8 @@
       "features": "",
 
       "nftMarketPlace": "",
-      "tags": ["TREASURY", "TOOL"]
-    },
-    {
-      "symbol": "MNGO",
-      "displayName": "Mango Markets",
-      "realmId": "DPiH3H3c7t47BMxqTxLsuPQpEC6Kne8GA9VXbxpnZxFE",
-      "website": "https://mango.markets",
-      "twitter": "mangomarkets",
-      "discord": "https://discord.gg/mangomarkets",
-      "ogImage": "https://pbs.twimg.com/profile_images/1461014736674435079/w83QozhN_400x400.jpg",
-      "description": "description",
-      "howToJoin": "how to join",
-      "features": "",
-
-      "nftMarketPlace": "",
-      "tags": ["TREASURY", "PROTOCOL", "TOOL"]
+      "tags": ["TREASURY", "TOOL"],
+      "screenshots": []
     },
     {
       "symbol": "SLND",
@@ -215,7 +208,8 @@
       "features": "",
 
       "nftMarketPlace": "",
-      "tags": ["TREASURY", "TOOL"]
+      "tags": ["TREASURY", "TOOL"],
+      "screenshots": []
     }
   ]
 }
