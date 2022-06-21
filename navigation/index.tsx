@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, StackActions } from "@react-navigation/native";
 import * as React from "react";
 import { DrawerContentContainer } from "../components/DrawerContentContainer";
 import { createDrawerNavigator } from "@react-navigation/drawer";
@@ -42,6 +42,7 @@ import { Chat } from "stream-chat-expo"; // Or stream-chat-expo
 import ThreadScreen from "../screens/ThreadScreen";
 import DiscoverScreen from "../screens/DiscoverScreen";
 import DiscoverDetailsScreen from "../screens/DiscoverDetailsScreen";
+import InfoModalScreen from "../screens/InfoModalScreen";
 
 const chatClient = StreamChat.getInstance(chatApiKey);
 
@@ -345,11 +346,11 @@ export default function Navigation({}: {}) {
             <Stack.Screen
               name="Discover"
               component={DiscoverScreen}
-              options={({ route }) => ({
+              options={({ route, navigation }) => ({
                 title: "Discover",
                 headerRight: () => {
                   return (
-                    <InfoButton onPress={() => setInfoDialogOpen(true)}>
+                    <InfoButton onPress={() => navigation.push("InfoScreen")}>
                       <Unicons.UilInfoCircle
                         size="20"
                         color={theme.gray[300]}
@@ -377,6 +378,24 @@ export default function Navigation({}: {}) {
                 presentation: "modal",
                 headerTransparent: true,
                 headerShown: false,
+              })}
+            />
+            <Stack.Screen
+              name="InfoScreen"
+              component={InfoModalScreen}
+              options={({ route }) => ({
+                title: "",
+                presentation: "modal",
+                headerTransparent: true,
+                headerShown: false,
+                contentStyle: {
+                  height: "50%",
+                  maxHeight: "50%",
+                  marginTop: "100%",
+                  backgroundColor: "red",
+                  borderTopEndRadius: 16,
+                  borderTopLeftRadius: 16,
+                },
               })}
             />
           </Stack.Navigator>
