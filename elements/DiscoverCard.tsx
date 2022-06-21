@@ -57,10 +57,11 @@ export const DiscoverCard = ({
           color2 ? color2 : theme.gray[800],
         ]}
         style={{ flex: 1, height: 140, borderRadius: 8 }}
-        start={{ x: 0.1, y: 0.2 }}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
       >
         <ImageBackground
-          source={useBackgroundImage ? { uri: ogImage } : TransparentImage}
+          source={!color1 || !color2 ? { uri: ogImage } : TransparentImage}
           resizeMode="cover"
           blurRadius={120}
         >

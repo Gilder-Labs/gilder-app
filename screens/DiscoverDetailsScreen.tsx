@@ -83,7 +83,8 @@ export default function DiscoverDetailsScreen({
           color2 ? color2 : theme.gray[800],
         ]}
         style={{ minHeight: 200 }}
-        start={{ x: 0.1, y: 0.2 }}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
       >
         <ImageBackground
           source={!color1 || !color2 ? { uri: ogImage } : TransparentImage}

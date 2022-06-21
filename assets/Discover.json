@@ -44,7 +44,7 @@
       "symbol": "",
       "displayName": "MonkeDAO",
       "realmId": "B1CxhV1khhj7n5mi5hebbivesqH9mvXr5Hfh2nD2UCh6",
-      "ogImage": "https://realms.today/realms/MonkeDAO/img/MonkeDAO_logo.png",
+      "ogImage": "https://firebasestorage.googleapis.com/v0/b/gilder-e1b6e.appspot.com/o/TM27IHMP_400x400.jpeg?alt=media&token=4dcfbb5a-935f-48a8-bc83-b631d4e2f682",
       "website": "https://monkedao.io/",
       "twitter": "MonkeDAO",
       "discord": "https://discord.gg/monkedao",
@@ -146,7 +146,9 @@
         "https://www.dialect.to/_next/static/media/wallet-to-wallet.e78e63bb.png",
         "https://www.dialect.to/_next/static/media/smart-messaging.5ddedc16.png",
         "https://pbs.twimg.com/media/FVeEG9XX0AAcaTi?format=jpg&name=small"
-      ]
+      ],
+      "color1": "#030303",
+      "color2": "#2e2e2e"
     },
     {
       "symbol": "UNQ",
@@ -166,7 +168,9 @@
         "https://1356965245-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FPoMm1b2k1gwsYilPUnbn%2Fuploads%2FaomUH1mttmYMVxFGUWYN%2FCreate%20club%20%232%20(1)%20(1).png?alt=media&token=2d4ca3e0-60a8-4d1c-b525-924708d985dc",
         "https://1356965245-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FPoMm1b2k1gwsYilPUnbn%2Fuploads%2FxaeTEr3dzmGqZRf3sVVA%2Fimage17.png?alt=media&token=ee1451ee-e0d0-4b93-8de7-4273ea0c7b90",
         "https://pbs.twimg.com/media/FVty2IgWQAAAtMy?format=jpg&name=small"
-      ]
+      ],
+      "color1": "#12203e",
+      "color2": "#040a16"
     },
     {
       "symbol": "",
@@ -208,7 +212,9 @@
         "https://firebasestorage.googleapis.com/v0/b/gilder-e1b6e.appspot.com/o/Screen%20Shot%202022-06-21%20at%204.12.58%20PM.png?alt=media&token=01b5b6cd-de9a-4f8a-9934-d2d06d54fccf",
         "https://firebasestorage.googleapis.com/v0/b/gilder-e1b6e.appspot.com/o/Screen%20Shot%202022-06-21%20at%204.12.48%20PM.png?alt=media&token=ec6a2e77-6185-426d-9de0-126f80dcad64",
         "https://firebasestorage.googleapis.com/v0/b/gilder-e1b6e.appspot.com/o/Screen%20Shot%202022-06-21%20at%204.12.30%20PM.png?alt=media&token=0632ee95-d19c-4fe6-95a9-895f21c9ea2d"
-      ]
+      ],
+      "color1": "#111120",
+      "color2": "#181830"
     },
     {
       "symbol": "",
@@ -229,7 +235,9 @@
         "https://streamflow.finance/imgs/img-feature-2.png",
         "https://streamflow.finance/imgs/img-feature-3.png",
         "https://streamflow.finance/imgs/img-feature-4.png"
-      ]
+      ],
+      "color1": "#17A2D9",
+      "color2": "#1D2530"
     },
     {
       "symbol": "SLND",
@@ -239,9 +247,9 @@
       "twitter": "solendprotocol",
       "discord": "https://discord.gg/solend",
       "ogImage": "https://pbs.twimg.com/profile_images/1479918591718064128/mjL4FpQU_400x400.jpg",
-      "description": "description",
-      "howToJoin": "how to join",
-      "features": "",
+      "description": "Solend is the autonomous interest rate machine for lending on Solana.\n\nEarn interest and borrow 16 assets across 46 pools on the fastest, lowest fee, and most scalable lending protocol.",
+      "howToJoin": "",
+      "features": "- Earn Interest\n- Borrow \n- Leverage long\n- Short",
 
       "nftMarketPlace": "",
       "tags": ["TREASURY", "TOOL"],
