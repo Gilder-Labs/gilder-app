@@ -44,7 +44,7 @@ export default function DiscoverScreen({
         <DiscoverCard
           data={feature as Feature}
           useBackgroundImage={false}
-          key={feature.displayName}
+          key={`${feature.displayName}-feature`}
         />
       ))}
       <Typography
@@ -63,7 +63,7 @@ export default function DiscoverScreen({
             data={feature as Feature}
             isHorizontal={true}
             useBackgroundImage={true}
-            key={feature.displayName}
+            key={`${feature.displayName}-tooling`}
           />
         ))}
       </HorizontalScrollView>
@@ -83,7 +83,7 @@ export default function DiscoverScreen({
             data={feature as Feature}
             isHorizontal={true}
             useBackgroundImage={true}
-            key={feature.displayName}
+            key={`${feature.displayName}-treasury`}
           />
         ))}
       </HorizontalScrollView>

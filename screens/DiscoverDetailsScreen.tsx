@@ -7,6 +7,8 @@ import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { ImageBackground } from "react-native";
 import TransparentImage from "../assets/images/transparent.png";
 import { useNavigation } from "@react-navigation/native";
+import { fetchRealm } from "../store/realmSlice";
+
 import * as Haptics from "expo-haptics";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Unicons from "@iconscout/react-native-unicons";
@@ -20,7 +22,7 @@ export default function DiscoverDetailsScreen({
 }: RootStackScreenProps<"RealmSettings">) {
   const theme = useTheme();
   const dispatch = useAppDispatch();
-  const { selectedRealm } = useAppSelector((state) => state.realms);
+  const navigation = useNavigation();
   // @ts-ignore
   const { data } = route?.params;
 
@@ -59,6 +61,12 @@ export default function DiscoverDetailsScreen({
   const handleTwitterLink = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     Linking.openURL(`https://twitter.com/${twitter}`);
+  };
+
+  const handleSelect = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    dispatch(fetchRealm(realmId));
+    navigation.popToTop();
   };
 
   return (
@@ -139,13 +147,26 @@ export default function DiscoverDetailsScreen({
         </ImageBackground>
       </LinearGradient>
       <ContentContainer>
-        <Typography
-          size="h4"
-          bold={true}
-          shade="100"
-          text={"Description"}
-          marginBottom="2"
-        />
+        <Row>
+          <Typography
+            size="h4"
+            bold={true}
+            shade="100"
+            text={"Description"}
+            marginBottom="3"
+          />
+          {!!realmId && (
+            <DaoViewButton onPress={handleSelect} activeOpacity={0.4}>
+              <Typography
+                text="View DAO"
+                marginBottom="0"
+                marginRight="1"
+                shade="300"
+              />
+              <Unicons.UilArrowRight size="24" color={theme.gray[300]} />
+            </DaoViewButton>
+          )}
+        </Row>
         <Typography
           size="body"
           shade="400"
@@ -159,7 +180,7 @@ export default function DiscoverDetailsScreen({
               bold={true}
               shade="100"
               text={"How to join"}
-              marginBottom="2"
+              marginBottom="3"
             />
             <Typography
               size="body"
@@ -176,7 +197,7 @@ export default function DiscoverDetailsScreen({
               bold={true}
               shade="100"
               text={"Features"}
-              marginBottom="2"
+              marginBottom="3"
             />
             <Typography
               size="body"
@@ -206,6 +227,12 @@ const HeaderRow = styled.View`
   margin-bottom: ${(props: any) => props.theme.spacing[3]};
 `;
 
+const Row = styled.View`
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-direction: row;
+`;
+
 const LinkRow = styled.View`
   justify-content: space-around;
   align-items: center;
@@ -227,6 +254,18 @@ const IconContainerButton = styled.TouchableOpacity`
 
 const ContentContainer = styled.View`
   padding: ${(props: any) => props.theme.spacing[4]};
+`;
+
+const DaoViewButton = styled.TouchableOpacity`
+  padding: ${(props: any) => props.theme.spacing[1]};
+  padding-left: ${(props: any) => props.theme.spacing[4]};
+  padding-right: ${(props: any) => props.theme.spacing[3]};
+
+  flex-direction: row;
+  border-radius: 8px;
+  align-items: center;
+  justify-content: center;
+  background: ${(props: any) => props.theme.gray[800]};
 `;
 
 const FloatingBarContainer = styled.View`
