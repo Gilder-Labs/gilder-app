@@ -138,7 +138,7 @@
       "discord": "discord.gg/UqS39ygksN",
       "description": "Dialect is the first protocol for smart messaging — dynamic, composable dapp notifications and wallet-to-wallet chat. \n\nDialect enables a more engaging dapp experience with timely, targeted messages and notifications. \n\nGet up & running with just a few lines of code using our open source, out-of-the-box tooling. We’ll keep shipping new features while you’re busy building the future of DeFi / DAOs / NFTs / GameFi / Solana.",
       "howToJoin": "",
-      "features": "- In-Dapp Notifications \n- Wallet-to-Wallet Chat\n- Email, SMS, & more",
+      "features": "- Wallet-to-wallet messaging \n- Dapp notifications (direct-to-wallet, email, SMS, and telegram)\n- Blockchain monitoring for triggering notifications",
       "nftMarketPlace": "",
       "tags": ["TOOL"],
       "screenshots": [
@@ -156,12 +156,17 @@
       "twitter": "uniquevcs",
       "discord": "http://http://discord.gg/uniquevcs",
       "ogImage": "https://pbs.twimg.com/profile_images/1503831774304083969/JtKY3CUN_400x400.jpg",
-      "description": "description",
-      "howToJoin": "how to join",
-      "features": "",
+      "description": "Unique Venture Clubs (Unique.vc) is a platform that allows people to quickly and securely pool resources, establish customizable on-chain governance structures and collectively own assets without knowing a single line of code. \n\nOur vision is to democratize investing and asset management by creating strong self-governed communities with common financial goals.",
+      "howToJoin": "",
+      "features": "- No code fast and simple club creation\n- Fully customizable governance\n- NFT trading and management \n- Raise and manage funds\n- Seamless investing",
       "nftMarketPlace": "",
       "tags": ["TOOL"],
-      "screenshots": []
+      "screenshots": [
+        "https://1356965245-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FPoMm1b2k1gwsYilPUnbn%2Fuploads%2FTRUrEh04lzN5Iq3Ciwat%2FScreenshot_2%20(2)d.jpg?alt=media&token=186675d8-558c-4a6f-94b4-c00a1f7aafcc",
+        "https://1356965245-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FPoMm1b2k1gwsYilPUnbn%2Fuploads%2FaomUH1mttmYMVxFGUWYN%2FCreate%20club%20%232%20(1)%20(1).png?alt=media&token=2d4ca3e0-60a8-4d1c-b525-924708d985dc",
+        "https://1356965245-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FPoMm1b2k1gwsYilPUnbn%2Fuploads%2FxaeTEr3dzmGqZRf3sVVA%2Fimage17.png?alt=media&token=ee1451ee-e0d0-4b93-8de7-4273ea0c7b90",
+        "https://pbs.twimg.com/media/FVty2IgWQAAAtMy?format=jpg&name=small"
+      ]
     },
     {
       "symbol": "",
@@ -193,13 +198,17 @@
       "twitter": "CastleFinance",
       "discord": "",
       "ogImage": "https://pbs.twimg.com/profile_images/1523747383011684354/siG1SFYs_400x400.jpg",
-      "description": "description",
-      "howToJoin": "how to join",
-      "features": "",
+      "description": "Castle provides the safest way to earn yield for DAOs and their communities. \n\nBuilt specifically for your DAO's risk/return needs. \n\nThe Vault product is a risk-managed, low-maintenance savings account that safely earns yield across a diversified set of DeFi protocols.",
+      "howToJoin": "",
+      "features": "- Risk-Managed Vaults\n- Yield and Vault Reporting\n- Automated low risk and maximal yield",
 
       "nftMarketPlace": "",
       "tags": ["TREASURY", "TOOL"],
-      "screenshots": []
+      "screenshots": [
+        "https://firebasestorage.googleapis.com/v0/b/gilder-e1b6e.appspot.com/o/Screen%20Shot%202022-06-21%20at%204.12.58%20PM.png?alt=media&token=01b5b6cd-de9a-4f8a-9934-d2d06d54fccf",
+        "https://firebasestorage.googleapis.com/v0/b/gilder-e1b6e.appspot.com/o/Screen%20Shot%202022-06-21%20at%204.12.48%20PM.png?alt=media&token=ec6a2e77-6185-426d-9de0-126f80dcad64",
+        "https://firebasestorage.googleapis.com/v0/b/gilder-e1b6e.appspot.com/o/Screen%20Shot%202022-06-21%20at%204.12.30%20PM.png?alt=media&token=0632ee95-d19c-4fe6-95a9-895f21c9ea2d"
+      ]
     },
     {
       "symbol": "",
@@ -209,13 +218,18 @@
       "twitter": "streamflow_fi",
       "discord": "http://discord.gg/9yyr8UBZjr",
       "ogImage": "https://pbs.twimg.com/profile_images/1396561843146080259/VJNtxnX0_400x400.jpg",
-      "description": "description",
-      "howToJoin": "how to join",
-      "features": "",
-
+      "description": "Streamflow is a suite of products that enables organizations (and individuals) to distribute funds in a simple and straightforward manner. \n\nOur vision is to make basic crypto-native financial workflows not suck.\n\nOur initial suite of products includes a protocol for streaming payments and solutions for token vesting and progressive payroll built on top of it. In addition, we're bringing one-to-many payments and multisig vaults on Solana.",
+      "howToJoin": "",
+      "features": "- Token Vesting\n- Stream Payments\n- Batch Payments\n- Multisig wallet (coming soon)",
       "nftMarketPlace": "",
       "tags": ["TREASURY", "TOOL"],
-      "screenshots": []
+      "screenshots": [
+        "https://firebasestorage.googleapis.com/v0/b/gilder-e1b6e.appspot.com/o/Screen%20Shot%202022-06-21%20at%204.27.27%20PM.png?alt=media&token=83860dc2-5c1b-443d-afac-e03211d2fe65",
+        "https://streamflow.finance/imgs/img-feature-1.png",
+        "https://streamflow.finance/imgs/img-feature-2.png",
+        "https://streamflow.finance/imgs/img-feature-3.png",
+        "https://streamflow.finance/imgs/img-feature-4.png"
+      ]
     },
     {
       "symbol": "SLND",
