@@ -164,9 +164,9 @@ export default function DiscoverDetailsScreen({
                 text="View DAO"
                 marginBottom="0"
                 marginRight="1"
-                shade="300"
+                shade="100"
               />
-              <Unicons.UilArrowRight size="24" color={theme.gray[300]} />
+              <Unicons.UilArrowRight size="24" color={theme.gray[100]} />
             </DaoViewButton>
           )}
         </Row>
@@ -216,7 +216,7 @@ export default function DiscoverDetailsScreen({
               size="h4"
               bold={true}
               shade="100"
-              text={isNFTDao ? "NFTs" : "Product"}
+              text={isNFTDao ? "NFT" : "Product"}
               marginBottom="3"
             />
             <HorizontalScrollView
@@ -229,9 +229,10 @@ export default function DiscoverDetailsScreen({
                   <AnimatedImage
                     source={{ uri: url }}
                     cover={isNFTDao ? false : true}
+                    // cover={true}
                     style={{
-                      width: 240,
-                      // maxWidth: 320,
+                      minWidth: 240,
+                      // flex: 1,
                       height: 240,
                       overflow: "hidden",
                       borderRadius: 8,
@@ -298,7 +299,7 @@ const DaoViewButton = styled.TouchableOpacity`
   border-radius: 8px;
   align-items: center;
   justify-content: center;
-  background: ${(props: any) => props.theme.gray[800]};
+  background: ${(props: any) => props.theme.gray[700]};
 `;
 
 const FloatingBarContainer = styled.View`

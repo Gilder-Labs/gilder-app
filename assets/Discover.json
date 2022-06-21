@@ -8,16 +8,15 @@
       "twitter": "mangomarkets",
       "discord": "https://discord.gg/mangomarkets",
       "ogImage": "https://pbs.twimg.com/profile_images/1461014736674435079/w83QozhN_400x400.jpg",
-      "description": "description",
-      "howToJoin": "how to join",
-      "features": "",
+      "description": "Mango Markets provides a single venue to lend, borrow, swap, and leverage-trade crypto assets through a powerful risk engine. \n\nMango Markets is built on the Solana blockchain and utilises Serum DEX for spot margin trading while perpetual futures are traded on Mango Markets' own order book. Mango Markets is governed by MNGO token holders via the Mango DAO.",
+      "howToJoin": "Buy $MNGO token and deposit the tokens into Mango Dao to start participating.",
+      "features": "- Trading \n- Borrow & Lend\n- Spot Margin\n- Perpetual Futures \n- Market Making Program",
       "nftMarketPlace": "",
       "tags": ["PROTOCOL", "DAO", "TOOL"],
       "color1": "#E54033",
       "color2": "#EEB91B",
       "screenshots": [
-        "https://mango.markets/img/borrow.png",
-        "https://mango.markets/img/borrow.png",
+        "https://1610690202-files.gitbook.io/~/files/v0/b/gitbook-legacy-files/o/assets%2F-MVID3wF97zSdsTruiIC%2F-MjMJvu-vg5qbF4C4Huf%2F-MjMPDm_USj5eyoZMpV0%2Ftradeee.png?alt=media&token=592f1514-17f3-4c2a-a9e5-7c875e0fd601",
         "https://mango.markets/img/borrow.png"
       ]
     },
@@ -30,13 +29,16 @@
       "twitter": "grapeprotocol",
       "discord": "https://discord.gg/greatape",
       "description": "description",
-      "howToJoin": "how to join",
-      "features": "",
+      "howToJoin": "Buy $GRAPE token and deposit the tokens into Grape Dao to start participating.",
+      "features": "- Social NFT Marketplace \n- Grape Access Verification \n- Community Driven DAO \n- Marketing and Branding \n- Dean's List Feedback",
       "nftMarketPlace": "",
       "tags": ["TOOL", "DAO"],
       "color1": "#984fac",
       "color2": "#44279c",
-      "screenshots": []
+      "screenshots": [
+        "https://services.grapes.network/images/mkt-p-1600.png",
+        "https://pbs.twimg.com/media/FVOx_lhWQAAt9OB?format=jpg&name=small"
+      ]
     },
     {
       "symbol": "",

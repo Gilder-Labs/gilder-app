@@ -1,35 +1,14 @@
 import { RootStackScreenProps } from "../types";
 import styled from "styled-components/native";
-import { useState, useRef, useEffect } from "react";
 import { Button, Typography, RealmIcon, Loading } from "../components";
-import { Switch } from "react-native-ui-lib";
 import { useTheme } from "styled-components";
-import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import {
-  fetchNotificationSettings,
-  subscribeToNotifications,
-} from "../store/notificationSlice";
-import * as Haptics from "expo-haptics";
-import { TouchableOpacity } from "react-native";
 import { DiscoverCard } from "../elements";
 import DiscoverData from "../assets/Discover.json";
 
 export default function DiscoverScreen({
   navigation,
 }: RootStackScreenProps<"RealmSettings">) {
-  const theme = useTheme();
-  const dispatch = useAppDispatch();
-  const { selectedRealm } = useAppSelector((state) => state.realms);
-
   const { featured, tooling, treasury } = DiscoverData;
-
-  if (!selectedRealm) {
-    return <Loading />;
-  }
-
-  const handleClick = () => {
-    navigation.push("RealmSettings2");
-  };
 
   return (
     <Container>
@@ -49,7 +28,7 @@ export default function DiscoverScreen({
       ))}
       <Typography
         bold={true}
-        size="h3"
+        size="h4"
         shade="300"
         text={"Tools"}
         marginBottom="2"
@@ -70,7 +49,7 @@ export default function DiscoverScreen({
       </HorizontalScrollView>
       <Typography
         bold={true}
-        size="h3"
+        size="h4"
         shade="300"
         text={"Treasury Management"}
         marginBottom="2"

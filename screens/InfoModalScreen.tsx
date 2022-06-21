@@ -28,14 +28,14 @@ export default function InfoModalScreen({ navigation }: any) {
             marginBottom="0"
           />
           <IconContainerButton activeOpacity={0.4} onPress={handleTwitterLink}>
-            <Unicons.UilTwitter size="40" color={"#1DA1F2"} />
+            <Unicons.UilTwitter size="32" color={"#1DA1F2"} />
           </IconContainerButton>
         </Row>
         <Typography
           size="body"
           shade="400"
           text={
-            "The discover tab is for featuring awesome DAO's and tools for DAO's. We will be regularly updating this page to help spread the word around your community or tool."
+            "The discover tab is for featuring awesome DAO's and tools for DAO's on Solana. We will be regularly updating this page to help spread the word around your community or tool."
           }
           marginBottom="2"
         />
@@ -43,7 +43,7 @@ export default function InfoModalScreen({ navigation }: any) {
           size="body"
           shade="400"
           text={
-            "If you are interested in seeing your DAO or Tool featured on Gilder, please feel free to DM us on twitter!"
+            "If you are interested in seeing your DAO or tool featured on Gilder, please feel free to DM us on twitter!"
           }
           marginBottom="2"
         />
