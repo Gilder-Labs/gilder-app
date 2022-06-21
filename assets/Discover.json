@@ -10,6 +10,7 @@
       "ogImage": "https://pbs.twimg.com/profile_images/1461014736674435079/w83QozhN_400x400.jpg",
       "description": "description",
       "howToJoin": "how to join",
+      "features": "",
       "nftMarketPlace": "",
       "tags": ["PROTOCOL", "DAO", "TOOL"],
       "color1": "#E54033",
@@ -25,6 +26,7 @@
       "discord": "https://discord.gg/greatape",
       "description": "description",
       "howToJoin": "how to join",
+      "features": "",
       "nftMarketPlace": "",
       "tags": ["TOOL", "DAO"],
       "color1": "#984fac",
@@ -40,6 +42,8 @@
       "discord": "https://discord.gg/monkedao",
       "description": "description",
       "howToJoin": "how to join",
+      "features": "",
+
       "nftMarketPlace": "https://magiceden.io/marketplace/solana_monkey_business",
       "tags": ["NFT", "DAO"],
       "color1": "#498D5E",
@@ -52,9 +56,11 @@
       "website": "https://www.reloaded.wtf/",
       "twitter": "BearsReloaded",
       "discord": "https://discord.gg/solsanctuary",
-      "ogImage": "https://realms.today/realms/Bears/img/bearlogo.png",
-      "description": "description",
-      "howToJoin": "how to join",
+      "ogImage": "https://pbs.twimg.com/profile_images/1519953413466853376/sag04d7i_400x400.jpg",
+      "description": "The first-ever rug on Solana, de-rugged, community-owned, DAO run, & upgraded with all-new art. From rugs-to-riches, our story is unmatched. Each Reloaded Bear comes with a corresponding original SolBear NFT attached to it.",
+      "howToJoin": "If you own an original SolBear, head to https://bears.solsanctuary.io to remint it! Alternatively, you can buy a floor bear on http://Grape.Art! Once you have a Reloaded Bear join our Discord and Grape Verify!",
+      "features": "",
+
       "nftMarketPlace": "https://grape.art/collection/bearsreloaded",
       "tags": ["NFT", "DAO"],
       "color1": "#421779",
@@ -71,7 +77,8 @@
       "discord": "http://discord.gg/tYpY9UfRFx",
       "ogImage": "https://pbs.twimg.com/profile_images/1519088664177004544/qIlttfZp_400x400.jpg",
       "description": "description",
-      "howToJoin": "how to join",
+      "howToJoin": "",
+      "features": "stuff stuff stuff",
       "nftMarketPlace": "",
       "tags": ["TOOL"]
     },
@@ -85,6 +92,8 @@
       "ogImage": "https://pbs.twimg.com/profile_images/1498369290579460103/zetDxGXp_400x400.jpg",
       "description": "description",
       "howToJoin": "how to join",
+      "features": "",
+
       "nftMarketPlace": "",
       "tags": ["TOOL"]
     },
@@ -98,6 +107,8 @@
       "discord": "https://discord.gg/greatape",
       "description": "description",
       "howToJoin": "how to join",
+      "features": "",
+
       "nftMarketPlace": "",
       "tags": ["TOOL", "DAO"]
     },
@@ -111,6 +122,8 @@
       "discord": "discord.gg/UqS39ygksN",
       "description": "description",
       "howToJoin": "how to join",
+      "features": "",
+
       "nftMarketPlace": "",
       "tags": ["TOOL"]
     },
@@ -137,6 +150,8 @@
       "ogImage": "https://pbs.twimg.com/profile_images/1503831774304083969/JtKY3CUN_400x400.jpg",
       "description": "description",
       "howToJoin": "how to join",
+      "features": "",
+
       "nftMarketPlace": "",
       "tags": ["TOOL"]
     }
@@ -152,6 +167,8 @@
       "ogImage": "https://pbs.twimg.com/profile_images/1523747383011684354/siG1SFYs_400x400.jpg",
       "description": "description",
       "howToJoin": "how to join",
+      "features": "",
+
       "nftMarketPlace": "",
       "tags": ["TREASURY", "TOOL"]
     },
@@ -165,12 +182,14 @@
       "ogImage": "https://pbs.twimg.com/profile_images/1396561843146080259/VJNtxnX0_400x400.jpg",
       "description": "description",
       "howToJoin": "how to join",
+      "features": "",
+
       "nftMarketPlace": "",
       "tags": ["TREASURY", "TOOL"]
     },
     {
       "symbol": "MNGO",
-      "displayName": "Mango DAO",
+      "displayName": "Mango Markets",
       "realmId": "DPiH3H3c7t47BMxqTxLsuPQpEC6Kne8GA9VXbxpnZxFE",
       "website": "https://mango.markets",
       "twitter": "mangomarkets",
@@ -178,8 +197,10 @@
       "ogImage": "https://pbs.twimg.com/profile_images/1461014736674435079/w83QozhN_400x400.jpg",
       "description": "description",
       "howToJoin": "how to join",
+      "features": "",
+
       "nftMarketPlace": "",
-      "tags": ["PROTOCOL", "DAO", "TOOL"]
+      "tags": ["TREASURY", "PROTOCOL", "TOOL"]
     },
     {
       "symbol": "SLND",
@@ -191,6 +212,8 @@
       "ogImage": "https://pbs.twimg.com/profile_images/1479918591718064128/mjL4FpQU_400x400.jpg",
       "description": "description",
       "howToJoin": "how to join",
+      "features": "",
+
       "nftMarketPlace": "",
       "tags": ["TREASURY", "TOOL"]
     }

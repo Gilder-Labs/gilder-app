@@ -97,7 +97,7 @@ const Text = styled.Text<{
 }>`
   flex-direction: row;
   font-size: ${(props) => sizeMapping[props.size]}px;
-  line-height: ${(props) => sizeMapping[props.size] * 1.3}px;
+  line-height: ${(props) => sizeMapping[props.size] * 1.4}px;
   font-weight: ${(props) => (props.bold ? "bold" : "normal")};
   color: ${(props) => props.theme[props.color][props.shade]};
   margin-bottom: ${(props) => props.theme.spacing[props.marginBottom]};

@@ -20,6 +20,7 @@ export default function DiscoverDetailsScreen({
 }: RootStackScreenProps<"RealmSettings">) {
   const theme = useTheme();
   const dispatch = useAppDispatch();
+  const { selectedRealm } = useAppSelector((state) => state.realms);
   // @ts-ignore
   const { data } = route?.params;
 
@@ -35,30 +36,36 @@ export default function DiscoverDetailsScreen({
     howToJoin,
     nftMarketPlace,
     tags,
+    features,
     color1,
     color2,
   } = data as Feature;
 
   const handleWebClick = async () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     await WebBrowser.openBrowserAsync(website);
   };
 
   const handleMarketplaceClick = async () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     await WebBrowser.openBrowserAsync(nftMarketPlace);
   };
 
   const handleDiscordLink = () => {
-    console.log("trying to open discord");
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     Linking.openURL(discord);
   };
 
   const handleTwitterLink = () => {
-    console.log("trying to open discord");
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     Linking.openURL(`https://twitter.com/${twitter}`);
   };
 
   return (
     <Container>
+      <FloatingBarContainer>
+        <FloatingBar />
+      </FloatingBarContainer>
       <LinearGradient
         colors={[
           color1 ? color1 : theme.gray[600],
@@ -141,11 +148,11 @@ export default function DiscoverDetailsScreen({
         />
         <Typography
           size="body"
-          shade="100"
+          shade="400"
           text={description}
           marginBottom="4"
         />
-        {howToJoin && (
+        {!!howToJoin && (
           <>
             <Typography
               size="h4"
@@ -156,8 +163,25 @@ export default function DiscoverDetailsScreen({
             />
             <Typography
               size="body"
-              shade="100"
+              shade="400"
               text={howToJoin}
+              marginBottom="4"
+            />
+          </>
+        )}
+        {!!features && (
+          <>
+            <Typography
+              size="h4"
+              bold={true}
+              shade="100"
+              text={"Features"}
+              marginBottom="2"
+            />
+            <Typography
+              size="body"
+              shade="400"
+              text={features}
               marginBottom="4"
             />
           </>
@@ -203,4 +227,26 @@ const IconContainerButton = styled.TouchableOpacity`
 
 const ContentContainer = styled.View`
   padding: ${(props: any) => props.theme.spacing[4]};
+`;
+
+const FloatingBarContainer = styled.View`
+  position: absolute;
+
+  width: 100%;
+  padding-top: ${(props: any) => props.theme.spacing[2]};
+  top: 0;
+  left: 0;
+  z-index: 100;
+
+  justify-content: center;
+  align-items: center;
+`;
+
+const FloatingBar = styled.View`
+  height: 4px;
+  width: 40px;
+  z-index: 100;
+  background: #ffffff88;
+  top: 0;
+  border-radius: 8;
 `;

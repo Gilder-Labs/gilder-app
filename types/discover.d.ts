@@ -8,6 +8,7 @@ interface Feature {
   ogImage: string;
   description: string;
   howToJoin: string;
+  features: string;
   nftMarketPlace: string;
   tags: Array<string>;
   color1: string;
