@@ -149,7 +149,9 @@ export default function DiscoverDetailsScreen({
           </HeaderRow>
         </ImageBackground>
       </LinearGradient>
-      <ContentContainer contentContainerStyle={{ padding: 16 }}>
+      <ContentContainer
+        contentContainerStyle={{ padding: 16, paddingBottom: 64 }}
+      >
         <Row>
           <Typography
             size="h4"
@@ -228,14 +230,15 @@ export default function DiscoverDetailsScreen({
                 <ImageContainer>
                   <AnimatedImage
                     source={{ uri: url }}
-                    cover={isNFTDao ? false : true}
                     // cover={true}
                     style={{
                       minWidth: 240,
-                      // flex: 1,
                       height: 240,
+                      width: isNFTDao ? 240 : 360,
+
                       overflow: "hidden",
                       borderRadius: 8,
+                      resizeMode: isNFTDao ? "cover" : "contain",
                     }}
                   />
                 </ImageContainer>
