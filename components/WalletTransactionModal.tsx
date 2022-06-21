@@ -47,6 +47,9 @@ export const WalletTransactionModal = ({}: WalletTransactionModalProps) => {
             <Unicons.UilTimes size="20" color={theme.gray[200]} />
           </CloseIconButton>
         </Header> */}
+        <FloatingBarContainer>
+          <FloatingBar />
+        </FloatingBarContainer>
         {transactionType === "VoteOnProposal" && <VoteOnProposalTransaction />}
         {false && <Typography text="info info info" />}
         {false && <Typography text="info info info" />}
@@ -83,4 +86,26 @@ const Container = styled.View`
   border-radius: 20px;
   align-items: center;
   justify-content: space-between;
+`;
+
+const FloatingBarContainer = styled.View`
+  position: absolute;
+
+  width: 100%;
+  padding-top: ${(props: any) => props.theme.spacing[2]};
+  top: 0;
+  left: 0;
+  z-index: 100;
+
+  justify-content: center;
+  align-items: center;
+`;
+
+const FloatingBar = styled.View`
+  height: 4px;
+  width: 40px;
+  z-index: 100;
+  background: #ffffff66;
+  top: 0;
+  border-radius: 8;
 `;

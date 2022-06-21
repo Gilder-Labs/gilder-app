@@ -16,6 +16,7 @@ import Web3Auth, {
   LOGIN_PROVIDER,
   OPENLOGIN_NETWORK,
 } from "@web3auth/react-native-sdk";
+import { useNavigation } from "@react-navigation/native";
 
 import { URL } from "react-native-url-polyfill";
 
@@ -35,6 +36,7 @@ export const ConnectWalletButton = ({}: ConnectWalletProps) => {
   const { publicKey } = useAppSelector((state) => state.wallet);
   const [key, setKey] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+  const navigation = useNavigation();
 
   const login = async () => {
     try {
@@ -70,6 +72,7 @@ export const ConnectWalletButton = ({}: ConnectWalletProps) => {
           userInfo: userInfo,
         })
       );
+      navigation.push("WalletModal");
     } catch (e) {
       console.error(e);
       setErrorMsg(String(e));
@@ -77,7 +80,8 @@ export const ConnectWalletButton = ({}: ConnectWalletProps) => {
   };
 
   const handleOpenWallet = () => {
-    dispatch(openWallet(""));
+    // dispatch(openWallet(""));
+    navigation.push("WalletModal");
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
   };
 

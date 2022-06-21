@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { Modal, FlatList, View, StyleSheet, Animated } from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet } from "react-native";
 import styled from "styled-components/native";
 import { getColorType, getFilteredTokens } from "../utils";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import * as Unicons from "@iconscout/react-native-unicons";
 import {
-  closeWallet,
   disconnectWallet,
   fetchTransactions,
   fetchTokens,
@@ -26,6 +25,7 @@ import { Typography } from "./Typography";
 import { TransactionList } from "../elements";
 import { PageControl } from "react-native-ui-lib";
 import * as Haptics from "expo-haptics";
+import { useNavigation } from "@react-navigation/native";
 
 import { Incubator } from "react-native-ui-lib";
 const { Toast } = Incubator;
@@ -36,35 +36,25 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const [selectedPage, setSelectedPage] = useState(0);
+  const navigation = useNavigation();
 
-  const {
-    isWalletOpen,
-    publicKey,
-    tokenPriceData,
-    tokens,
-    userInfo,
-    transactions,
-    nfts,
-  } = useAppSelector((state) => state.wallet);
+  const { publicKey, tokenPriceData, tokens, userInfo, transactions, nfts } =
+    useAppSelector((state) => state.wallet);
   const { isShowingToast } = useAppSelector((state) => state.utility);
 
-  const handleClose = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    dispatch(closeWallet(""));
-  };
-
   const handleDisconnect = () => {
+    navigation.pop(1);
     dispatch(disconnectWallet(""));
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
   };
 
   useEffect(() => {
-    if (isWalletOpen && publicKey) {
+    if (publicKey) {
       dispatch(fetchTokens(publicKey));
       dispatch(fetchNfts(publicKey));
       dispatch(fetchTransactions(publicKey));
     }
-  }, [isWalletOpen]);
+  }, []);
 
   const color = getColorType(publicKey);
 
@@ -91,18 +81,13 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
   const filteredTokens = getFilteredTokens(nfts, tokens);
 
   return (
-    <Modal
-      animationType="slide"
-      visible={isWalletOpen}
-      onRequestClose={handleClose}
-      presentationStyle="pageSheet"
-      // transparent={true}
-    >
+    <>
       <Container>
+        <FloatingBarContainer>
+          <FloatingBar />
+        </FloatingBarContainer>
+
         <Header>
-          <CloseIconButton onPress={handleClose} activeOpacity={0.5}>
-            <Unicons.UilTimes size="20" color={theme.gray[200]} />
-          </CloseIconButton>
           <DisconnectButton onPress={handleDisconnect}>
             <ButtonText>Disconnect</ButtonText>
           </DisconnectButton>
@@ -182,7 +167,7 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
         elevation={0}
         centerMessage={true}
       />
-    </Modal>
+    </>
   );
 };
 
@@ -196,21 +181,13 @@ const styles = StyleSheet.create({
 
 const Header = styled.View`
   height: 64px;
-  background-color: ${(props) => props.theme.gray[800]};
-  justify-content: space-between;
+  background-color: ${(props) => props.theme.gray[900]};
+  justify-content: flex-end;
   width: 100%;
   align-items: center;
   flex-direction: row;
   padding-left: ${(props) => props.theme.spacing[2]};
   padding-right: ${(props) => props.theme.spacing[2]};
-  margin-bottom: ${(props) => props.theme.spacing[3]};
-`;
-
-const CloseIconButton = styled.TouchableOpacity`
-  width: 48px;
-  height: 48px;
-  justify-content: center;
-  align-items: center;
 `;
 
 const EmptyView = styled.View`
@@ -232,7 +209,9 @@ const DisconnectButton = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
   border-radius: 4px;
+  z-index: 10;
   padding: ${(props) => props.theme.spacing[2]};
+  background: ${(props) => props.theme.gray[1000]};
 `;
 
 const ButtonText = styled.Text`
@@ -266,4 +245,26 @@ const WalletValue = styled.Text`
   font-size: 32px;
   margin-top: ${(props: any) => props.theme.spacing[3]};
   margin-bottom: ${(props: any) => props.theme.spacing[3]};
+`;
+
+const FloatingBarContainer = styled.View`
+  position: absolute;
+
+  width: 100%;
+  padding-top: ${(props: any) => props.theme.spacing[2]};
+  top: 0;
+  left: 0;
+  z-index: 100;
+
+  justify-content: center;
+  align-items: center;
+`;
+
+const FloatingBar = styled.View`
+  height: 4px;
+  width: 40px;
+  z-index: 100;
+  background: #ffffff88;
+  top: 0;
+  border-radius: 8;
 `;

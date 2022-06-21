@@ -369,6 +369,16 @@ export default function Navigation({}: {}) {
                 headerTransparent: true,
               })}
             />
+            <Stack.Screen
+              name="WalletModal"
+              component={WalletModal}
+              options={({ route }) => ({
+                title: "",
+                presentation: "modal",
+                headerTransparent: true,
+                headerShown: false,
+              })}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </Chat>

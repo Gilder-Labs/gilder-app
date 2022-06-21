@@ -50,6 +50,7 @@ export const PublicKeyTextCopy = ({
         text={abbreviatePublicKey(publicKey)}
         textAlign="left"
         bold={bold}
+        marginBottom={"0"}
       ></Typography>
       {!hideIcon && (
         <IconContainer>
@@ -78,6 +79,5 @@ const Container = styled.TouchableOpacity<{ noPadding: boolean }>`
 `;
 
 const IconContainer = styled.View`
-  padding-bottom: ${(props) => props.theme.spacing[1]};
   padding-left: ${(props) => props.theme.spacing[1]};
 `;
