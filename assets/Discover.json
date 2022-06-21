@@ -242,7 +242,7 @@
     {
       "symbol": "SLND",
       "displayName": "Solend",
-      "realmId": "",
+      "realmId": "7sf3tcWm58vhtkJMwuw2P3T6UBX7UE5VKxPMnXJUZ1Hn",
       "website": "https://solend.fi",
       "twitter": "solendprotocol",
       "discord": "https://discord.gg/solend",
@@ -252,8 +252,14 @@
       "features": "- Earn Interest\n- Borrow \n- Leverage long\n- Short",
 
       "nftMarketPlace": "",
-      "tags": ["TREASURY", "TOOL"],
-      "screenshots": []
+      "tags": ["TREASURY", "TOOL", "DAO"],
+      "screenshots": [
+        "https://firebasestorage.googleapis.com/v0/b/gilder-e1b6e.appspot.com/o/Screen%20Shot%202022-06-21%20at%205.27.28%20PM.png?alt=media&token=a81ad2b4-5a72-4046-8468-d7ea5c468dbb",
+        "https://firebasestorage.googleapis.com/v0/b/gilder-e1b6e.appspot.com/o/Screen%20Shot%202022-06-21%20at%205.27.53%20PM.png?alt=media&token=5f01ba3c-39f0-404c-af75-60857ecf5b9e",
+        "https://firebasestorage.googleapis.com/v0/b/gilder-e1b6e.appspot.com/o/Screen%20Shot%202022-06-21%20at%205.28.09%20PM.png?alt=media&token=1d620bd8-fe10-4034-9430-e289f7a7af31"
+      ],
+      "color1": "#ff5c28",
+      "color2": "#922300"
     }
   ]
 }
