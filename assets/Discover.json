@@ -97,15 +97,16 @@
       "twitter": "Realms_DAOs",
       "discord": "http://discord.gg/tYpY9UfRFx",
       "ogImage": "https://pbs.twimg.com/profile_images/1519088664177004544/qIlttfZp_400x400.jpg",
-      "description": "description",
+      "description": "Realms is an end to end DAO solution for Solana DAOs built by the Solana team and community. \n\nEasily spin up a new NFT, multi sig wallet or community dao in a few minutes in our no code dao creation wizard. \n\nManage your community, treasury and proposals transparently and resistant to censorship from our web app.",
       "howToJoin": "",
-      "features": "stuff stuff stuff",
+      "features": "- No Code DAO creation tool\n- Multi Sig Wallet, NFT DAO, Community DAO \n- Custom and Flexible Governance \n- Invest and stake directly from treasury \n- Proposal Notifications  ",
       "nftMarketPlace": "",
       "tags": ["TOOL"],
       "screenshots": [
-        "https://pbs.twimg.com/media/FVsGrwKX0AUyUyu?format=jpg&name=4096x4096",
-        "https://pbs.twimg.com/media/FVsGrwKX0AUyUyu?format=jpg&name=4096x4096",
-        "https://pbs.twimg.com/media/FVsGrwKX0AUyUyu?format=jpg&name=4096x4096"
+        "https://pbs.twimg.com/media/FVsGrwKX0AUyUyu?format=jpg&name=small",
+        "https://firebasestorage.googleapis.com/v0/b/gilder-e1b6e.appspot.com/o/Screen%20Shot%202022-06-22%20at%202.24.58%20PM.png?alt=media&token=b7e3db71-c078-4a80-b7af-f3ce6b997c10",
+        "https://firebasestorage.googleapis.com/v0/b/gilder-e1b6e.appspot.com/o/Screen%20Shot%202022-06-22%20at%202.25.45%20PM.png?alt=media&token=7a2fe111-d9e6-4313-9d93-0ae64283d3de",
+        "https://firebasestorage.googleapis.com/v0/b/gilder-e1b6e.appspot.com/o/Screen%20Shot%202022-06-22%20at%202.25.58%20PM.png?alt=media&token=4f3753f4-a72b-4b17-9672-99c92e9c57ad"
       ]
     },
     {
