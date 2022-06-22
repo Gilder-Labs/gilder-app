@@ -92,7 +92,7 @@ export const DiscoverCard = ({
             </Row>
             <RowEnd>
               {tags.map((tag) => (
-                <BadgeContainer>
+                <BadgeContainer key={tag}>
                   <Typography
                     text={tag}
                     marginBottom="0"
