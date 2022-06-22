@@ -79,25 +79,25 @@ export const fetchRealmMembers = createAsyncThunk(
         // if member does not exist, add member to member map
         // if member does exist, check which token record this is and add correct attributes to object
 
-        const governingTokenMint = member.account.governingTokenMint.toString();
+        const governingTokenMint = member.account.governingTokenMint.toBase58();
         const depositAmount =
           member.account.governingTokenDepositAmount.toString();
 
         let memberData = {
-          publicKey: member.pubkey.toString(),
-          owner: member.owner.toString(), // RealmId
+          publicKey: member.pubkey.toBase58(),
+          owner: member.owner.toBase58(), // RealmId
           totalVotesCount: member.account.totalVotesCount, // How many votes they have
           outstandingProposalCount: member.account.outstandingProposalCount,
-          walletId: member.account.governingTokenOwner.toString(), // Wallet address of owner of dao token
+          walletId: member.account.governingTokenOwner.toBase58(), // Wallet address of owner of dao token
         };
-        tokenRecordToWalletMap[member.pubkey.toString()] =
-          member.account.governingTokenOwner.toString();
+        tokenRecordToWalletMap[member.pubkey.toBase58()] =
+          member.account.governingTokenOwner.toBase58();
 
         if (governingTokenMint === councilMint) {
           const delegateWalletId =
             member?.account?.governanceDelegate?.toBase58();
           // @ts-ignore
-          memberData["councilPublicKey"] = member.pubkey.toString();
+          memberData["councilPublicKey"] = member.pubkey.toBase58();
           // @ts-ignore
           memberData["councilDelegate"] = delegateWalletId;
           // @ts-ignore
@@ -132,7 +132,7 @@ export const fetchRealmMembers = createAsyncThunk(
             member?.account?.governanceDelegate?.toBase58();
 
           //@ts-ignore
-          memberData["communityPublicKey"] = member.pubkey.toString();
+          memberData["communityPublicKey"] = member.pubkey.toBase58();
           // @ts-ignore
           memberData["communityDelegate"] = delegateWalletId;
           // @ts-ignore
@@ -210,10 +210,10 @@ export const fetchMemberChat = createAsyncThunk(
       let parsedChatMessages = rawChatMesssages.map((message) => {
         return {
           postedAt: message.account.postedAt.toNumber(),
-          replyTo: message.account.replyTo?.toString() || null,
-          proposalId: message.account.proposal.toString(),
+          replyTo: message.account.replyTo?.toBase58() || null,
+          proposalId: message.account.proposal.toBase58(),
           body: message.account.body.value,
-          author: message.account.author.toString(),
+          author: message.account.author.toBase58(),
           isReply: message.account.body.isReply,
           isReaction: message.account.body.type === 0,
         };
@@ -246,7 +246,7 @@ export const fetchMemberVotes = createAsyncThunk(
 
       let parsedVoteRecords = rawVoteRecords.map((vote) => {
         return {
-          proposalId: vote.account.proposal.toString(),
+          proposalId: vote.account.proposal.toBase58(),
           isRelinquished: vote.account.isRelinquished,
           voterWeightNo: vote.account.getNoVoteWeight()?.toString(),
           voteWeightYes: vote.account.getYesVoteWeight()?.toString(),

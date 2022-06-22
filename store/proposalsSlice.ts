@@ -50,9 +50,9 @@ export const fetchRealmProposals = createAsyncThunk(
     // votingAt, signingOffAt, votingCompletedAt, draftAt, executingAt
     // format(getStateTimestamp * 1000, "LLL cc, yyyy"
     let proposals = rawProposals?.map((proposal: any) => {
-      const proposalId = proposal.pubkey.toString();
+      const proposalId = proposal.pubkey.toBase58();
       let data = {
-        governanceId: proposal?.account?.governance.toString(),
+        governanceId: proposal?.account?.governance.toBase58(),
         description: proposal?.account?.descriptionLink,
         name: proposal?.account?.name,
         proposalId: proposalId,
@@ -63,9 +63,9 @@ export const fetchRealmProposals = createAsyncThunk(
         isPreVotingState: proposal.account.isPreVotingState(),
         getYesVoteCount: proposal.account.getYesVoteCount().toString(),
         getNoVoteCount: proposal.account.getNoVoteCount().toString(),
-        tokenOwnerRecord: proposal.account.tokenOwnerRecord.toString(),
+        tokenOwnerRecord: proposal.account.tokenOwnerRecord.toBase58(),
         // Determines whether council or community token is used for votes
-        governingTokenMint: proposal.account.governingTokenMint.toString(),
+        governingTokenMint: proposal.account.governingTokenMint.toBase58(),
         // Dates
         getStateTimestamp: proposal.account.getStateTimestamp(), // date/time it hit currents state
         votingAt: proposal.account?.votingAt?.toNumber(),
@@ -106,10 +106,10 @@ export const fetchProposalChat = createAsyncThunk(
       let parsedChatMessages = rawChatMesssages.map((message) => {
         return {
           postedAt: message.account.postedAt.toNumber(),
-          replyTo: message.account.replyTo?.toString() || null,
-          proposalId: message.account.proposal.toString(),
+          replyTo: message.account.replyTo?.toBase58() || null,
+          proposalId: message.account.proposal.toBase58(),
           body: message.account.body.value,
-          author: message.account.author.toString(),
+          author: message.account.author.toBase58(),
           isReply: message.account.body.isReply,
           isReaction: message.account.body.type === 0,
         };

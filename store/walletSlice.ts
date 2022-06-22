@@ -99,7 +99,7 @@ export const fetchTokens = createAsyncThunk(
         const tokenData = {
           ...tokenInfo,
           mint: token.account.data.parsed.info.mint,
-          owner: token.account.data.parsed.info.owner.toString(),
+          owner: token.account.data.parsed.info.owner.toBase58(),
           tokenAmount: token.account.data.parsed.info.tokenAmount,
         };
 

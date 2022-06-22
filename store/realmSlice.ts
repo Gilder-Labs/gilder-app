@@ -58,7 +58,7 @@ export const fetchRealms = createAsyncThunk("realms/fetchRealms", async () => {
     let realmDataKeys = Object.keys(cleanedRealmData);
     let uniqueRealmGovs = realmDataKeys.filter(
       (realmId) =>
-        cleanedRealmData[realmId].programId !== REALM_GOVERNANCE_PKEY.toString()
+        cleanedRealmData[realmId].programId !== REALM_GOVERNANCE_PKEY.toBase58()
     );
     // add them into realms list
     let realmsWithGovs = uniqueRealmGovs.map((realmId) => {
@@ -79,14 +79,14 @@ export const fetchRealms = createAsyncThunk("realms/fetchRealms", async () => {
     realms = realmsRaw.map((realm) => {
       // realm is in our realmdata from : https://github.com/solana-labs/governance-ui/blob/main/public/realms/mainnet-beta.json
       // delete off object so we can find custom governanceId realms we need to add to realm list
-      let realmId = realm.pubkey.toString();
+      let realmId = realm.pubkey.toBase58();
 
       let realmData = {
         name: realm.account.name,
-        pubKey: realm.pubkey.toString(),
-        communityMint: realm.account.communityMint.toString(),
-        councilMint: realm.account?.config?.councilMint?.toString() || null,
-        governanceId: realm?.owner.toString(),
+        pubKey: realm.pubkey.toBase58(),
+        communityMint: realm.account.communityMint.toBase58(),
+        councilMint: realm.account?.config?.councilMint?.toBase58() || null,
+        governanceId: realm?.owner.toBase58(),
         accountType: realm.account.accountType,
         votingProposalCount: realm.account.votingProposalCount,
         maxVoteWeight:
@@ -146,22 +146,22 @@ export const fetchRealm = createAsyncThunk(
 
       return {
         name: rawRealm.account.name,
-        pubKey: rawRealm.pubkey.toString(),
-        communityMint: rawRealm.account.communityMint.toString(),
+        pubKey: rawRealm.pubkey.toBase58(),
+        communityMint: rawRealm.account.communityMint.toBase58(),
         communityMintDecimals: communityMintData
           ? communityMintData.value?.data?.parsed?.info?.decimals
           : null,
         communityMintSupply: communityMintData
           ? communityMintData.value?.data?.parsed?.info?.supply
           : null,
-        councilMint: rawRealm.account?.config?.councilMint?.toString() || null,
+        councilMint: rawRealm.account?.config?.councilMint?.toBase58() || null,
         councilMintDecimals: councilMintData
           ? councilMintData.value?.data?.parsed?.info?.decimals
           : null,
         councilMintSupply: councilMintData
           ? councilMintData.value?.data?.parsed?.info?.supply
           : null,
-        governanceId: rawRealm?.owner.toString(),
+        governanceId: rawRealm?.owner.toBase58(),
         accountType: rawRealm.account.accountType,
         votingProposalCount: rawRealm.account.votingProposalCount,
         maxVoteWeight:
