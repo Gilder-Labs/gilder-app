@@ -9,6 +9,7 @@ import {
   Button,
   Loading,
   WalletIdentity,
+  Typography,
 } from "../components";
 import { format, getUnixTime, formatDistance } from "date-fns";
 import numeral from "numeral";
@@ -40,9 +41,8 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
   const { governancesMap, isLoadingVaults } = useAppSelector(
     (state) => state.treasury
   );
-  const { isLoadingMembers, tokenRecordToWalletMap } = useAppSelector(
-    (state) => state.members
-  );
+  const { isLoadingMembers, tokenRecordToWalletMap, delegateMap } =
+    useAppSelector((state) => state.members);
   const { chatMessages, isLoadingChatMessages } = useAppSelector(
     (state) => state.proposals
   );
@@ -52,6 +52,10 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
   const { proposalsMap } = useAppSelector((state) => state.proposals);
 
   const { proposalId } = route?.params;
+
+  // TODO: Fetch vote records for this proposal
+  // 1. show them on comments
+  // 2. display them on delegates (disable if already voted)
 
   useEffect(() => {
     if (proposalId && proposalsMap?.[proposalId]) {
@@ -123,7 +127,13 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
       : (votingAt ?? 0) + governance?.maxVotingTime - now;
 
     if (timeToVoteEnd <= 0) {
-      return 0;
+      return {
+        days: 0,
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
+        isVotingTimeOver: true,
+      };
     }
 
     const days = Math.floor(timeToVoteEnd / 86400);
@@ -133,7 +143,7 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
     const minutes = Math.floor(timeToVoteEnd / 60) % 60;
     timeToVoteEnd -= minutes * 60;
     const seconds = Math.floor(timeToVoteEnd % 60);
-    return { days, hours, minutes, seconds };
+    return { days, hours, minutes, seconds, isVotingTimeOver: false };
   };
 
   const renderChatMessage = ({ item }: any) => {
@@ -285,25 +295,54 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
           </Votes>
           {/* {isVoting && isMember && ( */}
           <>
-            <Title>Voting</Title>
-            <Divider />
+            <Typography
+              text="Voting"
+              bold={true}
+              size="h4"
+              shade={"400"}
+              marginLeft={"3"}
+              marginBottom={"0"}
+            />
             <VoteButtonContainer>
               <Button
                 title="Vote No"
                 onPress={() => vote(1)}
                 marginRight={true}
+                disabled={
+                  !publicKey ||
+                  !delegateMap[publicKey] ||
+                  timeLeft.isVotingTimeOver
+                }
               />
-              <Button title="Vote Yes" onPress={() => vote(0)} />
+              <Button
+                disabled={
+                  !publicKey ||
+                  !delegateMap[publicKey] ||
+                  timeLeft.isVotingTimeOver
+                }
+                title="Vote Yes"
+                onPress={() => vote(0)}
+              />
             </VoteButtonContainer>
           </>
           {/* )} */}
-          <Title>Description</Title>
-          <Divider />
+          <Typography
+            text="Description"
+            bold={true}
+            size="h4"
+            shade={"400"}
+            marginLeft={"3"}
+          />
 
           <DescriptionText selectable={true}>{description} </DescriptionText>
 
-          <Title>Discussion</Title>
-          <Divider />
+          <Typography
+            text="Discussion"
+            bold={true}
+            size="h4"
+            shade={"400"}
+            marginLeft={"3"}
+          />
           {isLoadingChatMessages && (
             <LoadingContainer>
               <Loading size={48} />
@@ -337,10 +376,10 @@ const VoteButtonContainer = styled.View`
 const ProposalTitle = styled.Text`
   color: ${(props: any) => props.theme.gray[100]}
   font-weight: bold;
-  font-size: 22px;
-  line-height: 24px;
+  font-size: 26px;
+  line-height: 32px;
   flex-wrap: wrap;
-  max-width: 240px;
+  max-width: 260px;
   padding-right: ${(props: any) => props.theme.spacing[2]};
 `;
 
@@ -350,6 +389,7 @@ const DescriptionText = styled.Text`
   line-height: 24px;
   padding-left: ${(props: any) => props.theme.spacing[3]};
   padding-right: ${(props: any) => props.theme.spacing[3]};
+  margin-bottom: ${(props: any) => props.theme.spacing[3]};
 `;
 
 const DateText = styled.Text`
@@ -369,6 +409,8 @@ const TextContainer = styled.View`
   padding-bottom: ${(props: any) => props.theme.spacing[1]};
   flex-direction: row;
   justify-content: space-between;
+  flex: 1;
+  width: 100%;
   /* margin-bottom: ${(props: any) => props.theme.spacing[2]}; */
 `;
 
@@ -456,14 +498,6 @@ const Title = styled.Text`
   margin-top: ${(props: any) => props.theme.spacing[4]};
   margin-bottom: ${(props: any) => props.theme.spacing[2]};
 
-`;
-
-const Divider = styled.View`
-  height: 2px;
-  background: ${(props: any) => props.theme.gray[700]};
-  margin-left: ${(props: any) => props.theme.spacing[3]};
-  margin-right: ${(props: any) => props.theme.spacing[3]};
-  margin-bottom: ${(props: any) => props.theme.spacing[3]};
 `;
 
 const LoadingContainer = styled.View``;
