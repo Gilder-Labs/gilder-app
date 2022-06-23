@@ -387,7 +387,7 @@ const ProposalTitle = styled.Text`
   font-size: 26px;
   line-height: 32px;
   flex-wrap: wrap;
-  max-width: 80%;
+  max-width: 75%;
   padding-right: ${(props: any) => props.theme.spacing[2]};
 `;
 
