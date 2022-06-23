@@ -43,9 +43,8 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
   );
   const { isLoadingMembers, tokenRecordToWalletMap, delegateMap } =
     useAppSelector((state) => state.members);
-  const { chatMessages, isLoadingChatMessages } = useAppSelector(
-    (state) => state.proposals
-  );
+  const { chatMessages, isLoadingChatMessages, walletToVoteMap } =
+    useAppSelector((state) => state.proposals);
   const { membersMap } = useAppSelector((state) => state.members);
 
   const { publicKey } = useAppSelector((state) => state.wallet);
@@ -147,17 +146,6 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
     return { days, hours, minutes, seconds, isVotingTimeOver: false };
   };
 
-  const renderChatMessage = ({ item }: any) => {
-    return (
-      <ChatMessage
-        message={item}
-        key={item.postedAt}
-        proposal={proposal}
-        isInProposal={true}
-      />
-    );
-  };
-
   const getVoteFormatted = (votes: string) => {
     let voteString;
     if (mintDecimals === 0) {
@@ -166,6 +154,24 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
 
     voteString = votes.slice(0, -mintDecimals);
     return numeral(Number(voteString)).format("0,0");
+  };
+
+  const renderChatMessage = ({ item }: any) => {
+    const vote = walletToVoteMap[item.author];
+    const voteWeight = vote?.voteWeightYes
+      ? vote?.voteWeightYes
+      : vote?.voteWeightNo;
+
+    return (
+      <ChatMessage
+        message={item}
+        key={item.postedAt}
+        proposal={proposal}
+        isInProposal={true}
+        voteWeight={voteWeight ? getVoteFormatted(voteWeight.toString()) : ""}
+        isYesVote={vote?.voteWeightYes ? true : false}
+      />
+    );
   };
 
   const getQuorum = () => {
@@ -343,6 +349,7 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
             size="h4"
             shade={"400"}
             marginLeft={"3"}
+            margin-bottom="2"
           />
           {isLoadingChatMessages && (
             <LoadingContainer>

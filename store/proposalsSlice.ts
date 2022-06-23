@@ -50,7 +50,6 @@ export const fetchRealmProposals = createAsyncThunk(
         new PublicKey(realm.pubKey)
       );
       rawProposals = rawProposals.flat();
-      console.log("raw proposals", rawProposals);
     } catch (error) {
       console.log("error", error);
     }
@@ -128,7 +127,7 @@ export const fetchProposalVotes = createAsyncThunk(
           const voteData = {
             walletId: vote?.account?.governingTokenOwner?.toBase58(),
             proposalId: vote?.account?.proposal?.toBase58(),
-            voterWeightNo: vote?.account?.getNoVoteWeight()?.toString(),
+            voteWeightNo: vote?.account?.getNoVoteWeight()?.toString(),
             voteWeightYes: vote?.account?.getYesVoteWeight()?.toString(),
           };
 

@@ -5,11 +5,15 @@ import { format, formatDistance } from "date-fns";
 import { getColorType, abbreviatePublicKey } from "../utils";
 import { useQuery, gql } from "@apollo/client";
 import { LinearGradient } from "expo-linear-gradient";
+import { Typography } from "./Typography";
+import * as Unicons from "@iconscout/react-native-unicons";
 
 interface ChatMessageProps {
   message: ChatMessage;
   proposal: Proposal;
   isInProposal?: boolean;
+  voteWeight: string;
+  isYesVote: boolean;
 }
 
 const GET_CYBERCONNECT_IDENTITY = gql`
@@ -29,6 +33,8 @@ export const ChatMessage = ({
   message,
   proposal,
   isInProposal = false,
+  isYesVote = true,
+  voteWeight = "",
 }: ChatMessageProps) => {
   const theme = useTheme();
   const { body, postedAt, proposalId, author } = message;
@@ -73,10 +79,30 @@ export const ChatMessage = ({
       </IconContainer>
 
       <Column>
-        <ProposalName>{getDisplayName()}</ProposalName>
-        <MessageDate>
-          {formatDistance(postedAt * 1000, new Date(), { addSuffix: true })}
-        </MessageDate>
+        <Row>
+          <Column>
+            <UserName>{getDisplayName()}</UserName>
+            <MessageDate>
+              {formatDistance(postedAt * 1000, new Date(), { addSuffix: true })}
+            </MessageDate>
+          </Column>
+          {!!voteWeight && (
+            <VoteButton>
+              {isYesVote ? (
+                <Unicons.UilCheckCircle size="20" color={theme.success[400]} />
+              ) : (
+                <Unicons.UilTimesCircle size="20" color={theme.error[400]} />
+              )}
+              <Typography
+                text={voteWeight}
+                size="subtitle"
+                shade="200"
+                marginBottom="0"
+                marginLeft="2"
+              />
+            </VoteButton>
+          )}
+        </Row>
         <MessageBody>{body} </MessageBody>
       </Column>
     </Container>
@@ -105,7 +131,7 @@ const MessageDate = styled.Text`
   font-size: 12px;
 `;
 
-const ProposalName = styled.Text`
+const UserName = styled.Text`
   color: ${(props) => props.theme.gray[100]};
   font-weight: bold;
   margin-bottom: ${(props) => props.theme.spacing[1]};
@@ -126,6 +152,7 @@ const IconContainer = styled.View<{ color: string }>`
 
 const Row = styled.View`
   flex-direction: row;
+  align-items: flex-start;
 `;
 
 const Column = styled.View`
@@ -137,4 +164,16 @@ const EmptyView = styled.View``;
 const Avatar = styled.Image`
   width: 34px;
   height: 34px;
+`;
+
+const VoteButton = styled.View`
+  background: ${(props: any) => props.theme.gray[900]};
+  padding: ${(props) => props.theme.spacing[2]};
+  padding-left: ${(props) => props.theme.spacing[3]};
+  padding-right: ${(props) => props.theme.spacing[3]};
+
+  border-radius: 16px;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
 `;
