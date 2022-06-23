@@ -14,9 +14,14 @@ import { getFilteredTokens } from "../utils";
 interface VaultCardProps {
   vaultId: string;
   tokens: Array<any>;
+  isGovernanceVault: boolean;
 }
 
-export const VaultCard = ({ vaultId, tokens }: VaultCardProps) => {
+export const VaultCard = ({
+  vaultId,
+  tokens,
+  isGovernanceVault,
+}: VaultCardProps) => {
   const { tokenPriceData, vaultsNfts } = useAppSelector(
     (state) => state.treasury
   );
@@ -41,8 +46,7 @@ export const VaultCard = ({ vaultId, tokens }: VaultCardProps) => {
 
   // If the vault has no tokens of value ||
   // TODO: handle this by setting
-  if ((!tokens.length || totalValue < 0.5) && !nfts.length) {
-    console.log("total value", totalValue);
+  if ((!tokens.length || totalValue < 0.1) && !nfts.length) {
     return <></>;
   }
 

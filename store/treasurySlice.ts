@@ -71,6 +71,7 @@ export const fetchVaults = createAsyncThunk(
         return {
           pubKey: governance.pubkey.toBase58(), // program that controls vault/token account
           vaultId: governance.account?.governedAccount.toBase58(), // vault/token account where tokens are held
+          isGovernanceVault: true,
         };
       });
 
@@ -88,6 +89,7 @@ export const fetchVaults = createAsyncThunk(
         vaultsInfo.push({
           pubKey: rawAddress.toBase58(), // program that controls vault/token account
           vaultId: index.toString(), // vault/token account where tokens are held
+          isGovernanceVault: false,
         });
       });
 
@@ -177,6 +179,7 @@ export const fetchVaults = createAsyncThunk(
         return {
           pubKey: vaultsInfo[index].pubKey, // WALLET ID
           vaultId: vaultsInfo[index].vaultId,
+          isGovernanceVault: vaultsInfo[index].isGovernanceVault,
           // nfts: vaultNftsMap[vault]
           tokens: tokens,
         };

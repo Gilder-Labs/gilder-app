@@ -44,6 +44,7 @@ export default function TreasuryScreen({
       <VaultCard
         vaultId={item.pubKey}
         tokens={item.tokens}
+        isGovernanceVault={item.isGovernanceVault}
         key={`${item.pubKey}-${index}`}
       />
     );
