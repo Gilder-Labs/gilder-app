@@ -109,12 +109,7 @@ export const VoteOnProposalTransaction = ({}: VoteOnProposalTransaction) => {
               size={48}
             />
             <TitleContainer>
-              <Typography
-                text={`${proposal.name}`}
-                bold={true}
-                maxLength={48}
-                size="h4"
-              />
+              <Typography text={`${proposal.name}`} bold={true} size="h4" />
             </TitleContainer>
           </TitleRow>
           <Row>
@@ -306,6 +301,7 @@ const TitleRow = styled.View`
 const TitleContainer = styled.View`
   margin-left: ${(props) => props.theme.spacing[3]};
   margin-bottom: ${(props) => props.theme.spacing[2]};
+  max-width: 80%;
 `;
 
 const ActionContainer = styled.View`
