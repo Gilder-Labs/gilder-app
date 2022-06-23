@@ -7,6 +7,8 @@ import {
   GOVERNANCE_CHAT_PROGRAM_ID,
 } from "@solana/spl-governance";
 import { RPC_CONNECTION, INDEX_RPC_CONNECTION } from "../constants/Solana";
+import { getVoteRecords } from "../utils/gov-ui-functions/getVoteRecords";
+import { RootState } from "./index";
 
 export interface ProposalsState {
   isLoadingProposals: boolean;
@@ -15,6 +17,9 @@ export interface ProposalsState {
   chatMessages: Array<ChatMessage>;
   isLoadingChatMessages: boolean;
   isRefreshingProposals: boolean;
+  isLoadingVotes: boolean;
+  votes: Array<any>;
+  walletToVoteMap: any;
 }
 
 const initialState: ProposalsState = {
@@ -23,7 +28,10 @@ const initialState: ProposalsState = {
   proposalsMap: null,
   chatMessages: [],
   isLoadingChatMessages: false,
+  isLoadingVotes: false,
   isRefreshingProposals: false,
+  votes: [],
+  walletToVoteMap: {},
 };
 
 let connection = new Connection(RPC_CONNECTION, "confirmed");
@@ -42,6 +50,7 @@ export const fetchRealmProposals = createAsyncThunk(
         new PublicKey(realm.pubKey)
       );
       rawProposals = rawProposals.flat();
+      console.log("raw proposals", rawProposals);
     } catch (error) {
       console.log("error", error);
     }
@@ -89,6 +98,52 @@ export const fetchRealmProposals = createAsyncThunk(
       proposalsMap: proposalsMap,
       isRefreshing: isRefreshing,
     };
+  }
+);
+
+export const fetchProposalVotes = createAsyncThunk(
+  "realms/fetchProposalVotes",
+  async (proposalId: string, { getState }) => {
+    let rawVotes;
+    try {
+      const { realms } = getState() as RootState;
+      const { selectedRealm } = realms;
+
+      rawVotes = await getGovernanceChatMessages(
+        indexConnection,
+        GOVERNANCE_CHAT_PROGRAM_ID,
+        new PublicKey(proposalId)
+      );
+      rawVotes = await getVoteRecords({
+        connection: indexConnection,
+        programId: new PublicKey(selectedRealm?.governanceId),
+        proposalPk: new PublicKey(proposalId),
+      });
+
+      let walletIdToVoteMap = {};
+
+      if (rawVotes && rawVotes.value) {
+        let parsedVoteRecords = rawVotes.value.map((vote) => {
+          const walletId = vote?.account?.governingTokenOwner?.toBase58();
+          const voteData = {
+            walletId: vote?.account?.governingTokenOwner?.toBase58(),
+            proposalId: vote?.account?.proposal?.toBase58(),
+            voterWeightNo: vote?.account?.getNoVoteWeight()?.toString(),
+            voteWeightYes: vote?.account?.getYesVoteWeight()?.toString(),
+          };
+
+          // @ts-ignore
+          walletIdToVoteMap[walletId] = voteData;
+
+          return voteData;
+        });
+
+        return { votes: parsedVoteRecords, walletIdToVoteMap };
+      }
+      return [];
+    } catch (error) {
+      console.log("error", error);
+    }
   }
 );
 
@@ -158,6 +213,18 @@ export const proposalsSlice = createSlice({
       .addCase(fetchProposalChat.fulfilled, (state, action: any) => {
         state.isLoadingChatMessages = false;
         state.chatMessages = action.payload;
+      })
+      .addCase(fetchProposalVotes.pending, (state) => {
+        state.isLoadingVotes = true;
+        state.votes = [];
+      })
+      .addCase(fetchProposalVotes.rejected, (state) => {
+        state.isLoadingVotes = false;
+      })
+      .addCase(fetchProposalVotes.fulfilled, (state, action: any) => {
+        state.isLoadingVotes = false;
+        state.votes = action.payload.votes;
+        state.walletToVoteMap = action.payload.walletIdToVoteMap;
       });
   },
 });

@@ -13,7 +13,7 @@ import {
 } from "../components";
 import { format, getUnixTime, formatDistance } from "date-fns";
 import numeral from "numeral";
-import { fetchProposalChat } from "../store/proposalsSlice";
+import { fetchProposalChat, fetchProposalVotes } from "../store/proposalsSlice";
 import { openTransactionModal } from "../store/walletSlice";
 import * as Haptics from "expo-haptics";
 
@@ -60,6 +60,7 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
   useEffect(() => {
     if (proposalId && proposalsMap?.[proposalId]) {
       dispatch(fetchProposalChat(proposalId));
+      dispatch(fetchProposalVotes(proposalId));
     }
   }, [proposalId, proposalsMap]);
 
