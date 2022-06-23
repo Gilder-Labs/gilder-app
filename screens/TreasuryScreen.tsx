@@ -44,7 +44,7 @@ export default function TreasuryScreen({
       <VaultCard
         vaultId={item.pubKey}
         tokens={item.tokens}
-        key={item.vaultId}
+        key={`${item.pubKey}-${index}`}
       />
     );
   };
@@ -57,7 +57,7 @@ export default function TreasuryScreen({
         <FlatList
           data={vaults}
           renderItem={renderVault}
-          keyExtractor={(item) => item.vaultId}
+          keyExtractor={(item, index) => `${item.vaultId}-${index}`}
           style={{ padding: 16 }}
           ListFooterComponent={<EmptyView />}
           scrollIndicatorInsets={{ right: 1 }}

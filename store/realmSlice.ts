@@ -167,7 +167,7 @@ export const fetchRealm = createAsyncThunk(
         maxVoteWeight:
           rawRealm.account.config.communityMintMaxVoteWeightSource.value.toNumber(),
         minTokensToCreateGov:
-          rawRealm.account.config.minCommunityTokensToCreateGovernance,
+          rawRealm.account.config.minCommunityTokensToCreateGovernance.toString(),
         fmtSupplyFraction:
           rawRealm.account.config.communityMintMaxVoteWeightSource.fmtSupplyFractionPercentage(),
         supplyFraction: rawRealm.account.config.communityMintMaxVoteWeightSource
@@ -178,6 +178,7 @@ export const fetchRealm = createAsyncThunk(
       };
     } catch (error) {
       console.log("error in fetch realm", error);
+      console.log("error fetching realm:", realmId);
     }
   }
 );

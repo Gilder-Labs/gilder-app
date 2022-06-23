@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { PublicKey, ConfirmedSignatureInfo, Connection } from "@solana/web3.js";
+import { PublicKey, LAMPORTS_PER_SOL, Connection } from "@solana/web3.js";
 import {
   getAllGovernances, // all governances of a realm
   GovernanceAccountType, // Map that has all types of governance
+  getNativeTreasuryAddress,
 } from "@solana/spl-governance";
 import axios from "axios";
 
@@ -73,6 +74,29 @@ export const fetchVaults = createAsyncThunk(
         };
       });
 
+      const rawNativeSolAddresses = await Promise.all(
+        rawGovernances.map((x) =>
+          getNativeTreasuryAddress(
+            //@ts-ignore
+            new PublicKey(selectedRealm?.governanceId),
+            x!.pubkey
+          )
+        )
+      );
+
+      rawNativeSolAddresses.forEach((rawAddress, index) => {
+        vaultsInfo.push({
+          pubKey: rawAddress.toBase58(), // program that controls vault/token account
+          vaultId: index.toString(), // vault/token account where tokens are held
+        });
+      });
+
+      const vaultSolBalancesPromise = Promise.all(
+        vaultsInfo.map((vault) =>
+          connection.getBalance(new PublicKey(vault.pubKey))
+        )
+      );
+
       const vaultsWithTokensPromise = Promise.all(
         vaultsInfo.map((vault) =>
           connection.getParsedTokenAccountsByOwner(
@@ -94,21 +118,10 @@ export const fetchVaults = createAsyncThunk(
         )
       );
 
-      // const collectionPromise = await axios.get(
-      //   "https://api-mainnet.magiceden.dev/v2/collections/runcible/stats"
-      // );
-      // console.log("Collections", collectionPromise.data);
-      // // https://api-mainnet.magiceden.io/all_collections?edge_cache=true
-      //         "https://api-mainnet.magiceden.io/all_collections_with_escrow_data?edge_cache=true"
-
-      // const collectionResponse = await collectionPromise;
-      // const collectionData = collectionResponse.data.collections;
-
-      // SOLSCAN api for nft floor
-      //https://api.solscan.io/collection?sortBy=volume&offset=0&limit=24
-
       const vaultNfts = await vaultNftsPromise;
       const vaultNftsMap = {};
+      const vaultSolBalances = await vaultSolBalancesPromise;
+      const vaultsWithTokensRaw = await vaultsWithTokensPromise;
       // const collectionMap = {};
 
       vaultNfts.forEach(
@@ -117,37 +130,55 @@ export const fetchVaults = createAsyncThunk(
           (vaultNftsMap[vault.config.params.address] = vault.data.results)
       );
 
-      // collectionData.forEach(
-      //   (nftCollection: any) =>
-      //     // @ts-ignore
-      //     (collectionMap[nftCollection.symbol] = nftCollection)
-      // );
-
-      const vaultsWithTokensRaw = await vaultsWithTokensPromise;
       const tokensData = await TokensInfo;
       const coinGeckoUrl = "https://api.coingecko.com/api/v3/coins/markets";
       let tokenIds = new Set();
 
       let vaultsParsed = vaultsWithTokensRaw.map((vault, index) => {
+        const tokens = vault.value.map((token) => {
+          let tokenInfo = tokensData.get(token.account.data.parsed.info.mint);
+          tokenIds.add(tokenInfo?.extensions?.coingeckoId);
+
+          const tokenData = {
+            ...tokenInfo,
+            mint: token.account.data.parsed.info.mint,
+            owner: token.account.data.parsed.info.owner.toString(),
+            tokenAmount: token.account.data.parsed.info.tokenAmount,
+            vaultId: token.pubkey.toString(),
+          };
+          //@ts-ignore
+          tokenMap[tokenData.mint] = tokenData;
+          return tokenData;
+        });
+
+        const solanaBalance = vaultSolBalances[index] / LAMPORTS_PER_SOL;
+
+        const solTokenData = {
+          tokenAmount: {
+            amount: vaultSolBalances[index],
+            decimals: 9,
+            uiAmount: solanaBalance,
+            uiAmountString: String(solanaBalance),
+          },
+          extensions: {
+            coingeckoId: "solana",
+          },
+          logoURI:
+            "https://assets.coingecko.com/coins/images/4128/small/solana.png?1640133422",
+          decimals: 9,
+          name: "Solana",
+          symbol: "SOL",
+          owner: "solana",
+          mint: "sol",
+        };
+
+        tokens.push(solTokenData);
+
         return {
           pubKey: vaultsInfo[index].pubKey, // WALLET ID
           vaultId: vaultsInfo[index].vaultId,
           // nfts: vaultNftsMap[vault]
-          tokens: vault.value.map((token) => {
-            let tokenInfo = tokensData.get(token.account.data.parsed.info.mint);
-            tokenIds.add(tokenInfo?.extensions?.coingeckoId);
-
-            const tokenData = {
-              ...tokenInfo,
-              mint: token.account.data.parsed.info.mint,
-              owner: token.account.data.parsed.info.owner.toString(),
-              tokenAmount: token.account.data.parsed.info.tokenAmount,
-              vaultId: token.pubkey.toString(),
-            };
-            //@ts-ignore
-            tokenMap[tokenData.mint] = tokenData;
-            return tokenData;
-          }),
+          tokens: tokens,
         };
       });
 
@@ -217,6 +248,7 @@ export const fetchVaults = createAsyncThunk(
       };
     } catch (error) {
       console.log("error", error);
+      console.log("Error with args:", realm);
     }
   }
 );

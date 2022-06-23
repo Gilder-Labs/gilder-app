@@ -75,14 +75,14 @@ export default function RealmSettingsScreen({
         size="h4"
         shade="100"
         text={"Notifications"}
-        marginBottom="4"
+        marginBottom="2"
       />
       <Typography
         size="subtitle"
         shade="400"
-        bold={true}
+        // bold={true}
         text={"Proposals"}
-        marginBottom="2"
+        marginBottom="0"
       />
       <Row>
         <Typography size="body" bold shade="300" text={"On Create"} />

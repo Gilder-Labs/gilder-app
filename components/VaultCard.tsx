@@ -32,17 +32,25 @@ export const VaultCard = ({ vaultId, tokens }: VaultCardProps) => {
         tokenPriceData[coinGeckoId]?.current_price *
           token.tokenAmount.uiAmount || 0;
     });
-    return numeral(totalValue).format("$0,0");
+    return totalValue;
   };
 
   const nfts = vaultsNfts[vaultId];
   const filteredTokens = getFilteredTokens(nfts, tokens);
+  const totalValue = getVaultTotalValue();
+
+  // If the vault has no tokens of value ||
+  // TODO: handle this by setting
+  if ((!tokens.length || totalValue < 0.5) && !nfts.length) {
+    console.log("total value", totalValue);
+    return <></>;
+  }
 
   return (
     <Container>
       <TitleContainer>
         <PublicKeyTextCopy publicKey={vaultId} fontSize={14} />
-        <VaultValue>{getVaultTotalValue()}</VaultValue>
+        <VaultValue>{numeral(totalValue).format("$0,0")}</VaultValue>
       </TitleContainer>
 
       {tokens.length > 0 && (
@@ -54,8 +62,7 @@ export const VaultCard = ({ vaultId, tokens }: VaultCardProps) => {
               <SectionHeaderContainer>
                 <Typography
                   text={`Tokens (${filteredTokens.length})`}
-                  size="h4"
-                  bold={true}
+                  size="body"
                   shade="400"
                 />
                 {tokenSectionOpen ? (
@@ -86,8 +93,7 @@ export const VaultCard = ({ vaultId, tokens }: VaultCardProps) => {
               <SectionHeaderContainer>
                 <Typography
                   text={`Nfts (${nfts.length})`}
-                  size="h4"
-                  bold={true}
+                  size="body"
                   shade="400"
                 />
                 {nftSectionOpen ? (
