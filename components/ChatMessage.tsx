@@ -96,7 +96,8 @@ export const ChatMessage = ({
               <Typography
                 text={voteWeight}
                 size="subtitle"
-                shade="200"
+                shade="300"
+                bold={true}
                 marginBottom="0"
                 marginLeft="2"
               />
@@ -111,7 +112,7 @@ export const ChatMessage = ({
 
 const Container = styled.View`
   background: ${(props) => props.theme.gray[800]};
-  margin-top: ${(props) => props.theme.spacing[3]};
+  margin-bottom: ${(props) => props.theme.spacing[3]};
   padding: ${(props) => props.theme.spacing[3]};
   border-radius: 8px;
   flex-direction: row;

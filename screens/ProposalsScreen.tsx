@@ -6,6 +6,7 @@ import { FlatList } from "react-native";
 import { fetchRealmProposals } from "../store/proposalsSlice";
 import { RefreshControl } from "react-native";
 import { useTheme } from "styled-components";
+import * as Haptics from "expo-haptics";
 
 export default function ProposalScreen({
   navigation,
@@ -27,6 +28,8 @@ export default function ProposalScreen({
   );
 
   const handleProposalSelect = (proposal: Proposal) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+
     //@ts-ignore
     navigation.push("ProposalDetail", {
       proposalId: proposal.proposalId,

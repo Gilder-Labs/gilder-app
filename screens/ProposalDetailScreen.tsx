@@ -349,7 +349,7 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
             size="h4"
             shade={"400"}
             marginLeft={"3"}
-            margin-bottom="2"
+            marginBottom="3"
           />
           {isLoadingChatMessages && (
             <LoadingContainer>
@@ -495,17 +495,6 @@ const ApproveText = styled.Text`
   font-weight: bold;
   font-size: 12px;
   margin-bottom:  ${(props: any) => props.theme.spacing[2]};
-`;
-
-const Title = styled.Text`
-  color: ${(props: any) => props.theme.gray[100]}
-  font-weight: bold;
-  font-size: 20px;
-  padding-left: ${(props: any) => props.theme.spacing[3]};
-  padding-right: ${(props: any) => props.theme.spacing[4]};
-  margin-top: ${(props: any) => props.theme.spacing[4]};
-  margin-bottom: ${(props: any) => props.theme.spacing[2]};
-
 `;
 
 const LoadingContainer = styled.View``;
