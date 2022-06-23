@@ -30,6 +30,29 @@ export default function TreasuryScreen({
     return numeral(totalValue).format("$0,0");
   };
 
+  const sortedVaults = () => {
+    let vaultsWithValue = [];
+
+    vaults.forEach((vault) => {
+      let vaultValue = 0;
+      vault.tokens.forEach((token: any) => {
+        const coinGeckoId = token?.extensions?.coingeckoId;
+        vaultValue +=
+          tokenPriceData[coinGeckoId]?.current_price *
+            token.tokenAmount.uiAmount || 0;
+      });
+      vaultsWithValue.push({ ...vault, vaultValue });
+    });
+
+    //@ts-ignore
+    vaultsWithValue = vaultsWithValue?.sort(
+      // @ts-ignore
+      (a, b) => b?.vaultValue - a?.vaultValue
+    );
+
+    return vaultsWithValue;
+  };
+
   useEffect(() => {
     setTreasuryValue(getTreasuryTotalValue());
   }, [vaults]);
@@ -56,7 +79,7 @@ export default function TreasuryScreen({
         <Loading />
       ) : (
         <FlatList
-          data={vaults}
+          data={sortedVaults()}
           renderItem={renderVault}
           keyExtractor={(item, index) => `${item.vaultId}-${index}`}
           style={{ padding: 16 }}
