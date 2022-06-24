@@ -9,8 +9,6 @@ import { ThemeProvider } from "./utils/styled-components";
 import { darkTheme } from "./constants/Theme";
 import { store } from "./store";
 import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
-import { persistStore } from "redux-persist";
 import { SplashScreen } from "./components";
 import useCachedResources from "./hooks/useCachedResources";
 import Navigation from "./navigation";
@@ -41,22 +39,19 @@ export default function App() {
   if (!isLoadingComplete) {
     return <SplashScreen />;
   } else {
-    let persistor = persistStore(store);
     // TODO: purge store whenever there is a new version to make sure we don't have wonky data till release
     // persistor.purge();
     return (
       <SafeAreaProvider>
         <Provider store={store}>
-          <PersistGate loading={<SplashScreen />} persistor={persistor}>
-            <ApolloProvider client={client}>
-              <ThemeProvider theme={darkTheme}>
-                <OverlayProvider value={{ style: ChatTheme }}>
-                  <StatusBar style="light" />
-                  <Navigation />
-                </OverlayProvider>
-              </ThemeProvider>
-            </ApolloProvider>
-          </PersistGate>
+          <ApolloProvider client={client}>
+            <ThemeProvider theme={darkTheme}>
+              <OverlayProvider value={{ style: ChatTheme }}>
+                <StatusBar style="light" />
+                <Navigation />
+              </OverlayProvider>
+            </ThemeProvider>
+          </ApolloProvider>
         </Provider>
       </SafeAreaProvider>
     );

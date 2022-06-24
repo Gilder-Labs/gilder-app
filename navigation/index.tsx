@@ -11,7 +11,7 @@ import { useNavigation } from "@react-navigation/native";
 
 import { useTheme } from "styled-components";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { fetchRealms, fetchRealm } from "../store/realmSlice";
+import { fetchRealms, fetchRealm, fetchStorage } from "../store/realmSlice";
 import { fetchRealmMembers } from "../store/memberSlice";
 import { fetchRealmProposals } from "../store/proposalsSlice";
 import { fetchRealmActivity } from "../store/activitySlice";
@@ -32,6 +32,7 @@ import { MemberProfile } from "../screens/MemberProfile";
 import { ProposalDetailScreen } from "../screens/ProposalDetailScreen";
 import ChannelScreen from "../screens/ChannelScreen";
 import { WalletModal } from "../components/WalletModal";
+import { SplashScreen } from "../components";
 import { WalletTransactionModal } from "../components/WalletTransactionModal";
 import RealmSettingsScreen from "../screens/RealmSettingsScreen";
 import { Incubator } from "react-native-ui-lib";
@@ -212,19 +213,19 @@ function DrawerScreen() {
 export default function Navigation({}: {}) {
   const theme = useTheme();
   const dispatch = useAppDispatch();
-  const { selectedRealm, selectedRealmId, isLoadingRealms } = useAppSelector(
-    (state) => state.realms
-  );
+  const { selectedRealm, selectedRealmId, isLoadingRealms, isFetchingStorage } =
+    useAppSelector((state) => state.realms);
   const { isShowingToast } = useAppSelector((state) => state.utility);
-  const [infoDialogOpen, setInfoDialogOpen] = useState(false);
 
   useEffect(() => {
     dispatch(fetchRealms());
+    dispatch(fetchStorage());
   }, []);
 
   // Run immediately if we have communityMint/councilMint, otherwies for custom daos we wait till we get a response
   useEffect(() => {
     if (
+      !isFetchingStorage &&
       selectedRealm?.pubKey === selectedRealmId &&
       (selectedRealm?.communityMint || selectedRealm?.councilMint)
     ) {
@@ -240,7 +241,7 @@ export default function Navigation({}: {}) {
       );
       dispatch(fetchRealmMembers({ realm: selectedRealm }));
     }
-  }, [selectedRealm?.pubKey, selectedRealm?.communityMint]);
+  }, [selectedRealm?.pubKey, selectedRealm?.communityMint, isFetchingStorage]);
 
   const handleDismiss = () => {
     dispatch(setShowToast(false));
@@ -258,9 +259,9 @@ export default function Navigation({}: {}) {
     },
   };
 
-  // if (isLoadingRealms) {
-  //   return <SplashScreen />;
-  // }
+  if (isFetchingStorage) {
+    return <SplashScreen />;
+  }
 
   return (
     <RootContainer>

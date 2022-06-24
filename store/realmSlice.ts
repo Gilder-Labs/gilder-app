@@ -10,6 +10,7 @@ import {
 } from "../constants/Solana";
 import { cleanRealmData, getTokensInfo, extractLogInfo } from "../utils";
 import { RootState } from ".";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export interface realmState {
   realms: Array<any>;
@@ -20,6 +21,7 @@ export interface realmState {
   realmWatchlist: Array<string>;
   isLoadingRealms: boolean;
   isLoadingSelectedRealm: boolean;
+  isFetchingStorage: boolean;
 }
 
 interface realmType {
@@ -41,6 +43,7 @@ const initialState: realmState = {
   realmWatchlist: [],
   isLoadingRealms: false,
   isLoadingSelectedRealm: false,
+  isFetchingStorage: false,
 };
 
 // getMultipleAccounts - gets account info of a bunch of accounts in 1 api request
@@ -144,7 +147,7 @@ export const fetchRealm = createAsyncThunk(
       // );
       // console.log("realm config", realmConfig);
 
-      return {
+      const selectedRealmData = {
         name: rawRealm.account.name,
         pubKey: rawRealm.pubkey.toBase58(),
         communityMint: rawRealm.account.communityMint.toBase58(),
@@ -176,9 +179,35 @@ export const fetchRealm = createAsyncThunk(
         isFullSupply:
           rawRealm.account.config.communityMintMaxVoteWeightSource.isFullSupply(),
       };
+
+      await AsyncStorage.setItem(
+        "@selectedRealm",
+        JSON.stringify(selectedRealmData)
+      );
+
+      return selectedRealmData;
     } catch (error) {
       console.log("error in fetch realm", error);
       console.log("error fetching realm:", realmId);
+    }
+  }
+);
+
+export const fetchStorage = createAsyncThunk(
+  "realms/fetchStorage",
+  async () => {
+    try {
+      const watchListJSON = await AsyncStorage.getItem("@watchList");
+      const selectedRealmJSON = await AsyncStorage.getItem("@selectedRealm");
+
+      return {
+        // @ts-ignore
+        watchList: JSON.parse(watchListJSON).watchList,
+        // @ts-ignore
+        selectedRealm: JSON.parse(selectedRealmJSON),
+      };
+    } catch (error) {
+      console.log("error in fetch realm", error);
     }
   }
 );
@@ -196,9 +225,15 @@ export const realmSlice = createSlice({
       if (realmIdIndex < 0) {
         // if in watchlist toggle off
         state.realmWatchlist.push(action.payload);
+        const watchlist = { watchList: state.realmWatchlist };
+        const jsonValue = JSON.stringify(watchlist);
+        AsyncStorage.setItem("@watchList", jsonValue);
       } else {
         // else toggle on
         state.realmWatchlist.splice(realmIdIndex, 1);
+        const watchlist = { watchList: state.realmWatchlist };
+        const jsonValue = JSON.stringify(watchlist);
+        AsyncStorage.setItem("@watchList", jsonValue);
       }
     },
     selectRealm: (state, action) => {
@@ -232,6 +267,22 @@ export const realmSlice = createSlice({
       .addCase(fetchRealm.fulfilled, (state, action: any) => {
         state.selectedRealm = action.payload;
         state.isLoadingSelectedRealm = false;
+      })
+      .addCase(fetchStorage.pending, (state, action) => {
+        state.isFetchingStorage = true;
+      })
+      .addCase(fetchStorage.rejected, (state) => {
+        state.isFetchingStorage = false;
+      })
+      .addCase(fetchStorage.fulfilled, (state, action: any) => {
+        state.isFetchingStorage = false;
+        state.selectedRealm = action.payload.selectedRealm
+          ? action.payload.selectedRealm
+          : null;
+        state.selectedRealmId = action.payload.selectedRealm
+          ? action.payload.selectedRealm.pubKey
+          : null;
+        state.realmWatchlist = action.payload?.watchList || [];
       });
   },
 });

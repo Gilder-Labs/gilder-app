@@ -19,8 +19,13 @@ export const RealmSelectModal = ({
 }: RealmSelectModalProps) => {
   const theme = useTheme();
   const [searchText, setSearchText] = useState("");
-  const { realmsData, realms, realmWatchlist, isLoadingRealms } =
-    useAppSelector((state) => state.realms);
+  const {
+    realmsData,
+    realms,
+    realmWatchlist,
+    isLoadingRealms,
+    isFetchingStorage,
+  } = useAppSelector((state) => state.realms);
   const [filteredRealms, setFilteredRealms] = useState(realms);
 
   useEffect(() => {
@@ -98,7 +103,7 @@ export const RealmSelectModal = ({
       {/* Input to filter by name or public key */}
       {/* <SearchBar /> */}
 
-      {isLoadingRealms ? (
+      {isLoadingRealms || isFetchingStorage ? (
         <Loading />
       ) : (
         <>
