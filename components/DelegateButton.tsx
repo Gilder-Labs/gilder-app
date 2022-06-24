@@ -7,6 +7,9 @@ import { useQuery, gql } from "@apollo/client";
 import { getColorType } from "../utils";
 import { LinearGradient } from "expo-linear-gradient";
 import { AnimatedImage } from "react-native-ui-lib";
+import numeral from "numeral";
+import { useAppSelector } from "../hooks/redux";
+import * as Unicons from "@iconscout/react-native-unicons";
 
 interface ButtonProps {
   onPress(): void;
@@ -40,7 +43,8 @@ export const DelegateButton = ({
   const { loading, error, data } = useQuery(GET_CYBERCONNECT_IDENTITY, {
     variables: { publicKey: memberPublicKey },
   });
-
+  const { selectedRealm } = useAppSelector((state) => state.realms);
+  const { walletToVoteMap } = useAppSelector((state) => state.proposals);
   const identityName = data?.identity?.social?.twitter
     ? data?.identity?.social?.twitter
     : data?.identity?.domain;
@@ -50,8 +54,29 @@ export const DelegateButton = ({
   const color = getColorType(memberPublicKey);
   const color2 = getColorType(memberPublicKey.slice(-1) || "string");
 
+  const getVoteFormatted = (votes: string) => {
+    let voteString = votes;
+    let mintDecimals = isCommunityVote
+      ? selectedRealm?.communityMintDecimals
+      : selectedRealm?.councilMintDecimals;
+
+    if (!mintDecimals || mintDecimals === 0) {
+      return numeral(Number(votes)).format("0,0");
+    }
+
+    voteString = voteString.slice(0, -mintDecimals);
+    return numeral(Number(voteString)).format("0,0");
+  };
+
+  const delegatesVote = walletToVoteMap[memberPublicKey];
+  const isYesVote = delegatesVote?.voteWeightYes ? true : false;
+
   return (
-    <DelegateButtonContainer isSelected={isSelected} onPress={onPress}>
+    <DelegateButtonContainer
+      isSelected={isSelected}
+      onPress={onPress}
+      disabled={!!delegatesVote}
+    >
       {avatarUrl ? (
         <IconContainer color={color}>
           <AnimatedImage
@@ -82,19 +107,35 @@ export const DelegateButton = ({
         size="caption"
         shade={"400"}
       />
-      <Typography
-        text={`${
-          isCommunityVote
-            ? delegate.communityDepositUiAmount
-            : delegate.councilDepositUiAmount
-        }
+
+      <Row>
+        {delegatesVote && isYesVote && (
+          <Unicons.UilCheckCircle
+            size="20"
+            color={theme.success[400]}
+            style={{ marginRight: 4 }}
+          />
+        )}
+        {delegatesVote && !isYesVote && (
+          <Unicons.UilTimesCircle
+            size="20"
+            color={theme.error[400]}
+            style={{ marginRight: 4 }}
+          />
+        )}
+        <Typography
+          text={`${
+            isCommunityVote
+              ? getVoteFormatted(delegate?.communityDepositAmount)
+              : getVoteFormatted(delegate?.councilDepositAmount)
+          }
         `}
-        textAlign="center"
-        size="body"
-        bold={true}
-        marginBottom="0"
-        shade={"300"}
-      />
+          size="body"
+          bold={true}
+          marginBottom="0"
+          shade={"300"}
+        />
+      </Row>
     </DelegateButtonContainer>
   );
 };
@@ -109,20 +150,31 @@ const IconContainer = styled.View<{ color: string }>`
   margin-bottom: ${(props: any) => props.theme.spacing[1]};
 `;
 
+const Row = styled.View`
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+`;
+
 const DelegateButtonContainer = styled.TouchableOpacity<{
   isSelected: boolean;
+  disabled?: boolean;
 }>`
+  opacity: ${(props: any) => (props.disabled ? 0.5 : 1)};
   height: 120px;
   width: 120px;
   margin-left: ${(props: any) => props.theme.spacing[1]};
   margin-right: ${(props: any) => props.theme.spacing[1]};
   border-radius: 4px;
   align-items: center;
-  background: ${(props: any) => props.theme.gray[900]};
+  background: ${(props: any) =>
+    props.disabled ? props.theme.gray[800] : props.theme.gray[900]};
   padding: ${(props: any) => props.theme.spacing[2]};
   padding-top: ${(props: any) => props.theme.spacing[4]};
   border: ${(props: any) =>
     props.isSelected
-      ? `1px solid  ${props.theme.secondary[500]}`
-      : "1px solid transparent"};
+      ? `2px solid  ${props.theme.secondary[700]}`
+      : "2px solid transparent"};
 `;

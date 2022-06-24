@@ -238,8 +238,8 @@ export const castVote = createAsyncThunk(
 
       // each member can have a token record for community or council.
       let tokenRecordPublicKey = isCommunityVote
-        ? tokenOwnerRecord.communityPublicKey
-        : tokenOwnerRecord.councilPublicKey;
+        ? tokenOwnerRecord?.communityPublicKey
+        : tokenOwnerRecord?.councilPublicKey;
       // 1. Check if current wallet is member and has token to be voted with
       // 2. If it does, do vote with that token
       // 3. If not check if current wallet is delegated from an token owner record

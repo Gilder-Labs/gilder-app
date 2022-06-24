@@ -33,7 +33,7 @@ export const PublicKeyTextCopy = ({
   const dispatch = useAppDispatch();
 
   const copyToClipboard = () => {
-    Clipboard.setString(publicKey);
+    Clipboard.setStringAsync(publicKey);
     dispatch(setShowToast(true));
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   };

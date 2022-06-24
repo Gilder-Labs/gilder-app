@@ -141,38 +141,38 @@ export const VoteOnProposalTransaction = ({}: VoteOnProposalTransaction) => {
               publicKey={selectedRealm.pubKey}
             />
           </Row>
-          {delegatesToVoteWith.length > 0 && (
-            <>
-              <Row>
-                <Typography text={"Delegate To Vote as:"} shade={"500"} />
-              </Row>
-              <DelegateScrollView
-                horizontal={true}
-                contentContainerStyle={{ justifyContent: "center" }}
-              >
-                {membersMap?.[publicKey] && (
-                  <DelegateButton
-                    isSelected={selectedDelegate === publicKey}
-                    onPress={() => handleSelectDelegate(publicKey)}
-                    memberPublicKey={publicKey}
-                    delegate={membersMap?.[publicKey]}
-                    isCommunityVote={isCommunityVote}
-                  />
-                )}
+          <>
+            <Row>
+              <Typography text={"Delegate To Vote as:"} shade={"500"} />
+            </Row>
+            <DelegateScrollView
+              horizontal={true}
+              contentContainerStyle={{ justifyContent: "center" }}
+            >
+              {membersMap?.[publicKey] && (
+                <DelegateButton
+                  isSelected={selectedDelegate === publicKey}
+                  onPress={() => handleSelectDelegate(publicKey)}
+                  memberPublicKey={publicKey}
+                  delegate={membersMap?.[publicKey]}
+                  isCommunityVote={isCommunityVote}
+                  key={publicKey}
+                />
+              )}
 
-                {delegatesToVoteWith.map((delegate: Member) => (
-                  <DelegateButton
-                    isSelected={selectedDelegate === delegate?.walletId}
-                    onPress={() => handleSelectDelegate(delegate.walletId)}
-                    memberPublicKey={delegate.walletId}
-                    delegate={delegate}
-                    isCommunityVote={isCommunityVote}
-                  />
-                ))}
-                <EmptyView />
-              </DelegateScrollView>
-            </>
-          )}
+              {delegatesToVoteWith.map((delegate: Member) => (
+                <DelegateButton
+                  isSelected={selectedDelegate === delegate?.walletId}
+                  onPress={() => handleSelectDelegate(delegate.walletId)}
+                  memberPublicKey={delegate.walletId}
+                  delegate={delegate}
+                  isCommunityVote={isCommunityVote}
+                  key={delegate.publicKey}
+                />
+              ))}
+              <EmptyView />
+            </DelegateScrollView>
+          </>
         </TransactionContainer>
       )}
       {transactionState === "success" && (
@@ -239,7 +239,7 @@ export const VoteOnProposalTransaction = ({}: VoteOnProposalTransaction) => {
             />
             <Button
               isLoading={isSendingTransaction}
-              disabled={isSendingTransaction || !publicKey}
+              disabled={isSendingTransaction || !publicKey || !selectedDelegate}
               title="Approve"
               onPress={handleApprove}
               shade="900"
@@ -275,7 +275,7 @@ const TransactionContainer = styled.ScrollView`
   border-top-left-radius: 20px;
   background: ${(props) => props.theme.gray[800]};
 
-  padding-top: ${(props) => props.theme.spacing[3]};
+  padding-top: ${(props) => props.theme.spacing[4]};
   padding-bottom: ${(props) => props.theme.spacing[3]};
   padding-right: ${(props) => props.theme.spacing[5]};
   padding-left: ${(props) => props.theme.spacing[5]};
