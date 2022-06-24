@@ -23,6 +23,9 @@ import {
 } from "@solana/spl-governance";
 import bs58 from "bs58";
 
+import * as SecureStore from "expo-secure-store";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 export interface WalletState {
   publicKey: string;
   privateKey: string;
@@ -41,6 +44,8 @@ export interface WalletState {
   transactionError: any;
   isLoadingTransactions: boolean;
   transactions: any;
+  isFetchingWalletInfo: boolean;
+  isDisconnectingWallet: boolean;
 }
 
 const initialState: WalletState = {
@@ -61,6 +66,8 @@ const initialState: WalletState = {
   transactionState: "none",
   isLoadingTransactions: false,
   transactions: [],
+  isFetchingWalletInfo: false,
+  isDisconnectingWallet: false,
 };
 
 let connection = new Connection(RPC_CONNECTION, "confirmed");
@@ -307,6 +314,44 @@ export const castVote = createAsyncThunk(
   }
 );
 
+export const fetchWalletInfo = createAsyncThunk(
+  "wallet/fetchWalletInfo",
+  async (publicKey: string) => {
+    try {
+      const walletInfoJSON = await AsyncStorage.getItem("@walletInfo");
+      const walletInfoData = JSON.parse(walletInfoJSON);
+      const privateKey = await SecureStore.getItemAsync("privateKey");
+
+      return {
+        publicKey: walletInfoData.publicKey,
+        privateKey: privateKey,
+        userInfo: walletInfoData.userInfo,
+      };
+    } catch (e) {
+      return { publicKey: "", privateKey: "", userInfo: {} };
+    }
+  }
+);
+
+export const disconnectWallet = createAsyncThunk(
+  "wallet/disconnectWallet",
+  async () => {
+    try {
+      // clear wallet data
+      await SecureStore.setItemAsync("privateKey", "");
+      const jsonValue = JSON.stringify({
+        publicKey: "",
+        userInfo: null,
+      });
+      AsyncStorage.setItem("@walletInfo", jsonValue);
+
+      return {};
+    } catch (e) {
+      return {};
+    }
+  }
+);
+
 export const walletSlice = createSlice({
   name: "wallet",
   initialState,
@@ -316,12 +361,6 @@ export const walletSlice = createSlice({
       state.privateKey = action.payload.privateKey;
       state.userInfo = action.payload.userInfo;
       state.isWalletOpen = true;
-    },
-    disconnectWallet: (state, action) => {
-      state.publicKey = "";
-      state.privateKey = "";
-      state.userInfo = null;
-      state.isWalletOpen = false;
     },
     openWallet: (state, action) => {
       state.isWalletOpen = true;
@@ -395,6 +434,32 @@ export const walletSlice = createSlice({
       .addCase(fetchTransactions.fulfilled, (state, action: any) => {
         state.isLoadingTransactions = false;
         state.transactions = action.payload.transactions;
+      })
+      .addCase(fetchWalletInfo.pending, (state) => {
+        state.isFetchingWalletInfo = true;
+      })
+      .addCase(fetchWalletInfo.rejected, (state) => {
+        state.isFetchingWalletInfo = false;
+      })
+      .addCase(fetchWalletInfo.fulfilled, (state, action: any) => {
+        state.isFetchingWalletInfo = false;
+        state.privateKey = action.payload.privateKey;
+        state.publicKey = action.payload.publicKey;
+        state.userInfo = action.payload.userInfo;
+        // state.nfts = action.payload.nfts;
+      })
+      .addCase(disconnectWallet.pending, (state) => {
+        state.isDisconnectingWallet = true;
+      })
+      .addCase(disconnectWallet.rejected, (state) => {
+        state.isDisconnectingWallet = false;
+      })
+      .addCase(disconnectWallet.fulfilled, (state, action: any) => {
+        state.isDisconnectingWallet = false;
+        state.publicKey = "";
+        state.privateKey = "";
+        state.userInfo = null;
+        state.isWalletOpen = false;
       });
   },
 });
@@ -404,7 +469,6 @@ export const {
   setWallet,
   openWallet,
   closeWallet,
-  disconnectWallet,
   openTransactionModal,
   closeTransactionModal,
 } = walletSlice.actions;

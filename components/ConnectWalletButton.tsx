@@ -17,6 +17,8 @@ import Web3Auth, {
   OPENLOGIN_NETWORK,
 } from "@web3auth/react-native-sdk";
 import { useNavigation } from "@react-navigation/native";
+import * as SecureStore from "expo-secure-store";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { URL } from "react-native-url-polyfill";
 
@@ -64,6 +66,14 @@ export const ConnectWalletButton = ({}: ConnectWalletProps) => {
       // public key of our new wallet
       const pubKey = keyPair.publicKey.toString();
       const privateKey = bs58.encode(keyPair.secretKey);
+
+      // Securely store wallet info for future use in app and so user doesn't have to keep logging in
+      await SecureStore.setItemAsync("privateKey", privateKey);
+      const jsonValue = JSON.stringify({
+        publicKey: pubKey,
+        userInfo: userInfo,
+      });
+      AsyncStorage.setItem("@walletInfo", jsonValue);
 
       dispatch(
         setWallet({

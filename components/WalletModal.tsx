@@ -44,7 +44,7 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
 
   const handleDisconnect = () => {
     navigation.pop(1);
-    dispatch(disconnectWallet(""));
+    dispatch(disconnectWallet());
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
   };
 
