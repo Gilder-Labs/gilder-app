@@ -50,29 +50,27 @@ export const WalletIdentity = ({
 
   return (
     <WalletIdentityContainer>
-      {avatarUrl ? (
-        <IconContainer color={color}>
-          <AnimatedImage
-            style={{
-              width: avatarSize,
-              height: avatarSize,
-              overflow: "hidden",
-            }}
-            source={{
-              uri: avatarUrl,
-            }}
-          />
-        </IconContainer>
-      ) : (
-        <IconContainer color={color}>
-          <LinearGradient
-            // Background Linear Gradient
-            colors={[`${theme[color][500]}`, `${theme[color2][900]}`]}
-            style={{ height: avatarSize, width: avatarSize }}
-            start={{ x: 0.1, y: 0.2 }}
-          ></LinearGradient>
-        </IconContainer>
-      )}
+      <IconContainer color={color}>
+        <LinearGradient
+          // Background Linear Gradient
+          colors={[`${theme[color][500]}`, `${theme[color2][900]}`]}
+          style={{ height: avatarSize, width: avatarSize }}
+          start={{ x: 0.1, y: 0.2 }}
+        >
+          {!!avatarUrl && (
+            <AnimatedImage
+              style={{
+                width: avatarSize,
+                height: avatarSize,
+                overflow: "hidden",
+              }}
+              source={{
+                uri: avatarUrl,
+              }}
+            />
+          )}
+        </LinearGradient>
+      </IconContainer>
       <Typography
         text={
           identityName ? identityName : abbreviatePublicKey(memberPublicKey)

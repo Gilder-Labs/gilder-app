@@ -66,16 +66,14 @@ export const ChatMessage = ({
   return (
     <Container>
       <IconContainer color={color}>
-        {avatarUrl ? (
-          <Avatar source={{ uri: avatarUrl }} />
-        ) : (
-          <LinearGradient
-            // Background Linear Gradient
-            colors={[`${theme[color][500]}`, `${theme[color2][900]}`]}
-            style={{ height: 34, width: 34 }}
-            start={{ x: 0.1, y: 0.2 }}
-          />
-        )}
+        <LinearGradient
+          // Background Linear Gradient
+          colors={[`${theme[color][500]}`, `${theme[color2][900]}`]}
+          style={{ height: 34, width: 34 }}
+          start={{ x: 0.1, y: 0.2 }}
+        >
+          {!!avatarUrl && <Avatar source={{ uri: avatarUrl }} />}
+        </LinearGradient>
       </IconContainer>
 
       <Column>
