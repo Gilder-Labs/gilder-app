@@ -202,7 +202,7 @@ export const fetchStorage = createAsyncThunk(
 
       return {
         // @ts-ignore
-        watchList: JSON.parse(watchListJSON).watchList,
+        watchList: JSON.parse(watchListJSON)?.watchList || [],
         // @ts-ignore
         selectedRealm: JSON.parse(selectedRealmJSON),
       };

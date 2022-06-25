@@ -42,7 +42,7 @@ export default function RealmSettingsScreen({
     dispatch(
       subscribeToNotifications({
         pushToken: pushToken,
-        realmId: selectedRealm.pubKey,
+        realmId: selectedRealm?.pubKey,
         isSubscribing: value,
       })
     );

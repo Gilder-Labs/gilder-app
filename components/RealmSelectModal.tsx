@@ -7,6 +7,7 @@ import { debounce, filter } from "lodash";
 import { useTheme } from "styled-components";
 import { RealmCard } from "./RealmCard";
 import { Loading } from "./Loading";
+import { Typography } from "../components";
 
 interface RealmSelectModalProps {
   open: boolean;
@@ -62,7 +63,6 @@ export const RealmSelectModal = ({
     const normalizedText = newText.toLowerCase();
 
     if (!newText) {
-      console.log("resetting search");
       setFilteredRealms(realms);
     } else {
       const filtRealms = realms.filter(
@@ -87,21 +87,12 @@ export const RealmSelectModal = ({
       onRequestClose={handleOnClose}
       presentationStyle="pageSheet"
     >
+      <FloatingBarContainer>
+        <FloatingBar />
+      </FloatingBarContainer>
       <Header>
-        {/* if a user has no realms, don't let them close modal till they pick one */}
-        {realmWatchlist?.length ? (
-          <CloseIconButton onPress={handleOnClose} activeOpacity={0.5}>
-            <Unicons.UilTimes size="20" color={theme.gray[200]} />
-          </CloseIconButton>
-        ) : (
-          <View style={{ width: 48 }} />
-        )}
-        <HeaderTitle> Add DAO</HeaderTitle>
-        <View style={{ width: 48, height: 48 }} />
+        <Typography text="Add DAOs" size="h2" bold={true} />
       </Header>
-
-      {/* Input to filter by name or public key */}
-      {/* <SearchBar /> */}
 
       {isLoadingRealms || isFetchingStorage ? (
         <Loading />
@@ -114,6 +105,9 @@ export const RealmSelectModal = ({
               placeholderTextColor={theme.gray[400]}
               selectionColor={theme.gray[200]}
             />
+            <IconContainer>
+              <Unicons.UilSearch size="20" color={theme.gray[300]} />
+            </IconContainer>
           </SearchBarContainer>
 
           <RealmContainer>
@@ -145,43 +139,28 @@ const RealmContainer = styled.View`
   background-color: ${(props) => props.theme.gray[900]};
   width: 100%;
   height: 100%;
+  padding-top: ${(props: any) => props.theme.spacing[2]};
 `;
 
 const Header = styled.View`
-  height: 64px;
-  background-color: ${(props) => props.theme.gray[800]};
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   flex-direction: row;
-  padding-left: ${(props) => props.theme.spacing[2]};
+  background-color: ${(props) => props.theme.gray[900]};
+
+  padding-top: ${(props) => props.theme.spacing[5]};
+  padding-left: ${(props) => props.theme.spacing[4]};
   padding-right: ${(props) => props.theme.spacing[2]};
-`;
-
-const HeaderTitle = styled.Text`
-  font-size: 18px;
-  font-weight: bold;
-  color: ${(props) => props.theme.gray[50]};
-`;
-
-const CloseIconButton = styled.TouchableOpacity`
-  width: 48px;
-  height: 48px;
-  justify-content: center;
-  align-items: center;
 `;
 
 const SearchBar = styled.TextInput`
   margin: ${(props) => props.theme.spacing[2]};
   padding: ${(props) => props.theme.spacing[3]};
   font-size: 14px;
-  background-color: ${(props) => props.theme.gray[800]};
+  background-color: ${(props) => props.theme.gray[800]}44;
   border-radius: 4px;
-  border: 1px solid ${(props) => props.theme.gray[500]};
+  border: 1px solid ${(props) => props.theme.gray[600]};
   color: ${(props) => props.theme.gray[100]};
-
-  :focus {
-    background: green;
-  }
 `;
 
 const EmptyView = styled.View`
@@ -189,7 +168,8 @@ const EmptyView = styled.View`
 `;
 
 const SearchBarContainer = styled.View`
-  padding: ${(props) => props.theme.spacing[2]};
+  padding-left: ${(props) => props.theme.spacing[2]};
+  padding-right: ${(props) => props.theme.spacing[2]};
   background-color: ${(props) => props.theme.gray[900]};
 `;
 
@@ -199,4 +179,32 @@ const EmptyText = styled.Text`
   line-height: 40px;
   font-weight: bold;
   margin: ${(props) => props.theme.spacing[4]};
+`;
+
+const FloatingBarContainer = styled.View`
+  position: absolute;
+
+  width: 100%;
+  padding-top: ${(props: any) => props.theme.spacing[2]};
+  top: 0;
+  left: 0;
+  z-index: 100;
+
+  justify-content: center;
+  align-items: center;
+`;
+
+const FloatingBar = styled.View`
+  height: 4px;
+  width: 40px;
+  z-index: 100;
+  background: #ffffff88;
+  top: 0;
+  border-radius: 8;
+`;
+
+const IconContainer = styled.View`
+  position: absolute;
+  right: 36;
+  top: 20;
 `;
