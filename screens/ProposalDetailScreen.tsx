@@ -126,24 +126,25 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
       ? governance?.maxVotingTime
       : (votingAt ?? 0) + governance?.maxVotingTime - now;
 
-    if (timeToVoteEnd <= 0) {
-      return {
-        days: 0,
-        hours: 0,
-        minutes: 0,
-        seconds: 0,
-        isVotingTimeOver: true,
-      };
-    }
+    const isTimeLeft = timeToVoteEnd > 0 ? true : false;
 
     const days = Math.floor(timeToVoteEnd / 86400);
     timeToVoteEnd -= days * 86400;
+
     const hours = Math.floor(timeToVoteEnd / 3600) % 24;
     timeToVoteEnd -= hours * 3600;
+
     const minutes = Math.floor(timeToVoteEnd / 60) % 60;
     timeToVoteEnd -= minutes * 60;
+
     const seconds = Math.floor(timeToVoteEnd % 60);
-    return { days, hours, minutes, seconds, isVotingTimeOver: false };
+    return {
+      days,
+      hours,
+      minutes,
+      seconds,
+      isTimeLeft,
+    };
   };
 
   const getVoteFormatted = (votes: string) => {
@@ -229,13 +230,16 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
         <Container>
           <TextContainer>
             <ProposalTitle>{name}</ProposalTitle>
-            <Badge title={status} type={proposalStatusKey[status]} />
+            <Badge
+              title={isVoting && !timeLeft.isTimeLeft ? "Finalizing" : status}
+              type={proposalStatusKey[status]}
+            />
           </TextContainer>
           <ProposalSubData>
             <DateText>
               {format(dateTimestamp * 1000, "MMM d, yyyy - p")}
             </DateText>
-            {isVoting ? (
+            {isVoting && timeLeft.isTimeLeft ? (
               <TimeContainer>
                 <StatusText>Ends in </StatusText>
                 <TimeText>
@@ -244,6 +248,8 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
                   {`${timeLeft.minutes ? timeLeft.minutes : 0}m`}
                 </TimeText>
               </TimeContainer>
+            ) : isVoting && !timeLeft.isTimeLeft ? (
+              <StatusText>Voting ended </StatusText>
             ) : (
               <StatusText>
                 {status}{" "}

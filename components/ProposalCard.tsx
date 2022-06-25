@@ -66,9 +66,7 @@ export const ProposalCard = ({
       ? governance?.maxVotingTime
       : (votingAt ?? 0) + governance?.maxVotingTime - now;
 
-    if (timeToVoteEnd <= 0) {
-      return 0;
-    }
+    const isTimeLeft = timeToVoteEnd > 0 ? true : false;
 
     const days = Math.floor(timeToVoteEnd / 86400);
     timeToVoteEnd -= days * 86400;
@@ -80,7 +78,13 @@ export const ProposalCard = ({
     timeToVoteEnd -= minutes * 60;
 
     const seconds = Math.floor(timeToVoteEnd % 60);
-    return { days, hours, minutes, seconds };
+    return {
+      days,
+      hours,
+      minutes,
+      seconds,
+      isTimeLeft,
+    };
   };
 
   const getVoteFormatted = (votes: string) => {
@@ -131,12 +135,15 @@ export const ProposalCard = ({
     <Container onLongPress={onClick} activeOpacity={0.5}>
       <TextContainer>
         <ProposalTitle>{name}</ProposalTitle>
-        <Badge title={status} type={proposalStatusKey[status]} />
+        <Badge
+          title={isVoting && !timeLeft.isTimeLeft ? "Finalizing" : status}
+          type={proposalStatusKey[status]}
+        />
       </TextContainer>
       <ProposalSubData>
         <SubtextContainer>
           <DateText>{format(dateTimestamp * 1000, "MMM d, yyyy - p")}</DateText>
-          {isVoting ? (
+          {isVoting && timeLeft.isTimeLeft ? (
             <TimeContainer>
               <StatusText>Ends in </StatusText>
               <TimeText>
@@ -145,6 +152,8 @@ export const ProposalCard = ({
                 {`${timeLeft.minutes ? timeLeft.minutes : 0}m`}
               </TimeText>
             </TimeContainer>
+          ) : isVoting && !timeLeft.isTimeLeft ? (
+            <StatusText>Voting ended </StatusText>
           ) : (
             <StatusText>
               {status}{" "}
