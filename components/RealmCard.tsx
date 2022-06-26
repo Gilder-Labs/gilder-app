@@ -23,12 +23,12 @@ export const RealmCard = ({ realm, onClick }: RealmCardProps) => {
 
   const handleRealmClick = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    dispatch(toggleRealmInWatchlist(realm.pubKey));
+    dispatch(toggleRealmInWatchlist(realm.realmId));
     if (pushToken) {
       dispatch(
         subscribeToNotifications({
           pushToken: pushToken,
-          realmId: realm.pubKey,
+          realmId: realm.realmId,
           isSubscribing: !isSelected,
         })
       );
@@ -38,13 +38,13 @@ export const RealmCard = ({ realm, onClick }: RealmCardProps) => {
   return (
     <ContainerButton
       onPress={handleRealmClick}
-      key={realm.pubKey}
+      key={realm.realmId}
       activeOpacity={0.4}
       isSelected={isSelected}
     >
       <Container>
         <IconContainer>
-          <RealmIcon realmId={realm.pubKey} />
+          <RealmIcon realmId={realm.realmId} />
         </IconContainer>
         <RealmName>{realmInfo?.displayName || realm.name}</RealmName>
       </Container>

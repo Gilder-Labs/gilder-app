@@ -72,6 +72,7 @@ export const fetchRealms = createAsyncThunk("realms/fetchRealms", async () => {
         name: realmWithGov?.displayName || realmWithGov?.symbol,
         governanceId: realmWithGov?.programId,
         pubKey: pubkey,
+        realmId: pubkey,
       };
 
       // @ts-ignore
@@ -87,6 +88,7 @@ export const fetchRealms = createAsyncThunk("realms/fetchRealms", async () => {
       let realmData = {
         name: realm.account.name,
         pubKey: realm.pubkey.toBase58(),
+        realmId: realm.pubkey.toBase58(),
         communityMint: realm.account.communityMint.toBase58(),
         councilMint: realm.account?.config?.councilMint?.toBase58() || null,
         governanceId: realm?.owner.toBase58(),
@@ -150,6 +152,7 @@ export const fetchRealm = createAsyncThunk(
       const selectedRealmData = {
         name: rawRealm.account.name,
         pubKey: rawRealm.pubkey.toBase58(),
+        realmId: rawRealm.pubkey.toBase58(),
         communityMint: rawRealm.account.communityMint.toBase58(),
         communityMintDecimals: communityMintData
           ? communityMintData.value?.data?.parsed?.info?.decimals

@@ -1,6 +1,8 @@
 interface Realm {
   name: string;
   pubKey: string;
+  realmId: string;
+
   communityMint: string;
   communityMintDecimals: number;
   communityMintSupply: string;
