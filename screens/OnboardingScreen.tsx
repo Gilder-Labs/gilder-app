@@ -13,6 +13,8 @@ import WelcomeImage from "../assets/images/onboarding/welcome.png";
 import NotificationsImage from "../assets/images/onboarding/notifications.png";
 import WalletImage from "../assets/images/onboarding/wallet.png";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Dimensions } from "react-native";
+import { DaoWatchlistSelection } from "../elements";
 
 import * as Haptics from "expo-haptics";
 
@@ -21,6 +23,7 @@ export default function OnboardingScreen({ navigation }: any) {
   const dispatch = useAppDispatch();
   const { selectedRealm } = useAppSelector((state) => state.realms);
   const [selectedPage, setSelectedPage] = useState(0);
+  const { width } = Dimensions.get("window");
 
   const handlePageScroll = (event: PagerViewOnPageSelectedEvent) => {
     const index = event.nativeEvent.position;
@@ -44,7 +47,7 @@ export default function OnboardingScreen({ navigation }: any) {
         <OnboardingPageContainer key="1">
           <AnimatedImage
             style={{
-              width: 400,
+              width: width,
               height: "100%",
             }}
             source={WelcomeImage}
@@ -53,7 +56,7 @@ export default function OnboardingScreen({ navigation }: any) {
         <OnboardingPageContainer key="2">
           <AnimatedImage
             style={{
-              width: 400,
+              width: width,
               height: "100%",
             }}
             source={NotificationsImage}
@@ -62,26 +65,14 @@ export default function OnboardingScreen({ navigation }: any) {
         <OnboardingPageContainer key="3">
           <AnimatedImage
             style={{
-              width: 400,
+              width: width,
               height: "100%",
             }}
             source={WalletImage}
           />
         </OnboardingPageContainer>
         <OnboardingPageContainer key="4">
-          <Typography
-            bold={true}
-            size="h3"
-            shade="300"
-            text={"Selecting daos"}
-            marginBottom="2"
-          />
-          <Button
-            title="Approve"
-            onPress={handleFinishOnboarding}
-            shade="900"
-            color="secondary"
-          />
+          <DaoWatchlistSelection />
         </OnboardingPageContainer>
       </PagerView>
       <PageControl

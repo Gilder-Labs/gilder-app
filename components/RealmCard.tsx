@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { toggleRealmInWatchlist } from "../store/realmSlice";
 import { RealmIcon } from "./RealmIcon";
 import * as Haptics from "expo-haptics";
+import { toggleRealmInWatchlist } from "../store/realmSlice";
 import { subscribeToNotifications } from "../store/notificationSlice";
 
 interface RealmCardProps {
