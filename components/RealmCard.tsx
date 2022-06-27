@@ -43,7 +43,6 @@ export const RealmCard = ({ realm }: RealmCardProps) => {
   const color1 = realm?.color1;
   const color2 = realm?.color2;
 
-  console.log("isselected", isSelected);
   return (
     <ContainerButton
       onPress={handleRealmClick}

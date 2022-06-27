@@ -7,7 +7,17 @@ interface TypographyProps {
   size?: "h1" | "h2" | "h3" | "h4" | "body" | "subtitle" | "caption";
   textAlign?: "center" | "left" | "right";
   bold?: boolean;
-  shade?: "100" | "200" | "300" | "400" | "500" | "600" | "700" | "800" | "900";
+  shade?:
+    | "50"
+    | "100"
+    | "200"
+    | "300"
+    | "400"
+    | "500"
+    | "600"
+    | "700"
+    | "800"
+    | "900";
   color?:
     | "gray"
     | "primary"

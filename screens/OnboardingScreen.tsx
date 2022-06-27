@@ -72,7 +72,7 @@ export default function OnboardingScreen({ navigation }: any) {
           />
         </OnboardingPageContainer>
         <OnboardingPageContainer key="4">
-          <DaoWatchlistSelection />
+          <DaoWatchlistSelection isOnboarding={true} />
         </OnboardingPageContainer>
       </PagerView>
       <PageControl

@@ -19,10 +19,15 @@ import * as Haptics from "expo-haptics";
 import { toggleRealmInWatchlist } from "../store/realmSlice";
 import { subscribeToNotifications } from "../store/notificationSlice";
 import DiscoverData from "../assets/Discover.json";
+import { LinearGradient } from "expo-linear-gradient";
 
-interface DaoWatchlistSelection {}
+interface DaoWatchlistSelection {
+  isOnboarding?: boolean;
+}
 
-export const DaoWatchlistSelection = ({}: DaoWatchlistSelection) => {
+export const DaoWatchlistSelection = ({
+  isOnboarding = false,
+}: DaoWatchlistSelection) => {
   const theme = useTheme();
   const navigation = useNavigation();
   const [searchText, setSearchText] = useState("");
@@ -94,6 +99,8 @@ export const DaoWatchlistSelection = ({}: DaoWatchlistSelection) => {
     return <RealmCard realm={item} />;
   };
 
+  const hasSomeRealmsSelected = realmWatchlist?.length > 0;
+
   return (
     <Container>
       {isLoadingRealms ? (
@@ -107,12 +114,48 @@ export const DaoWatchlistSelection = ({}: DaoWatchlistSelection) => {
               bold={true}
               marginLeft={"4"}
             />
-            <Button
-              title="Approve"
-              onPress={handleFinishOnboarding}
-              shade="900"
-              color="secondary"
-            />
+            {isOnboarding && (
+              <CompleteOnboardingButton
+                onPress={handleFinishOnboarding}
+                disabled={!hasSomeRealmsSelected}
+              >
+                {/* TODO give is a gradient background */}
+                <LinearGradient
+                  colors={[
+                    hasSomeRealmsSelected
+                      ? theme.primary[700]
+                      : theme.gray[600],
+                    hasSomeRealmsSelected
+                      ? theme.primary[400]
+                      : theme.gray[700],
+                  ]}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={{
+                    height: 36,
+                    borderRadius: 8,
+                    paddingHorizontal: 16,
+                    paddingVertical: 4,
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography
+                    text="Enter App"
+                    marginBottom="0"
+                    marginRight="1"
+                    shade="50"
+                    color="primary"
+                    // hasTextShadow={true}
+                  />
+                  <Unicons.UilArrowRight
+                    size="24"
+                    color={theme.primary[100]}
+                    style={{ marginRight: -4 }}
+                  />
+                </LinearGradient>
+              </CompleteOnboardingButton>
+            )}
           </Row>
           <SearchBarContainer>
             <SearchBar
@@ -266,6 +309,7 @@ const ContentContainer = styled.View`
 const Row = styled.View`
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
 `;
 
 const RealmIconContainer = styled.View`
@@ -280,4 +324,14 @@ const RemoveContainer = styled.TouchableOpacity`
   right: 0;
   background: ${(props: any) => props.theme.gray[800]};
   border-radius: 100px;
+`;
+
+const CompleteOnboardingButton = styled.TouchableOpacity`
+  flex-direction: row;
+  border-radius: 8px;
+  align-items: center;
+  justify-content: center;
+  background: ${(props: any) => props.theme.gray[700]};
+  height: 36;
+  margin-right: ${(props: any) => props.theme.spacing[4]};
 `;
