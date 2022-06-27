@@ -16,7 +16,7 @@ import { fetchRealmMembers } from "../store/memberSlice";
 import { fetchRealmProposals } from "../store/proposalsSlice";
 import { fetchRealmActivity } from "../store/activitySlice";
 import { fetchVaults } from "../store/treasurySlice";
-import { setShowToast } from "../store/utilitySlice";
+import { setShowToast, fetchOnboarding } from "../store/utilitySlice";
 import { fetchWalletInfo } from "../store/walletSlice";
 import {
   fetchNotificationSettings,
@@ -216,12 +216,14 @@ export default function Navigation({}: {}) {
   const dispatch = useAppDispatch();
   const { selectedRealm, selectedRealmId, isLoadingRealms, isFetchingStorage } =
     useAppSelector((state) => state.realms);
-  const { isShowingToast } = useAppSelector((state) => state.utility);
+  const { isShowingToast, hasCompletedOnboarding, isFetchingOnboarding } =
+    useAppSelector((state) => state.utility);
 
   useEffect(() => {
     dispatch(fetchRealms());
     dispatch(fetchStorage());
     dispatch(fetchWalletInfo());
+    dispatch(fetchOnboarding());
   }, []);
 
   // Run immediately if we have communityMint/councilMint, otherwies for custom daos we wait till we get a response
@@ -261,7 +263,7 @@ export default function Navigation({}: {}) {
     },
   };
 
-  if (isFetchingStorage) {
+  if (isFetchingStorage || isFetchingOnboarding) {
     return <SplashScreen />;
   }
 
@@ -298,7 +300,7 @@ export default function Navigation({}: {}) {
             fullScreenGestureEnabled: true,
             headerTintColor: "#f4f4f5", //Set Header text color
           }}
-          initialRouteName="Onboarding"
+          initialRouteName={hasCompletedOnboarding ? "Root" : "Onboarding"}
         >
           <Stack.Screen
             name="Onboarding"

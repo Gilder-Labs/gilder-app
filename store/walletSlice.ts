@@ -253,8 +253,6 @@ export const castVote = createAsyncThunk(
       // 4. if it is, check if it has the token for the proposal
       // 5. if it does, attempt vote
 
-      console.log("PUBLIC KEY?", tokenRecordPublicKey);
-
       const payer = walletPubkey;
 
       const signers: Keypair[] = [];
@@ -316,7 +314,7 @@ export const castVote = createAsyncThunk(
 
 export const fetchWalletInfo = createAsyncThunk(
   "wallet/fetchWalletInfo",
-  async (publicKey: string) => {
+  async () => {
     try {
       const walletInfoJSON = await AsyncStorage.getItem("@walletInfo");
       const walletInfoData = JSON.parse(walletInfoJSON);

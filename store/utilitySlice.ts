@@ -1,13 +1,31 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { clusterApiUrl, Connection } from "@solana/web3.js";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export interface UtilityState {
   isShowingToast: boolean;
+  hasCompletedOnboarding: boolean;
+  isFetchingOnboarding: boolean;
 }
 
 const initialState: UtilityState = {
   isShowingToast: false,
+  hasCompletedOnboarding: false,
+  isFetchingOnboarding: false,
 };
+
+export const fetchOnboarding = createAsyncThunk(
+  "utility/fetchOnboarding",
+  async () => {
+    try {
+      const hasCompletedOnboarding = await AsyncStorage.getItem(
+        "@hasCompletedOnboarding"
+      );
+      return hasCompletedOnboarding === "true" || false;
+    } catch (e) {
+      return false;
+    }
+  }
+);
 
 export const utilitySlice = createSlice({
   name: "utility",
@@ -16,6 +34,19 @@ export const utilitySlice = createSlice({
     setShowToast: (state, action) => {
       state.isShowingToast = action.payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchOnboarding.pending, (state) => {
+        state.isFetchingOnboarding = true;
+      })
+      .addCase(fetchOnboarding.rejected, (state) => {
+        state.isFetchingOnboarding = false;
+      })
+      .addCase(fetchOnboarding.fulfilled, (state, action: any) => {
+        state.isFetchingOnboarding = false;
+        state.hasCompletedOnboarding = action.payload;
+      });
   },
 });
 

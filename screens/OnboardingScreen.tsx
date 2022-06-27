@@ -12,6 +12,7 @@ import { AnimatedImage } from "react-native-ui-lib";
 import WelcomeImage from "../assets/images/onboarding/welcome.png";
 import NotificationsImage from "../assets/images/onboarding/notifications.png";
 import WalletImage from "../assets/images/onboarding/wallet.png";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import * as Haptics from "expo-haptics";
 
@@ -27,6 +28,8 @@ export default function OnboardingScreen({ navigation }: any) {
   };
 
   const handleFinishOnboarding = () => {
+    AsyncStorage.setItem("@hasCompletedOnboarding", "true");
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     navigation.replace("Root");
   };
 
