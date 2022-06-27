@@ -114,6 +114,7 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
           inactiveColor={theme.gray[600]}
           color={theme.gray[200]}
           containerStyle={{ marginBottom: 16 }}
+          enlargeActive={true}
         />
 
         <PagerView

@@ -70,6 +70,7 @@ const ButtonContainer = styled.TouchableOpacity<{
 }>`
   flex-direction: row;
   min-height: 48px;
+  max-height: 48px;
   flex: 1;
   align-items: center;
   justify-content: center;

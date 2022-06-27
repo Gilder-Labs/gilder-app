@@ -45,6 +45,7 @@ import { StreamChat } from "stream-chat";
 import DiscoverScreen from "../screens/DiscoverScreen";
 import DiscoverDetailsScreen from "../screens/DiscoverDetailsScreen";
 import InfoModalScreen from "../screens/InfoModalScreen";
+import OnboardingScreen from "../screens/OnboardingScreen";
 
 // const chatClient = StreamChat.getInstance(chatApiKey);
 
@@ -297,8 +298,13 @@ export default function Navigation({}: {}) {
             fullScreenGestureEnabled: true,
             headerTintColor: "#f4f4f5", //Set Header text color
           }}
-          initialRouteName="Root"
+          initialRouteName="Onboarding"
         >
+          <Stack.Screen
+            name="Onboarding"
+            component={OnboardingScreen}
+            options={{ headerShown: false, headerTransparent: true }}
+          />
           <Stack.Screen
             name="Root"
             component={DrawerScreen}

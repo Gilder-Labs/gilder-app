@@ -95,7 +95,7 @@ export const fetchVaults = createAsyncThunk(
 
       const vaultSolBalancesPromise = Promise.all(
         vaultsInfo.map((vault) =>
-          connection.getBalance(new PublicKey(vault.pubKey))
+          indexConnection.getBalance(new PublicKey(vault.pubKey))
         )
       );
 
