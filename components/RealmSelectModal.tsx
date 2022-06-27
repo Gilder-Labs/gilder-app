@@ -59,7 +59,7 @@ export const RealmSelectModal = ({
   };
 
   const handleSearchChange = (newText: string) => {
-    setSearchText(newText);
+    // setSearchText(newText);
     const normalizedText = newText.toLowerCase();
 
     if (!newText) {
@@ -73,6 +73,11 @@ export const RealmSelectModal = ({
 
       setFilteredRealms(filtRealms);
     }
+  };
+
+  const handleSearchInputChange = (newText: string) => {
+    setSearchText(newText);
+    debouncedChangeHandler(newText);
   };
 
   const debouncedChangeHandler = useCallback(
@@ -101,14 +106,18 @@ export const RealmSelectModal = ({
           <SearchBarContainer>
             <SearchBar
               placeholder="Search by name or public key"
-              onChangeText={debouncedChangeHandler}
+              onChangeText={handleSearchInputChange}
               placeholderTextColor={theme.gray[400]}
               selectionColor={theme.gray[200]}
               autoCompleteType={"off"}
               autoCapitalize={"none"}
               autoCorrect={false}
+              value={searchText}
             />
-            <IconContainer disabled={!searchText}>
+            <IconContainer
+              disabled={!searchText}
+              onPress={() => setSearchText("")}
+            >
               {searchText ? (
                 <Unicons.UilTimes size="20" color={theme.gray[300]} />
               ) : (
