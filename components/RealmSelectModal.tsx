@@ -55,7 +55,7 @@ export const RealmSelectModal = ({
   };
 
   const renderRealmCard = ({ item }) => {
-    return <RealmCard realm={item} onClick={() => handleRealmClick()} />;
+    return <RealmCard realm={item} />;
   };
 
   const handleSearchChange = (newText: string) => {

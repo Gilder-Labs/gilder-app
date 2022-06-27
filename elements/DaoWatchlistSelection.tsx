@@ -1,10 +1,16 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useTheme } from "styled-components";
-import { Typography, Button, Loading, RealmIcon } from "../components";
+
+import {
+  Typography,
+  Button,
+  Loading,
+  RealmIcon,
+  RealmCard,
+} from "../components";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Dimensions } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import { FlatList } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import styled from "styled-components/native";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import * as Unicons from "@iconscout/react-native-unicons";
@@ -12,6 +18,7 @@ import { debounce, filter } from "lodash";
 import * as Haptics from "expo-haptics";
 import { toggleRealmInWatchlist } from "../store/realmSlice";
 import { subscribeToNotifications } from "../store/notificationSlice";
+import DiscoverData from "../assets/Discover.json";
 
 interface DaoWatchlistSelection {}
 
@@ -24,6 +31,7 @@ export const DaoWatchlistSelection = ({}: DaoWatchlistSelection) => {
   const [filteredRealms, setFilteredRealms] = useState(realms);
   const dispatch = useAppDispatch();
   const { pushToken } = useAppSelector((state) => state.notifications);
+  const { featured } = DiscoverData;
 
   const handleFinishOnboarding = () => {
     AsyncStorage.setItem("@hasCompletedOnboarding", "true");
@@ -68,7 +76,7 @@ export const DaoWatchlistSelection = ({}: DaoWatchlistSelection) => {
     [realms]
   );
 
-  const handleRealmRemove = (realmId: string) => {
+  const handleRealmToggle = (realmId: string, isSubscribing: boolean) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     dispatch(toggleRealmInWatchlist(realmId));
     if (pushToken) {
@@ -76,10 +84,14 @@ export const DaoWatchlistSelection = ({}: DaoWatchlistSelection) => {
         subscribeToNotifications({
           pushToken: pushToken,
           realmId: realmId,
-          isSubscribing: false,
+          isSubscribing: isSubscribing,
         })
       );
     }
+  };
+
+  const renderRealmCard = ({ item }) => {
+    return <RealmCard realm={item} />;
   };
 
   return (
@@ -124,12 +136,11 @@ export const DaoWatchlistSelection = ({}: DaoWatchlistSelection) => {
               )}
             </IconContainer>
           </SearchBarContainer>
-          {/* TODO: horizontal scroll of watchlist + click off */}
           <Typography
             text="Watchlist"
             size="h4"
             bold={true}
-            shade="400"
+            shade="300"
             marginLeft={"4"}
           />
           <WatchlistContainer
@@ -146,7 +157,9 @@ export const DaoWatchlistSelection = ({}: DaoWatchlistSelection) => {
             {realmWatchlist.map((realmId) => (
               <RealmIconContainer>
                 <RealmIcon size={54} realmId={realmId} />
-                <RemoveContainer onPress={() => handleRealmRemove(realmId)}>
+                <RemoveContainer
+                  onPress={() => handleRealmToggle(realmId, false)}
+                >
                   <Unicons.UilTimes size="20" color={theme.gray[500]} />
                 </RemoveContainer>
               </RealmIconContainer>
@@ -159,7 +172,20 @@ export const DaoWatchlistSelection = ({}: DaoWatchlistSelection) => {
             size="h4"
             bold={true}
             marginLeft={"4"}
-            shade="400"
+            shade="300"
+          />
+          <FlatList
+            data={featured}
+            renderItem={renderRealmCard}
+            numColumns={2}
+            keyExtractor={(item) => item.pubKey}
+            style={{
+              paddingTop: 0,
+              paddingLeft: 8,
+              paddingRight: 8,
+              // height: "100%",
+            }}
+            scrollIndicatorInsets={{ right: 1 }}
           />
 
           {/* TODO: DAO's in realmsdata list */}
@@ -168,7 +194,7 @@ export const DaoWatchlistSelection = ({}: DaoWatchlistSelection) => {
             size="h4"
             bold={true}
             marginLeft={"4"}
-            shade="400"
+            shade="300"
           />
           {/* TODO: Rest of the daos */}
           <Typography
@@ -176,7 +202,7 @@ export const DaoWatchlistSelection = ({}: DaoWatchlistSelection) => {
             size="h4"
             bold={true}
             marginLeft={"4"}
-            shade="400"
+            shade="300"
           />
 
           {/* Only show if a user is searching for daos */}
@@ -185,7 +211,7 @@ export const DaoWatchlistSelection = ({}: DaoWatchlistSelection) => {
             size="h4"
             bold={true}
             marginLeft={"4"}
-            shade="400"
+            shade="300"
           />
         </ContentContainer>
       )}
