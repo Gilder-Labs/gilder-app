@@ -104,9 +104,16 @@ export const RealmSelectModal = ({
               onChangeText={debouncedChangeHandler}
               placeholderTextColor={theme.gray[400]}
               selectionColor={theme.gray[200]}
+              autoCompleteType={"off"}
+              autoCapitalize={"none"}
+              autoCorrect={false}
             />
-            <IconContainer>
-              <Unicons.UilSearch size="20" color={theme.gray[300]} />
+            <IconContainer disabled={!searchText}>
+              {searchText ? (
+                <Unicons.UilTimes size="20" color={theme.gray[300]} />
+              ) : (
+                <Unicons.UilSearch size="20" color={theme.gray[300]} />
+              )}
             </IconContainer>
           </SearchBarContainer>
 
@@ -203,8 +210,9 @@ const FloatingBar = styled.View`
   border-radius: 8;
 `;
 
-const IconContainer = styled.View`
+const IconContainer = styled.TouchableOpacity`
   position: absolute;
-  right: 36;
-  top: 20;
+  right: 24;
+  top: 12;
+  padding: ${(props: any) => props.theme.spacing[2]};
 `;

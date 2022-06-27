@@ -227,8 +227,8 @@ export default function DiscoverDetailsScreen({
               scrollIndicatorInsets={{ bottom: -16 }}
               contentContainerStyle={{ padding: 12 }}
             >
-              {screenshots.map((url) => (
-                <ImageContainer>
+              {screenshots.map((url, index) => (
+                <ImageContainer key={index}>
                   <AnimatedImage
                     source={{ uri: url }}
                     // cover={true}
