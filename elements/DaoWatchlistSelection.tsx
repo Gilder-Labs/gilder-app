@@ -202,7 +202,7 @@ export const DaoWatchlistSelection = ({
                 <RemoveContainer
                   onPress={() => handleRealmToggle(realmId, false)}
                 >
-                  <Unicons.UilTimes size="20" color={theme.gray[500]} />
+                  <Unicons.UilTimes size="18" color={theme.gray[500]} />
                 </RemoveContainer>
               </RealmIconContainer>
             ))}
@@ -338,6 +338,8 @@ const RealmIconContainer = styled.View`
   padding: ${(props: any) => props.theme.spacing[2]};
   margin-right: ${(props: any) => props.theme.spacing[2]};
   border-radius: 100px;
+  width: 60px;
+  height: 60px;
 `;
 
 const RemoveContainer = styled.TouchableOpacity`

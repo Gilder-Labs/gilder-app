@@ -104,6 +104,8 @@ const ContainerButton = styled.TouchableOpacity<{ isSelected: boolean }>`
 const IconContainer = styled.View`
   margin-bottom: ${(props: any) => props.theme.spacing[1]};
   border-radius: 100px;
+  width: 54px;
+  height: 54px;
   padding: ${(props: any) => props.theme.spacing[2]};
   background: ${(props: any) => props.theme.gray[900]};
 `;
