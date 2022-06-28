@@ -228,6 +228,7 @@ export default function DiscoverDetailsScreen({
           visible={isImageViewerOpen}
           onRequestClose={() => setIsImageViewerOpen(false)}
           swipeToCloseEnabled={true}
+          doubleTapToZoomEnabled
         />
         {!!screenshots.length && (
           <>

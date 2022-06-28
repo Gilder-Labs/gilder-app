@@ -16,7 +16,7 @@ import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import * as Unicons from "@iconscout/react-native-unicons";
 import { debounce, filter } from "lodash";
 import * as Haptics from "expo-haptics";
-import { toggleRealmInWatchlist } from "../store/realmSlice";
+import { toggleRealmInWatchlist, fetchRealm } from "../store/realmSlice";
 import { subscribeToNotifications } from "../store/notificationSlice";
 import DiscoverData from "../assets/Discover.json";
 import { LinearGradient } from "expo-linear-gradient";
@@ -41,6 +41,7 @@ export const DaoWatchlistSelection = ({
   const handleFinishOnboarding = () => {
     AsyncStorage.setItem("@hasCompletedOnboarding", "true");
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    dispatch(fetchRealm(realmWatchlist[0]));
     navigation.replace("Root");
   };
 
@@ -55,7 +56,6 @@ export const DaoWatchlistSelection = ({
   }, [searchText]);
 
   const handleSearchChange = (newText: string) => {
-    // setSearchText(newText);
     const normalizedText = newText.toLowerCase();
 
     if (!newText) {
