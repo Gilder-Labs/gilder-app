@@ -221,11 +221,15 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
       keyExtractor={(item: any) => item.postedAt.toString()}
       style={{
         backgroundColor: theme.gray[900],
+        paddingTop: 30,
       }}
       ListFooterComponent={<EmptyView />}
       scrollIndicatorInsets={{ right: 1 }}
       removeClippedSubviews={true}
       initialNumToRender={10}
+      contentContainerStyle={{
+        paddingBottom: 20,
+      }}
       ListHeaderComponent={
         <Container>
           <TextContainer>
@@ -345,6 +349,7 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
             size="h4"
             shade={"400"}
             marginLeft={"3"}
+            // marginBottom="2"
           />
 
           <DescriptionText selectable={true}>{description} </DescriptionText>
@@ -355,7 +360,7 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
             size="h4"
             shade={"400"}
             marginLeft={"3"}
-            marginBottom="3"
+            marginBottom="2"
           />
           {isLoadingChatMessages && (
             <LoadingContainer>
