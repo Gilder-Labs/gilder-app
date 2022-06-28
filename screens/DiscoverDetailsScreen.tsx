@@ -8,6 +8,7 @@ import { ImageBackground } from "react-native";
 import TransparentImage from "../assets/images/transparent.png";
 import { useNavigation } from "@react-navigation/native";
 import { fetchRealm } from "../store/realmSlice";
+import ImageView from "react-native-image-viewing";
 
 import * as Haptics from "expo-haptics";
 import { LinearGradient } from "expo-linear-gradient";
@@ -23,6 +24,7 @@ export default function DiscoverDetailsScreen({
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const navigation = useNavigation();
+  const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
   // @ts-ignore
   const { data } = route?.params;
 
@@ -69,6 +71,12 @@ export default function DiscoverDetailsScreen({
     dispatch(fetchRealm(realmId));
     navigation.popToTop();
   };
+
+  const imageArrayUri = screenshots.map((image) => {
+    return {
+      uri: image,
+    };
+  });
 
   const isNFTDao = tags.includes("NFT");
 
@@ -213,6 +221,14 @@ export default function DiscoverDetailsScreen({
             />
           </>
         )}
+
+        <ImageView
+          images={imageArrayUri}
+          imageIndex={0}
+          visible={isImageViewerOpen}
+          onRequestClose={() => setIsImageViewerOpen(false)}
+          swipeToCloseEnabled={true}
+        />
         {!!screenshots.length && (
           <>
             <Typography
@@ -228,7 +244,10 @@ export default function DiscoverDetailsScreen({
               contentContainerStyle={{ padding: 12 }}
             >
               {screenshots.map((url, index) => (
-                <ImageContainer key={index}>
+                <ImageContainer
+                  key={index}
+                  onPress={() => setIsImageViewerOpen(true)}
+                >
                   <AnimatedImage
                     source={{ uri: url }}
                     // cover={true}
@@ -334,7 +353,7 @@ const HorizontalScrollView = styled.ScrollView`
   background: ${(props: any) => props.theme.gray[1000]};
 `;
 
-const ImageContainer = styled.View`
+const ImageContainer = styled.TouchableOpacity`
   overflow: hidden;
   border-radius: 8px;
   margin-right: 12;

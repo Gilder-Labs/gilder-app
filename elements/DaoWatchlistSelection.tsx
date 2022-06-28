@@ -263,7 +263,11 @@ export const DaoWatchlistSelection = ({
             scrollIndicatorInsets={{ right: 1 }}
             // ListFooterComponent={<EmptyView />}
             ListEmptyComponent={
-              <Typography text={"No DAO's match that name or public key."} />
+              <Typography
+                text={"No DAO's match that name or public key."}
+                marginLeft="2"
+                shade="400"
+              />
             }
           />
 
