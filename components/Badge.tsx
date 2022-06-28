@@ -65,6 +65,7 @@ ${(props: any) => {
   padding-bottom: ${(props: any) => props.theme.spacing[1]}
   padding-left: ${(props: any) => props.theme.spacing[2]}
   padding-right: ${(props: any) => props.theme.spacing[2]}
+  min-height: 28px;
 
   align-items: center;
 `;

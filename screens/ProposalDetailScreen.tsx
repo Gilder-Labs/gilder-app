@@ -221,7 +221,6 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
       keyExtractor={(item: any) => item.postedAt.toString()}
       style={{
         backgroundColor: theme.gray[900],
-        paddingTop: 30,
       }}
       ListFooterComponent={<EmptyView />}
       scrollIndicatorInsets={{ right: 1 }}
@@ -428,7 +427,7 @@ const TextContainer = styled.View`
   padding-bottom: ${(props: any) => props.theme.spacing[1]};
   flex-direction: row;
   justify-content: space-between;
-  flex: 1;
+  /* flex: 1; */
   width: 100%;
   /* margin-bottom: ${(props: any) => props.theme.spacing[2]}; */
 `;

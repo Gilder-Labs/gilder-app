@@ -110,7 +110,7 @@ export const ChatMessage = ({
 
 const Container = styled.View`
   background: ${(props) => props.theme.gray[800]};
-  margin-bottom: ${(props) => props.theme.spacing[3]};
+  margin-top: ${(props) => props.theme.spacing[3]};
   padding: ${(props) => props.theme.spacing[3]};
   border-radius: 8px;
   flex-direction: row;

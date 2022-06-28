@@ -104,6 +104,7 @@ export const DelegateButton = ({
         }
         size="caption"
         shade={"400"}
+        marginBottom="0"
       />
 
       <Row>
@@ -134,6 +135,11 @@ export const DelegateButton = ({
           shade={"300"}
         />
       </Row>
+      {isSelected && (
+        <SelectedContainer>
+          <Unicons.UilCheck size="16" color={`${theme.gray[200]}`} />
+        </SelectedContainer>
+      )}
     </DelegateButtonContainer>
   );
 };
@@ -156,6 +162,18 @@ const Row = styled.View`
   flex: 1;
 `;
 
+const SelectedContainer = styled.View`
+  background: ${(props: any) => props.theme.gray[600]}88;
+  border-radius: 100px;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  right: 8;
+  padding: 2px;
+
+  top: 8;
+`;
+
 const DelegateButtonContainer = styled.TouchableOpacity<{
   isSelected: boolean;
   disabled?: boolean;
@@ -171,8 +189,4 @@ const DelegateButtonContainer = styled.TouchableOpacity<{
     props.disabled ? props.theme.gray[800] : props.theme.gray[900]};
   padding: ${(props: any) => props.theme.spacing[2]};
   padding-top: ${(props: any) => props.theme.spacing[4]};
-  border: ${(props: any) =>
-    props.isSelected
-      ? `2px solid  ${props.theme.secondary[700]}`
-      : "2px solid transparent"};
 `;
