@@ -126,7 +126,7 @@ export const DaoWatchlistSelection = ({
                     hasSomeRealmsSelected
                       ? theme.secondary[600]
                       : theme.gray[700],
-                    hasSomeRealmsSelected ? theme.aqua[700] : theme.gray[700],
+                    hasSomeRealmsSelected ? theme.purple[700] : theme.gray[700],
                   ]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
@@ -247,7 +247,7 @@ export const DaoWatchlistSelection = ({
                   text="DAOs"
                   size="h4"
                   bold={true}
-                  marginLeft={"4"}
+                  marginLeft={"2"}
                   shade="300"
                   marginBottom="2"
                 />
@@ -257,6 +257,7 @@ export const DaoWatchlistSelection = ({
               paddingTop: 16,
               paddingLeft: 8,
               paddingRight: 8,
+              backgroundColor: "#131313",
               // height: "100%",
             }}
             scrollIndicatorInsets={{ right: 1 }}

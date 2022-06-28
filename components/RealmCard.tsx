@@ -10,6 +10,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import TransparentImage from "../assets/images/transparent.png";
 import { ImageBackground } from "react-native";
 import { useTheme } from "styled-components";
+import * as Unicons from "@iconscout/react-native-unicons";
 
 interface RealmCardProps {
   realm: any;
@@ -78,6 +79,11 @@ export const RealmCard = ({ realm }: RealmCardProps) => {
           hasTextShadow={true}
         />
       </LinearGradient>
+      {isSelected && (
+        <SelectedContainer>
+          <Unicons.UilCheck size="20" color={`${theme.gray[200]}`} />
+        </SelectedContainer>
+      )}
     </ContainerButton>
   );
 };
@@ -90,10 +96,10 @@ const ContainerButton = styled.TouchableOpacity<{ isSelected: boolean }>`
   margin-right: ${(props: any) => props.theme.spacing[2]};
   border-radius: 10px;
   background: ${(props: any) => props.theme.gray[800]};
-  border: ${(props: any) =>
+  /* border: ${(props: any) =>
     props.isSelected
-      ? `2px solid  ${props.theme.gray[200]}`
-      : "2px solid transparent"};
+      ? `2px solid  ${props.theme.gray[400]}`
+      : "2px solid transparent"}; */
 `;
 
 const IconContainer = styled.View`
@@ -101,4 +107,16 @@ const IconContainer = styled.View`
   border-radius: 100px;
   padding: ${(props: any) => props.theme.spacing[2]};
   background: ${(props: any) => props.theme.gray[900]};
+`;
+
+const SelectedContainer = styled.View`
+  background: ${(props: any) => props.theme.gray[600]}88;
+  border-radius: 100px;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  right: 8;
+  padding: 2px;
+
+  top: 8;
 `;
