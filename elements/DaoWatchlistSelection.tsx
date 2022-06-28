@@ -96,6 +96,8 @@ export const DaoWatchlistSelection = ({
   };
 
   const renderRealmCard = ({ item }) => {
+    // TODO: check if featured dao is a item, don't return anything if it is
+
     return <RealmCard realm={item} />;
   };
 
@@ -119,23 +121,20 @@ export const DaoWatchlistSelection = ({
                 onPress={handleFinishOnboarding}
                 disabled={!hasSomeRealmsSelected}
               >
-                {/* TODO give is a gradient background */}
                 <LinearGradient
                   colors={[
                     hasSomeRealmsSelected
-                      ? theme.primary[700]
-                      : theme.gray[600],
-                    hasSomeRealmsSelected
-                      ? theme.primary[400]
+                      ? theme.secondary[600]
                       : theme.gray[700],
+                    hasSomeRealmsSelected ? theme.aqua[700] : theme.gray[700],
                   ]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
                   style={{
                     height: 36,
                     borderRadius: 8,
-                    paddingHorizontal: 16,
-                    paddingVertical: 4,
+                    paddingHorizontal: 12,
+                    paddingVertical: 0,
                     flexDirection: "row",
                     alignItems: "center",
                   }}
@@ -145,12 +144,12 @@ export const DaoWatchlistSelection = ({
                     marginBottom="0"
                     marginRight="1"
                     shade="50"
-                    color="primary"
+                    color="gray"
                     // hasTextShadow={true}
                   />
                   <Unicons.UilArrowRight
                     size="24"
-                    color={theme.primary[100]}
+                    color={theme.gray[100]}
                     style={{ marginRight: -4 }}
                   />
                 </LinearGradient>
@@ -198,7 +197,7 @@ export const DaoWatchlistSelection = ({
             }}
           >
             {realmWatchlist.map((realmId) => (
-              <RealmIconContainer>
+              <RealmIconContainer key={realmId}>
                 <RealmIcon size={54} realmId={realmId} />
                 <RemoveContainer
                   onPress={() => handleRealmToggle(realmId, false)}
@@ -210,52 +209,72 @@ export const DaoWatchlistSelection = ({
           </WatchlistContainer>
 
           {/* TODO: Featured daos in block list */}
-          <Typography
-            text="Featured"
-            size="h4"
-            bold={true}
-            marginLeft={"4"}
-            shade="300"
-          />
+
           <FlatList
-            data={featured}
+            data={filteredRealms}
             renderItem={renderRealmCard}
             numColumns={2}
             keyExtractor={(item) => item.pubKey}
+            ListHeaderComponent={
+              <>
+                {!searchText && (
+                  <>
+                    <Typography
+                      text="Featured"
+                      size="h4"
+                      bold={true}
+                      marginLeft={"2"}
+                      marginBottom="2"
+                      shade="300"
+                    />
+                    <FlatList
+                      data={featured}
+                      renderItem={renderRealmCard}
+                      numColumns={2}
+                      keyExtractor={(item) => item.realmId}
+                      style={{
+                        paddingTop: 0,
+                        paddingBottom: 8,
+                        // paddingLeft: 8,
+                        // paddingRight: 8,
+                        // height: "100%",
+                      }}
+                      scrollIndicatorInsets={{ right: 1 }}
+                    />
+                  </>
+                )}
+                <Typography
+                  text="DAOs"
+                  size="h4"
+                  bold={true}
+                  marginLeft={"4"}
+                  shade="300"
+                  marginBottom="2"
+                />
+              </>
+            }
             style={{
-              paddingTop: 0,
+              paddingTop: 16,
               paddingLeft: 8,
               paddingRight: 8,
               // height: "100%",
             }}
             scrollIndicatorInsets={{ right: 1 }}
+            // ListFooterComponent={<EmptyView />}
+            ListEmptyComponent={
+              <Typography text={"No DAO's match that name or public key."} />
+            }
           />
 
           {/* TODO: DAO's in realmsdata list */}
-          <Typography
-            text="DAOs"
-            size="h4"
-            bold={true}
-            marginLeft={"4"}
-            shade="300"
-          />
-          {/* TODO: Rest of the daos */}
-          <Typography
-            text="Unchartered DAOs"
-            size="h4"
-            bold={true}
-            marginLeft={"4"}
-            shade="300"
-          />
-
           {/* Only show if a user is searching for daos */}
-          <Typography
+          {/* <Typography
             text="Search"
             size="h4"
             bold={true}
             marginLeft={"4"}
             shade="300"
-          />
+          /> */}
         </ContentContainer>
       )}
     </Container>
@@ -273,6 +292,7 @@ const Container = styled.View`
 
 const WatchlistContainer = styled.ScrollView`
   max-height: 64px;
+  min-height: 64px;
   border-radius: 8px;
   margin-bottom: ${(props) => props.theme.spacing[2]};
 `;

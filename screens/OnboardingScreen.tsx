@@ -30,12 +30,6 @@ export default function OnboardingScreen({ navigation }: any) {
     setSelectedPage(index);
   };
 
-  const handleFinishOnboarding = () => {
-    AsyncStorage.setItem("@hasCompletedOnboarding", "true");
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    navigation.replace("Root");
-  };
-
   return (
     <Container>
       <PagerView
@@ -75,14 +69,19 @@ export default function OnboardingScreen({ navigation }: any) {
           <DaoWatchlistSelection isOnboarding={true} />
         </OnboardingPageContainer>
       </PagerView>
-      <PageControl
-        numOfPages={4}
-        currentPage={selectedPage}
-        inactiveColor={theme.gray[600]}
-        color={theme.gray[200]}
-        containerStyle={{ marginBottom: 40, marginTop: 40 }}
-        enlargeActive={true}
-      />
+      <PageControlContainer>
+        <PageControl
+          numOfPages={4}
+          currentPage={selectedPage}
+          inactiveColor={theme.gray[600]}
+          color={theme.gray[200]}
+          containerStyle={{
+            marginBottom: 12,
+            marginTop: 12,
+          }}
+          enlargeActive={true}
+        />
+      </PageControlContainer>
     </Container>
   );
 }
@@ -104,6 +103,10 @@ const Container = styled.View`
   justify-content: center;
   align-items: center;
   padding-top: 48;
+`;
+
+const PageControlContainer = styled.View`
+  background: transparent;
 `;
 
 const Row = styled.View`

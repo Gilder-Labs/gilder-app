@@ -8,6 +8,7 @@ import { useTheme } from "styled-components";
 import { RealmCard } from "./RealmCard";
 import { Loading } from "./Loading";
 import { Typography } from "../components";
+import { DaoWatchlistSelection } from "../elements";
 
 interface RealmSelectModalProps {
   open: boolean;
@@ -95,67 +96,22 @@ export const RealmSelectModal = ({
       <FloatingBarContainer>
         <FloatingBar />
       </FloatingBarContainer>
-      <Header>
-        <Typography text="Add DAOs" size="h2" bold={true} />
-      </Header>
 
       {isLoadingRealms || isFetchingStorage ? (
         <Loading />
       ) : (
-        <>
-          <SearchBarContainer>
-            <SearchBar
-              placeholder="Search by name or public key"
-              onChangeText={handleSearchInputChange}
-              placeholderTextColor={theme.gray[400]}
-              selectionColor={theme.gray[200]}
-              autoCompleteType={"off"}
-              autoCapitalize={"none"}
-              autoCorrect={false}
-              value={searchText}
-            />
-            <IconContainer
-              disabled={!searchText}
-              onPress={() => setSearchText("")}
-            >
-              {searchText ? (
-                <Unicons.UilTimes size="20" color={theme.gray[300]} />
-              ) : (
-                <Unicons.UilSearch size="20" color={theme.gray[300]} />
-              )}
-            </IconContainer>
-          </SearchBarContainer>
-
-          <RealmContainer>
-            <FlatList
-              data={filteredRealms}
-              renderItem={renderRealmCard}
-              numColumns={2}
-              keyExtractor={(item) => item.pubKey}
-              style={{
-                paddingTop: 16,
-                paddingLeft: 8,
-                paddingRight: 8,
-                // height: "100%",
-              }}
-              scrollIndicatorInsets={{ right: 1 }}
-              ListFooterComponent={<EmptyView />}
-              ListEmptyComponent={
-                <EmptyText>No DAO's match that name or public key.</EmptyText>
-              }
-            />
-          </RealmContainer>
-        </>
+        <RealmContainer>
+          <DaoWatchlistSelection />
+        </RealmContainer>
       )}
     </Modal>
   );
 };
 
 const RealmContainer = styled.View`
-  background-color: ${(props) => props.theme.gray[900]};
-  width: 100%;
+  padding-top: ${(props: any) => props.theme.spacing[4]};
+  background: ${(props) => props.theme.gray[900]};
   height: 100%;
-  padding-top: ${(props: any) => props.theme.spacing[2]};
 `;
 
 const Header = styled.View`

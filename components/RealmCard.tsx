@@ -52,7 +52,7 @@ export const RealmCard = ({ realm }: RealmCardProps) => {
     >
       <LinearGradient
         colors={[
-          color1 ? color1 : theme.gray[600],
+          color1 ? color1 : theme.gray[800],
           color2 ? color2 : theme.gray[800],
         ]}
         style={{
@@ -70,7 +70,7 @@ export const RealmCard = ({ realm }: RealmCardProps) => {
         <Typography
           text={realmInfo?.displayName || realm?.displayName || realm.name}
           marginLeft={"2"}
-          size="h4"
+          size="body"
           shade="100"
           textAlign="center"
           bold={true}
@@ -92,22 +92,8 @@ const ContainerButton = styled.TouchableOpacity<{ isSelected: boolean }>`
   background: ${(props: any) => props.theme.gray[800]};
   border: ${(props: any) =>
     props.isSelected
-      ? `2px solid  ${props.theme.gray[400]}`
+      ? `2px solid  ${props.theme.gray[200]}`
       : "2px solid transparent"};
-`;
-
-const RealmName = styled.Text`
-  margin-top: ${(props: any) => props.theme.spacing[3]}
-  color: ${(props: any) => props.theme.gray[100]};
-  font-size: 16px;
-  font-weight: bold;
-  text-align: center;
-`;
-
-const Container = styled.View`
-  justify-content: center;
-  align-items: center;
-  height: 140px;
 `;
 
 const IconContainer = styled.View`
