@@ -12,22 +12,48 @@ import { AnimatedImage } from "react-native-ui-lib";
 import WelcomeImage from "../assets/images/onboarding/welcome.png";
 import NotificationsImage from "../assets/images/onboarding/notifications.png";
 import WalletImage from "../assets/images/onboarding/wallet.png";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Device from "expo-device";
+import * as Notifications from "expo-notifications";
+import { setToken } from "../store/notificationSlice";
 import { Dimensions } from "react-native";
 import { DaoWatchlistSelection } from "../elements";
-
-import * as Haptics from "expo-haptics";
 
 export default function OnboardingScreen({ navigation }: any) {
   const theme = useTheme();
   const dispatch = useAppDispatch();
-  const { selectedRealm } = useAppSelector((state) => state.realms);
   const [selectedPage, setSelectedPage] = useState(0);
   const { width } = Dimensions.get("window");
 
-  const handlePageScroll = (event: PagerViewOnPageSelectedEvent) => {
+  const handlePageScroll = async (event: PagerViewOnPageSelectedEvent) => {
     const index = event.nativeEvent.position;
     setSelectedPage(index);
+    if (index === 3) {
+      const token = await registerForPushNotificationsAsync();
+      dispatch(setToken(token));
+    }
+  };
+
+  const registerForPushNotificationsAsync = async () => {
+    let token;
+    console.log("trying to register for notifications");
+    if (Device.isDevice) {
+      const { status: existingStatus } =
+        await Notifications.getPermissionsAsync();
+      let finalStatus = existingStatus;
+      if (existingStatus !== "granted") {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+      }
+      if (finalStatus !== "granted") {
+        // alert("Failed to get push token for push notification!");
+        return;
+      }
+      token = (await Notifications.getExpoPushTokenAsync()).data;
+      return token;
+    } else {
+      // alert("Must use physical device for Push Notifications");
+    }
+    return token;
   };
 
   return (
