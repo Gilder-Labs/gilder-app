@@ -70,7 +70,6 @@ export const RealmCard = ({ realm }: RealmCardProps) => {
         </IconContainer>
         <Typography
           text={realmInfo?.displayName || realm?.displayName || realm.name}
-          marginLeft={"2"}
           size="body"
           shade="100"
           textAlign="center"
