@@ -46,7 +46,7 @@ export const VaultCard = ({
 
   // If the vault has no tokens of value ||
   // TODO: handle this by setting
-  if ((!tokens.length || totalValue < 0.1) && !nfts.length) {
+  if ((!tokens?.length || totalValue < 0.1) && !nfts?.length) {
     return <></>;
   }
 
@@ -65,7 +65,7 @@ export const VaultCard = ({
             sectionHeader={
               <SectionHeaderContainer>
                 <Typography
-                  text={`Tokens (${filteredTokens.length})`}
+                  text={`Tokens (${filteredTokens?.length})`}
                   size="body"
                   shade="400"
                 />
@@ -88,7 +88,7 @@ export const VaultCard = ({
         </SectionContainer>
       )}
 
-      {nfts.length > 0 && (
+      {nfts?.length > 0 && (
         <SectionContainer>
           <ExpandableSection
             top={false}
@@ -96,7 +96,7 @@ export const VaultCard = ({
             sectionHeader={
               <SectionHeaderContainer>
                 <Typography
-                  text={`Nfts (${nfts.length})`}
+                  text={`Nfts (${nfts?.length})`}
                   size="body"
                   shade="400"
                 />

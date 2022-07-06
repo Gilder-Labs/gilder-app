@@ -8,7 +8,7 @@
       "twitter": "mangomarkets",
       "discord": "https://discord.gg/mangomarkets",
       "ogImage": "https://pbs.twimg.com/profile_images/1461014736674435079/w83QozhN_400x400.jpg",
-      "description": "Mango Markets provides a single venue to lend, borrow, swap, and leverage-trade crypto assets through a powerful risk engine. \n\nMango Markets is built on the Solana blockchain and utilises Serum DEX for spot margin trading while perpetual futures are traded on Mango Markets' own order book. Mango Markets is governed by MNGO token holders via the Mango DAO.",
+      "description": "Mango Markets provides a single venue to lend, borrow, swap, and leverage-trade crypto assets through a powerful risk engine. \n\nMango Markets is built on the Solana blockchain and utilizes Serum DEX for spot margin trading while perpetual futures are traded on Mango Markets' own order book. Mango Markets is governed by MNGO token holders via the Mango DAO.",
       "howToJoin": "Buy $MNGO token and deposit the tokens into Mango Dao to start participating.",
       "features": "- Trading \n- Borrow & Lend\n- Spot Margin\n- Perpetual Futures \n- Market Making Program",
       "nftMarketPlace": "",
@@ -98,7 +98,7 @@
       "website": "https://realms.today",
       "twitter": "Realms_DAOs",
       "discord": "http://discord.gg/tYpY9UfRFx",
-      "ogImage": "https://pbs.twimg.com/profile_images/1519088664177004544/qIlttfZp_400x400.jpg",
+      "ogImage": "https://pbs.twimg.com/profile_images/1542187607102132224/dsvWAvLm_400x400.jpg",
       "description": "Realms is an end to end DAO solution for Solana DAOs built by the Solana team and community. \n\nEasily spin up a new NFT, multi sig wallet or community dao in a few minutes in the no code dao creation wizard. \n\nManage your community, treasury and proposals transparently and resistant to censorship from Realms web app.",
       "howToJoin": "",
       "features": "- No Code DAO creation tool\n- Multi Sig Wallet, NFT DAO, Community DAO \n- Custom and Flexible Governance \n- Invest and stake directly from treasury \n- Proposal Notifications  ",
@@ -153,6 +153,27 @@
       ],
       "color1": "#030303",
       "color2": "#2e2e2e"
+    },
+    {
+      "symbol": "",
+      "displayName": "Civic",
+      "realmId": "",
+      "ogImage": "https://pbs.twimg.com/profile_images/1537964289964658688/ibLqv_Tw_400x400.jpg",
+      "website": "https://civic.com/",
+      "twitter": "civickey",
+      "discord": "http://discord.gg/FCTHTBwj5Z",
+      "description": "Civic provides identity services for Solana, including KYC, bot-resistance, uniqueness and more.\n\nCivic adds an identity layer to your DAO, through the Civic Pass plugin. \n\nExample use-cases:\nSybil-resistance and one-person-one-vote\nDAOs with quadratic voting systems\nLocation-specific DAOs\nBot-resistance\nAge-gated DAOs\nDAOs that require KYC",
+      "howToJoin": "",
+      "features": "- Seamless integration using the SPL-Governance Plugin system \n- A non-transferable token model to gate access to a DAO\n- Intuitive UI to guide users to obtain the identity token",
+      "nftMarketPlace": "",
+      "tags": ["TOOL"],
+      "screenshots": [
+        "https://firebasestorage.googleapis.com/v0/b/gilder-e1b6e.appspot.com/o/Screen%20Shot%202022-07-05%20at%2012.20.47%20PM.png?alt=media&token=403834f6-3c15-417b-bdfe-c22752d0dc60",
+        "https://firebasestorage.googleapis.com/v0/b/gilder-e1b6e.appspot.com/o/Screen%20Shot%202022-07-05%20at%2012.22.47%20PM.png?alt=media&token=23a0fa7d-8124-4687-8c9f-4de5b74091eb",
+        "https://firebasestorage.googleapis.com/v0/b/gilder-e1b6e.appspot.com/o/Ignite-Captcha.png?alt=media&token=6c7027e6-5478-4aab-92ed-8d9b32bf7023"
+      ],
+      "color1": "#2F1730",
+      "color2": "#BB4F44"
     },
     {
       "symbol": "UNQ",
@@ -211,7 +232,7 @@
       "features": "- Risk-Managed Vaults\n- Yield and Vault Reporting\n- Automated low risk and maximal yield",
 
       "nftMarketPlace": "",
-      "tags": ["TREASURY", "TOOL"],
+      "tags": ["IDENTITY", "TOOL"],
       "screenshots": [
         "https://firebasestorage.googleapis.com/v0/b/gilder-e1b6e.appspot.com/o/Screen%20Shot%202022-06-21%20at%204.12.58%20PM.png?alt=media&token=01b5b6cd-de9a-4f8a-9934-d2d06d54fccf",
         "https://firebasestorage.googleapis.com/v0/b/gilder-e1b6e.appspot.com/o/Screen%20Shot%202022-06-21%20at%204.12.48%20PM.png?alt=media&token=ec6a2e77-6185-426d-9de0-126f80dcad64",
