@@ -345,7 +345,7 @@ const FloatingBar = styled.View`
   z-index: 100;
   background: #ffffff88;
   top: 0;
-  border-radius: 8;
+  border-radius: 8px;
 `;
 
 const HorizontalScrollView = styled.ScrollView`
@@ -357,5 +357,5 @@ const HorizontalScrollView = styled.ScrollView`
 const ImageContainer = styled.TouchableOpacity`
   overflow: hidden;
   border-radius: 8px;
-  margin-right: 12;
+  margin-right: 12px;
 `;

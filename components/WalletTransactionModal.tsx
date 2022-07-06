@@ -107,5 +107,5 @@ const FloatingBar = styled.View`
   z-index: 100;
   background: #ffffff66;
   top: 0;
-  border-radius: 8;
+  border-radius: 8px;
 `;

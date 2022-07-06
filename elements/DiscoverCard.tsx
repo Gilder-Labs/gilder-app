@@ -115,7 +115,7 @@ const ContainerButton = styled.TouchableOpacity<{ isHorizontal: boolean }>`
     !props.isHorizontal ? props.theme.spacing[3] : "0px"};
   border-radius: 4px;
   background: ${(props: any) => props.theme.gray[800]};
-  border-radius: 8;
+  px;
   min-width: 200px;
   margin-right: ${(props: any) =>
     props.isHorizontal ? props.theme.spacing[3] : "0px"};

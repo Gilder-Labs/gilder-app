@@ -172,7 +172,7 @@ const FloatingBar = styled.View`
   z-index: 100;
   background: #ffffff88;
   top: 0;
-  border-radius: 8;
+  border-radius: 8px;
 `;
 
 const IconContainer = styled.TouchableOpacity`

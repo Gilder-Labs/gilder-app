@@ -52,7 +52,7 @@ export const ConnectWalletButton = ({}: ConnectWalletProps) => {
       });
 
       const state = await web3auth.login({
-        // loginProvider: LOGIN_PROVIDER.TWITTER,
+        // loginProvider: [LOGIN_PROVIDER.TWITTER, LOGIN_PROVIDER.DISCORD],
         redirectUrl: resolvedRedirectUrl,
       });
       const userInfo = await state.userInfo;
