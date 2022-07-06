@@ -116,7 +116,7 @@ function DrawerScreen() {
       screenOptions={{
         drawerActiveBackgroundColor: `${theme?.gray[800]}aa`,
         drawerActiveTintColor: theme?.gray[300],
-        drawerInactiveTintColor: theme?.gray[600],
+        drawerInactiveTintColor: theme?.gray[500],
         drawerStyle: {
           width: 320,
         },
@@ -138,7 +138,7 @@ function DrawerScreen() {
             </DrawerTabText>
           ),
           drawerIcon: ({ focused, color, size }) => (
-            <Unicons.UilGold size="24" color={theme?.gray[600]} />
+            <Unicons.UilGold size="24" color={theme?.gray[500]} />
           ),
         }}
       />
@@ -152,7 +152,7 @@ function DrawerScreen() {
             </DrawerTabText>
           ),
           drawerIcon: ({ focused, color, size }) => (
-            <Unicons.UilUsersAlt size="24" color={theme?.gray[600]} />
+            <Unicons.UilUsersAlt size="24" color={theme?.gray[500]} />
           ),
         }}
       />
@@ -175,7 +175,7 @@ function DrawerScreen() {
             </DrawerLabelContainer>
           ),
           drawerIcon: ({ focused, color, size }) => (
-            <Unicons.UilFileAlt size="24" color={theme?.gray[600]} />
+            <Unicons.UilFileAlt size="24" color={theme?.gray[500]} />
           ),
         }}
       />
@@ -189,7 +189,7 @@ function DrawerScreen() {
             </DrawerTabText>
           ),
           drawerIcon: ({ focused, color, size }) => (
-            <Unicons.UilListUl size="24" color={theme?.gray[600]} />
+            <Unicons.UilListUl size="24" color={theme?.gray[500]} />
           ),
         }}
       />
