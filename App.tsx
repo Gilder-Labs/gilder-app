@@ -42,7 +42,7 @@ export default function App() {
     // TODO: purge store whenever there is a new version to make sure we don't have wonky data till release
     // persistor.purge();
     return (
-      <SafeAreaProvider>
+      <SafeAreaProvider style={{ backgroundColor: "black" }}>
         <Provider store={store}>
           <ApolloProvider client={client}>
             <ThemeProvider theme={darkTheme}>

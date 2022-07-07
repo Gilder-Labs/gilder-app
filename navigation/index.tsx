@@ -443,6 +443,7 @@ const DrawerTabText = styled.Text<{ color: string; focused: boolean }>`
 
 const RootContainer = styled.View`
   flex: 1;
+  height: 100%;
   background: black;
 `;
 
