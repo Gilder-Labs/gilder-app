@@ -10,7 +10,7 @@ interface VoteCardProps {
   vote: MemberVote;
   proposal: Proposal;
   member: Member;
-  realm: any;
+  realm: Realm;
 }
 // Vote weight
 // Direction vote is cast
@@ -37,15 +37,20 @@ export const VoteCard = ({ vote, proposal, member, realm }: VoteCardProps) => {
   }
 
   const { status } = proposal;
-  const { councilDepositUiAmount, communityDepositUiAmount } = member;
+  const { councilDepositAmount, communityDepositAmount } = member;
 
   const getVoteWeight = () => {
-    const { communityMint, councilMint } = realm;
+    const {
+      communityMint,
+      councilMint,
+      councilMintDecimals,
+      communityMintDecimals,
+    } = realm;
 
     if (proposal.governingTokenMint === councilMint) {
-      return councilDepositUiAmount;
+      return formatVoteWeight(councilDepositAmount, councilMintDecimals);
     } else {
-      return communityDepositUiAmount;
+      return formatVoteWeight(communityDepositAmount, communityMintDecimals);
     }
   };
 
