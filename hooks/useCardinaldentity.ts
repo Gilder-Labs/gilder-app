@@ -16,15 +16,13 @@ export const useCardinalIdentity = (walletId: string) => {
 
   useEffect(() => {
     const getTwitterIdentity = async () => {
-      const cardinalData = await tryGetName(
-        indexConnection,
-        new PublicKey(walletId)
-      );
+      const walletKey = new PublicKey(walletId);
+      const cardinalData = await tryGetName(indexConnection, walletKey);
 
       const handle = cardinalData?.[0];
       cache[walletId] = { twitterURL: "", twitterHandle: cardinalData?.[0] };
 
-      if (!twitterURL && handle) {
+      if (handle) {
         setTwitterHandle(cardinalData?.[0]);
         const handleFormatted = handle.slice(1);
 
@@ -39,12 +37,10 @@ export const useCardinalIdentity = (walletId: string) => {
     };
 
     // if we already cached cardinal wallet, just return that data
-    if (cache[walletId]) {
+    if (cache[walletId]?.twitterHandle) {
       setTwitterURL(cache[walletId].twitterURL);
       setTwitterHandle(cache[walletId].twitterHandle);
-    } else if (cache[walletId] && !cache[walletId].twitterHandle) {
-      // if wallet had cardinal identity checked, but is not link, we do nothing cause we don't have data
-    } else if (walletId) {
+    } else if (walletId && !cache[walletId]) {
       // we haven't checked their identity yet
       getTwitterIdentity();
     }
