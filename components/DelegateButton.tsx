@@ -10,6 +10,7 @@ import { AnimatedImage } from "react-native-ui-lib";
 import numeral from "numeral";
 import { useAppSelector } from "../hooks/redux";
 import * as Unicons from "@iconscout/react-native-unicons";
+import { useCardinalIdentity } from "../hooks/useCardinaldentity";
 
 interface ButtonProps {
   onPress(): void;
@@ -19,18 +20,18 @@ interface ButtonProps {
   isCommunityVote: boolean;
 }
 
-const GET_CYBERCONNECT_IDENTITY = gql`
-  query FullIdentityQuery($publicKey: String!) {
-    identity(address: $publicKey, network: SOLANA) {
-      address
-      domain
-      social {
-        twitter
-      }
-      avatar
-    }
-  }
-`;
+// const GET_CYBERCONNECT_IDENTITY = gql`
+//   query FullIdentityQuery($publicKey: String!) {
+//     identity(address: $publicKey, network: SOLANA) {
+//       address
+//       domain
+//       social {
+//         twitter
+//       }
+//       avatar
+//     }
+//   }
+// `;
 
 export const DelegateButton = ({
   onPress,
@@ -40,16 +41,15 @@ export const DelegateButton = ({
   isCommunityVote,
 }: ButtonProps) => {
   const theme = useTheme();
-  const { loading, error, data } = useQuery(GET_CYBERCONNECT_IDENTITY, {
-    variables: { publicKey: memberPublicKey },
-  });
+  // const { loading, error, data } = useQuery(GET_CYBERCONNECT_IDENTITY, {
+  //   variables: { publicKey: memberPublicKey },
+  // });
   const { selectedRealm } = useAppSelector((state) => state.realms);
   const { walletToVoteMap } = useAppSelector((state) => state.proposals);
-  const identityName = data?.identity?.social?.twitter
-    ? data?.identity?.social?.twitter
-    : data?.identity?.domain;
+  const [twitterURL, twitterHandle] = useCardinalIdentity(memberPublicKey);
 
-  const avatarUrl = data?.identity?.avatar;
+  const identityName = twitterHandle;
+  const avatarUrl = twitterURL;
 
   const color = getColorType(memberPublicKey);
   const color2 = getColorType(memberPublicKey.slice(-1) || "string");

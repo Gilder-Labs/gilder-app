@@ -18,19 +18,6 @@ interface MemberProfileProps {
   navigation: any;
 }
 
-const GET_CYBERCONNECT_IDENTITY = gql`
-  query FullIdentityQuery($publicKey: String!) {
-    identity(address: $publicKey, network: SOLANA) {
-      address
-      domain
-      social {
-        twitter
-      }
-      avatar
-    }
-  }
-`;
-
 export const MemberProfile = ({ route }: MemberProfileProps) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
@@ -38,18 +25,10 @@ export const MemberProfile = ({ route }: MemberProfileProps) => {
     useAppSelector((state) => state.members);
   const { selectedRealm } = useAppSelector((state) => state.realms);
   const { proposalsMap } = useAppSelector((state) => state.proposals);
-  const { member } = route?.params;
+  const { member, memberInfo } = route?.params;
   const [selectedTab, setSelectedTab] = useState("Messages");
 
-  const { loading, error, data } = useQuery(GET_CYBERCONNECT_IDENTITY, {
-    variables: { publicKey: member.walletId },
-  });
-
-  const identityName = data?.identity?.social?.twitter
-    ? data?.identity?.social?.twitter
-    : data?.identity?.domain;
-
-  const avatarUrl = data?.identity?.avatar;
+  console.log("ROUTE PROPS", route);
 
   useEffect(() => {
     if (member) {
@@ -109,7 +88,7 @@ export const MemberProfile = ({ route }: MemberProfileProps) => {
               onSelectTab={setSelectedTab}
               color={color}
               color2={color2}
-              avatarUrl={avatarUrl}
+              avatarUrl={memberInfo?.avatarUrl}
             />
           }
         />
@@ -129,7 +108,7 @@ export const MemberProfile = ({ route }: MemberProfileProps) => {
               onSelectTab={setSelectedTab}
               color={color}
               color2={color2}
-              avatarUrl={avatarUrl}
+              avatarUrl={memberInfo?.avatarUrl}
             />
           }
         />

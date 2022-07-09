@@ -10,6 +10,8 @@ import { AnimatedImage } from "react-native-ui-lib";
 import { formatVoteWeight } from "../utils";
 import { useAppSelector } from "../hooks/redux";
 import { PublicKeyTextCopy } from "./PublicKeyTextCopy";
+import axios from "axios";
+import { useCardinalIdentity } from "../hooks/useCardinaldentity";
 
 interface MemberCardProps {
   member: any;
@@ -35,16 +37,16 @@ export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
   const { loading, error, data } = useQuery(GET_CYBERCONNECT_IDENTITY, {
     variables: { publicKey: member.walletId },
   });
+
+  const [twitterURL, twitterHandle] = useCardinalIdentity(member.walletId);
+
   const { selectedRealm } = useAppSelector((state) => state.realms);
 
   const color = getColorType(member.walletId);
   const color2 = getColorType(member?.walletId.slice(-1) || "string");
 
-  const identityName = data?.identity?.social?.twitter
-    ? data?.identity?.social?.twitter
-    : data?.identity?.domain;
-
-  const avatarUrl = data?.identity?.avatar;
+  const identityName = twitterHandle;
+  const avatarUrl = twitterURL;
 
   const handleProfileClick = () => {
     onSelect({ name: identityName, avatarUrl: avatarUrl });

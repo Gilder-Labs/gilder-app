@@ -7,27 +7,15 @@ import { useQuery, gql } from "@apollo/client";
 import { LinearGradient } from "expo-linear-gradient";
 import { Typography } from "./Typography";
 import * as Unicons from "@iconscout/react-native-unicons";
+import { WalletIdentity } from "../components";
 
 interface ChatMessageProps {
   message: ChatMessage;
   proposal: Proposal;
   isInProposal?: boolean;
-  voteWeight: string;
-  isYesVote: boolean;
+  voteWeight?: string;
+  isYesVote?: boolean;
 }
-
-const GET_CYBERCONNECT_IDENTITY = gql`
-  query FullIdentityQuery($publicKey: String!) {
-    identity(address: $publicKey, network: SOLANA) {
-      address
-      domain
-      social {
-        twitter
-      }
-      avatar
-    }
-  }
-`;
 
 export const ChatMessage = ({
   message,
@@ -38,48 +26,17 @@ export const ChatMessage = ({
 }: ChatMessageProps) => {
   const theme = useTheme();
   const { body, postedAt, proposalId, author } = message;
-  const { loading, error, data } = useQuery(GET_CYBERCONNECT_IDENTITY, {
-    variables: { publicKey: author },
-  });
-
-  const color = getColorType(author);
-  const color2 = getColorType(author.slice(-1) || "string");
-
-  const identityName = data?.identity?.social?.twitter
-    ? data?.identity?.social?.twitter
-    : data?.identity?.domain;
-
-  const avatarUrl = data?.identity?.avatar;
 
   if (!proposal) {
     return <EmptyView />;
   }
 
-  const getDisplayName = () => {
-    if (isInProposal) {
-      return identityName ? identityName : abbreviatePublicKey(author);
-    }
-
-    return proposal?.name;
-  };
-
   return (
     <Container>
-      <IconContainer color={color}>
-        <LinearGradient
-          // Background Linear Gradient
-          colors={[`${theme[color][500]}`, `${theme[color2][900]}`]}
-          style={{ height: 34, width: 34 }}
-          start={{ x: 0.1, y: 0.2 }}
-        >
-          {!!avatarUrl && <Avatar source={{ uri: avatarUrl }} />}
-        </LinearGradient>
-      </IconContainer>
-
       <Column>
         <Row>
           <Column>
-            <UserName>{getDisplayName()}</UserName>
+            <WalletIdentity memberPublicKey={author} />
             <MessageDate>
               {formatDistance(postedAt * 1000, new Date(), { addSuffix: true })}
             </MessageDate>

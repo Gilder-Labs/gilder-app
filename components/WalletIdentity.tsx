@@ -7,6 +7,7 @@ import { useQuery, gql } from "@apollo/client";
 import { getColorType } from "../utils";
 import { LinearGradient } from "expo-linear-gradient";
 import { AnimatedImage } from "react-native-ui-lib";
+import { useCardinalIdentity } from "../hooks/useCardinaldentity";
 
 interface WalletIdentity {
   memberPublicKey: string;
@@ -15,18 +16,18 @@ interface WalletIdentity {
   avatarSize?: number;
 }
 
-const GET_CYBERCONNECT_IDENTITY = gql`
-  query FullIdentityQuery($publicKey: String!) {
-    identity(address: $publicKey, network: SOLANA) {
-      address
-      domain
-      social {
-        twitter
-      }
-      avatar
-    }
-  }
-`;
+// const GET_CYBERCONNECT_IDENTITY = gql`
+//   query FullIdentityQuery($publicKey: String!) {
+//     identity(address: $publicKey, network: SOLANA) {
+//       address
+//       domain
+//       social {
+//         twitter
+//       }
+//       avatar
+//     }
+//   }
+// `;
 
 export const WalletIdentity = ({
   memberPublicKey,
@@ -35,15 +36,13 @@ export const WalletIdentity = ({
   avatarSize = 32,
 }: WalletIdentity) => {
   const theme = useTheme();
-  const { loading, error, data } = useQuery(GET_CYBERCONNECT_IDENTITY, {
-    variables: { publicKey: memberPublicKey },
-  });
+  // const { loading, error, data } = useQuery(GET_CYBERCONNECT_IDENTITY, {
+  //   variables: { publicKey: memberPublicKey },
+  // });
+  const [twitterURL, twitterHandle] = useCardinalIdentity(memberPublicKey);
 
-  const identityName = data?.identity?.social?.twitter
-    ? data?.identity?.social?.twitter
-    : data?.identity?.domain;
-
-  const avatarUrl = data?.identity?.avatar;
+  const identityName = twitterHandle;
+  const avatarUrl = twitterURL;
 
   const color = getColorType(memberPublicKey);
   const color2 = getColorType(memberPublicKey.slice(-1) || "string");
