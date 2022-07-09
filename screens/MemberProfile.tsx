@@ -28,8 +28,6 @@ export const MemberProfile = ({ route }: MemberProfileProps) => {
   const { member, memberInfo } = route?.params;
   const [selectedTab, setSelectedTab] = useState("Messages");
 
-  console.log("ROUTE PROPS", route);
-
   useEffect(() => {
     if (member) {
       dispatch(fetchMemberChat(member));
