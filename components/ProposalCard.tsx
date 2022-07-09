@@ -205,7 +205,7 @@ export const ProposalCard = ({
               <VoteText>
                 {quorumData.hasMetQuorum
                   ? "Quorum Reached"
-                  : `${quorumData.votesNeeded} yes votes still needed.`}
+                  : `${quorumData.votesNeeded} votes still needed.`}
               </VoteText>
             </VoteColumn>
           </VoteCountRow>

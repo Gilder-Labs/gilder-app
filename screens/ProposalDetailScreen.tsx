@@ -301,7 +301,7 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
                 <VoteText>
                   {quorumData.hasMetQuorum
                     ? "Quorum Reached"
-                    : `${quorumData.votesNeeded} yes votes still needed`}
+                    : `${quorumData.votesNeeded} votes still needed`}
                 </VoteText>
               </VoteColumn>
             </VoteCountRow>
@@ -350,9 +350,15 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
             marginLeft={"3"}
             // marginBottom="2"
           />
-
-          <DescriptionText selectable={true}>{description} </DescriptionText>
-
+          <Typography
+            text={description}
+            size="body"
+            shade={"100"}
+            marginLeft={"3"}
+            marginRight="3"
+            marginBottom="3"
+            selectable={true}
+          />
           <Typography
             text="Discussion"
             bold={true}
