@@ -282,10 +282,10 @@ export const memberSlice = createSlice({
       .addCase(fetchRealmMembers.fulfilled, (state, action: any) => {
         state.isLoadingMembers = false;
         state.isRefreshingMembers = false;
-        state.membersMap = action.payload.membersMap;
-        state.members = action.payload.members;
-        state.delegateMap = action.payload.delegateMap;
-        state.tokenRecordToWalletMap = action.payload.tokenRecordToWalletMap;
+        state.membersMap = action.payload?.membersMap;
+        state.members = action.payload?.members;
+        state.delegateMap = action.payload?.delegateMap;
+        state.tokenRecordToWalletMap = action.payload?.tokenRecordToWalletMap;
       })
       .addCase(fetchMemberChat.pending, (state) => {
         state.isLoadingChat = true;

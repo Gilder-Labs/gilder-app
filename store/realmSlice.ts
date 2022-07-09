@@ -256,8 +256,8 @@ export const realmSlice = createSlice({
         // TODO handle error
       })
       .addCase(fetchRealms.fulfilled, (state, action: any) => {
-        state.realms = action.payload.realms;
-        state.realmsMap = action.payload.realmsMap;
+        state.realms = action.payload?.realms;
+        state.realmsMap = action.payload?.realmsMap;
         state.isLoadingRealms = false;
       })
       .addCase(fetchRealm.pending, (state, action) => {

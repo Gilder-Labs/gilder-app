@@ -276,14 +276,14 @@ export const treasurySlice = createSlice({
           tokenPriceObject[token.id] = token;
         });
 
-        state.vaultsNfts = action.payload.vaultsNfts;
-        state.vaults = action.payload.vaults;
+        state.vaultsNfts = action.payload?.vaultsNfts;
+        state.vaults = action.payload?.vaults;
         state.isLoadingVaults = false;
         state.tokenPriceData = tokenPriceObject;
-        state.governances = action.payload.governances;
-        state.governancesMap = action.payload.governancesMap;
-        state.tokenMap = action.payload.tokenMap;
-        state.activeProposals = action.payload.activeProposals;
+        state.governances = action.payload?.governances;
+        state.governancesMap = action.payload?.governancesMap;
+        state.tokenMap = action.payload?.tokenMap;
+        state.activeProposals = action.payload?.activeProposals;
         // state.nftCollectionData = action.payload.nftCollectionData;
       });
   },

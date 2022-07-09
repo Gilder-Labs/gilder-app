@@ -18,7 +18,7 @@ export const getFilteredTokens = (nfts: Array<any>, tokens: Array<Token>) => {
   let nftsMintMap = {};
 
   // if we have no nfts, just return all tokens
-  if (!nfts || nfts.length === 0) {
+  if (!nfts || nfts?.length === 0) {
     return tokens;
   }
 

@@ -199,8 +199,8 @@ export const proposalsSlice = createSlice({
       .addCase(fetchRealmProposals.fulfilled, (state, action: any) => {
         state.isLoadingProposals = false;
         state.isRefreshingProposals = false;
-        state.proposals = action.payload.proposals;
-        state.proposalsMap = action.payload.proposalsMap;
+        state.proposals = action.payload?.proposals;
+        state.proposalsMap = action.payload?.proposalsMap;
       })
       .addCase(fetchProposalChat.pending, (state) => {
         state.isLoadingChatMessages = true;
@@ -211,7 +211,7 @@ export const proposalsSlice = createSlice({
       })
       .addCase(fetchProposalChat.fulfilled, (state, action: any) => {
         state.isLoadingChatMessages = false;
-        state.chatMessages = action.payload;
+        state.chatMessages = action?.payload;
       })
       .addCase(fetchProposalVotes.pending, (state) => {
         state.isLoadingVotes = true;
@@ -222,8 +222,8 @@ export const proposalsSlice = createSlice({
       })
       .addCase(fetchProposalVotes.fulfilled, (state, action: any) => {
         state.isLoadingVotes = false;
-        state.votes = action.payload.votes;
-        state.walletToVoteMap = action.payload.walletIdToVoteMap;
+        state.votes = action.payload?.votes;
+        state.walletToVoteMap = action.payload?.walletIdToVoteMap;
       });
   },
 });

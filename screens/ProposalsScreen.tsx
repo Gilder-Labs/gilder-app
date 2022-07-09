@@ -43,7 +43,7 @@ export default function ProposalScreen({
   const getActiveProposals = () => {
     let activeProposals = 0;
 
-    proposals.forEach((proposal) => {
+    proposals?.forEach((proposal) => {
       if (proposal.status === "Voting") {
         activeProposals += 1;
       }

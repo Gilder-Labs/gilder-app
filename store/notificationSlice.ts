@@ -87,7 +87,7 @@ export const activitySlice = createSlice({
       })
       .addCase(fetchNotificationSettings.fulfilled, (state, action: any) => {
         state.isLoadingNotifications = false;
-        state.notificationSettings = action.payload.notificationMap;
+        state.notificationSettings = action.payload?.notificationMap;
       });
   },
 });
