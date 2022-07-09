@@ -306,7 +306,7 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
               </VoteColumn>
             </VoteCountRow>
             <QuorumContainer>
-              <VoteYes percent={quorumData.totalVotesNeededPercentage} />
+              <VoteQuorum percent={quorumData.totalVotesNeededPercentage} />
             </QuorumContainer>
           </Votes>
           {/* {isVoting && isMember && ( */}
@@ -455,6 +455,7 @@ const VoteContainer = styled.View`
   flex-direction: row;
   background: ${(props: any) => props.theme.gray[900]};
   border-radius: 2px;
+  overflow: hidden;
   margin-bottom: ${(props: any) => props.theme.spacing[3]};
 `;
 
@@ -462,20 +463,24 @@ const QuorumContainer = styled.View`
   flex-direction: row;
   background: ${(props: any) => props.theme.gray[900]};
   border-radius: 2px;
+  overflow: hidden;
 `;
 
 const VoteNo = styled.View<{ percent: any }>`
   width: ${(props) => props.percent}%;
   height: 8px;
-  background: ${(props) => props.theme.gray[900]};
-
-  border-radius: 4px;
+  background: ${(props) => props.theme.gray[600]};
 `;
 const VoteYes = styled.View<{ percent: any }>`
   width: ${(props) => props.percent}%;
   height: 8px;
+  background: ${(props) => props.theme.aqua[500]};
+`;
+
+const VoteQuorum = styled.View<{ percent: any }>`
+  width: ${(props) => props.percent}%;
+  height: 8px;
   background: ${(props) => props.theme.gray[400]};
-  border-radius: 4px;
 `;
 
 const VoteCountRow = styled.View`
