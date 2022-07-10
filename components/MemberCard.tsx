@@ -18,25 +18,25 @@ interface MemberCardProps {
   onSelect: any;
 }
 
-const GET_CYBERCONNECT_IDENTITY = gql`
-  query FullIdentityQuery($publicKey: String!) {
-    identity(address: $publicKey, network: SOLANA) {
-      address
-      domain
-      social {
-        twitter
-      }
-      avatar
-    }
-  }
-`;
+// const GET_CYBERCONNECT_IDENTITY = gql`
+//   query FullIdentityQuery($publicKey: String!) {
+//     identity(address: $publicKey, network: SOLANA) {
+//       address
+//       domain
+//       social {
+//         twitter
+//       }
+//       avatar
+//     }
+//   }
+// `;
 
 export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
   const theme = useTheme();
   // Fetch cyberconnect wallet data
-  const { loading, error, data } = useQuery(GET_CYBERCONNECT_IDENTITY, {
-    variables: { publicKey: member.walletId },
-  });
+  // const { loading, error, data } = useQuery(GET_CYBERCONNECT_IDENTITY, {
+  //   variables: { publicKey: member.walletId },
+  // });
 
   const [twitterURL, twitterHandle] = useCardinalIdentity(member.walletId);
 
