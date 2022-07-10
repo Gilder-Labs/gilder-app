@@ -74,7 +74,7 @@ export default function DiscoverScreen({
 }
 
 const Container = styled.ScrollView`
-  flex: 1;
+  min-height: 100%;
   background: ${(props: any) => props.theme.gray[900]};
   padding: ${(props) => props.theme.spacing[3]};
 `;

@@ -221,6 +221,7 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
       keyExtractor={(item: any) => item.postedAt.toString()}
       style={{
         backgroundColor: theme.gray[900],
+        minHeight: "100%",
       }}
       ListFooterComponent={<EmptyView />}
       scrollIndicatorInsets={{ right: 1 }}
