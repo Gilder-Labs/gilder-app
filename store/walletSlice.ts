@@ -16,15 +16,23 @@ import { SPL_PUBLIC_KEY, RPC_CONNECTION } from "../constants/Solana";
 import { getTokensInfo } from "../utils";
 import {
   withCastVote,
-  CastVoteArgs,
-  RpcContext,
+  SYSTEM_PROGRAM_ID,
   Vote,
   getGovernanceProgramVersion,
 } from "@solana/spl-governance";
 import bs58 from "bs58";
-
 import * as SecureStore from "expo-secure-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
+// plugin stuff
+import { Provider, Wallet, AnchorProvider } from "@project-serum/anchor";
+import { VsrClient } from "@blockworks-foundation/voter-stake-registry-client/index";
+import {
+  getRegistrarPDA,
+  getVoterPDA,
+  getVoterWeightPDA,
+} from "../utils/gov-ui-functions/governance-plugins/account";
+// end plugin stuff
 
 export interface WalletState {
   publicKey: string;
@@ -260,14 +268,36 @@ export const castVote = createAsyncThunk(
 
       const programVersion = await getGovernanceProgramVersion(
         connection,
-        new PublicKey(selectedRealm.governanceId)
+        new PublicKey(selectedRealm!.governanceId)
       );
+
+      const privateKey = wallet.privateKey;
+      const walletKeypair = Keypair.fromSecretKey(bs58.decode(privateKey));
+
+      console.log("instructions before plugin", instructions);
+
+      // PLUGIN STUFF
+      let votePlugin;
+      // TODO: update this to handle any vsr plugin, rn only runs for mango dao
+      if (
+        selectedRealm?.realmId ===
+        "DPiH3H3c7t47BMxqTxLsuPQpEC6Kne8GA9VXbxpnZxFE"
+      ) {
+        votePlugin = await getVotingPlugin(
+          selectedRealm,
+          walletKeypair,
+          walletPubkey,
+          instructions
+        );
+      }
+      // END PLUGIN STUFF
+      console.log("instructions after plugin", instructions);
 
       await withCastVote(
         instructions,
-        new PublicKey(selectedRealm.governanceId), //  realm/governance PublicKey
+        new PublicKey(selectedRealm!.governanceId), //  realm/governance PublicKey
         programVersion, // version object, version of realm
-        new PublicKey(selectedRealm.pubKey), // realms publicKey
+        new PublicKey(selectedRealm!.pubKey), // realms publicKey
         new PublicKey(proposal.governanceId), // proposal governance Public key
         new PublicKey(proposal.proposalId), // proposal public key
         new PublicKey(proposal.tokenOwnerRecord), // proposal token owner record, publicKey
@@ -275,28 +305,19 @@ export const castVote = createAsyncThunk(
         governanceAuthority, // wallet publicKey
         new PublicKey(proposal.governingTokenMint), // proposal governanceMint publicKey
         Vote.fromYesNoVote(action), //  *Vote* class? 1 = no, 0 = yes
-        payer
+        payer,
         // TODO: handle plugin stuff here.
+        votePlugin?.voterWeightPk,
+        votePlugin?.maxVoterWeightRecord
       );
 
-      const privateKey = wallet.privateKey;
-      const walletKeypair = Keypair.fromSecretKey(bs58.decode(privateKey));
-      const recentBlockhash = await connection.getRecentBlockhash();
+      const recentBlock = await connection.getLatestBlockhash();
 
-      const transaction = new Transaction({
-        recentBlockhash: recentBlockhash.blockhash,
-      });
+      const transaction = new Transaction({ feePayer: walletPubkey });
+      transaction.recentBlockhash = recentBlock.blockhash;
 
       transaction.add(...instructions);
       transaction.sign(walletKeypair);
-
-      console.log(
-        `SOL transfer would cost: ${
-          (transaction.signatures.length *
-            recentBlockhash.feeCalculator.lamportsPerSignature) /
-          LAMPORTS_PER_SOL
-        } sol`
-      );
 
       const response = await sendAndConfirmTransaction(
         connection,
@@ -311,6 +332,57 @@ export const castVote = createAsyncThunk(
     }
   }
 );
+
+// signTransaction(tx: Transaction): Promise<Transaction>;
+// signAllTransactions(txs: Transaction[]): Promise<Transaction[]>;
+// get publicKey(): PublicKey;
+
+const getVotingPlugin = async (
+  selectedRealm: any,
+  walletKeypair: any,
+  walletPubkey: any,
+  instructions: any
+) => {
+  const options = AnchorProvider.defaultOptions();
+  const provider = new AnchorProvider(
+    connection,
+    walletKeypair as unknown as Wallet,
+    options
+  );
+  const client = await VsrClient.connect(provider, false);
+  const clientProgramId = client!.program.programId;
+  const { registrar } = await getRegistrarPDA(
+    new PublicKey(selectedRealm!.realmId),
+    new PublicKey(selectedRealm!.communityMint),
+    clientProgramId
+  );
+  const { voter } = await getVoterPDA(registrar, walletPubkey, clientProgramId);
+  const { voterWeightPk } = await getVoterWeightPDA(
+    registrar,
+    walletPubkey,
+    clientProgramId
+  );
+
+  console.log("system program", SYSTEM_PROGRAM_ID);
+
+  console.log("CLIENT", client);
+  console.log("REGISTRAR", registrar.toBase58());
+  console.log("VOTER", voter.toBase58());
+  console.log("VoterweightPK", voterWeightPk.toBase58());
+  const updateVoterWeightRecordIx = await client!.program.methods
+    .updateVoterWeightRecord()
+    .accounts({
+      registrar,
+      voter,
+      voterWeightRecord: voterWeightPk,
+      systemProgram: SYSTEM_PROGRAM_ID,
+    })
+    .instruction();
+
+  instructions.push(updateVoterWeightRecordIx);
+  console.log("INSTRUCTIONS IN FUNCTION");
+  return { voterWeightPk, maxVoterWeightRecord: undefined };
+};
 
 export const fetchWalletInfo = createAsyncThunk(
   "wallet/fetchWalletInfo",

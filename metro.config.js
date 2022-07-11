@@ -18,7 +18,15 @@ module.exports = {
   resolver: {
     ...defaultConfig.resolver,
     assetExts: defaultConfig.resolver.assetExts.filter((ext) => ext !== "svg"),
-    sourceExts: [...defaultConfig.resolver.sourceExts, "cjs", "svg"],
+    sourceExts: [
+      ...defaultConfig.resolver.sourceExts,
+      "cjs",
+      "js",
+      "ts",
+      "tsx",
+      "jsx",
+      "svg",
+    ],
     extraNodeModules: require("expo-crypto-polyfills"),
   },
 };
