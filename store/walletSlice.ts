@@ -275,7 +275,7 @@ export const castVote = createAsyncThunk(
       const walletKeypair = Keypair.fromSecretKey(bs58.decode(privateKey));
 
       console.log("instructions before plugin", instructions);
-
+      console.log("token owner record", tokenOwnerRecord);
       // PLUGIN STUFF
       let votePlugin;
       // TODO: update this to handle any vsr plugin, rn only runs for mango dao
@@ -286,7 +286,7 @@ export const castVote = createAsyncThunk(
         votePlugin = await getVotingPlugin(
           selectedRealm,
           walletKeypair,
-          walletPubkey,
+          new PublicKey(tokenOwnerRecord.walletId),
           instructions
         );
       }
@@ -363,12 +363,19 @@ const getVotingPlugin = async (
     clientProgramId
   );
 
-  console.log("system program", SYSTEM_PROGRAM_ID);
+  console.log("system program", SYSTEM_PROGRAM_ID.toBase58());
 
+  console.log("realmid", new PublicKey(selectedRealm!.realmId).toBase58());
+  console.log(
+    "communitymint",
+    new PublicKey(selectedRealm!.communityMint).toBase58()
+  );
   console.log("CLIENT", client);
+  console.log("walletPubkey", walletPubkey.toBase58());
   console.log("REGISTRAR", registrar.toBase58());
   console.log("VOTER", voter.toBase58());
   console.log("VoterweightPK", voterWeightPk.toBase58());
+
   const updateVoterWeightRecordIx = await client!.program.methods
     .updateVoterWeightRecord()
     .accounts({
@@ -380,7 +387,7 @@ const getVotingPlugin = async (
     .instruction();
 
   instructions.push(updateVoterWeightRecordIx);
-  console.log("INSTRUCTIONS IN FUNCTION");
+  console.log("INSTRUCTIONS IN FUNCTION", instructions);
   return { voterWeightPk, maxVoterWeightRecord: undefined };
 };
 
