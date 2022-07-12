@@ -300,7 +300,7 @@ export default function Navigation({}: {}) {
             fullScreenGestureEnabled: true,
             headerTintColor: "#f4f4f5", //Set Header text color
           }}
-          initialRouteName={hasCompletedOnboarding ? "Root" : "Onboarding"}
+          initialRouteName={hasCompletedOnboarding ? "Discover" : "Onboarding"}
         >
           <Stack.Screen
             name="Onboarding"
