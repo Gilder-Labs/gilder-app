@@ -24,9 +24,9 @@
     "@react-native-community/netinfo": "8.2.0",
     "@react-native-picker/picker": "2.4.0",
     "@react-navigation/bottom-tabs": "^6.1.0",
-    "@react-navigation/drawer": "^6.3.1",
+    "@react-navigation/drawer": "^6.4.3",
     "@react-navigation/native": "^6.0.8",
-    "@react-navigation/native-stack": "^6.5.1",
+    "@react-navigation/native-stack": "^6.7.0",
     "@reduxjs/toolkit": "^1.7.1",
     "@sentry/react-native": "^3.3.3",
     "@solana/spl-governance": "^0.0.34",
@@ -78,7 +78,7 @@
     "react-devtools-core": "^4.23.0",
     "react-dom": "17.0.2",
     "react-native": "0.68.2",
-    "react-native-gesture-handler": "~2.2.1",
+    "react-native-gesture-handler": "2.2.1",
     "react-native-get-random-values": "~1.8.0",
     "react-native-image-viewing": "^0.2.2",
     "react-native-pager-view": "^5.4.25",
@@ -106,8 +106,7 @@
     "typescript": "4.3.5"
   },
   "resolutions": {
-    "react-devtools-core": "~4.13.5",
-    "@solana/web3.js": "^1.37.1"
+    "react-devtools-core": "~4.13.5"
   },
   "private": true
 }
