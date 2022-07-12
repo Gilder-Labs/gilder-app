@@ -19,7 +19,6 @@ const options = {
 };
 
 const CustomListItem = (props) => {
-  console.log("channel props", props);
   return (
     <ChannelView>
       <ChannelPreviewMessenger {...props} PreviewMessage={EmptyView} />

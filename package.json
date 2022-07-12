@@ -92,7 +92,7 @@
     "react-native-web": "0.17.7",
     "react-redux": "^7.2.6",
     "sentry-expo": "^4.2.0",
-    "stream-chat-expo": "^4.7.0",
+    "stream-chat-expo": "^4.9.0",
     "styled-components": "^5.3.3",
     "text-encoding-polyfill": "^0.6.7"
   },

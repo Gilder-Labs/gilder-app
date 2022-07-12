@@ -27,10 +27,7 @@ import ActivityScreen from "../screens/ActivityScreen";
 import TreasuryScreen from "../screens/TreasuryScreen";
 import MembersScreen from "../screens/MembersScreen";
 import ProposalsScreen from "../screens/ProposalsScreen";
-// import ChatScreen from "../screens/ChatScreen";
-import { Chat } from "stream-chat-expo"; // Or stream-chat-expo
-// import ThreadScreen from "../screens/ThreadScreen";
-// import ChannelScreen from "../screens/ChannelScreen";
+
 import LinkingConfiguration from "./LinkingConfiguration";
 import { MemberProfile } from "../screens/MemberProfile";
 import { ProposalDetailScreen } from "../screens/ProposalDetailScreen";
@@ -40,14 +37,19 @@ import { WalletTransactionModal } from "../components/WalletTransactionModal";
 import RealmSettingsScreen from "../screens/RealmSettingsScreen";
 import { Incubator } from "react-native-ui-lib";
 const { Toast } = Incubator;
-import { chatApiKey } from "../constants/Chat";
-import { StreamChat } from "stream-chat";
 import DiscoverScreen from "../screens/DiscoverScreen";
 import DiscoverDetailsScreen from "../screens/DiscoverDetailsScreen";
 import InfoModalScreen from "../screens/InfoModalScreen";
 import OnboardingScreen from "../screens/OnboardingScreen";
 
-// const chatClient = StreamChat.getInstance(chatApiKey);
+import { chatApiKey } from "../constants/Chat";
+import { StreamChat } from "stream-chat";
+import { Chat } from "stream-chat-expo"; // Or stream-chat-expo
+import ChatScreen from "../screens/ChatScreen";
+import ThreadScreen from "../screens/ThreadScreen";
+import ChannelScreen from "../screens/ChannelScreen";
+
+const chatClient = StreamChat.getInstance(chatApiKey);
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -111,7 +113,7 @@ function DrawerScreen() {
 
   return (
     <Drawer.Navigator
-      initialRouteName="Proposals"
+      initialRouteName="Chat"
       drawerContent={(props) => <DrawerContentContainer {...props} />}
       screenOptions={{
         drawerActiveBackgroundColor: `${theme?.gray[800]}aa`,
@@ -193,7 +195,7 @@ function DrawerScreen() {
           ),
         }}
       />
-      {/* <Drawer.Screen
+      <Drawer.Screen
         name="Chat"
         component={ChatScreen}
         options={{
@@ -206,7 +208,7 @@ function DrawerScreen() {
             <Unicons.UilComment size="28" color={color} />
           ),
         }}
-      /> */}
+      />
     </Drawer.Navigator>
   );
 }
@@ -290,124 +292,127 @@ export default function Navigation({}: {}) {
         centerMessage={true}
       />
       <WalletTransactionModal />
-      {/* <Chat client={chatClient}> */}
-      <NavigationContainer
-        linking={LinkingConfiguration}
-        theme={NavigationTheme}
-      >
-        <Stack.Navigator
-          screenOptions={{
-            fullScreenGestureEnabled: true,
-            headerTintColor: "#f4f4f5", //Set Header text color
-          }}
-          initialRouteName={hasCompletedOnboarding ? "Root" : "Onboarding"}
+      <Chat client={chatClient}>
+        <NavigationContainer
+          linking={LinkingConfiguration}
+          theme={NavigationTheme}
         >
-          <Stack.Screen
-            name="Onboarding"
-            component={OnboardingScreen}
-            options={{ headerShown: false, headerTransparent: true }}
-          />
-          <Stack.Screen
-            name="Root"
-            component={DrawerScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="MemberDetails"
-            component={MemberProfile}
-            // options={{ headerShown: false }}
-            options={({ route }) => ({
-              title: route?.params?.memberInfo?.name
-                ? route?.params?.memberInfo?.name
-                : `${route?.params?.member?.walletId?.slice(
-                    0,
-                    4
-                  )}...${route?.params?.member?.walletId?.slice(-4)}`,
-            })}
-          />
-          <Stack.Screen
-            name="RealmSettings"
-            component={RealmSettingsScreen}
-            options={({ route }) => ({
-              title: "Realm Settings", // update to realm name
-            })}
-          />
-          <Stack.Screen
-            name="ProposalDetail"
-            component={ProposalDetailScreen}
-            options={({ route }) => ({
-              title: "Proposal Details",
-            })}
-          />
-          {/* <Stack.Screen
+          <Stack.Navigator
+            screenOptions={{
+              fullScreenGestureEnabled: true,
+              headerTintColor: "#f4f4f5", //Set Header text color
+            }}
+            initialRouteName={hasCompletedOnboarding ? "Root" : "Onboarding"}
+          >
+            <Stack.Screen
+              name="Onboarding"
+              component={OnboardingScreen}
+              options={{ headerShown: false, headerTransparent: true }}
+            />
+            <Stack.Screen
+              name="Root"
+              component={DrawerScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="MemberDetails"
+              component={MemberProfile}
+              // options={{ headerShown: false }}
+              options={({ route }) => ({
+                title: route?.params?.memberInfo?.name
+                  ? route?.params?.memberInfo?.name
+                  : `${route?.params?.member?.walletId?.slice(
+                      0,
+                      4
+                    )}...${route?.params?.member?.walletId?.slice(-4)}`,
+              })}
+            />
+            <Stack.Screen
+              name="RealmSettings"
+              component={RealmSettingsScreen}
+              options={({ route }) => ({
+                title: "Realm Settings", // update to realm name
+              })}
+            />
+            <Stack.Screen
+              name="ProposalDetail"
+              component={ProposalDetailScreen}
+              options={({ route }) => ({
+                title: "Proposal Details",
+              })}
+            />
+            <Stack.Screen
               name="ChannelScreen"
               component={ChannelScreen}
               options={({ route }) => ({
                 title: route?.params?.channel?.data?.name,
               })}
-            /> */}
-          {/* <Stack.Screen
+            />
+            <Stack.Screen
               name="ThreadScreen"
               component={ThreadScreen}
               options={({ route }) => ({
                 title: "Thread",
               })}
-            /> */}
-          <Stack.Screen
-            name="Discover"
-            component={DiscoverScreen}
-            options={({ route, navigation }) => ({
-              title: "Discover",
-              headerRight: () => {
-                return (
-                  <InfoButton onPress={() => navigation.push("InfoScreen")}>
-                    <Unicons.UilInfoCircle size="20" color={theme.gray[300]} />
-                  </InfoButton>
-                );
-              },
-            })}
-          />
-          <Stack.Screen
-            name="DiscoverDetails"
-            component={DiscoverDetailsScreen}
-            options={({ route }) => ({
-              title: "",
-              headerBackTitle: "Back",
-              presentation: "modal",
-              headerTransparent: true,
-            })}
-          />
-          <Stack.Screen
-            name="WalletModal"
-            component={WalletModal}
-            options={({ route }) => ({
-              title: "",
-              presentation: "modal",
-              headerTransparent: true,
-              headerShown: false,
-            })}
-          />
-          <Stack.Screen
-            name="InfoScreen"
-            component={InfoModalScreen}
-            options={({ route }) => ({
-              title: "",
-              presentation: "modal",
-              headerTransparent: true,
-              headerShown: false,
-              contentStyle: {
-                height: "50%",
-                maxHeight: "50%",
-                marginTop: "100%",
-                backgroundColor: "red",
-                borderTopEndRadius: 16,
-                borderTopLeftRadius: 16,
-              },
-            })}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-      {/* </Chat> */}
+            />
+            <Stack.Screen
+              name="Discover"
+              component={DiscoverScreen}
+              options={({ route, navigation }) => ({
+                title: "Discover",
+                headerRight: () => {
+                  return (
+                    <InfoButton onPress={() => navigation.push("InfoScreen")}>
+                      <Unicons.UilInfoCircle
+                        size="20"
+                        color={theme.gray[300]}
+                      />
+                    </InfoButton>
+                  );
+                },
+              })}
+            />
+            <Stack.Screen
+              name="DiscoverDetails"
+              component={DiscoverDetailsScreen}
+              options={({ route }) => ({
+                title: "",
+                headerBackTitle: "Back",
+                presentation: "modal",
+                headerTransparent: true,
+              })}
+            />
+            <Stack.Screen
+              name="WalletModal"
+              component={WalletModal}
+              options={({ route }) => ({
+                title: "",
+                presentation: "modal",
+                headerTransparent: true,
+                headerShown: false,
+              })}
+            />
+            <Stack.Screen
+              name="InfoScreen"
+              component={InfoModalScreen}
+              options={({ route }) => ({
+                title: "",
+                presentation: "modal",
+                headerTransparent: true,
+                headerShown: false,
+                contentStyle: {
+                  height: "50%",
+                  maxHeight: "50%",
+                  marginTop: "100%",
+                  backgroundColor: "red",
+                  borderTopEndRadius: 16,
+                  borderTopLeftRadius: 16,
+                },
+              })}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </Chat>
     </RootContainer>
   );
 }
