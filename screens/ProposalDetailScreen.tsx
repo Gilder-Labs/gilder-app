@@ -215,167 +215,169 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
   const isMember = membersMap[publicKey];
 
   return (
-    <FlatList
-      data={chatMessages}
-      renderItem={renderChatMessage}
-      keyExtractor={(item: any) => item.postedAt.toString()}
-      style={{
-        backgroundColor: theme.gray[900],
-        minHeight: "100%",
-      }}
-      ListFooterComponent={<EmptyView />}
-      scrollIndicatorInsets={{ right: 1 }}
-      removeClippedSubviews={true}
-      initialNumToRender={10}
-      contentContainerStyle={{
-        paddingBottom: 20,
-      }}
-      ListHeaderComponent={
-        <Container>
-          <TextContainer>
-            <ProposalTitle>{name}</ProposalTitle>
-            <Badge
-              title={isVoting && !timeLeft.isTimeLeft ? "Finalizing" : status}
-              type={proposalStatusKey[status]}
-            />
-          </TextContainer>
-          <ProposalSubData>
-            <DateText>
-              {format(dateTimestamp * 1000, "MMM d, yyyy - p")}
-            </DateText>
-            {isVoting && timeLeft.isTimeLeft ? (
-              <TimeContainer>
-                <StatusText>Ends in </StatusText>
-                <TimeText>
-                  {`${timeLeft.days ? timeLeft.days : 0}d: `}
-                  {`${timeLeft.hours ? timeLeft.hours : 0}h: `}
-                  {`${timeLeft.minutes ? timeLeft.minutes : 0}m`}
-                </TimeText>
-              </TimeContainer>
-            ) : isVoting && !timeLeft.isTimeLeft ? (
-              <StatusText>Voting ended </StatusText>
-            ) : (
-              <StatusText>
-                {status}{" "}
-                {formatDistance(getStateTimestamp * 1000, new Date(), {
-                  addSuffix: true,
-                })}
-              </StatusText>
-            )}
-          </ProposalSubData>
-          {tokenRecordToWalletMap &&
-            tokenRecordToWalletMap[proposal.tokenOwnerRecord] && (
-              <CreatorRow>
-                <WalletIdentity
-                  memberPublicKey={
-                    tokenRecordToWalletMap[proposal.tokenOwnerRecord]
-                  }
-                  size="subtitle"
-                  shade="100"
-                />
-              </CreatorRow>
-            )}
-          <Votes>
-            <VoteCountRow>
-              <VoteColumn>
-                <ApproveText>Yes</ApproveText>
-                <VoteText>
-                  {getVoteFormatted(getYesVoteCount)} ({yesPercentage}%)
-                </VoteText>
-              </VoteColumn>
-              <VoteColumn>
-                <ApproveText style={{ textAlign: "right" }}>No</ApproveText>
-                <VoteText>
-                  {getVoteFormatted(getNoVoteCount)} ({noPercentage}%)
-                </VoteText>
-              </VoteColumn>
-            </VoteCountRow>
-            <VoteContainer>
-              <VoteYes percent={yesPercentage} />
-              <VoteNo percent={noPercentage} />
-            </VoteContainer>
+    <ScreenContainer>
+      <FlatList
+        data={chatMessages}
+        renderItem={renderChatMessage}
+        keyExtractor={(item: any) => item.postedAt.toString()}
+        style={{
+          backgroundColor: theme.gray[900],
+          minHeight: "100%",
+        }}
+        ListFooterComponent={<EmptyView />}
+        scrollIndicatorInsets={{ right: 1 }}
+        removeClippedSubviews={true}
+        initialNumToRender={10}
+        contentContainerStyle={{
+          paddingBottom: 20,
+        }}
+        ListHeaderComponent={
+          <Container>
+            <TextContainer>
+              <ProposalTitle>{name}</ProposalTitle>
+              <Badge
+                title={isVoting && !timeLeft.isTimeLeft ? "Finalizing" : status}
+                type={proposalStatusKey[status]}
+              />
+            </TextContainer>
+            <ProposalSubData>
+              <DateText>
+                {format(dateTimestamp * 1000, "MMM d, yyyy - p")}
+              </DateText>
+              {isVoting && timeLeft.isTimeLeft ? (
+                <TimeContainer>
+                  <StatusText>Ends in </StatusText>
+                  <TimeText>
+                    {`${timeLeft.days ? timeLeft.days : 0}d: `}
+                    {`${timeLeft.hours ? timeLeft.hours : 0}h: `}
+                    {`${timeLeft.minutes ? timeLeft.minutes : 0}m`}
+                  </TimeText>
+                </TimeContainer>
+              ) : isVoting && !timeLeft.isTimeLeft ? (
+                <StatusText>Voting ended </StatusText>
+              ) : (
+                <StatusText>
+                  {status}{" "}
+                  {formatDistance(getStateTimestamp * 1000, new Date(), {
+                    addSuffix: true,
+                  })}
+                </StatusText>
+              )}
+            </ProposalSubData>
+            {tokenRecordToWalletMap &&
+              tokenRecordToWalletMap[proposal.tokenOwnerRecord] && (
+                <CreatorRow>
+                  <WalletIdentity
+                    memberPublicKey={
+                      tokenRecordToWalletMap[proposal.tokenOwnerRecord]
+                    }
+                    size="subtitle"
+                    shade="100"
+                  />
+                </CreatorRow>
+              )}
+            <Votes>
+              <VoteCountRow>
+                <VoteColumn>
+                  <ApproveText>Yes</ApproveText>
+                  <VoteText>
+                    {getVoteFormatted(getYesVoteCount)} ({yesPercentage}%)
+                  </VoteText>
+                </VoteColumn>
+                <VoteColumn>
+                  <ApproveText style={{ textAlign: "right" }}>No</ApproveText>
+                  <VoteText>
+                    {getVoteFormatted(getNoVoteCount)} ({noPercentage}%)
+                  </VoteText>
+                </VoteColumn>
+              </VoteCountRow>
+              <VoteContainer>
+                <VoteYes percent={yesPercentage} />
+                <VoteNo percent={noPercentage} />
+              </VoteContainer>
 
-            {/* Quorum row */}
-            <VoteCountRow>
-              <VoteColumn>
-                <ApproveText>Approval Quorum</ApproveText>
-                <VoteText>
-                  {quorumData.hasMetQuorum
-                    ? "Quorum Reached"
-                    : `${quorumData.votesNeeded} votes still needed`}
-                </VoteText>
-              </VoteColumn>
-            </VoteCountRow>
-            <QuorumContainer>
-              <VoteQuorum percent={quorumData.totalVotesNeededPercentage} />
-            </QuorumContainer>
-          </Votes>
-          {/* {isVoting && isMember && ( */}
-          <>
+              {/* Quorum row */}
+              <VoteCountRow>
+                <VoteColumn>
+                  <ApproveText>Approval Quorum</ApproveText>
+                  <VoteText>
+                    {quorumData.hasMetQuorum
+                      ? "Quorum Reached"
+                      : `${quorumData.votesNeeded} votes still needed`}
+                  </VoteText>
+                </VoteColumn>
+              </VoteCountRow>
+              <QuorumContainer>
+                <VoteQuorum percent={quorumData.totalVotesNeededPercentage} />
+              </QuorumContainer>
+            </Votes>
+            {/* {isVoting && isMember && ( */}
+            <>
+              <Typography
+                text="Voting"
+                bold={true}
+                size="h4"
+                shade={"400"}
+                marginLeft={"3"}
+                marginBottom={"0"}
+              />
+              <VoteButtonContainer>
+                <Button
+                  title="Vote No"
+                  onPress={() => vote(1)}
+                  marginRight={true}
+                  disabled={
+                    !publicKey ||
+                    !delegateMap[publicKey] ||
+                    timeLeft.isVotingTimeOver
+                  }
+                />
+                <Button
+                  disabled={
+                    !publicKey ||
+                    !delegateMap[publicKey] ||
+                    timeLeft.isVotingTimeOver
+                  }
+                  title="Vote Yes"
+                  onPress={() => vote(0)}
+                />
+              </VoteButtonContainer>
+            </>
+            {/* )} */}
             <Typography
-              text="Voting"
+              text="Description"
               bold={true}
               size="h4"
               shade={"400"}
               marginLeft={"3"}
-              marginBottom={"0"}
+              // marginBottom="2"
             />
-            <VoteButtonContainer>
-              <Button
-                title="Vote No"
-                onPress={() => vote(1)}
-                marginRight={true}
-                disabled={
-                  !publicKey ||
-                  !delegateMap[publicKey] ||
-                  timeLeft.isVotingTimeOver
-                }
-              />
-              <Button
-                disabled={
-                  !publicKey ||
-                  !delegateMap[publicKey] ||
-                  timeLeft.isVotingTimeOver
-                }
-                title="Vote Yes"
-                onPress={() => vote(0)}
-              />
-            </VoteButtonContainer>
-          </>
-          {/* )} */}
-          <Typography
-            text="Description"
-            bold={true}
-            size="h4"
-            shade={"400"}
-            marginLeft={"3"}
-            // marginBottom="2"
-          />
-          <Typography
-            text={description}
-            size="body"
-            shade={"100"}
-            marginLeft={"3"}
-            marginRight="3"
-            marginBottom="3"
-            selectable={true}
-          />
-          <Typography
-            text="Discussion"
-            bold={true}
-            size="h4"
-            shade={"400"}
-            marginLeft={"3"}
-            marginBottom="2"
-          />
-          {isLoadingChatMessages && (
-            <LoadingContainer>
-              <Loading size={48} />
-            </LoadingContainer>
-          )}
-        </Container>
-      }
-    />
+            <Typography
+              text={description}
+              size="body"
+              shade={"100"}
+              marginLeft={"3"}
+              marginRight="3"
+              marginBottom="3"
+              selectable={true}
+            />
+            <Typography
+              text="Discussion"
+              bold={true}
+              size="h4"
+              shade={"400"}
+              marginLeft={"3"}
+              marginBottom="2"
+            />
+            {isLoadingChatMessages && (
+              <LoadingContainer>
+                <Loading size={48} />
+              </LoadingContainer>
+            )}
+          </Container>
+        }
+      />
+    </ScreenContainer>
   );
 };
 
@@ -384,6 +386,8 @@ const Container = styled.View`
   background: ${(props: any) => props.theme.gray[900]};
   padding-top: ${(props: any) => props.theme.spacing[2]};
 `;
+
+const ScreenContainer = styled.View``;
 
 const ProposalSubData = styled.View`
   justify-content: flex-start;
