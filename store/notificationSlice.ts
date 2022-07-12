@@ -36,8 +36,6 @@ export const fetchNotificationSettings = createAsyncThunk(
         notificationMap[notification.realm] = notification;
       });
 
-      console.log("FETCH response", response);
-
       return {
         notificationArray: notificationArray,
         notificationMap: notificationMap,
