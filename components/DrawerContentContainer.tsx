@@ -1,8 +1,4 @@
-import {
-  DrawerContentScrollView,
-  DrawerItemList,
-  DrawerContent,
-} from "@react-navigation/drawer";
+import { DrawerItemList } from "@react-navigation/drawer";
 import { FlatList, View } from "react-native";
 import styled from "styled-components/native";
 import { useEffect, useState } from "react";
@@ -17,6 +13,7 @@ import { fetchRealm, selectRealm } from "../store/realmSlice";
 import { Typography } from "./Typography";
 import { useNavigation } from "@react-navigation/native";
 import * as Haptics from "expo-haptics";
+import { ChatRoomList } from "../elements";
 
 export function DrawerContentContainer(props: any) {
   const theme = useTheme();
@@ -119,6 +116,16 @@ export function DrawerContentContainer(props: any) {
               </IconButton>
             </RealmNameContainer>
             <DrawerItemList {...props} />
+            <Typography
+              text="Chat Channels"
+              shade="300"
+              bold={true}
+              marginLeft="3"
+              marginTop="2"
+              size="subtitle"
+              marginBottom="2"
+            />
+            <ChatRoomList navigation={navigation} />
           </Content>
           <ConnectWalletButton />
         </DrawerContentContainerWrapper>
@@ -225,7 +232,7 @@ const StyledHeader = styled.View`
   /* max-height: 40px; */
 `;
 
-const Content = styled.View``;
+const Content = styled.ScrollView``;
 
 // const BetaBadge = styled.Text`
 //   font-size: 12px;

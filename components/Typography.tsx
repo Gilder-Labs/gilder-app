@@ -27,6 +27,7 @@ interface TypographyProps {
     | "error"
     | "warning";
   marginBottom?: "0" | "1" | "2" | "3" | "4" | "5";
+  marginTop?: "0" | "1" | "2" | "3" | "4" | "5";
   marginRight?: "0" | "1" | "2" | "3" | "4" | "5";
   marginLeft?: "0" | "1" | "2" | "3" | "4" | "5";
   maxLength?: number;
@@ -56,6 +57,7 @@ export const Typography = ({
   selectable = false,
   marginRight = "0",
   marginLeft = "0",
+  marginTop = "0",
   hasTextShadow = false,
 }: TypographyProps) => {
   const formattedText = () => {
@@ -81,6 +83,7 @@ export const Typography = ({
       marginRight={marginRight}
       marginLeft={marginLeft}
       hasTextShadow={hasTextShadow}
+      marginTop={marginTop}
     >
       {text ? formattedText() : ""}
     </Text>
@@ -93,6 +96,7 @@ const Text = styled.Text<{
   bold: boolean;
   shade: "100" | "200" | "300" | "400" | "500" | "600" | "700" | "800" | "900";
   marginBottom: "0" | "1" | "2" | "3" | "4" | "5";
+  marginTop: "0" | "1" | "2" | "3" | "4" | "5";
   marginRight: "0" | "1" | "2" | "3" | "4" | "5";
   marginLeft: "0" | "1" | "2" | "3" | "4" | "5";
   color:
@@ -111,6 +115,7 @@ const Text = styled.Text<{
   font-weight: ${(props) => (props.bold ? "bold" : "normal")};
   color: ${(props) => props.theme[props.color][props.shade]};
   margin-bottom: ${(props) => props.theme.spacing[props.marginBottom]};
+  margin-top: ${(props) => props.theme.spacing[props.marginTop]};
   margin-right: ${(props) => props.theme.spacing[props.marginRight]};
   margin-left: ${(props) => props.theme.spacing[props.marginLeft]};
   text-align: ${(props) => props.textAlign};

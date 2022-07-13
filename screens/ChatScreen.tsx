@@ -36,17 +36,15 @@ export default function ChatScreen({ navigation }: RootTabScreenProps<"Chat">) {
   }
 
   return (
-    <Container>
-      <ChannelList
-        // filters={filters}
-        Preview={CustomListItem}
-        onSelect={(channel) => {
-          navigation.navigate("ChannelScreen", { channel });
-        }}
-        options={options}
-        sort={sort}
-      />
-    </Container>
+    <ChannelList
+      // filters={filters}
+      Preview={CustomListItem}
+      onSelect={(channel) => {
+        navigation.navigate("ChannelScreen", { channel });
+      }}
+      options={options}
+      sort={sort}
+    />
   );
 }
 
