@@ -26,7 +26,7 @@ export default {
     },
     android: {
       adaptiveIcon: {
-        foregroundImage: "./assets/images/adaptive-icon.png",
+        foregroundImage: "./assets/images/DarkIcon.png",
         backgroundColor: "#ffffff",
       },
       package: "com.dawggydawg.gilderapp",
