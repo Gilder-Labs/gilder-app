@@ -14,13 +14,19 @@ export const useCardinalIdentity = (walletId: string) => {
   const [twitterURL, setTwitterURL] = useState("");
   const [twitterHandle, setTwitterHandle] = useState("");
 
+  let userUrl = cache?.[walletId]?.twitterURL;
+
   useEffect(() => {
     const getTwitterIdentity = async () => {
       const walletKey = new PublicKey(walletId);
+      cache[walletId] = { twitterURL: undefined, twitterHandle: "" };
       const cardinalData = await tryGetName(indexConnection, walletKey);
 
       const handle = cardinalData?.[0];
-      cache[walletId] = { twitterURL: "", twitterHandle: cardinalData?.[0] };
+      cache[walletId] = {
+        twitterURL: undefined,
+        twitterHandle: cardinalData?.[0],
+      };
 
       if (handle) {
         setTwitterHandle(cardinalData?.[0]);
@@ -40,11 +46,13 @@ export const useCardinalIdentity = (walletId: string) => {
     if (cache[walletId]?.twitterHandle) {
       setTwitterURL(cache[walletId].twitterURL);
       setTwitterHandle(cache[walletId].twitterHandle);
+    } else if (walletId && cache[walletId]) {
+      // do nothing because we are waiting for the request to finish
     } else if (walletId && !cache[walletId]) {
       // we haven't checked their identity yet
       getTwitterIdentity();
     }
-  }, [walletId]);
+  }, [walletId, userUrl]);
 
   return [twitterURL, twitterHandle];
 };
