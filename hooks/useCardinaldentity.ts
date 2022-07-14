@@ -13,6 +13,7 @@ const cache: Record<string, any> = {};
 export const useCardinalIdentity = (walletId: string) => {
   const [twitterURL, setTwitterURL] = useState("");
   const [twitterHandle, setTwitterHandle] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   let userUrl = cache?.[walletId]?.twitterURL;
 
@@ -40,6 +41,7 @@ export const useCardinalIdentity = (walletId: string) => {
 
         setTwitterURL(twitterImage);
       }
+      setIsLoading(false);
     };
 
     // if we already cached cardinal wallet, just return that data
@@ -50,9 +52,10 @@ export const useCardinalIdentity = (walletId: string) => {
       // do nothing because we are waiting for the request to finish
     } else if (walletId && !cache[walletId]) {
       // we haven't checked their identity yet
+      setIsLoading(true);
       getTwitterIdentity();
     }
-  }, [walletId, userUrl]);
+  }, [walletId, userUrl, isLoading]);
 
   return [twitterURL, twitterHandle];
 };

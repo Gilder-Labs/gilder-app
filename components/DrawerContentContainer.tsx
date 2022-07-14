@@ -210,7 +210,6 @@ const Divider = styled.View`
 
 const DrawerContentContainerWrapper = styled.View`
   flex: 1;
-  justify-content: space-between;
   /* height: 100%; */
   /* padding-bottom: 100px; */
 `;
@@ -232,7 +231,9 @@ const StyledHeader = styled.View`
   /* max-height: 40px; */
 `;
 
-const Content = styled.ScrollView``;
+const Content = styled.View`
+  flex: 1;
+`;
 
 // const BetaBadge = styled.Text`
 //   font-size: 12px;

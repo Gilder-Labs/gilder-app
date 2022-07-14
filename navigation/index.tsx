@@ -45,7 +45,6 @@ import OnboardingScreen from "../screens/OnboardingScreen";
 import { chatApiKey } from "../constants/Chat";
 import { StreamChat } from "stream-chat";
 import { Chat } from "stream-chat-expo"; // Or stream-chat-expo
-import ChatScreen from "../screens/ChatScreen";
 import ThreadScreen from "../screens/ThreadScreen";
 import ChannelScreen from "../screens/ChannelScreen";
 
@@ -195,20 +194,17 @@ function DrawerScreen() {
           ),
         }}
       />
-      {/* <Drawer.Screen
-        name="Chat"
-        component={ChatScreen}
-        options={{
-          drawerLabel: ({ focused, color }) => (
-            <DrawerTabText color={color} focused={focused}>
-              Chat
-            </DrawerTabText>
-          ),
-          drawerIcon: ({ focused, color, size }) => (
-            <Unicons.UilComment size="28" color={color} />
-          ),
-        }}
-      /> */}
+
+      <Drawer.Screen
+        name="ChannelScreen"
+        component={ChannelScreen}
+        options={({ route }) => ({
+          title: route?.params?.channel?.data?.name,
+          drawerItemStyle: {
+            display: "none",
+          },
+        })}
+      />
     </Drawer.Navigator>
   );
 }
@@ -341,13 +337,7 @@ export default function Navigation({}: {}) {
                 title: "Proposal Details",
               })}
             />
-            <Stack.Screen
-              name="ChannelScreen"
-              component={ChannelScreen}
-              options={({ route }) => ({
-                title: route?.params?.channel?.data?.name,
-              })}
-            />
+
             <Stack.Screen
               name="ThreadScreen"
               component={ThreadScreen}

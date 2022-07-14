@@ -23,21 +23,29 @@ const options = {
   watch: true,
 };
 
-const CustomListItem = (props: ChannelProps) => {
-  console.log("Chat props", props);
-  const { channel } = props;
+const CustomListItem = (props: any) => {
+  const { channel } = props.channelData;
   const { data } = channel;
   const navigation = useNavigation();
 
+  // console.log("navigation", navigation.getState());
+
   const isUnread = channel?.state?.unreadCount > 0;
+
+  const handleSelect = () => {
+    navigation.navigate("ChannelScreen", { channel });
+    //@ts-ignore
+  };
 
   return (
     <ChannelItemButton
-      onPress={() => navigation.navigate("ChannelScreen", { channel })}
+      // @ts-ignore
+      onPress={() => handleSelect()}
+      isSelected={false}
     >
       <Typography
         text={`#  ${data?.name}`}
-        shade={isUnread ? "300" : "400"}
+        shade={isUnread ? "300" : "500"}
         marginLeft="5"
         bold={isUnread ? true : false}
       />
@@ -45,17 +53,14 @@ const CustomListItem = (props: ChannelProps) => {
   );
 };
 
-export const ChatRoomList = ({ navigation }: any): any => {
+export const ChatRoomList = ({ navigation, ...props }: any): any => {
   const { clientIsReady } = useChatClient();
 
   return (
     <Container>
       <ChannelList
         // filters={filters}
-        Preview={CustomListItem}
-        onSelect={(channel) => {
-          navigation.navigate("ChannelScreen", { channel });
-        }}
+        Preview={(props) => <CustomListItem channelData={props} />}
         options={options}
         sort={sort}
       />
@@ -64,12 +69,19 @@ export const ChatRoomList = ({ navigation }: any): any => {
 };
 
 const Container = styled.View`
+  flex: 1;
+  height: 100%;
+  width: 100%;
+  min-height: 20px;
   /* background: ${(props: any) => props.theme.gray[1000]}; */
 `;
 
-const ChannelItemButton = styled.TouchableOpacity`
+const ChannelItemButton = styled.TouchableOpacity<{ isSelected: boolean }>`
   padding-top: ${(props: any) => props.theme.spacing[1]};
   padding-bottom: ${(props: any) => props.theme.spacing[1]};
+  min-height: 20px;
+  background-color: ${(props: any) =>
+    props.isSelected ? props.theme.gray[600] : props.theme.gray[900]};
 `;
 
 const EmptyView = styled.View``;
