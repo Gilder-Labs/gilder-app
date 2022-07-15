@@ -194,17 +194,6 @@ function DrawerScreen() {
           ),
         }}
       />
-
-      <Drawer.Screen
-        name="ChannelScreen"
-        component={ChannelScreen}
-        options={({ route }) => ({
-          title: route?.params?.channel?.data?.name,
-          drawerItemStyle: {
-            display: "none",
-          },
-        })}
-      />
     </Drawer.Navigator>
   );
 }
@@ -337,7 +326,16 @@ export default function Navigation({}: {}) {
                 title: "Proposal Details",
               })}
             />
-
+            <Drawer.Screen
+              name="ChannelScreen"
+              component={ChannelScreen}
+              options={({ route }) => ({
+                title: route?.params?.channel?.data?.name,
+                drawerItemStyle: {
+                  display: "none",
+                },
+              })}
+            />
             <Stack.Screen
               name="ThreadScreen"
               component={ThreadScreen}

@@ -6,6 +6,7 @@ module.exports = {
   ...defaultConfig,
   transformer: {
     ...defaultConfig.transformer,
+    babelTransformerPath: require.resolve("react-native-svg-transformer"),
     getTransformOptions: () => ({
       transform: {
         ...defaultConfig.transformer.transform,
@@ -14,7 +15,6 @@ module.exports = {
       },
     }),
   },
-  babelTransformerPath: require.resolve("react-native-svg-transformer"),
   resolver: {
     ...defaultConfig.resolver,
     assetExts: defaultConfig.resolver.assetExts.filter((ext) => ext !== "svg"),

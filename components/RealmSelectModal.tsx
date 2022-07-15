@@ -19,71 +19,8 @@ export const RealmSelectModal = ({
   open,
   handleOnClose,
 }: RealmSelectModalProps) => {
-  const theme = useTheme();
-  const [searchText, setSearchText] = useState("");
-  const {
-    realmsData,
-    realms,
-    realmWatchlist,
-    isLoadingRealms,
-    isFetchingStorage,
-  } = useAppSelector((state) => state.realms);
-  const [filteredRealms, setFilteredRealms] = useState(realms);
-
-  useEffect(() => {
-    setFilteredRealms(realms);
-  }, [realms]);
-
-  useEffect(() => {
-    if (!searchText) {
-      setFilteredRealms(realms);
-    }
-  }, [searchText]);
-
-  useEffect(() => {
-    setSearchText("");
-    setFilteredRealms(realms);
-  }, [open]);
-
-  if (!realmsData) {
-    return <View />;
-  }
-
-  const handleRealmClick = () => {
-    setSearchText("");
-    setFilteredRealms(realms);
-    handleOnClose();
-  };
-
-  const renderRealmCard = ({ item }) => {
-    return <RealmCard realm={item} />;
-  };
-
-  const handleSearchChange = (newText: string) => {
-    // setSearchText(newText);
-    const normalizedText = newText.toLowerCase();
-
-    if (!newText) {
-      setFilteredRealms(realms);
-    } else {
-      const filtRealms = realms.filter(
-        (realm) =>
-          realm.name.toLowerCase().includes(normalizedText) ||
-          realm.pubKey.toLowerCase() === normalizedText
-      );
-
-      setFilteredRealms(filtRealms);
-    }
-  };
-
-  const handleSearchInputChange = (newText: string) => {
-    setSearchText(newText);
-    debouncedChangeHandler(newText);
-  };
-
-  const debouncedChangeHandler = useCallback(
-    debounce(handleSearchChange, 300),
-    [realms]
+  const { isLoadingRealms, isFetchingStorage } = useAppSelector(
+    (state) => state.realms
   );
 
   return (
