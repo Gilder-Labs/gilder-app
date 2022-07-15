@@ -118,7 +118,7 @@ export const VaultCard = ({
 };
 
 const Container = styled.View`
-  width: 100%%;
+  width: 100%;
   margin-bottom: ${(props: any) => props.theme.spacing[3]};
   border-radius: 4px;
   background: ${(props: any) => props.theme.gray[800]};
@@ -131,7 +131,7 @@ const SectionContainer = styled.View`
 `;
 
 const VaultValue = styled.Text`
-color: ${(props: any) => props.theme.gray[100]}
+  color: ${(props: any) => props.theme.gray[100]}
   font-weight: bold;
   font-size: 24px;
 `;
