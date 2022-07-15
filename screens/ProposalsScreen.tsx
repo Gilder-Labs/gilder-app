@@ -49,7 +49,7 @@ export default function ProposalScreen({
       }
     });
 
-    return activeProposals;
+    return activeProposals.toString();
   };
 
   const renderProposal = ({ item }: any) => {
@@ -115,9 +115,8 @@ export default function ProposalScreen({
           refreshControl={
             <RefreshControl
               refreshing={isRefreshingProposals}
-              tintColor={theme.gray[300]}
+              // tintColor={theme.gray[300]}
               onRefresh={handleRefresh}
-              size={18}
             />
           }
           ListHeaderComponent={
@@ -149,7 +148,7 @@ export default function ProposalScreen({
                   size="h2"
                   shade="100"
                   textAlign="right"
-                  text={proposals?.length}
+                  text={proposals?.length.toString()}
                   marginBottom="0"
                 />
               </HeaderTextContainer>

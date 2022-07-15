@@ -86,7 +86,6 @@ export default function ActivityScreen({
               refreshing={isRefreshingActivities}
               tintColor={theme.gray[300]}
               onRefresh={handleRefresh}
-              size={18}
             />
           }
           // onRefresh={handleRefresh}

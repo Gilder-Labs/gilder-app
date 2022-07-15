@@ -80,7 +80,6 @@ export default function MemberScreen({
               refreshing={isRefreshingMembers}
               tintColor={theme.gray[300]}
               onRefresh={handleRefresh}
-              size={18}
             />
           }
           ListHeaderComponent={
