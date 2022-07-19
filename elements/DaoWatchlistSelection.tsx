@@ -321,8 +321,15 @@ const SearchBarContainer = styled.View`
 
 const IconContainer = styled.TouchableOpacity`
   position: absolute;
-  right: 24;
-  top: 12;
+  /* right: 32;
+  top: 20; */
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  justify-content: center;
+  align-items: flex-end;
+  margin-right: 24px;
   padding: ${(props: any) => props.theme.spacing[2]};
 `;
 
