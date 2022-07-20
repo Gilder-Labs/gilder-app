@@ -8,7 +8,11 @@ import { RealmSelectModal } from "./RealmSelectModal";
 import { ConnectWalletButton } from "./ConnectWalletButton";
 import { useTheme } from "styled-components";
 import Logo from "../assets/images/GilderLogo.png";
-import * as Unicons from "@iconscout/react-native-unicons";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faPlus } from "@fortawesome/pro-regular-svg-icons/faPlus";
+import { faGear } from "@fortawesome/pro-regular-svg-icons/faGear";
+import { faGrid2 } from "@fortawesome/pro-regular-svg-icons/faGrid2";
+
 import { fetchRealm, selectRealm } from "../store/realmSlice";
 import { Typography } from "./Typography";
 import { useNavigation } from "@react-navigation/native";
@@ -81,7 +85,11 @@ export function DrawerContentContainer(props: any) {
                   onPress={handleDiscoverPress}
                   activeOpacity={0.4}
                 >
-                  <Unicons.UilApps size="20" color={theme.gray[400]} />
+                  <FontAwesomeIcon
+                    icon={faGrid2}
+                    size={20}
+                    color={theme?.gray[500]}
+                  />
                 </DiscoverButton>
                 <Divider />
               </View>
@@ -93,7 +101,11 @@ export function DrawerContentContainer(props: any) {
                   onPress={handleAddRealmOpen}
                   activeOpacity={0.4}
                 >
-                  <Unicons.UilPlus size="20" color={theme.gray[400]} />
+                  <FontAwesomeIcon
+                    icon={faPlus}
+                    size={20}
+                    color={theme?.gray[500]}
+                  />
                 </AddRealmButtonContainer>
                 <EmptyView />
               </View>
@@ -112,7 +124,11 @@ export function DrawerContentContainer(props: any) {
                 text={realmDisplayName ? realmDisplayName : selectedRealm?.name}
               />
               <IconButton onPress={handleSettingsPress}>
-                <Unicons.UilSetting size="24" color={theme.gray[600]} />
+                <FontAwesomeIcon
+                  icon={faGear}
+                  size={20}
+                  color={theme?.gray[500]}
+                />
               </IconButton>
             </RealmNameContainer>
             <DrawerItemList {...props} />

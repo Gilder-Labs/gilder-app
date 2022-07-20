@@ -11,6 +11,6 @@ npm-debug.*
 web-build/
 .env*
 settings.json
-
+.yarn/
 # macOS
 .DS_Store

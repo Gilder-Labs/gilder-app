@@ -28,3 +28,13 @@ rd node_modules /q /s
 npm cache clean --force
 npm start -- --reset-cache
 ```
+
+### Font awesome
+
+- We use pro version of font awesome.
+- To get install to work you need to set npm config
+
+```
+npm config set "@fortawesome:registry" https://npm.fontawesome.com/
+npm config set "//npm.fontawesome.com/:_authToken" "YOUR_FONT_AWESOME_AUTH_TOKEN"
+```

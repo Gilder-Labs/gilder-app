@@ -8,6 +8,7 @@ import * as Unicons from "@iconscout/react-native-unicons";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import { useNavigation } from "@react-navigation/native";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
 import { useTheme } from "styled-components";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
@@ -47,6 +48,11 @@ import { StreamChat } from "stream-chat";
 import { Chat } from "stream-chat-expo"; // Or stream-chat-expo
 import ThreadScreen from "../screens/ThreadScreen";
 import ChannelScreen from "../screens/ChannelScreen";
+
+import { faBuildingColumns } from "@fortawesome/pro-regular-svg-icons/faBuildingColumns";
+import { faUserGroup } from "@fortawesome/pro-solid-svg-icons/faUserGroup";
+import { faCoins } from "@fortawesome/pro-solid-svg-icons/faCoins";
+import { faListUl } from "@fortawesome/pro-regular-svg-icons/faListUl";
 
 const chatClient = StreamChat.getInstance(chatApiKey);
 
@@ -112,7 +118,7 @@ function DrawerScreen() {
 
   return (
     <Drawer.Navigator
-      initialRouteName="Proposals"
+      initialRouteName="Treasury"
       drawerContent={(props) => <DrawerContentContainer {...props} />}
       screenOptions={{
         drawerActiveBackgroundColor: `${theme?.gray[800]}aa`,
@@ -139,7 +145,12 @@ function DrawerScreen() {
             </DrawerTabText>
           ),
           drawerIcon: ({ focused, color, size }) => (
-            <Unicons.UilGold size="24" color={theme?.gray[500]} />
+            // <Unicons.UilGold size="24" color={theme?.gray[500]} />
+            <FontAwesomeIcon
+              icon={faCoins}
+              size={24}
+              color={theme?.gray[500]}
+            />
           ),
         }}
       />
@@ -153,7 +164,11 @@ function DrawerScreen() {
             </DrawerTabText>
           ),
           drawerIcon: ({ focused, color, size }) => (
-            <Unicons.UilUsersAlt size="24" color={theme?.gray[500]} />
+            <FontAwesomeIcon
+              icon={faUserGroup}
+              size={24}
+              color={theme?.gray[500]}
+            />
           ),
         }}
       />
@@ -176,7 +191,11 @@ function DrawerScreen() {
             </DrawerLabelContainer>
           ),
           drawerIcon: ({ focused, color, size }) => (
-            <Unicons.UilFileAlt size="24" color={theme?.gray[500]} />
+            <FontAwesomeIcon
+              icon={faBuildingColumns}
+              size={24}
+              color={theme?.gray[500]}
+            />
           ),
         }}
       />
@@ -190,7 +209,11 @@ function DrawerScreen() {
             </DrawerTabText>
           ),
           drawerIcon: ({ focused, color, size }) => (
-            <Unicons.UilListUl size="24" color={theme?.gray[500]} />
+            <FontAwesomeIcon
+              icon={faListUl}
+              size={24}
+              color={theme?.gray[500]}
+            />
           ),
         }}
       />

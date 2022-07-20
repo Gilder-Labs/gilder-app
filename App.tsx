@@ -17,6 +17,8 @@ import * as Sentry from "sentry-expo";
 import { OverlayProvider } from "stream-chat-expo"; // Or stream-chat-expo
 import { defaultTheme as ChatTheme } from "./constants/ChatTheme";
 
+// fontawesome
+import { library } from "@fortawesome/fontawesome-svg-core";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 
 // If we are in prod we wanna catch bugs

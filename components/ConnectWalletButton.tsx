@@ -19,6 +19,8 @@ import Web3Auth, {
 import { useNavigation } from "@react-navigation/native";
 import * as SecureStore from "expo-secure-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faWallet } from "@fortawesome/pro-solid-svg-icons/faWallet";
 
 import { URL } from "react-native-url-polyfill";
 
@@ -98,9 +100,10 @@ export const ConnectWalletButton = ({}: ConnectWalletProps) => {
   return (
     <ConnectWalletContainer>
       <ConnectButton onPress={publicKey ? handleOpenWallet : login}>
-        <Unicons.UilWallet
-          size="20"
-          color={theme.gray[400]}
+        <FontAwesomeIcon
+          icon={faWallet}
+          size={20}
+          color={theme?.gray[500]}
           style={{ marginRight: 8 }}
         />
         <WalletConnectText>
