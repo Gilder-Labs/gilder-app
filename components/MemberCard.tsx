@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { useTheme } from "styled-components";
 import { LinearGradient } from "expo-linear-gradient";
-import * as Unicons from "@iconscout/react-native-unicons";
 import { getColorType } from "../utils";
 import { useQuery, gql } from "@apollo/client";
 import { Typography } from "../components";
@@ -10,8 +9,9 @@ import { AnimatedImage } from "react-native-ui-lib";
 import { formatVoteWeight } from "../utils";
 import { useAppSelector } from "../hooks/redux";
 import { PublicKeyTextCopy } from "./PublicKeyTextCopy";
-import axios from "axios";
 import { useCardinalIdentity } from "../hooks/useCardinaldentity";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faAngleDoubleRight } from "@fortawesome/pro-solid-svg-icons/faAngleDoubleRight";
 
 interface MemberCardProps {
   member: any;
@@ -118,7 +118,11 @@ export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
             </MemberNameContainer>
           </Column>
           <IconButton onPress={handleProfileClick} activeOpacity={0.5}>
-            <Unicons.UilAngleDoubleRight size="28" color={theme.gray[400]} />
+            <FontAwesomeIcon
+              icon={faAngleDoubleRight}
+              size={18}
+              color={theme.gray[400]}
+            />
           </IconButton>
         </TitleRow>
 

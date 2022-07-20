@@ -1,9 +1,10 @@
 import React from "react";
 import styled from "styled-components/native";
 import { useTheme } from "styled-components";
-import * as Unicons from "@iconscout/react-native-unicons";
-import { SvgXml } from "react-native-svg";
 import { LinearGradient } from "expo-linear-gradient";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faCommentLines } from "@fortawesome/pro-regular-svg-icons/faCommentLines";
+import { faCheckToSlot } from "@fortawesome/pro-solid-svg-icons/faCheckToSlot";
 
 interface MemberProfileHeaderProps {
   selectedTab: string;
@@ -48,25 +49,14 @@ export const MemberProfileHeader = ({
         )}
       </IconContainer>
       <MemberInfoSwitcherContainer>
-        {/* <NavIconButton
-          color={color}
-          isSelected={selectedTab === "Info"}
-          onPress={() => onSelectTab("Info")}
-        >
-          <Unicons.UilUser
-            size="20"
-            style={{ marginRight: 4 }}
-            color={theme[color][200]}
-          />
-          <ButtonText color={color}>Info</ButtonText>
-        </NavIconButton> */}
         <NavIconButton
           color={color}
           isSelected={selectedTab === "Messages"}
           onPress={() => onSelectTab("Messages")}
         >
-          <Unicons.UilCommentDots
-            size="20"
+          <FontAwesomeIcon
+            size={16}
+            icon={faCommentLines}
             style={{ marginRight: 4 }}
             color={theme[color][200]}
           />
@@ -77,8 +67,9 @@ export const MemberProfileHeader = ({
           isSelected={selectedTab === "Votes"}
           onPress={() => onSelectTab("Votes")}
         >
-          <Unicons.UilEnvelopeEdit
-            size="20"
+          <FontAwesomeIcon
+            size={16}
+            icon={faCheckToSlot}
             style={{ marginRight: 4 }}
             color={theme[color][200]}
           />

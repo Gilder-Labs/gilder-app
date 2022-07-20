@@ -1,18 +1,12 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
-import { View } from "react-native";
 import { Linking } from "react-native";
 import { format } from "date-fns";
 import { useTheme } from "styled-components";
 import * as Unicons from "@iconscout/react-native-unicons";
 import { InstructionToText } from "../utils/cleanData";
-/*
-  <who made transaction> <type> <type of instruction> in <what governance> <date>
-
-*/
-
-// Looks super promising for api fetchings
-// https://github.com/gootools/glasseater
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faAngleDoubleRight } from "@fortawesome/pro-solid-svg-icons/faAngleDoubleRight";
 
 interface ActivityCardProps {
   activity: any;
@@ -169,7 +163,11 @@ export const ActivityCard = ({ activity }: ActivityCardProps) => {
         <ActivityDate>{transactionDate}</ActivityDate>
       </TextContainer>
       <IconButton onPress={handleActivityClick} activeOpacity={0.5}>
-        <Unicons.UilAngleDoubleRight size="28" color={theme.gray[400]} />
+        <FontAwesomeIcon
+          icon={faAngleDoubleRight}
+          size={18}
+          color={theme.gray[400]}
+        />
       </IconButton>
     </Container>
   );

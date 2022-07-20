@@ -3,7 +3,6 @@ import { Modal, FlatList, View, StyleSheet, Animated } from "react-native";
 import styled from "styled-components/native";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 // @ts-ignore
-import * as Unicons from "@iconscout/react-native-unicons";
 import { useTheme } from "styled-components";
 import { closeTransactionModal, castVote } from "../store/walletSlice";
 import { Typography } from "./Typography";
@@ -42,11 +41,6 @@ export const WalletTransactionModal = ({}: WalletTransactionModalProps) => {
       transparent={true}
     >
       <Container>
-        {/* <Header>
-          <CloseIconButton onPress={handleClose} activeOpacity={0.5}>
-            <Unicons.UilTimes size="20" color={theme.gray[200]} />
-          </CloseIconButton>
-        </Header> */}
         <FloatingBarContainer>
           <FloatingBar />
         </FloatingBarContainer>

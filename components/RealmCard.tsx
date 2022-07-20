@@ -7,10 +7,10 @@ import { Typography } from "../components";
 import { toggleRealmInWatchlist } from "../store/realmSlice";
 import { subscribeToNotifications } from "../store/notificationSlice";
 import { LinearGradient } from "expo-linear-gradient";
-import TransparentImage from "../assets/images/transparent.png";
-import { ImageBackground } from "react-native";
+
 import { useTheme } from "styled-components";
-import * as Unicons from "@iconscout/react-native-unicons";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faCheck } from "@fortawesome/pro-solid-svg-icons/faCheck";
 
 interface RealmCardProps {
   realm: any;
@@ -80,7 +80,11 @@ export const RealmCard = ({ realm }: RealmCardProps) => {
       </LinearGradient>
       {isSelected && (
         <SelectedContainer>
-          <Unicons.UilCheck size="20" color={`${theme.gray[200]}`} />
+          <FontAwesomeIcon
+            icon={faCheck}
+            size={12}
+            color={`${theme.gray[200]}`}
+          />
         </SelectedContainer>
       )}
     </ContainerButton>
@@ -117,7 +121,7 @@ const SelectedContainer = styled.View`
   align-items: center;
   position: absolute;
   right: 8;
-  padding: 2px;
+  padding: 4px;
 
-  top: 8;
+  top: 8px;
 `;

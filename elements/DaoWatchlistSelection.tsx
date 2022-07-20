@@ -13,7 +13,11 @@ import { FlatList } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import styled from "styled-components/native";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import * as Unicons from "@iconscout/react-native-unicons";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faArrowRight } from "@fortawesome/pro-solid-svg-icons/faArrowRight";
+import { faXmark } from "@fortawesome/pro-solid-svg-icons/faXmark";
+import { faMagnifyingGlass } from "@fortawesome/pro-regular-svg-icons/faMagnifyingGlass";
+
 import { debounce, filter } from "lodash";
 import * as Haptics from "expo-haptics";
 import { toggleRealmInWatchlist, fetchRealm } from "../store/realmSlice";
@@ -147,8 +151,9 @@ export const DaoWatchlistSelection = ({
                     color="gray"
                     // hasTextShadow={true}
                   />
-                  <Unicons.UilArrowRight
-                    size="24"
+                  <FontAwesomeIcon
+                    icon={faArrowRight}
+                    size={16}
                     color={theme.gray[100]}
                     style={{ marginRight: -4 }}
                   />
@@ -172,9 +177,17 @@ export const DaoWatchlistSelection = ({
               onPress={() => setSearchText("")}
             >
               {searchText ? (
-                <Unicons.UilTimes size="20" color={theme.gray[300]} />
+                <FontAwesomeIcon
+                  icon={faXmark}
+                  size={16}
+                  color={theme.gray[300]}
+                />
               ) : (
-                <Unicons.UilSearch size="20" color={theme.gray[300]} />
+                <FontAwesomeIcon
+                  icon={faMagnifyingGlass}
+                  size={16}
+                  color={theme.gray[300]}
+                />
               )}
             </IconContainer>
           </SearchBarContainer>
@@ -202,7 +215,11 @@ export const DaoWatchlistSelection = ({
                 <RemoveContainer
                   onPress={() => handleRealmToggle(realmId, false)}
                 >
-                  <Unicons.UilTimes size="18" color={theme.gray[500]} />
+                  <FontAwesomeIcon
+                    icon={faXmark}
+                    size={12}
+                    color={theme.gray[500]}
+                  />
                 </RemoveContainer>
               </RealmIconContainer>
             ))}
@@ -317,6 +334,7 @@ const SearchBarContainer = styled.View`
   padding-right: ${(props) => props.theme.spacing[2]};
   background-color: ${(props) => props.theme.gray[900]};
   margin-bottom: ${(props) => props.theme.spacing[2]};
+  justify-content: space-between;
 `;
 
 const IconContainer = styled.TouchableOpacity`
@@ -324,7 +342,6 @@ const IconContainer = styled.TouchableOpacity`
   /* right: 32;
   top: 20; */
   top: 0px;
-  left: 0px;
   right: 0px;
   bottom: 0px;
   justify-content: center;
@@ -358,6 +375,7 @@ const RemoveContainer = styled.TouchableOpacity`
   right: 0;
   background: ${(props: any) => props.theme.gray[800]};
   border-radius: 100px;
+  padding: 2px;
 `;
 
 const CompleteOnboardingButton = styled.TouchableOpacity`

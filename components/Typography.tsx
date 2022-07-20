@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
-// import * as Unicons from "@iconscout/react-native-unicons";
 
 interface TypographyProps {
   text: string | number;

@@ -3,7 +3,6 @@ import { StyleSheet } from "react-native";
 import styled from "styled-components/native";
 import { getColorType, getFilteredTokens } from "../utils";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import * as Unicons from "@iconscout/react-native-unicons";
 import {
   disconnectWallet,
   fetchTransactions,

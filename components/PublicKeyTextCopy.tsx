@@ -1,13 +1,14 @@
 import React from "react";
 import styled from "styled-components/native";
 import { abbreviatePublicKey } from "../utils";
-import * as Unicons from "@iconscout/react-native-unicons";
 import { useTheme } from "styled-components";
 import * as Clipboard from "expo-clipboard";
 import { Typography } from "./Typography";
 import { useAppDispatch } from "../hooks/redux";
 import { setShowToast } from "../store/utilitySlice";
 import * as Haptics from "expo-haptics";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faCopy } from "@fortawesome/pro-regular-svg-icons/faCopy";
 
 interface PublicKeyTextCopyProps {
   fontSize?: number;
@@ -54,7 +55,11 @@ export const PublicKeyTextCopy = ({
       ></Typography>
       {!hideIcon && (
         <IconContainer>
-          <Unicons.UilCopy size={fontSize + 2} color={theme.gray[400]} />
+          <FontAwesomeIcon
+            icon={faCopy}
+            size={fontSize}
+            color={theme.gray[400]}
+          />
         </IconContainer>
       )}
     </Container>

@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Modal, FlatList, View } from "react-native";
 import styled from "styled-components/native";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import * as Unicons from "@iconscout/react-native-unicons";
 import { debounce, filter } from "lodash";
 import { useTheme } from "styled-components";
 import { RealmCard } from "./RealmCard";

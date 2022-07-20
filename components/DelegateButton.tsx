@@ -9,8 +9,12 @@ import { LinearGradient } from "expo-linear-gradient";
 import { AnimatedImage } from "react-native-ui-lib";
 import numeral from "numeral";
 import { useAppSelector } from "../hooks/redux";
-import * as Unicons from "@iconscout/react-native-unicons";
 import { useCardinalIdentity } from "../hooks/useCardinaldentity";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faCircleCheck } from "@fortawesome/pro-regular-svg-icons/faCircleCheck";
+import { faCheck } from "@fortawesome/pro-solid-svg-icons/faCheck";
+
+import { faCircleXmark } from "@fortawesome/pro-regular-svg-icons/faCircleXmark";
 
 interface ButtonProps {
   onPress(): void;
@@ -109,15 +113,17 @@ export const DelegateButton = ({
 
       <Row>
         {delegatesVote && isYesVote && (
-          <Unicons.UilCheckCircle
-            size="20"
+          <FontAwesomeIcon
+            size={16}
+            icon={faCircleCheck}
             color={theme.success[400]}
             style={{ marginRight: 4 }}
           />
         )}
         {delegatesVote && !isYesVote && (
-          <Unicons.UilTimesCircle
-            size="20"
+          <FontAwesomeIcon
+            size={16}
+            icon={faCircleXmark}
             color={theme.error[400]}
             style={{ marginRight: 4 }}
           />
@@ -137,7 +143,11 @@ export const DelegateButton = ({
       </Row>
       {isSelected && (
         <SelectedContainer>
-          <Unicons.UilCheck size="16" color={`${theme.gray[200]}`} />
+          <FontAwesomeIcon
+            icon={faCheck}
+            size={12}
+            color={`${theme.gray[200]}`}
+          />
         </SelectedContainer>
       )}
     </DelegateButtonContainer>
@@ -168,10 +178,10 @@ const SelectedContainer = styled.View`
   justify-content: center;
   align-items: center;
   position: absolute;
-  right: 8;
-  padding: 2px;
+  right: 8px;
+  padding: 4px;
 
-  top: 8;
+  top: 8px;
 `;
 
 const DelegateButtonContainer = styled.TouchableOpacity<{

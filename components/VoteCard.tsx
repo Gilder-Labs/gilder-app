@@ -3,8 +3,12 @@ import styled from "styled-components/native";
 import { useTheme } from "styled-components";
 import { Badge } from "../components";
 import numeral from "numeral";
-import * as Unicons from "@iconscout/react-native-unicons";
 import { formatVoteWeight } from "../utils";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faCircleCheck } from "@fortawesome/pro-regular-svg-icons/faCircleCheck";
+import { faCheck } from "@fortawesome/pro-solid-svg-icons/faCheck";
+
+import { faCircleXmark } from "@fortawesome/pro-regular-svg-icons/faCircleXmark";
 
 interface VoteCardProps {
   vote: MemberVote;
@@ -62,9 +66,17 @@ export const VoteCard = ({ vote, proposal, member, realm }: VoteCardProps) => {
           <VoteRow>
             <IconContainer isApproved={vote.voteWeightYes ? true : false}>
               {vote.voteWeightYes ? (
-                <Unicons.UilCheck size="18" color={theme.success[400]} />
+                <FontAwesomeIcon
+                  icon={faCheck}
+                  size={14}
+                  color={theme.success[400]}
+                />
               ) : (
-                <Unicons.UilTimes size="18" color={theme.error[400]} />
+                <FontAwesomeIcon
+                  icon={faCircleXmark}
+                  size={14}
+                  color={theme.success[400]}
+                />
               )}
             </IconContainer>
             <VoteText>Votes -</VoteText>

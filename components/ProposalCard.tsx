@@ -3,10 +3,11 @@ import styled from "styled-components/native";
 import { Badge } from "./Badge";
 import { format, getUnixTime, formatDistance } from "date-fns";
 import numeral from "numeral";
-import * as Unicons from "@iconscout/react-native-unicons";
 import { useTheme } from "styled-components";
 import { WalletIdentity } from "./WalletIdentity";
 import { Typography } from "./Typography";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faAngleDoubleRight } from "@fortawesome/pro-solid-svg-icons/faAngleDoubleRight";
 
 interface ProposalCardProps {
   proposal: any;
@@ -164,7 +165,11 @@ export const ProposalCard = ({
           )}
         </SubtextContainer>
         <IconButton onPress={onClick} activeOpacity={0.5}>
-          <Unicons.UilAngleDoubleRight size="28" color={theme.gray[400]} />
+          <FontAwesomeIcon
+            icon={faAngleDoubleRight}
+            size={18}
+            color={theme.gray[400]}
+          />
         </IconButton>
       </ProposalSubData>
       {creatorWalletId && (

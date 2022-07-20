@@ -7,9 +7,11 @@ import { Typography } from "./Typography";
 import numeral from "numeral";
 import { PublicKeyTextCopy } from "./PublicKeyTextCopy";
 import { ExpandableSection } from "react-native-ui-lib";
-import * as Unicons from "@iconscout/react-native-unicons";
 import { useTheme } from "styled-components";
 import { getFilteredTokens } from "../utils";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faChevronRight } from "@fortawesome/pro-regular-svg-icons/faChevronRight";
+import { faChevronDown } from "@fortawesome/pro-regular-svg-icons/faChevronDown";
 
 interface VaultCardProps {
   vaultId: string;
@@ -70,9 +72,17 @@ export const VaultCard = ({
                   shade="400"
                 />
                 {tokenSectionOpen ? (
-                  <Unicons.UilAngleDown size="28" color={theme.gray[300]} />
+                  <FontAwesomeIcon
+                    icon={faChevronDown}
+                    size={16}
+                    color={theme.gray[400]}
+                  />
                 ) : (
-                  <Unicons.UilAngleRight size="28" color={theme.gray[600]} />
+                  <FontAwesomeIcon
+                    icon={faChevronRight}
+                    size={16}
+                    color={theme.gray[500]}
+                  />
                 )}
               </SectionHeaderContainer>
             }
@@ -101,9 +111,17 @@ export const VaultCard = ({
                   shade="400"
                 />
                 {nftSectionOpen ? (
-                  <Unicons.UilAngleDown size="28" color={theme.gray[300]} />
+                  <FontAwesomeIcon
+                    icon={faChevronDown}
+                    size={16}
+                    color={theme.gray[400]}
+                  />
                 ) : (
-                  <Unicons.UilAngleRight size="28" color={theme.gray[600]} />
+                  <FontAwesomeIcon
+                    icon={faChevronRight}
+                    size={16}
+                    color={theme.gray[600]}
+                  />
                 )}
               </SectionHeaderContainer>
             }

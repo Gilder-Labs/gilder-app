@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { Typography } from "./Typography";
-// import * as Unicons from "@iconscout/react-native-unicons";
 import { useTheme } from "styled-components";
 
 interface ButtonProps {
@@ -41,11 +40,6 @@ export const Button = ({
       color={color}
       disabled={disabled}
     >
-      {/* <Unicons.UilWallet
-          size="20"
-          color={theme.gray[400]}
-          style={{ marginRight: 8 }}
-        /> */}
       {isLoading ? (
         <Loading color={theme.gray[300]} />
       ) : (

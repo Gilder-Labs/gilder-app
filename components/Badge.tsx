@@ -26,7 +26,7 @@ const BadgeContainer = styled.View<{
 }>`
   ${(props: any) => {
     if (props.type === "success") {
-      return `background:  ${props.theme.success[800]}44`;
+      return `background:  ${props.theme.aqua[800]}44`;
     }
     if (props.type === "pending") {
       return `background:  ${props.theme.secondary[800]}44`;
@@ -44,7 +44,7 @@ const BadgeContainer = styled.View<{
 
 ${(props: any) => {
   if (props.type === "success") {
-    return `border:  ${props.theme.success[400]}`;
+    return `border:  ${props.theme.aqua[400]}`;
   }
   if (props.type === "pending") {
     return `border:  ${props.theme.secondary[400]}`;
@@ -77,7 +77,7 @@ const BadgeText = styled.Text<{
 
   ${(props: any) => {
     if (props.type === "success") {
-      return `color:  ${props.theme.success[400]}`;
+      return `color:  ${props.theme.aqua[400]}`;
     }
     if (props.type === "pending") {
       return `color:  ${props.theme.secondary[400]}`;
