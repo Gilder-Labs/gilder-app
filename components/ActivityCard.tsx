@@ -3,10 +3,17 @@ import styled from "styled-components/native";
 import { Linking } from "react-native";
 import { format } from "date-fns";
 import { useTheme } from "styled-components";
-import * as Unicons from "@iconscout/react-native-unicons";
-import { InstructionToText } from "../utils/cleanData";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faCheck } from "@fortawesome/pro-solid-svg-icons/faCheck";
+import { faCheckToSlot } from "@fortawesome/pro-solid-svg-icons/faCheckToSlot";
+import { faFileLines } from "@fortawesome/pro-regular-svg-icons/faFileLines";
+import { faCommentLines } from "@fortawesome/pro-regular-svg-icons/faCommentLines";
+import { faMoneySimpleFromBracket } from "@fortawesome/pro-regular-svg-icons/faMoneySimpleFromBracket";
+import { faHouse } from "@fortawesome/pro-regular-svg-icons/faHouse";
+
 import { faAngleDoubleRight } from "@fortawesome/pro-solid-svg-icons/faAngleDoubleRight";
+
+import { InstructionToText } from "../utils/cleanData";
 
 interface ActivityCardProps {
   activity: any;
@@ -36,8 +43,9 @@ export const ActivityCard = ({ activity }: ActivityCardProps) => {
       case InstructionToText.CastVote:
         return (
           <IconContainer isSuccessful={isSuccessful} color={theme.success[400]}>
-            <Unicons.UilEnvelopeEdit
-              size="22"
+            <FontAwesomeIcon
+              icon={faCheckToSlot}
+              size={20}
               color={isSuccessful ? theme.success[400] : theme.error[400]}
             />
           </IconContainer>
@@ -45,8 +53,9 @@ export const ActivityCard = ({ activity }: ActivityCardProps) => {
       case InstructionToText.FinalizeVote:
         return (
           <IconContainer isSuccessful={isSuccessful} color={theme.success[400]}>
-            <Unicons.UilEnvelopeCheck
-              size="22"
+            <FontAwesomeIcon
+              icon={faCheckToSlot}
+              size={20}
               color={isSuccessful ? theme.success[400] : theme.error[400]}
             />
           </IconContainer>
@@ -54,8 +63,9 @@ export const ActivityCard = ({ activity }: ActivityCardProps) => {
       case InstructionToText.RelinquishVote:
         return (
           <IconContainer isSuccessful={isSuccessful} color={theme.success[400]}>
-            <Unicons.UilEnvelopeRedo
-              size="22"
+            <FontAwesomeIcon
+              icon={faCheckToSlot}
+              size={20}
               color={isSuccessful ? theme.success[400] : theme.error[400]}
             />
           </IconContainer>
@@ -66,8 +76,9 @@ export const ActivityCard = ({ activity }: ActivityCardProps) => {
             isSuccessful={isSuccessful}
             color={theme.secondary[400]}
           >
-            <Unicons.UilCommentAltLines
-              size="20"
+            <FontAwesomeIcon
+              icon={faCommentLines}
+              size={20}
               color={isSuccessful ? theme.secondary[400] : theme.error[400]}
             />
           </IconContainer>
@@ -75,26 +86,19 @@ export const ActivityCard = ({ activity }: ActivityCardProps) => {
       case InstructionToText.CreateProposal:
         return (
           <IconContainer isSuccessful={isSuccessful} color={theme.primary[400]}>
-            <Unicons.UilFilePlusAlt
-              size="20"
+            <FontAwesomeIcon
+              icon={faFileLines}
+              size={20}
               color={isSuccessful ? theme.primary[400] : theme.error[400]}
-            />
-          </IconContainer>
-        );
-      case InstructionToText.SetRealmAuthority:
-        return (
-          <IconContainer isSuccessful={isSuccessful} color={theme.purple[400]}>
-            <Unicons.UilFilePlusAlt
-              size="20"
-              color={isSuccessful ? theme.purple[400] : theme.error[400]}
             />
           </IconContainer>
         );
       case InstructionToText.DepositGoverningTokens:
         return (
           <IconContainer isSuccessful={isSuccessful} color={theme.aqua[400]}>
-            <Unicons.UilMoneyWithdraw
-              size="20"
+            <FontAwesomeIcon
+              icon={faMoneySimpleFromBracket}
+              size={20}
               color={isSuccessful ? theme.aqua[400] : theme.error[400]}
             />
           </IconContainer>
@@ -102,35 +106,20 @@ export const ActivityCard = ({ activity }: ActivityCardProps) => {
       case InstructionToText.CreateRealm:
         return (
           <IconContainer isSuccessful={isSuccessful} color={theme.aqua[400]}>
-            <Unicons.UilEstate
-              size="20"
+            <FontAwesomeIcon
+              icon={faHouse}
+              size={20}
               color={isSuccessful ? theme.aqua[400] : theme.error[400]}
             />
           </IconContainer>
         );
-      case InstructionToText.CreateProgramGovernance:
-        return (
-          <IconContainer isSuccessful={isSuccessful} color={theme.aqua[400]}>
-            <Unicons.UilFilePlus
-              size="20"
-              color={isSuccessful ? theme.aqua[400] : theme.error[400]}
-            />
-          </IconContainer>
-        );
-      case InstructionToText.CreateTokenGovernance:
-        return (
-          <IconContainer isSuccessful={isSuccessful} color={theme.aqua[400]}>
-            <Unicons.UilFilePlus
-              size="20"
-              color={isSuccessful ? theme.aqua[400] : theme.error[400]}
-            />
-          </IconContainer>
-        );
+
       case InstructionToText.WithdrawGoverningTokens:
         return (
           <IconContainer isSuccessful={isSuccessful} color={theme.aqua[400]}>
-            <Unicons.UilMoneyInsert
-              size="20"
+            <FontAwesomeIcon
+              icon={faMoneySimpleFromBracket}
+              size={20}
               color={isSuccessful ? theme.aqua[400] : theme.error[400]}
             />
           </IconContainer>
@@ -138,8 +127,9 @@ export const ActivityCard = ({ activity }: ActivityCardProps) => {
       default:
         return (
           <IconContainer isSuccessful={isSuccessful} color={theme.success[400]}>
-            <Unicons.UilCheck
-              size="24"
+            <FontAwesomeIcon
+              icon={faCheck}
+              size={18}
               color={isSuccessful ? theme.success[400] : theme.error[400]}
             />
           </IconContainer>

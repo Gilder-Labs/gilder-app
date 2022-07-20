@@ -7,7 +7,10 @@ import {
   PublicKeyTextCopy,
   Button,
 } from "../components";
-import * as Unicons from "@iconscout/react-native-unicons";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faCheck } from "@fortawesome/pro-solid-svg-icons/faCheck";
+import { faXmark } from "@fortawesome/pro-solid-svg-icons/faXmark";
+
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { closeTransactionModal, castVote } from "../store/walletSlice";
 import { useTheme } from "styled-components";
@@ -198,7 +201,11 @@ export const VoteOnProposalTransaction = ({}: VoteOnProposalTransaction) => {
           </TitleContainer>
           <Typography text={"Successfully voted!"} shade={"300"} />
           <IconContainer isSuccessful={true}>
-            <Unicons.UilCheck size="48" color={theme.success[400]} />
+            <FontAwesomeIcon
+              icon={faCheck}
+              size={32}
+              color={theme.success[400]}
+            />
           </IconContainer>
         </TransactionContainer>
       )}
@@ -223,7 +230,11 @@ export const VoteOnProposalTransaction = ({}: VoteOnProposalTransaction) => {
             shade={"300"}
           />
           <IconContainer isSuccessful={false}>
-            <Unicons.UilTimes size="48" color={theme.error[400]} />
+            <FontAwesomeIcon
+              icon={faXmark}
+              size={32}
+              color={theme.error[400]}
+            />
           </IconContainer>
           {renderErrorLogs()}
         </TransactionContainer>

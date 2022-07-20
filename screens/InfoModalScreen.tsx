@@ -3,7 +3,8 @@ import { Button, Typography } from "../components";
 import { useTheme } from "styled-components";
 import * as Haptics from "expo-haptics";
 import * as Linking from "expo-linking";
-import * as Unicons from "@iconscout/react-native-unicons";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faTwitter } from "@fortawesome/free-brands-svg-icons/faTwitter";
 
 export default function InfoModalScreen({ navigation }: any) {
   const theme = useTheme();
@@ -28,7 +29,7 @@ export default function InfoModalScreen({ navigation }: any) {
             marginBottom="0"
           />
           <IconContainerButton activeOpacity={0.4} onPress={handleTwitterLink}>
-            <Unicons.UilTwitter size="32" color={"#1DA1F2"} />
+            <FontAwesomeIcon icon={faTwitter} size={24} color={"#1DA1F2"} />
           </IconContainerButton>
         </Row>
         <Typography
@@ -97,6 +98,6 @@ const FloatingBar = styled.View`
 
 const IconContainerButton = styled.TouchableOpacity`
   border-radius: 100px;
-  padding: ${(props: any) => props.theme.spacing[2]};
+  padding: ${(props: any) => props.theme.spacing[3]};
   background: ${(props: any) => props.theme.gray[800]};
 `;

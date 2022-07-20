@@ -4,10 +4,14 @@ import { View } from "react-native";
 import { Linking } from "react-native";
 import { format } from "date-fns";
 import { useTheme } from "styled-components";
-import * as Unicons from "@iconscout/react-native-unicons";
 import { InstructionToText } from "../utils/cleanData";
 import { Typography } from "../components";
 import { abbreviatePublicKey } from "../utils";
+
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faAngleDoubleRight } from "@fortawesome/pro-solid-svg-icons/faAngleDoubleRight";
+import { faInfo } from "@fortawesome/pro-solid-svg-icons/faInfo";
+
 /*
   <who made transaction> <type> <type of instruction> in <what governance> <date>
 
@@ -37,7 +41,7 @@ export const TransactionCard = ({ transaction }: TransactionCardProps) => {
   return (
     <Container>
       <IconContainer color={theme.gray[600]}>
-        <Unicons.UilInfo size="22" color={theme.gray[400]} />
+        <FontAwesomeIcon icon={faInfo} size={14} color={theme.gray[400]} />
       </IconContainer>
       <TextContainer>
         <TitleContainer>
@@ -51,7 +55,11 @@ export const TransactionCard = ({ transaction }: TransactionCardProps) => {
         <ActivityDate>{transactionDate}</ActivityDate>
       </TextContainer>
       <IconButton onPress={handleTransactionClick} activeOpacity={0.5}>
-        <Unicons.UilAngleDoubleRight size="28" color={theme.gray[400]} />
+        <FontAwesomeIcon
+          icon={faAngleDoubleRight}
+          size={18}
+          color={theme.gray[400]}
+        />
       </IconButton>
     </Container>
   );

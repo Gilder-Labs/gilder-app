@@ -58,7 +58,7 @@ export const InstructionToText = {
   FlagTransactionError: "Flagged Transaction Error",
   SetRealmAuthority: "Set Realm Authority",
   SetRealmConfig: "Set Realm Config",
-  CreateTokenOwnerRecord: "Created Token Owner Record",
+  CreateTokenOwnerRecord: "New Member joined the dao",
   UpdateProgramMetadata: "Updated Program Metadata",
   CreateNativeTreasury: "Created Native Treasury",
   RemoveTransaction: "Removed Transaction",
