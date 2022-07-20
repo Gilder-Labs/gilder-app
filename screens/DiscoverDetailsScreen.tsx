@@ -12,11 +12,16 @@ import ImageView from "react-native-image-viewing";
 
 import * as Haptics from "expo-haptics";
 import { LinearGradient } from "expo-linear-gradient";
-import * as Unicons from "@iconscout/react-native-unicons";
 import * as WebBrowser from "expo-web-browser";
 import * as Linking from "expo-linking";
 
 import { AnimatedImage } from "react-native-ui-lib";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faDiscord } from "@fortawesome/free-brands-svg-icons/faDiscord";
+import { faTwitter } from "@fortawesome/free-brands-svg-icons/faTwitter";
+import { faGlobe } from "@fortawesome/pro-regular-svg-icons/faGlobe";
+import { faStore } from "@fortawesome/pro-solid-svg-icons/faStore";
+import { faArrowRight } from "@fortawesome/pro-solid-svg-icons/faArrowRight";
 
 export default function DiscoverDetailsScreen({
   route,
@@ -127,7 +132,11 @@ export default function DiscoverDetailsScreen({
                   activeOpacity={0.4}
                   onPress={handleWebClick}
                 >
-                  <Unicons.UilGlobe size="32" color={theme.gray[300]} />
+                  <FontAwesomeIcon
+                    icon={faGlobe}
+                    size={24}
+                    color={theme.gray[300]}
+                  />
                 </IconContainerButton>
               )}
               {!!discord && (
@@ -135,7 +144,11 @@ export default function DiscoverDetailsScreen({
                   activeOpacity={0.4}
                   onPress={handleDiscordLink}
                 >
-                  <Unicons.UilDiscord size="32" color={"#5865F2"} />
+                  <FontAwesomeIcon
+                    icon={faDiscord}
+                    size={24}
+                    color={"#5865F2"}
+                  />
                 </IconContainerButton>
               )}
               {!!twitter && (
@@ -143,7 +156,11 @@ export default function DiscoverDetailsScreen({
                   activeOpacity={0.4}
                   onPress={handleTwitterLink}
                 >
-                  <Unicons.UilTwitter size="32" color={"#1DA1F2"} />
+                  <FontAwesomeIcon
+                    icon={faTwitter}
+                    size={24}
+                    color={"#1DA1F2"}
+                  />
                 </IconContainerButton>
               )}
               {!!nftMarketPlace && (
@@ -151,7 +168,11 @@ export default function DiscoverDetailsScreen({
                   activeOpacity={0.4}
                   onPress={handleMarketplaceClick}
                 >
-                  <Unicons.UilShoppingCart size="32" color={theme.gray[300]} />
+                  <FontAwesomeIcon
+                    icon={faStore}
+                    size={24}
+                    color={theme.gray[300]}
+                  />
                 </IconContainerButton>
               )}
             </LinkRow>
@@ -177,7 +198,11 @@ export default function DiscoverDetailsScreen({
                 marginRight="1"
                 shade="100"
               />
-              <Unicons.UilArrowRight size="24" color={theme.gray[100]} />
+              <FontAwesomeIcon
+                icon={faArrowRight}
+                size={16}
+                color={theme.gray[100]}
+              />
             </DaoViewButton>
           )}
         </Row>
@@ -308,7 +333,7 @@ const IconContainer = styled.View`
 
 const IconContainerButton = styled.TouchableOpacity`
   border-radius: 100px;
-  padding: ${(props: any) => props.theme.spacing[2]};
+  padding: ${(props: any) => props.theme.spacing[3]};
   background: ${(props: any) => props.theme.gray[900]};
 `;
 

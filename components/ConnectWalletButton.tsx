@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components/native";
 import { useTheme } from "styled-components";
-import * as Unicons from "@iconscout/react-native-unicons";
 import { Keypair } from "@solana/web3.js";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import Constants, { AppOwnership } from "expo-constants";
@@ -102,7 +101,7 @@ export const ConnectWalletButton = ({}: ConnectWalletProps) => {
       <ConnectButton onPress={publicKey ? handleOpenWallet : login}>
         <FontAwesomeIcon
           icon={faWallet}
-          size={20}
+          size={16}
           color={theme?.gray[500]}
           style={{ marginRight: 8 }}
         />

@@ -4,7 +4,6 @@ import * as React from "react";
 import { DrawerContentContainer } from "../components/DrawerContentContainer";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import * as Unicons from "@iconscout/react-native-unicons";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import { useNavigation } from "@react-navigation/native";
@@ -51,8 +50,9 @@ import ChannelScreen from "../screens/ChannelScreen";
 
 import { faBuildingColumns } from "@fortawesome/pro-regular-svg-icons/faBuildingColumns";
 import { faUserGroup } from "@fortawesome/pro-solid-svg-icons/faUserGroup";
-import { faCoins } from "@fortawesome/pro-solid-svg-icons/faCoins";
+import { faTreasureChest } from "@fortawesome/pro-solid-svg-icons/faTreasureChest";
 import { faListUl } from "@fortawesome/pro-regular-svg-icons/faListUl";
+import { faInfoCircle } from "@fortawesome/pro-regular-svg-icons/faInfoCircle";
 
 const chatClient = StreamChat.getInstance(chatApiKey);
 
@@ -145,10 +145,9 @@ function DrawerScreen() {
             </DrawerTabText>
           ),
           drawerIcon: ({ focused, color, size }) => (
-            // <Unicons.UilGold size="24" color={theme?.gray[500]} />
             <FontAwesomeIcon
-              icon={faCoins}
-              size={24}
+              icon={faTreasureChest}
+              size={20}
               color={theme?.gray[500]}
             />
           ),
@@ -166,7 +165,7 @@ function DrawerScreen() {
           drawerIcon: ({ focused, color, size }) => (
             <FontAwesomeIcon
               icon={faUserGroup}
-              size={24}
+              size={20}
               color={theme?.gray[500]}
             />
           ),
@@ -193,7 +192,7 @@ function DrawerScreen() {
           drawerIcon: ({ focused, color, size }) => (
             <FontAwesomeIcon
               icon={faBuildingColumns}
-              size={24}
+              size={20}
               color={theme?.gray[500]}
             />
           ),
@@ -211,7 +210,7 @@ function DrawerScreen() {
           drawerIcon: ({ focused, color, size }) => (
             <FontAwesomeIcon
               icon={faListUl}
-              size={24}
+              size={20}
               color={theme?.gray[500]}
             />
           ),
@@ -374,9 +373,10 @@ export default function Navigation({}: {}) {
                 headerRight: () => {
                   return (
                     <InfoButton onPress={() => navigation.push("InfoScreen")}>
-                      <Unicons.UilInfoCircle
-                        size="20"
-                        color={theme.gray[300]}
+                      <FontAwesomeIcon
+                        icon={faInfoCircle}
+                        size={16}
+                        color={theme?.gray[300]}
                       />
                     </InfoButton>
                   );
