@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "461089184219",
+    "project_id": "gilder-e1b6e",
+    "storage_bucket": "gilder-e1b6e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:461089184219:android:d5dfce627c57bc903f6ffe",
+        "android_client_info": {
+          "package_name": "com.dawggydawg.gilderapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "461089184219-cmrq3o2p4d509e4h5ns22g31clvf253g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvGH-BLZvARh6zvVRU-GFBoFfy8-WsUss"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "461089184219-cmrq3o2p4d509e4h5ns22g31clvf253g.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "461089184219-n2g9l7r4nko0284tpvicl2rhcra85868.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.gilder.gilder"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

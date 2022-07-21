@@ -132,7 +132,7 @@ export function DrawerContentContainer(props: any) {
               </IconButton>
             </RealmNameContainer>
             <DrawerItemList {...props} />
-            <Typography
+            {/* <Typography
               text="Chat Channels"
               shade="300"
               bold={true}
@@ -141,7 +141,7 @@ export function DrawerContentContainer(props: any) {
               size="subtitle"
               marginBottom="2"
             />
-            <ChatRoomList navigation={navigation} />
+            <ChatRoomList navigation={navigation} /> */}
           </Content>
           <ConnectWalletButton />
         </DrawerContentContainerWrapper>

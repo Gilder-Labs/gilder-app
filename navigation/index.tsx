@@ -8,7 +8,7 @@ import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-
+import { Platform } from "react-native";
 import { useTheme } from "styled-components";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { fetchRealms, fetchRealm, fetchStorage } from "../store/realmSlice";
@@ -54,7 +54,7 @@ import { faTreasureChest } from "@fortawesome/pro-solid-svg-icons/faTreasureChes
 import { faListUl } from "@fortawesome/pro-regular-svg-icons/faListUl";
 import { faInfoCircle } from "@fortawesome/pro-regular-svg-icons/faInfoCircle";
 
-const chatClient = StreamChat.getInstance(chatApiKey);
+// const chatClient = StreamChat.getInstance(chatApiKey);
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -299,131 +299,131 @@ export default function Navigation({}: {}) {
         centerMessage={true}
       />
       <WalletTransactionModal />
-      <Chat client={chatClient}>
-        <NavigationContainer
-          linking={LinkingConfiguration}
-          theme={NavigationTheme}
+      {/* <Chat client={chatClient}> */}
+      <NavigationContainer
+        linking={LinkingConfiguration}
+        theme={NavigationTheme}
+      >
+        <Stack.Navigator
+          screenOptions={{
+            fullScreenGestureEnabled: true,
+            headerTintColor: "#f4f4f5", //Set Header text color
+          }}
+          initialRouteName={hasCompletedOnboarding ? "Root" : "Onboarding"}
         >
-          <Stack.Navigator
-            screenOptions={{
-              fullScreenGestureEnabled: true,
-              headerTintColor: "#f4f4f5", //Set Header text color
-            }}
-            initialRouteName={hasCompletedOnboarding ? "Root" : "Onboarding"}
-          >
-            <Stack.Screen
-              name="Onboarding"
-              component={OnboardingScreen}
-              options={{ headerShown: false, headerTransparent: true }}
-            />
-            <Stack.Screen
-              name="Root"
-              component={DrawerScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="MemberDetails"
-              component={MemberProfile}
-              // options={{ headerShown: false }}
-              options={({ route }) => ({
-                title: route?.params?.memberInfo?.name
-                  ? route?.params?.memberInfo?.name
-                  : `${route?.params?.member?.walletId?.slice(
-                      0,
-                      4
-                    )}...${route?.params?.member?.walletId?.slice(-4)}`,
-              })}
-            />
-            <Stack.Screen
-              name="RealmSettings"
-              component={RealmSettingsScreen}
-              options={({ route }) => ({
-                title: "Realm Settings", // update to realm name
-              })}
-            />
-            <Stack.Screen
-              name="ProposalDetail"
-              component={ProposalDetailScreen}
-              options={({ route }) => ({
-                title: "Proposal Details",
-              })}
-            />
-            <Drawer.Screen
-              name="ChannelScreen"
-              component={ChannelScreen}
-              options={({ route }) => ({
-                title: route?.params?.channel?.data?.name,
-                drawerItemStyle: {
-                  display: "none",
-                },
-              })}
-            />
-            <Stack.Screen
-              name="ThreadScreen"
-              component={ThreadScreen}
-              options={({ route }) => ({
-                title: "Thread",
-              })}
-            />
-            <Stack.Screen
-              name="Discover"
-              component={DiscoverScreen}
-              options={({ route, navigation }) => ({
-                title: "Discover",
-                headerRight: () => {
-                  return (
-                    <InfoButton onPress={() => navigation.push("InfoScreen")}>
-                      <FontAwesomeIcon
-                        icon={faInfoCircle}
-                        size={16}
-                        color={theme?.gray[300]}
-                      />
-                    </InfoButton>
-                  );
-                },
-              })}
-            />
-            <Stack.Screen
-              name="DiscoverDetails"
-              component={DiscoverDetailsScreen}
-              options={({ route }) => ({
-                title: "",
-                headerBackTitle: "Back",
-                presentation: "modal",
-                headerTransparent: true,
-              })}
-            />
-            <Stack.Screen
-              name="WalletModal"
-              component={WalletModal}
-              options={({ route }) => ({
-                title: "",
-                presentation: "modal",
-                headerTransparent: true,
-                headerShown: false,
-              })}
-            />
-            <Stack.Screen
-              name="InfoScreen"
-              component={InfoModalScreen}
-              options={({ route }) => ({
-                title: "",
-                presentation: "modal",
-                headerTransparent: true,
-                headerShown: false,
-                contentStyle: {
-                  height: "50%",
-                  maxHeight: "50%",
-                  marginTop: "100%",
-                  backgroundColor: "red",
-                  borderTopEndRadius: 16,
-                  borderTopLeftRadius: 16,
-                },
-              })}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </Chat>
+          <Stack.Screen
+            name="Onboarding"
+            component={OnboardingScreen}
+            options={{ headerShown: false, headerTransparent: true }}
+          />
+          <Stack.Screen
+            name="Root"
+            component={DrawerScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="MemberDetails"
+            component={MemberProfile}
+            // options={{ headerShown: false }}
+            options={({ route }) => ({
+              title: route?.params?.memberInfo?.name
+                ? route?.params?.memberInfo?.name
+                : `${route?.params?.member?.walletId?.slice(
+                    0,
+                    4
+                  )}...${route?.params?.member?.walletId?.slice(-4)}`,
+            })}
+          />
+          <Stack.Screen
+            name="RealmSettings"
+            component={RealmSettingsScreen}
+            options={({ route }) => ({
+              title: "Realm Settings", // update to realm name
+            })}
+          />
+          <Stack.Screen
+            name="ProposalDetail"
+            component={ProposalDetailScreen}
+            options={({ route }) => ({
+              title: "Proposal Details",
+            })}
+          />
+          <Drawer.Screen
+            name="ChannelScreen"
+            component={ChannelScreen}
+            options={({ route }) => ({
+              title: route?.params?.channel?.data?.name,
+              drawerItemStyle: {
+                display: "none",
+              },
+            })}
+          />
+          <Stack.Screen
+            name="ThreadScreen"
+            component={ThreadScreen}
+            options={({ route }) => ({
+              title: "Thread",
+            })}
+          />
+          <Stack.Screen
+            name="Discover"
+            component={DiscoverScreen}
+            options={({ route, navigation }) => ({
+              title: "Discover",
+              headerRight: () => {
+                return (
+                  <InfoButton onPress={() => navigation.push("InfoScreen")}>
+                    <FontAwesomeIcon
+                      icon={faInfoCircle}
+                      size={16}
+                      color={theme?.gray[300]}
+                    />
+                  </InfoButton>
+                );
+              },
+            })}
+          />
+          <Stack.Screen
+            name="DiscoverDetails"
+            component={DiscoverDetailsScreen}
+            options={({ route }) => ({
+              title: "",
+              headerBackTitle: "Back",
+              presentation: "modal",
+              headerTransparent: true,
+            })}
+          />
+          <Stack.Screen
+            name="WalletModal"
+            component={WalletModal}
+            options={({ route }) => ({
+              title: "",
+              presentation: "modal",
+              headerTransparent: true,
+              headerShown: false,
+            })}
+          />
+          <Stack.Screen
+            name="InfoScreen"
+            component={InfoModalScreen}
+            options={({ route }) => ({
+              title: "",
+              presentation: "modal",
+              headerTransparent: true,
+              headerShown: false,
+              contentStyle: {
+                height: "50%",
+                maxHeight: "50%",
+                marginTop: "100%",
+                backgroundColor: "red",
+                borderTopEndRadius: 16,
+                borderTopLeftRadius: 16,
+              },
+            })}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+      {/* </Chat> */}
     </RootContainer>
   );
 }
@@ -447,6 +447,16 @@ const registerForPushNotificationsAsync = async () => {
   } else {
     // alert("Must use physical device for Push Notifications");
   }
+
+  if (Platform.OS === "android") {
+    Notifications.setNotificationChannelAsync("default", {
+      name: "default",
+      importance: Notifications.AndroidImportance.HIGH,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: "#fcd34d",
+    });
+  }
+
   return token;
 };
 
