@@ -12,5 +12,6 @@ web-build/
 .env*
 settings.json
 .yarn/
+google-services.json
 # macOS
 .DS_Store

@@ -38,3 +38,7 @@ npm start -- --reset-cache
 npm config set "@fortawesome:registry" https://npm.fontawesome.com/
 npm config set "//npm.fontawesome.com/:_authToken" "YOUR_FONT_AWESOME_AUTH_TOKEN"
 ```
+
+### Android specific
+
+- get google-services.json to get FCM config before building/deploying
