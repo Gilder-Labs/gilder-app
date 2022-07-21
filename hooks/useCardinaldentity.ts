@@ -36,7 +36,7 @@ export const useCardinalIdentity = (walletId: string) => {
         const response = await axios.get(
           `https://api.cardinal.so/twitter/proxy?url=https://api.twitter.com/2/users/by&usernames=${handleFormatted}&user.fields=profile_image_url`
         );
-        const twitterImage = response?.data?.data[0]?.profile_image_url;
+        const twitterImage = response?.data?.data?.[0]?.profile_image_url;
         cache[walletId] = { twitterURL: twitterImage, twitterHandle: handle };
 
         setTwitterURL(twitterImage);
