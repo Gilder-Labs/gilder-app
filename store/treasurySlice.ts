@@ -242,7 +242,7 @@ export const fetchVaults = createAsyncThunk(
       return {
         vaults: vaultsParsed,
         vaultsNfts: vaultNftsMap,
-        tokenPriceData: tokenPriceResponse.data,
+        tokenPriceData: tokenPriceResponse?.data,
         governances: governancesParsed,
         governancesMap: governancesMap,
         tokenMap: tokenMap,
@@ -271,10 +271,12 @@ export const treasurySlice = createSlice({
       .addCase(fetchVaults.fulfilled, (state, action: any) => {
         let tokenPriceObject = {};
         // @ts-ignore
-        action.payload.tokenPriceData.forEach((token) => {
-          // @ts-ignore
-          tokenPriceObject[token.id] = token;
-        });
+        if (action?.payload?.tokenPriceData) {
+          action?.payload?.tokenPriceData.forEach((token) => {
+            // @ts-ignore
+            tokenPriceObject[token.id] = token;
+          });
+        }
 
         state.vaultsNfts = action.payload?.vaultsNfts;
         state.vaults = action.payload?.vaults;
