@@ -4,7 +4,7 @@ export default {
   expo: {
     name: "Gilder",
     slug: "gilder-app",
-    version: "1.0.26",
+    version: "1.0.27",
     orientation: "portrait",
     icon: "./assets/images/DarkIcon.png",
     scheme: "gilder",
@@ -26,8 +26,8 @@ export default {
     },
     android: {
       adaptiveIcon: {
-        foregroundImage: "./assets/images/DarkIcon.png",
-        backgroundColor: "#ffffff",
+        foregroundImage: "./assets/images/DarkIconAndroid.png",
+        backgroundColor: "#000000",
       },
       package: "com.dawggydawg.gilderapp",
     },
