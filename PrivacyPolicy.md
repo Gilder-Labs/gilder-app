@@ -1,6 +1,6 @@
 **Privacy Policy**
 
-Noah Drabinsky built the Gilder app as an Open Source app. This SERVICE is provided by Noah Drabinsky at no cost and is intended for use as is.
+Gilder, Inc built the Gilder app as an Open Source app. This SERVICE is provided by Gilder, Inc at no cost and is intended for use as is.
 
 This page is used to inform visitors regarding my policies with the collection, use, and disclosure of Personal Information if anyone decided to use my Service.
 
