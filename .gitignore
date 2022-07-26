@@ -14,3 +14,4 @@ settings.json
 .yarn/
 # macOS
 .DS_Store
+gilder-android-google-key.json

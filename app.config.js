@@ -29,6 +29,7 @@ export default {
         foregroundImage: "./assets/images/DarkIconAndroid.png",
         backgroundColor: "#000000",
       },
+      version: "1.0.28",
       googleServicesFile: "./google-services.json",
       package: "com.dawggydawg.gilderapp",
     },
