@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Platform } from "react-native";
 import styled from "styled-components/native";
 import { getColorType, getFilteredTokens } from "../utils";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
@@ -82,9 +82,11 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
   return (
     <>
       <Container>
-        <FloatingBarContainer>
-          <FloatingBar />
-        </FloatingBarContainer>
+        {Platform.OS === "ios" && (
+          <FloatingBarContainer>
+            <FloatingBar />
+          </FloatingBarContainer>
+        )}
 
         <Header>
           <DisconnectButton onPress={handleDisconnect}>

@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Modal, FlatList, View, StyleSheet, Animated } from "react-native";
+import {
+  Modal,
+  FlatList,
+  View,
+  StyleSheet,
+  Animated,
+  Platform,
+} from "react-native";
 import styled from "styled-components/native";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 // @ts-ignore
@@ -41,9 +48,11 @@ export const WalletTransactionModal = ({}: WalletTransactionModalProps) => {
       transparent={true}
     >
       <Container>
-        <FloatingBarContainer>
-          <FloatingBar />
-        </FloatingBarContainer>
+        {Platform.OS === "ios" && (
+          <FloatingBarContainer>
+            <FloatingBar />
+          </FloatingBarContainer>
+        )}
         {transactionType === "VoteOnProposal" && <VoteOnProposalTransaction />}
         {false && <Typography text="info info info" />}
         {false && <Typography text="info info info" />}

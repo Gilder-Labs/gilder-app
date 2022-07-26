@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { Button, Typography, RealmIcon, Loading } from "../components";
 import { useTheme } from "styled-components";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { ImageBackground } from "react-native";
+import { ImageBackground, Platform } from "react-native";
 import TransparentImage from "../assets/images/transparent.png";
 import { useNavigation } from "@react-navigation/native";
 import { fetchRealm } from "../store/realmSlice";
@@ -87,9 +87,11 @@ export default function DiscoverDetailsScreen({
 
   return (
     <Container>
-      <FloatingBarContainer>
-        <FloatingBar />
-      </FloatingBarContainer>
+      {Platform.OS === "ios" && (
+        <FloatingBarContainer>
+          <FloatingBar />
+        </FloatingBarContainer>
+      )}
       <LinearGradient
         colors={[
           color1 ? color1 : theme.gray[600],

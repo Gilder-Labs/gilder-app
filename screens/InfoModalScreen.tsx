@@ -5,6 +5,7 @@ import * as Haptics from "expo-haptics";
 import * as Linking from "expo-linking";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faTwitter } from "@fortawesome/free-brands-svg-icons/faTwitter";
+import { Platform } from "react-native";
 
 export default function InfoModalScreen({ navigation }: any) {
   const theme = useTheme();
@@ -16,9 +17,11 @@ export default function InfoModalScreen({ navigation }: any) {
 
   return (
     <Container>
-      <FloatingBarContainer>
-        <FloatingBar />
-      </FloatingBarContainer>
+      {Platform.OS === "ios" && (
+        <FloatingBarContainer>
+          <FloatingBar />
+        </FloatingBarContainer>
+      )}
       <ContentContainer>
         <Row>
           <Typography

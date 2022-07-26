@@ -19,7 +19,7 @@ export default function TreasuryScreen({
   const getTreasuryTotalValue = () => {
     let totalValue = 0;
 
-    vaults.forEach((vault) => {
+    vaults?.forEach((vault) => {
       vault.tokens.forEach((token: any) => {
         const coinGeckoId = token?.extensions?.coingeckoId;
         totalValue +=
@@ -33,7 +33,7 @@ export default function TreasuryScreen({
   const sortedVaults = () => {
     let vaultsWithValue = [];
 
-    vaults.forEach((vault) => {
+    vaults?.forEach((vault) => {
       let vaultValue = 0;
       vault.tokens.forEach((token: any) => {
         const coinGeckoId = token?.extensions?.coingeckoId;

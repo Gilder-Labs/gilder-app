@@ -1,12 +1,9 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Modal, FlatList, View } from "react-native";
 import styled from "styled-components/native";
+import { Platform } from "react-native";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { debounce, filter } from "lodash";
-import { useTheme } from "styled-components";
-import { RealmCard } from "./RealmCard";
 import { Loading } from "./Loading";
-import { Typography } from "../components";
 import { DaoWatchlistSelection } from "../elements";
 
 interface RealmSelectModalProps {
@@ -29,9 +26,11 @@ export const RealmSelectModal = ({
       onRequestClose={handleOnClose}
       presentationStyle="pageSheet"
     >
-      <FloatingBarContainer>
-        <FloatingBar />
-      </FloatingBarContainer>
+      {Platform.OS === "ios" && (
+        <FloatingBarContainer>
+          <FloatingBar />
+        </FloatingBarContainer>
+      )}
 
       {isLoadingRealms || isFetchingStorage ? (
         <Loading />

@@ -287,7 +287,7 @@ const TransactionContainer = styled.ScrollView`
   background: ${(props) => props.theme.gray[800]};
 
   padding-top: ${(props) => props.theme.spacing[4]};
-  padding-bottom: ${(props) => props.theme.spacing[3]};
+  padding-bottom: ${(props) => props.theme.spacing[5]};
   padding-right: ${(props) => props.theme.spacing[5]};
   padding-left: ${(props) => props.theme.spacing[5]};
 `;
@@ -353,6 +353,7 @@ const DelegateScrollView = styled.ScrollView`
   padding-bottom: ${(props: any) => props.theme.spacing[3]};
   padding-top: ${(props: any) => props.theme.spacing[3]};
   padding-left: ${(props: any) => props.theme.spacing[2]};
+  margin-bottom: 48px;
   padding-right: ${(props: any) => props.theme.spacing[4]};
 
   border-radius: 8px;
