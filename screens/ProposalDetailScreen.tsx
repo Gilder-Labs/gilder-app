@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components/native";
-import { FlatList } from "react-native";
+import { FlatList, View, Text } from "react-native";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { useTheme } from "styled-components";
 import {
@@ -360,6 +360,7 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
               marginRight="3"
               marginBottom="3"
               selectable={true}
+              hasLinks={true}
             />
             <Typography
               text="Discussion"

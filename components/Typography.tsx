@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
+import Hyperlink from "react-native-hyperlink";
+import { useTheme } from "styled-components";
 
 interface TypographyProps {
   text: string | number;
@@ -32,6 +34,7 @@ interface TypographyProps {
   maxLength?: number;
   selectable?: boolean;
   hasTextShadow?: boolean;
+  hasLinks?: boolean;
 }
 
 const sizeMapping = {
@@ -58,7 +61,10 @@ export const Typography = ({
   marginLeft = "0",
   marginTop = "0",
   hasTextShadow = false,
+  hasLinks = false,
 }: TypographyProps) => {
+  const theme = useTheme();
+
   const formattedText = () => {
     let strText = text.toString();
 
@@ -71,21 +77,43 @@ export const Typography = ({
   };
 
   return (
-    <Text
-      textAlign={textAlign}
-      size={size}
-      bold={bold}
-      shade={shade}
-      color={color}
-      marginBottom={marginBottom}
-      selectable={selectable}
-      marginRight={marginRight}
-      marginLeft={marginLeft}
-      hasTextShadow={hasTextShadow}
-      marginTop={marginTop}
-    >
-      {text ? formattedText() : ""}
-    </Text>
+    <>
+      {hasLinks ? (
+        <Hyperlink linkDefault={true} linkStyle={{ color: theme.blue[400] }}>
+          <Text
+            textAlign={textAlign}
+            size={size}
+            bold={bold}
+            shade={shade}
+            color={color}
+            marginBottom={marginBottom}
+            selectable={selectable}
+            marginRight={marginRight}
+            marginLeft={marginLeft}
+            hasTextShadow={hasTextShadow}
+            marginTop={marginTop}
+          >
+            {text ? formattedText() : ""}
+          </Text>
+        </Hyperlink>
+      ) : (
+        <Text
+          textAlign={textAlign}
+          size={size}
+          bold={bold}
+          shade={shade}
+          color={color}
+          marginBottom={marginBottom}
+          selectable={selectable}
+          marginRight={marginRight}
+          marginLeft={marginLeft}
+          hasTextShadow={hasTextShadow}
+          marginTop={marginTop}
+        >
+          {text ? formattedText() : ""}
+        </Text>
+      )}
+    </>
   );
 };
 
