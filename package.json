@@ -87,6 +87,7 @@
     "react-native-get-random-values": "~1.8.0",
     "react-native-hyperlink": "^0.0.19",
     "react-native-image-viewing": "^0.2.2",
+    "react-native-modal": "^13.0.1",
     "react-native-pager-view": "5.4.15",
     "react-native-reanimated": "~2.8.0",
     "react-native-safe-area-context": "4.2.4",
@@ -100,7 +101,8 @@
     "sentry-expo": "^4.2.0",
     "stream-chat-expo": "^4.10.0",
     "styled-components": "^5.3.3",
-    "text-encoding-polyfill": "^0.6.7"
+    "text-encoding-polyfill": "^0.6.7",
+    "tweetnacl": "^1.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
