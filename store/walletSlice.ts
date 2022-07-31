@@ -54,6 +54,7 @@ export interface WalletState {
   transactions: any;
   isFetchingWalletInfo: boolean;
   isDisconnectingWallet: boolean;
+  walletType: "sms" | "phantom" | "web3auth" | "none";
 }
 
 const initialState: WalletState = {
@@ -76,6 +77,7 @@ const initialState: WalletState = {
   transactions: [],
   isFetchingWalletInfo: false,
   isDisconnectingWallet: false,
+  walletType: "none",
 };
 
 let connection = new Connection(RPC_CONNECTION, "confirmed");
@@ -363,19 +365,6 @@ const getVotingPlugin = async (
     clientProgramId
   );
 
-  console.log("system program", SYSTEM_PROGRAM_ID.toBase58());
-
-  console.log("realmid", new PublicKey(selectedRealm!.realmId).toBase58());
-  console.log(
-    "communitymint",
-    new PublicKey(selectedRealm!.communityMint).toBase58()
-  );
-  console.log("CLIENT", client);
-  console.log("walletPubkey", walletPubkey.toBase58());
-  console.log("REGISTRAR", registrar.toBase58());
-  console.log("VOTER", voter.toBase58());
-  console.log("VoterweightPK", voterWeightPk.toBase58());
-
   const updateVoterWeightRecordIx = await client!.program.methods
     .updateVoterWeightRecord()
     .accounts({
@@ -386,8 +375,6 @@ const getVotingPlugin = async (
     })
     .instruction();
 
-  instructions.push(updateVoterWeightRecordIx);
-  console.log("INSTRUCTIONS IN FUNCTION", instructions);
   return { voterWeightPk, maxVoterWeightRecord: undefined };
 };
 
