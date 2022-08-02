@@ -155,8 +155,8 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
             <NftList
               nfts={nfts}
               isScrollable={true}
-              vaultId={publicKey}
               addSpacing={true}
+              walletId={publicKey}
             />
           </TokenContainer>
           <TokenContainer key="3">

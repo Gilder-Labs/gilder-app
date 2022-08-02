@@ -110,27 +110,9 @@ export const fetchVaults = createAsyncThunk(
         )
       );
 
-      const vaultNftsPromise = Promise.all(
-        vaultsInfo.map((vault) =>
-          axios.get("https://api.cybertino.io/querier/getSolNftByAddress", {
-            params: {
-              address: vault.pubKey,
-            },
-          })
-        )
-      );
-
-      const vaultNfts = await vaultNftsPromise;
-      const vaultNftsMap = {};
       const vaultSolBalances = await vaultSolBalancesPromise;
       const vaultsWithTokensRaw = await vaultsWithTokensPromise;
       // const collectionMap = {};
-
-      vaultNfts.forEach(
-        (vault) =>
-          // @ts-ignore
-          (vaultNftsMap[vault.config.params.address] = vault.data.results)
-      );
 
       const tokensData = await TokensInfo;
       const coinGeckoUrl = "https://api.coingecko.com/api/v3/coins/markets";
@@ -180,7 +162,6 @@ export const fetchVaults = createAsyncThunk(
           pubKey: vaultsInfo[index].pubKey, // WALLET ID
           vaultId: vaultsInfo[index].vaultId,
           isGovernanceVault: vaultsInfo[index].isGovernanceVault,
-          // nfts: vaultNftsMap[vault]
           tokens: tokens,
         };
       });
@@ -241,7 +222,6 @@ export const fetchVaults = createAsyncThunk(
 
       return {
         vaults: vaultsParsed,
-        vaultsNfts: vaultNftsMap,
         tokenPriceData: tokenPriceResponse?.data,
         governances: governancesParsed,
         governancesMap: governancesMap,

@@ -32,7 +32,7 @@ LogBox.ignoreAllLogs();
 
 // Appolo client for cyberconnect data
 const client = new ApolloClient({
-  uri: "https://api.cybertino.io/connect/",
+  uri: "https://graph.holaplex.com/v1",
   cache: new InMemoryCache(),
 });
 

@@ -4,23 +4,23 @@ import { FlatList } from "react-native";
 import { AnimatedImage } from "react-native-ui-lib";
 
 interface NftListProps {
-  nfts: Array<any>;
-  vaultId?: string;
   isScrollable?: boolean;
   addSpacing?: boolean;
+  walletId: string;
+  nfts: Array<any>;
 }
 
 export const NftList = ({
-  nfts,
-  vaultId = "",
   isScrollable = false,
   addSpacing = false,
+  walletId = "",
+  nfts = [],
 }: NftListProps) => {
   const renderNft = ({ item }) => {
     return (
       <ImageContainer>
         <AnimatedImage
-          key={item.id}
+          key={item.address}
           style={{
             minHeight: 160,
             height: "auto",
@@ -31,18 +31,16 @@ export const NftList = ({
           }}
           source={{
             // uri: "",
-            uri: item.img,
+            uri: item.image,
           }}
         />
       </ImageContainer>
     );
   };
 
-  console.log("rendering nfts", nfts);
-
   return (
     <FlatList
-      listKey={"nft" + vaultId}
+      listKey={"nft" + walletId}
       data={nfts}
       renderItem={renderNft}
       keyExtractor={(item) => item.id}
