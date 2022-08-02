@@ -24,8 +24,14 @@ export const ConnectWalletButton = ({}: ConnectWalletProps) => {
   const { height, width } = useWindowDimensions();
 
   useEffect(() => {
-    if (publicKey) {
+    if (publicKey && modalVisible) {
       setModalVisible(false);
+      // wait to clear out current modal, then open the wallet one
+      const timer = setTimeout(() => {
+        navigation.push("WalletModal");
+      }, 1000);
+
+      return () => clearTimeout(timer);
     }
   }, [publicKey]);
 

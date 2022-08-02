@@ -25,6 +25,7 @@ import { TransactionList } from "../elements";
 import { PageControl } from "react-native-ui-lib";
 import * as Haptics from "expo-haptics";
 import { useNavigation } from "@react-navigation/native";
+import { useCardinalIdentity } from "../hooks/useCardinaldentity";
 
 import { Incubator } from "react-native-ui-lib";
 const { Toast } = Incubator;
@@ -40,6 +41,7 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
   const { publicKey, tokenPriceData, tokens, userInfo, transactions, nfts } =
     useAppSelector((state) => state.wallet);
   const { isShowingToast } = useAppSelector((state) => state.utility);
+  const [twitterURL, twitterHandle] = useCardinalIdentity(publicKey);
 
   const handleDisconnect = () => {
     navigation.pop(1);
@@ -101,7 +103,7 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
               overflow: "hidden",
             }}
             source={{
-              uri: userInfo?.profileImage,
+              uri: twitterURL ? twitterURL : userInfo?.profileImage,
             }}
           />
         </IconContainer>
@@ -238,7 +240,6 @@ const TokenContainer = styled.View`
   padding: ${(props: any) => props.theme.spacing[4]};
   flex-direction: column;
   background: ${(props: any) => props.theme.gray[800]};
-  /* height: 100%; */
 `;
 
 const WalletValue = styled.Text`

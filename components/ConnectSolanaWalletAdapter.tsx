@@ -33,7 +33,7 @@ export const ConnectSolanaWalletAdapter = ({}: ConnectWalletProps) => {
         style={{
           padding: 16,
           borderRadius: 8,
-          marginBottom: 16,
+          marginBottom: 8,
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "center",
@@ -51,6 +51,7 @@ export const ConnectSolanaWalletAdapter = ({}: ConnectWalletProps) => {
             text="Coming soon"
             marginBottom="0"
             shade="300"
+            size="caption"
             color="purple"
           />
         </BadgeContainer>
@@ -64,17 +65,16 @@ const ConnectButton = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
   flex: 1;
-  min-width: 120px;
-  min-height: 120px;
+  min-width: 140px;
+  min-height: 140px;
   max-width: 50%;
-  margin-left: ${(props) => props.theme.spacing[1]};
 `;
 
 const BadgeContainer = styled.View`
   background-color: ${(props) => props.theme.gray[700]}aa;
   position: absolute;
   border-radius: 16px;
-  bottom: 10;
+  bottom: 10px;
   padding: ${(props) => props.theme.spacing[1]};
   padding-left: ${(props) => props.theme.spacing[2]};
   padding-right: ${(props) => props.theme.spacing[2]};

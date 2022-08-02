@@ -424,6 +424,7 @@ export const walletSlice = createSlice({
       state.publicKey = action.payload.publicKey;
       state.privateKey = action.payload.privateKey;
       state.userInfo = action.payload.userInfo;
+      state.walletType = action.payload.walletType;
       state.isWalletOpen = true;
     },
     openWallet: (state, action) => {
@@ -522,6 +523,7 @@ export const walletSlice = createSlice({
         state.isDisconnectingWallet = false;
         state.publicKey = "";
         state.privateKey = "";
+        state.walletType = "none";
         state.userInfo = null;
         state.isWalletOpen = false;
       });

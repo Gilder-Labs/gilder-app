@@ -81,19 +81,13 @@ export const ConnectWeb3AuthButton = ({}: ConnectWalletProps) => {
           publicKey: pubKey,
           privateKey: privateKey,
           userInfo: userInfo,
+          walletType: "web3auth",
         })
       );
-      navigation.push("WalletModal");
     } catch (e) {
       console.error(e);
       setErrorMsg(String(e));
     }
-  };
-
-  const handleOpenWallet = () => {
-    // dispatch(openWallet(""));
-    navigation.push("WalletModal");
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
   };
 
   return (
@@ -103,7 +97,7 @@ export const ConnectWeb3AuthButton = ({}: ConnectWalletProps) => {
         style={{
           padding: 16,
           borderRadius: 8,
-          marginBottom: 16,
+          marginBottom: 8,
           minHeight: 140,
           minWidth: 140,
           flexDirection: "row",
@@ -123,5 +117,7 @@ const ConnectButton = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
   max-width: 50%;
+  min-width: 140px;
+  min-height: 140px;
   margin-right: ${(props) => props.theme.spacing[1]};
 `;

@@ -25,6 +25,7 @@ export const NftList = ({
             minWidth: "48%",
             // maxWidth: "50%",
             borderRadius: 8,
+            resizeMode: "contain",
           }}
           source={{
             // uri: "",

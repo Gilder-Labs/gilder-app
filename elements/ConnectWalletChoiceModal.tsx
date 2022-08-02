@@ -55,7 +55,7 @@ const Container = styled.View`
 const Row = styled.View`
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   flex-wrap: wrap;
   padding: ${(props) => props.theme.spacing[4]};
 `;
