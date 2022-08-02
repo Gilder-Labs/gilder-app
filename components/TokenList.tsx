@@ -10,6 +10,8 @@ interface TokenCardProps {
   hideUnknownTokens?: boolean;
   vaultId?: string;
   isScrollable?: boolean;
+  hideLowNumberTokens?: boolean;
+  addSpacing?: boolean;
 }
 
 export const TokenList = ({
@@ -18,6 +20,8 @@ export const TokenList = ({
   hideUnknownTokens = false,
   vaultId = "",
   isScrollable = false,
+  hideLowNumberTokens = false,
+  addSpacing = false,
 }: TokenCardProps) => {
   const renderToken = ({ item }) => {
     return (
@@ -26,6 +30,7 @@ export const TokenList = ({
         key={item.mint + item.vaultId}
         tokenPriceData={tokenPriceData}
         hideUnknownTokens={hideUnknownTokens}
+        hideLowNumberTokens={hideLowNumberTokens}
       />
     );
   };
@@ -38,8 +43,13 @@ export const TokenList = ({
       keyExtractor={(item) => item.mint}
       scrollEnabled={isScrollable}
       // columnWrapperStyle={{ marginBottom: 8 }}
-      scrollIndicatorInsets={{ right: 1 }}
+      scrollIndicatorInsets={{}}
       initialNumToRender={10}
+      style={{
+        paddingLeft: addSpacing ? 16 : 0,
+        paddingRight: addSpacing ? 16 : 0,
+        minWidth: "100%",
+      }}
     />
   );
 };

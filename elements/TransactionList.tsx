@@ -19,10 +19,10 @@ export const TransactionList = () => {
         data={transactions}
         renderItem={renderActivity}
         keyExtractor={(item) => item.signature}
-        style={{ minWidth: "100%" }}
         ListFooterComponent={<EmptyView />}
         scrollIndicatorInsets={{ right: -8 }}
         initialNumToRender={20}
+        style={{ paddingLeft: 16, paddingRight: 16, minWidth: "100%" }}
         // onEndReached={onEndReached}
         // onEndReachedThreshold={1}
         // onRefresh={handleRefresh}

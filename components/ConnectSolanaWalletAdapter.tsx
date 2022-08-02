@@ -87,6 +87,6 @@ const LogoContainer = styled.View`
 `;
 
 const SMSLogoImage = styled.Image`
-  width: 42px;
-  height: 42px;
+  width: 36px;
+  height: 36px;
 `;

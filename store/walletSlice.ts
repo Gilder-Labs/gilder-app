@@ -116,7 +116,7 @@ export const fetchTokens = createAsyncThunk(
         const tokenData = {
           ...tokenInfo,
           mint: token.account.data.parsed.info.mint,
-          owner: token.account.data.parsed.info.owner.toBase58(),
+          owner: token.account.data.parsed.info.owner,
           tokenAmount: token.account.data.parsed.info.tokenAmount,
         };
 
@@ -180,6 +180,7 @@ export const fetchNfts = createAsyncThunk(
           },
         }
       );
+      console.log("nft response", nftResponse);
 
       return { nfts: nftResponse.data.results };
     } catch (e) {
@@ -195,6 +196,10 @@ export const fetchTransactions = createAsyncThunk(
     try {
       let rawTransactionsFilled;
       let transactionsParsed = [];
+
+      //c229aafc-cac2-4d60-8a1d-d6ac21beb28f
+      // const url =
+      //   "https://api.helius.xyz/v0/addresses/EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i/names?api-key=c229aafc-cac2-4d60-8a1d-d6ac21beb28f";
 
       let transactions = await connection.getConfirmedSignaturesForAddress2(
         new PublicKey(publicKey),

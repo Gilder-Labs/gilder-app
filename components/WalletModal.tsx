@@ -52,7 +52,7 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
   useEffect(() => {
     if (publicKey) {
       dispatch(fetchTokens(publicKey));
-      dispatch(fetchNfts(publicKey));
+      // dispatch(fetchNfts(publicKey));
       dispatch(fetchTransactions(publicKey));
     }
   }, []);
@@ -127,18 +127,37 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
           onPageSelected={handlePageScroll}
         >
           <TokenContainer key="1">
-            <Typography size="h3" text="Tokens" bold={true} />
+            <Typography
+              size="h3"
+              text="Tokens"
+              bold={true}
+              marginLeft="4"
+              marginTop="4"
+            />
             <TokenList
               tokens={filteredTokens}
               tokenPriceData={tokenPriceData}
-              hideUnknownTokens={false}
+              hideUnknownTokens={true}
               isScrollable={true}
               vaultId={publicKey}
+              hideLowNumberTokens={true}
+              addSpacing={true}
             />
           </TokenContainer>
           <TokenContainer key="2">
-            <Typography size="h3" text="Nfts" bold={true} />
-            <NftList nfts={nfts} isScrollable={true} vaultId={publicKey} />
+            <Typography
+              size="h3"
+              text="Nfts"
+              bold={true}
+              marginLeft="4"
+              marginTop="4"
+            />
+            <NftList
+              nfts={nfts}
+              isScrollable={true}
+              vaultId={publicKey}
+              addSpacing={true}
+            />
           </TokenContainer>
           <TokenContainer key="3">
             <Typography
@@ -146,6 +165,8 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
               text="Activity"
               bold={true}
               marginBottom="3"
+              marginLeft="4"
+              marginTop="4"
             />
             <TransactionList />
           </TokenContainer>
@@ -224,7 +245,7 @@ const ButtonText = styled.Text`
 
 const IconContainer = styled.View<{ color: string }>`
   /* border-radius: 100px, */
-  background: ${(props: any) => props.theme[props.color][800]};
+  background: ${(props: any) => props.theme.gray[800]};
   flex-direction: row;
   align-items: center;
   overflow: hidden;
@@ -237,9 +258,11 @@ const TokenContainer = styled.View`
   /* width: 100%; */
   margin-bottom: ${(props: any) => props.theme.spacing[3]};
   border-radius: 4px;
-  padding: ${(props: any) => props.theme.spacing[4]};
   flex-direction: column;
   background: ${(props: any) => props.theme.gray[800]};
+  padding-bottom: 240px;
+  flex: 1;
+  height: 100%;
 `;
 
 const WalletValue = styled.Text`

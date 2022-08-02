@@ -11,19 +11,26 @@ interface TokenCardProps {
   token: any;
   tokenPriceData: any;
   hideUnknownTokens: boolean;
+  hideLowNumberTokens: boolean;
 }
 
 export const TokenCard = ({
   token,
   tokenPriceData,
   hideUnknownTokens,
+  hideLowNumberTokens,
 }: TokenCardProps) => {
   const coinGeckoId = token?.extensions?.coingeckoId;
   const theme = useTheme();
 
-  if (!token.name && hideUnknownTokens) {
-    return null;
+  if (
+    (!token.name && hideUnknownTokens) ||
+    (hideLowNumberTokens && token?.tokenAmount?.uiAmountString === "0")
+  ) {
+    return <></>;
   }
+
+  console.log("rendering tokens");
 
   const color = getColorType(token.mint);
   const color2 = getColorType(token.owner);

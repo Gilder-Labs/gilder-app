@@ -7,12 +7,14 @@ interface NftListProps {
   nfts: Array<any>;
   vaultId?: string;
   isScrollable?: boolean;
+  addSpacing?: boolean;
 }
 
 export const NftList = ({
   nfts,
   vaultId = "",
   isScrollable = false,
+  addSpacing = false,
 }: NftListProps) => {
   const renderNft = ({ item }) => {
     return (
@@ -35,6 +37,8 @@ export const NftList = ({
       </ImageContainer>
     );
   };
+
+  console.log("rendering nfts", nfts);
 
   return (
     <FlatList

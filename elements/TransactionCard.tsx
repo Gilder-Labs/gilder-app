@@ -39,7 +39,7 @@ export const TransactionCard = ({ transaction }: TransactionCardProps) => {
   };
 
   return (
-    <Container>
+    <Container onLongPress={() => handleTransactionClick()}>
       <IconContainer color={theme.gray[600]}>
         <FontAwesomeIcon icon={faInfo} size={14} color={theme.gray[400]} />
       </IconContainer>
@@ -65,7 +65,7 @@ export const TransactionCard = ({ transaction }: TransactionCardProps) => {
   );
 };
 
-const Container = styled.View`
+const Container = styled.TouchableOpacity`
   /* height: 80px; */
   width: 100%;
   margin-bottom: ${(props: any) => props.theme.spacing[3]};
