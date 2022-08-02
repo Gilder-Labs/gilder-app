@@ -29,6 +29,7 @@ import { useCardinalIdentity } from "../hooks/useCardinaldentity";
 import { Incubator } from "react-native-ui-lib";
 const { Toast } = Incubator;
 import { useQuery, gql } from "@apollo/client";
+import { usePhantom } from "../hooks/usePhantom";
 
 interface RealmSelectModalProps {}
 
@@ -56,9 +57,16 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
   const dispatch = useAppDispatch();
   const [selectedPage, setSelectedPage] = useState(0);
   const navigation = useNavigation();
+  const { connect, disconnect } = usePhantom();
 
-  const { publicKey, tokenPriceData, tokens, userInfo, transactions } =
-    useAppSelector((state) => state.wallet);
+  const {
+    publicKey,
+    tokenPriceData,
+    tokens,
+    userInfo,
+    transactions,
+    walletType,
+  } = useAppSelector((state) => state.wallet);
   const { loading, error, data } = useQuery(GET_WALLET_NFTS, {
     variables: { owners: [publicKey] },
   });
@@ -67,6 +75,9 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
 
   const handleDisconnect = () => {
     navigation.pop(1);
+    if (walletType === "phantom") {
+      disconnect();
+    }
     dispatch(disconnectWallet());
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
   };

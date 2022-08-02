@@ -329,14 +329,14 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
                   marginRight={true}
                   disabled={
                     !publicKey ||
-                    !delegateMap[publicKey] ||
-                    timeLeft.isVotingTimeOver
+                    (!delegateMap[publicKey] && !membersMap[publicKey]) ||
+                    timeLeft?.isVotingTimeOver
                   }
                 />
                 <Button
                   disabled={
                     !publicKey ||
-                    !delegateMap[publicKey] ||
+                    (!delegateMap[publicKey] && !membersMap[publicKey]) ||
                     timeLeft.isVotingTimeOver
                   }
                   title="Vote Yes"

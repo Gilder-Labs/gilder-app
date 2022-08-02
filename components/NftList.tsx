@@ -43,7 +43,7 @@ export const NftList = ({
       listKey={"nft" + walletId}
       data={nfts}
       renderItem={renderNft}
-      keyExtractor={(item) => item.address}
+      keyExtractor={(item, index) => `${index}-${item.address}`}
       numColumns={2}
       scrollEnabled={isScrollable}
       style={{ paddingTop: 8 }}

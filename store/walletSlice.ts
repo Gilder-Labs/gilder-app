@@ -368,6 +368,7 @@ export const fetchWalletInfo = createAsyncThunk(
         publicKey: walletInfoData.publicKey,
         privateKey: privateKey,
         userInfo: walletInfoData.userInfo,
+        walletType: walletInfoData.walletType,
       };
     } catch (e) {
       return { publicKey: "", privateKey: "", userInfo: {} };
@@ -384,6 +385,7 @@ export const disconnectWallet = createAsyncThunk(
       const jsonValue = JSON.stringify({
         publicKey: "",
         userInfo: null,
+        walletType: "",
       });
       AsyncStorage.setItem("@walletInfo", jsonValue);
 

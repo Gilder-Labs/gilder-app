@@ -35,14 +35,13 @@ export const TokenList = ({
     );
   };
 
-  console.log("TOKENS IN TOKEN LIST", tokens);
   return (
     <FlatList
       listKey={"token" + walletId}
       data={tokens}
       renderItem={renderToken}
       scrollEnabled={isScrollable}
-      keyExtractor={(item) => `${item.address}-${item.owner} `}
+      keyExtractor={(item, index) => `${index}-${item.owner} `}
       // columnWrapperStyle={{ marginBottom: 8 }}
       scrollIndicatorInsets={{}}
       initialNumToRender={50}
