@@ -40,9 +40,7 @@ export interface WalletState {
   userInfo: any;
   isWalletOpen: boolean;
   isLoadingTokens: boolean;
-  isLoadingNfts: boolean;
   tokens: Array<Token>;
-  nfts: Array<any>;
   tokenPriceData: any;
   isTransactionModalOpen: boolean;
   transactionType: "VoteOnProposal" | "something" | "";
@@ -63,9 +61,7 @@ const initialState: WalletState = {
   userInfo: null,
   isWalletOpen: false,
   tokens: [],
-  nfts: [],
   isLoadingTokens: false,
-  isLoadingNfts: false,
   tokenPriceData: null,
   isTransactionModalOpen: false,
   transactionType: "",
@@ -88,7 +84,6 @@ export const fetchTokens = createAsyncThunk(
   async (publicKey: string) => {
     try {
       // TODO: GET THE SOL OF THE ACCOUNT WITH `getBalance`
-      // TODO: differentiate between NFTS/tokens
 
       const solanaLamportsInWallet = await connection.getBalance(
         new PublicKey(publicKey)
@@ -164,28 +159,6 @@ export const fetchTokens = createAsyncThunk(
     } catch (e) {
       console.log("error", e);
       return { tokens: [] };
-    }
-  }
-);
-
-export const fetchNfts = createAsyncThunk(
-  "wallet/fetchNfts",
-  async (publicKey: string) => {
-    try {
-      const nftResponse = await axios.get(
-        "https://api.cybertino.io/querier/getSolNftByAddress",
-        {
-          params: {
-            address: publicKey,
-          },
-        }
-      );
-      console.log("nft response", nftResponse);
-
-      return { nfts: nftResponse.data.results };
-    } catch (e) {
-      console.log("error", e);
-      return { nfts: [] };
     }
   }
 );
@@ -467,16 +440,6 @@ export const walletSlice = createSlice({
         state.tokens = action.payload.tokens;
         state.tokenPriceData = action.payload.tokenPriceData;
       })
-      .addCase(fetchNfts.pending, (state) => {
-        state.isLoadingNfts = true;
-      })
-      .addCase(fetchNfts.rejected, (state) => {
-        state.isLoadingNfts = false;
-      })
-      .addCase(fetchNfts.fulfilled, (state, action: any) => {
-        state.isLoadingNfts = false;
-        state.nfts = action.payload.nfts;
-      })
       .addCase(castVote.pending, (state) => {
         state.isSendingTransaction = true;
         state.transactionError = "";
@@ -516,7 +479,6 @@ export const walletSlice = createSlice({
         state.privateKey = action.payload.privateKey;
         state.publicKey = action.payload.publicKey;
         state.userInfo = action.payload.userInfo;
-        // state.nfts = action.payload.nfts;
       })
       .addCase(disconnectWallet.pending, (state) => {
         state.isDisconnectingWallet = true;

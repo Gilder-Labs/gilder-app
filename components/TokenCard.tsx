@@ -18,19 +18,17 @@ export const TokenCard = ({
   token,
   tokenPriceData,
   hideUnknownTokens,
-  hideLowNumberTokens,
+  hideLowNumberTokens = false,
 }: TokenCardProps) => {
   const coinGeckoId = token?.extensions?.coingeckoId;
   const theme = useTheme();
 
   if (
     (!token.name && hideUnknownTokens) ||
-    (hideLowNumberTokens && token?.tokenAmount?.uiAmountString === "0")
+    (hideLowNumberTokens && token?.tokenAmount?.uiAmount === 0)
   ) {
-    return <></>;
+    return null;
   }
-
-  console.log("rendering tokens");
 
   const color = getColorType(token.mint);
   const color2 = getColorType(token.owner);

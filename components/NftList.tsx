@@ -20,7 +20,7 @@ export const NftList = ({
     return (
       <ImageContainer>
         <AnimatedImage
-          key={item.address}
+          key={item?.address}
           style={{
             minHeight: 160,
             height: "auto",
@@ -43,7 +43,7 @@ export const NftList = ({
       listKey={"nft" + walletId}
       data={nfts}
       renderItem={renderNft}
-      keyExtractor={(item) => item.id}
+      keyExtractor={(item) => item.address}
       numColumns={2}
       scrollEnabled={isScrollable}
       style={{ paddingTop: 8 }}

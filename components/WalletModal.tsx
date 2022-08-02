@@ -7,7 +7,6 @@ import {
   disconnectWallet,
   fetchTransactions,
   fetchTokens,
-  fetchNfts,
 } from "../store/walletSlice";
 import { setShowToast } from "../store/utilitySlice";
 import { AnimatedImage } from "react-native-ui-lib";
@@ -29,8 +28,28 @@ import { useCardinalIdentity } from "../hooks/useCardinaldentity";
 
 import { Incubator } from "react-native-ui-lib";
 const { Toast } = Incubator;
+import { useQuery, gql } from "@apollo/client";
 
 interface RealmSelectModalProps {}
+
+const GET_WALLET_NFTS = gql`
+  query nfts($owners: [PublicKey!]) {
+    nfts(owners: $owners, limit: 10000, offset: 0) {
+      name
+      mintAddress
+      address
+      image
+      updateAuthorityAddress
+      collection {
+        creators {
+          verified
+          address
+        }
+        mintAddress
+      }
+    }
+  }
+`;
 
 export const WalletModal = ({}: RealmSelectModalProps) => {
   const theme = useTheme();
@@ -38,8 +57,11 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
   const [selectedPage, setSelectedPage] = useState(0);
   const navigation = useNavigation();
 
-  const { publicKey, tokenPriceData, tokens, userInfo, transactions, nfts } =
+  const { publicKey, tokenPriceData, tokens, userInfo, transactions } =
     useAppSelector((state) => state.wallet);
+  const { loading, error, data } = useQuery(GET_WALLET_NFTS, {
+    variables: { owners: [publicKey] },
+  });
   const { isShowingToast } = useAppSelector((state) => state.utility);
   const [twitterURL, twitterHandle] = useCardinalIdentity(publicKey);
 
@@ -52,7 +74,6 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
   useEffect(() => {
     if (publicKey) {
       dispatch(fetchTokens(publicKey));
-      // dispatch(fetchNfts(publicKey));
       dispatch(fetchTransactions(publicKey));
     }
   }, []);
@@ -79,7 +100,9 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
     setSelectedPage(index);
   };
 
-  const filteredTokens = getFilteredTokens(nfts, tokens);
+  const nfts = data?.nfts ? data?.nfts : [];
+
+  const filteredTokens = getFilteredTokens(data?.nfts, tokens);
 
   return (
     <>
@@ -139,7 +162,7 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
               tokenPriceData={tokenPriceData}
               hideUnknownTokens={true}
               isScrollable={true}
-              vaultId={publicKey}
+              walletId={publicKey}
               hideLowNumberTokens={true}
               addSpacing={true}
             />

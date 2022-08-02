@@ -115,7 +115,7 @@ export const VaultCard = ({
             <TokenList
               tokens={filteredTokens}
               tokenPriceData={tokenPriceData}
-              vaultId={vaultId}
+              walletId={vaultId}
               // hideUnknownTokens={true}
             />
           </ExpandableSection>
