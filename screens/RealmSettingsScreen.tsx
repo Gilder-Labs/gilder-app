@@ -19,9 +19,8 @@ export default function RealmSettingsScreen({
   const { selectedRealm } = useAppSelector((state) => state.realms);
   const [notifyOnCreate, setNotifyOnCreate] = useState(false);
 
-  const { pushToken, notificationSettings } = useAppSelector(
-    (state) => state.notifications
-  );
+  const { pushToken, notificationSettings, isLoadingNotifications } =
+    useAppSelector((state) => state.notifications);
 
   useEffect(() => {
     dispatch(
@@ -51,7 +50,7 @@ export default function RealmSettingsScreen({
     setNotifyOnCreate(value);
   };
 
-  if (!selectedRealm) {
+  if (!selectedRealm || isLoadingNotifications) {
     return <Loading />;
   }
 
