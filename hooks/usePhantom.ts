@@ -76,8 +76,6 @@ export const usePhantom = () => {
   const [dappKeyPair] = useState(nacl.box.keyPair());
   // const [sharedSecret, setSharedSecret] = useState<Uint8Array>();
   const [session, setSession] = useState<string>();
-  const [phantomWalletPublicKey, setPhantomWalletPublicKey] =
-    useState<PublicKey>();
 
   useEffect(() => {
     (async () => {
@@ -121,7 +119,6 @@ export const usePhantom = () => {
       // setSharedSecret(sharedSecretDapp);
       sharedSecret = sharedSecretDapp;
       setSession(connectData.session);
-      setPhantomWalletPublicKey(new PublicKey(connectData.public_key));
 
       const jsonValue = JSON.stringify({
         publicKey: connectData.public_key,

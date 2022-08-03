@@ -36,7 +36,6 @@ import {
 
 export interface WalletState {
   publicKey: string;
-  privateKey: string;
   userInfo: any;
   isWalletOpen: boolean;
   isLoadingTokens: boolean;
@@ -56,7 +55,6 @@ export interface WalletState {
 }
 
 const initialState: WalletState = {
-  privateKey: "",
   publicKey: "",
   userInfo: null,
   isWalletOpen: false,
@@ -251,11 +249,13 @@ export const castVote = createAsyncThunk(
         new PublicKey(selectedRealm!.governanceId)
       );
 
-      const privateKey = wallet.privateKey;
+      const privateKey = await SecureStore.getItemAsync("privateKey");
+      if (!privateKey) {
+        throw Error();
+      }
+
       const walletKeypair = Keypair.fromSecretKey(bs58.decode(privateKey));
 
-      console.log("instructions before plugin", instructions);
-      console.log("token owner record", tokenOwnerRecord);
       // PLUGIN STUFF
       let votePlugin;
       // TODO: update this to handle any vsr plugin, rn only runs for mango dao
@@ -271,7 +271,6 @@ export const castVote = createAsyncThunk(
         );
       }
       // END PLUGIN STUFF
-      console.log("instructions after plugin", instructions);
 
       await withCastVote(
         instructions,
@@ -362,16 +361,14 @@ export const fetchWalletInfo = createAsyncThunk(
     try {
       const walletInfoJSON = await AsyncStorage.getItem("@walletInfo");
       const walletInfoData = JSON.parse(walletInfoJSON);
-      const privateKey = await SecureStore.getItemAsync("privateKey");
 
       return {
         publicKey: walletInfoData.publicKey,
-        privateKey: privateKey,
         userInfo: walletInfoData.userInfo,
         walletType: walletInfoData.walletType,
       };
     } catch (e) {
-      return { publicKey: "", privateKey: "", userInfo: {} };
+      return { publicKey: "", userInfo: {} };
     }
   }
 );
@@ -402,7 +399,6 @@ export const walletSlice = createSlice({
   reducers: {
     setWallet: (state, action) => {
       state.publicKey = action.payload.publicKey;
-      state.privateKey = action.payload.privateKey;
       state.userInfo = action.payload.userInfo;
       state.walletType = action.payload.walletType;
       state.isWalletOpen = true;
@@ -478,7 +474,6 @@ export const walletSlice = createSlice({
       })
       .addCase(fetchWalletInfo.fulfilled, (state, action: any) => {
         state.isFetchingWalletInfo = false;
-        state.privateKey = action.payload.privateKey;
         state.publicKey = action.payload.publicKey;
         state.userInfo = action.payload.userInfo;
       })
@@ -491,7 +486,6 @@ export const walletSlice = createSlice({
       .addCase(disconnectWallet.fulfilled, (state, action: any) => {
         state.isDisconnectingWallet = false;
         state.publicKey = "";
-        state.privateKey = "";
         state.walletType = "none";
         state.userInfo = null;
         state.isWalletOpen = false;
