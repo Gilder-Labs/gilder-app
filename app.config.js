@@ -9,7 +9,7 @@ export default {
     icon: "./assets/images/DarkIcon.png",
     scheme: "gilder",
     userInterfaceStyle: "automatic",
-    plugins: ["sentry-expo"],
+    plugins: [],
     splash: {
       image: "./assets/images/GilderSplash.png",
       resizeMode: "contain",
@@ -43,16 +43,7 @@ export default {
       streamApiKey: process.env.STREAM_API_KEY,
     },
     hooks: {
-      postPublish: [
-        {
-          file: "sentry-expo/upload-sourcemaps",
-          config: {
-            organization: "gilder",
-            project: "gilder",
-            authToken: process.env.SENTRY_API_TOKEN,
-          },
-        },
-      ],
+      postPublish: [],
     },
   },
   name: "gilder-app",
