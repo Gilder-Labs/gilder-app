@@ -21,6 +21,26 @@
     "sortRank": 3
   },
   {
+    "symbol": "MangoLiquidityDAO",
+    "displayName": "Mango Liquidity Council",
+    "programId": "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw",
+    "realmId": "DnWHRVRbA2XGwWth2da7iF3Q81cqRHhqJXSPS8J3G6fo",
+    "website": "https://mango.markets",
+    "keywords": "Mango Markets, REALM, Governance, Serum, SRM, Serum DEX, DEFI, Decentralized Finance, Decentralised Finance, Crypto, ERC20, Ethereum, Decentralize, Solana, SOL, SPL, Cross-Chain, Trading, Fastest, Fast, SerumBTC, SerumUSD, SRM Tokens, SPL Tokens",
+    "twitter": "@mangomarkets",
+    "ogImage": "https://trade.mango.markets/assets/icons/logo.svg"
+  },
+  {
+    "symbol": "MangolanaCouncil",
+    "displayName": "Mangolana Council",
+    "programId": "GqTPL6qRf5aUuqscLh8Rg2HTxPUXfhhAXDptTLhp1t2J",
+    "realmId": "Eb69t8zTkNbBViLRykbgBofr8PbwvZoAX4KicVcNNwkj",
+    "website": "https://mango.markets",
+    "keywords": "Mango Markets, REALM, Governance, Serum, SRM, Serum DEX, DEFI, Decentralized Finance, Decentralised Finance, Crypto, ERC20, Ethereum, Decentralize, Solana, SOL, SPL, Cross-Chain, Trading, Fastest, Fast, SerumBTC, SerumUSD, SRM Tokens, SPL Tokens",
+    "twitter": "@mangomarkets",
+    "ogImage": "/realms/MangoXSol/img/logo.svg"
+  },
+  {
     "symbol": "DTP",
     "displayName": "The Imperium of Rain",
     "programId": "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw",
@@ -37,16 +57,6 @@
     "website": "https://unchain.fund",
     "twitter": "@Unchainfund",
     "sharedWalletId": "BnBe9uwucnLWpKqzgtvGU2aURRXezcqEVCoL8L6CeDgF"
-  },
-  {
-    "symbol": "MangoLiquidityDAO",
-    "displayName": "Mango Liquidity Council",
-    "programId": "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw",
-    "realmId": "DnWHRVRbA2XGwWth2da7iF3Q81cqRHhqJXSPS8J3G6fo",
-    "website": "https://mango.markets",
-    "keywords": "Mango Markets, REALM, Governance, Serum, SRM, Serum DEX, DEFI, Decentralized Finance, Decentralised Finance, Crypto, ERC20, Ethereum, Decentralize, Solana, SOL, SPL, Cross-Chain, Trading, Fastest, Fast, SerumBTC, SerumUSD, SRM Tokens, SPL Tokens",
-    "twitter": "@mangomarkets",
-    "ogImage": "https://trade.mango.markets/assets/icons/logo.svg"
   },
   {
     "symbol": "WEZ",
@@ -340,7 +350,7 @@
     "displayName": "Chicken Tribe",
     "programId": "GCockTxUjxuMdojHiABVZ5NKp6At8eTKDiizbPjiCo4m",
     "realmId": "FuqmCzaTqH1QbokY3agcYQaJqoWog1UkSrcNCDBPXusu",
-    "ogImage": "https://pbs.twimg.com/profile_images/1454132980012650498/V3SR8pa1_400x400.jpg",
+    "ogImage": "https://chickentribe.com/_next/image?url=%2Fimages%2FChickenTribe_Team01.svg&w=128&q=75",
     "website": "https://chickentribe.com/",
     "twitter": "@ChickenTribe"
   },
@@ -488,7 +498,7 @@
     "realmId": "EPB9JbK5NiHoHkrRmpo9v4oJ2bKSVjfA731jeBModC1e",
     "website": "https://meta-collective.digital",
     "twitter": "@_metaCOLLECTIVE",
-    "ogImage": "https://www.meta-collective.digital/assets/home/header-logo.png"
+    "ogImage": "https://governance.meta-collective.digital/realms/META/img/logo.png"
   },
   {
     "symbol": "UXP",
@@ -506,11 +516,27 @@
     "realmId": "97jKDX5Uxh5xSPbmmfhiFodHEajSVdKkknTzzgf8GBAr"
   },
   {
+    "symbol": "RatioFinance",
+    "displayName": "Ratio Finance",
+    "programId": "HT19EcD68zn7NoCF79b2ucQF8XaMdowyPt5ccS6g1PUx",
+    "realmId": "8HZ4V94dtojrTpdUpWrfstr7bEhRnZZHn8jotfns9L9x",
+    "website": "https://ratio.finance/",
+    "twitter": "@RatioFinance",
+    "ogImage": "/realms/RatioFinance/img/ratiologo.png"
+  },
+  {
     "symbol": "PixelBands",
     "displayName": "PixelBands DAO",
     "programId": "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw",
     "realmId": "AUYUF7z2aWNHySuWEW43pzSYL6aioKdc1pwCniyNCFBK",
     "ogImage": "/realms/PixelBands/img/pixel_bands_log.png"
+  },
+  {
+    "symbol": "Gil",
+    "displayName": "Gilder",
+    "programId": "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw",
+    "realmId": "6jydyMWSqV2bFHjCHydEQxa9XfXQWDwjVqAdjBEA1BXx",
+    "ogImage": "https://uploads-ssl.webflow.com/6155dbf133933371fa666e7a/620bc84e6c44fc6b90d44ec5_WebclipDark.png"
   },
   {
     "symbol": "MEDIA",
@@ -875,10 +901,41 @@
     "ogImage": "/realms/laptopDAO/logo.png"
   },
   {
-    "symbol": "Gil",
-    "displayName": "Gilder",
+    "symbol": "HOADAO",
+    "displayName": "HOA DAO",
     "programId": "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw",
-    "realmId": "6jydyMWSqV2bFHjCHydEQxa9XfXQWDwjVqAdjBEA1BXx",
-    "ogImage": "https://uploads-ssl.webflow.com/6155dbf133933371fa666e7a/620bc84e6c44fc6b90d44ec5_WebclipDark.png"
+    "realmId": "CsmD7MZ5aKA26gyvtXMzFNL5krnvHfd6SPUpXj8EgTky",
+    "website": "https://www.hoa.house/",
+    "twitter": "@ParclHOA",
+    "ogImage": "/realms/HOADAO/img/hoa.jpg"
+  },
+  {
+    "symbol": "TelebunniesDAO",
+    "displayName": "Telebunnies",
+    "programId": "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw",
+    "realmId": "2h3UJMWgsDxZJFJ2PhmeA6b27j1ZEmVthEBFMWaUEbZL",
+    "website": "https://www.telebunnies.com/",
+    "twitter": "@TelebunniesO",
+    "ogImage": "/realms/TelebunniesDAO/telebunniesDAO.png"
+  },
+  {
+    "symbol": "CYG",
+    "displayName": "Cygnus",
+    "programId": "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw",
+    "realmId": "CCbMnmocmd7GMc688ixg2okNFKshJwdqCfMuxng2CAL",
+    "bannerImage": "/realms/Cygnus/cygnus-banner.jpg",
+    "website": "https://cygnusorg.com/",
+    "twitter": "@Cygnusorg",
+    "ogImage": "/realms/Cygnus/cygnus-logo.jpg"
+  },
+  {
+    "symbol": "EPCT",
+    "displayName": "Epics",
+    "programId": "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw",
+    "realmId": "DCdCsuUjg6MnULfEmBUmvg1heggnLrKSFdp5uTRSKuwR",
+    "bannerImage": "/realms/Epics/Epics-logo.jpg",
+    "website": "https://epics.dev/",
+    "twitter": "@EpicsDAO",
+    "ogImage": "/realms/Epics/Epics-logo.jpg"
   }
 ]
