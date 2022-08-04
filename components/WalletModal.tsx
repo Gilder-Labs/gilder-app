@@ -7,7 +7,6 @@ import {
   disconnectWallet,
   fetchTransactions,
   fetchTokens,
-  fetchNfts,
 } from "../store/walletSlice";
 import { setShowToast } from "../store/utilitySlice";
 import { AnimatedImage } from "react-native-ui-lib";
@@ -25,24 +24,60 @@ import { TransactionList } from "../elements";
 import { PageControl } from "react-native-ui-lib";
 import * as Haptics from "expo-haptics";
 import { useNavigation } from "@react-navigation/native";
+import { useCardinalIdentity } from "../hooks/useCardinaldentity";
 
 import { Incubator } from "react-native-ui-lib";
 const { Toast } = Incubator;
+import { useQuery, gql } from "@apollo/client";
+import { usePhantom } from "../hooks/usePhantom";
 
 interface RealmSelectModalProps {}
+
+const GET_WALLET_NFTS = gql`
+  query nfts($owners: [PublicKey!]) {
+    nfts(owners: $owners, limit: 10000, offset: 0) {
+      name
+      mintAddress
+      address
+      image
+      updateAuthorityAddress
+      collection {
+        creators {
+          verified
+          address
+        }
+        mintAddress
+      }
+    }
+  }
+`;
 
 export const WalletModal = ({}: RealmSelectModalProps) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const [selectedPage, setSelectedPage] = useState(0);
   const navigation = useNavigation();
+  const { connect, disconnect } = usePhantom();
 
-  const { publicKey, tokenPriceData, tokens, userInfo, transactions, nfts } =
-    useAppSelector((state) => state.wallet);
+  const {
+    publicKey,
+    tokenPriceData,
+    tokens,
+    userInfo,
+    transactions,
+    walletType,
+  } = useAppSelector((state) => state.wallet);
+  const { loading, error, data } = useQuery(GET_WALLET_NFTS, {
+    variables: { owners: [publicKey] },
+  });
   const { isShowingToast } = useAppSelector((state) => state.utility);
+  const [twitterURL, twitterHandle] = useCardinalIdentity(publicKey);
 
   const handleDisconnect = () => {
     navigation.pop(1);
+    if (walletType === "phantom") {
+      disconnect();
+    }
     dispatch(disconnectWallet());
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
   };
@@ -50,7 +85,6 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
   useEffect(() => {
     if (publicKey) {
       dispatch(fetchTokens(publicKey));
-      dispatch(fetchNfts(publicKey));
       dispatch(fetchTransactions(publicKey));
     }
   }, []);
@@ -77,7 +111,9 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
     setSelectedPage(index);
   };
 
-  const filteredTokens = getFilteredTokens(nfts, tokens);
+  const nfts = data?.nfts ? data?.nfts : [];
+
+  const filteredTokens = getFilteredTokens(data?.nfts, tokens);
 
   return (
     <>
@@ -101,7 +137,7 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
               overflow: "hidden",
             }}
             source={{
-              uri: userInfo?.profileImage,
+              uri: twitterURL ? twitterURL : userInfo?.profileImage,
             }}
           />
         </IconContainer>
@@ -125,18 +161,37 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
           onPageSelected={handlePageScroll}
         >
           <TokenContainer key="1">
-            <Typography size="h3" text="Tokens" bold={true} />
+            <Typography
+              size="h3"
+              text="Tokens"
+              bold={true}
+              marginLeft="4"
+              marginTop="4"
+            />
             <TokenList
               tokens={filteredTokens}
               tokenPriceData={tokenPriceData}
-              hideUnknownTokens={false}
+              hideUnknownTokens={true}
               isScrollable={true}
-              vaultId={publicKey}
+              walletId={publicKey}
+              hideLowNumberTokens={true}
+              addSpacing={true}
             />
           </TokenContainer>
           <TokenContainer key="2">
-            <Typography size="h3" text="Nfts" bold={true} />
-            <NftList nfts={nfts} isScrollable={true} vaultId={publicKey} />
+            <Typography
+              size="h3"
+              text="Nfts"
+              bold={true}
+              marginLeft="4"
+              marginTop="4"
+            />
+            <NftList
+              nfts={nfts}
+              isScrollable={true}
+              addSpacing={true}
+              walletId={publicKey}
+            />
           </TokenContainer>
           <TokenContainer key="3">
             <Typography
@@ -144,6 +199,8 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
               text="Activity"
               bold={true}
               marginBottom="3"
+              marginLeft="4"
+              marginTop="4"
             />
             <TransactionList />
           </TokenContainer>
@@ -222,7 +279,7 @@ const ButtonText = styled.Text`
 
 const IconContainer = styled.View<{ color: string }>`
   /* border-radius: 100px, */
-  background: ${(props: any) => props.theme[props.color][800]};
+  background: ${(props: any) => props.theme.gray[800]};
   flex-direction: row;
   align-items: center;
   overflow: hidden;
@@ -235,10 +292,11 @@ const TokenContainer = styled.View`
   /* width: 100%; */
   margin-bottom: ${(props: any) => props.theme.spacing[3]};
   border-radius: 4px;
-  padding: ${(props: any) => props.theme.spacing[4]};
   flex-direction: column;
   background: ${(props: any) => props.theme.gray[800]};
-  /* height: 100%; */
+  padding-bottom: 240px;
+  flex: 1;
+  height: 100%;
 `;
 
 const WalletValue = styled.Text`

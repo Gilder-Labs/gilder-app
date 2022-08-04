@@ -53,7 +53,7 @@ export default function ProposalScreen({
   };
 
   const renderProposal = ({ item }: any) => {
-    const proposalGovernance = governancesMap[item.governanceId];
+    const proposalGovernance = governancesMap?.[item?.governanceId];
 
     if (!proposalGovernance) {
       return <EmptyView />;

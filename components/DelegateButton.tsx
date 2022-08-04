@@ -135,6 +135,7 @@ export const DelegateButton = ({
               : getVoteFormatted(delegate?.councilDepositAmount)
           }
         `}
+          textAlign="center"
           size="body"
           bold={true}
           marginBottom="0"

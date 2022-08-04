@@ -30,6 +30,7 @@ const proposalStatusKey = {
   Executing: "pending",
   Voting: "pending",
   Defeated: "error",
+  ExecutingWithErrors: "error",
 };
 
 export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
@@ -328,14 +329,14 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
                   marginRight={true}
                   disabled={
                     !publicKey ||
-                    !delegateMap[publicKey] ||
-                    timeLeft.isVotingTimeOver
+                    (!delegateMap[publicKey] && !membersMap[publicKey]) ||
+                    timeLeft?.isVotingTimeOver
                   }
                 />
                 <Button
                   disabled={
                     !publicKey ||
-                    !delegateMap[publicKey] ||
+                    (!delegateMap[publicKey] && !membersMap[publicKey]) ||
                     timeLeft.isVotingTimeOver
                   }
                   title="Vote Yes"
@@ -409,7 +410,7 @@ const ProposalTitle = styled.Text`
   font-size: 26px;
   line-height: 32px;
   flex-wrap: wrap;
-  max-width: 75%;
+  flex:1;
   padding-right: ${(props: any) => props.theme.spacing[2]};
 `;
 

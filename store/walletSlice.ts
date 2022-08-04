@@ -1,4 +1,9 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  AnyAction,
+  createAsyncThunk,
+  createSlice,
+  PayloadAction,
+} from "@reduxjs/toolkit";
 import {
   PublicKey,
   ConfirmedSignatureInfo,
@@ -14,35 +19,18 @@ import { RootState } from "./index";
 import axios from "axios";
 import { SPL_PUBLIC_KEY, RPC_CONNECTION } from "../constants/Solana";
 import { getTokensInfo } from "../utils";
-import {
-  withCastVote,
-  SYSTEM_PROGRAM_ID,
-  Vote,
-  getGovernanceProgramVersion,
-} from "@solana/spl-governance";
+
 import bs58 from "bs58";
 import * as SecureStore from "expo-secure-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-// plugin stuff
-import { Provider, Wallet, AnchorProvider } from "@project-serum/anchor";
-import { VsrClient } from "@blockworks-foundation/voter-stake-registry-client/index";
-import {
-  getRegistrarPDA,
-  getVoterPDA,
-  getVoterWeightPDA,
-} from "../utils/gov-ui-functions/governance-plugins/account";
-// end plugin stuff
+import { createCastVoteTransaction } from "../utils/castVote";
 
 export interface WalletState {
   publicKey: string;
-  privateKey: string;
   userInfo: any;
   isWalletOpen: boolean;
   isLoadingTokens: boolean;
-  isLoadingNfts: boolean;
   tokens: Array<Token>;
-  nfts: Array<any>;
   tokenPriceData: any;
   isTransactionModalOpen: boolean;
   transactionType: "VoteOnProposal" | "something" | "";
@@ -54,17 +42,15 @@ export interface WalletState {
   transactions: any;
   isFetchingWalletInfo: boolean;
   isDisconnectingWallet: boolean;
+  walletType: "sms" | "phantom" | "web3auth" | "none";
 }
 
 const initialState: WalletState = {
-  privateKey: "",
   publicKey: "",
   userInfo: null,
   isWalletOpen: false,
   tokens: [],
-  nfts: [],
   isLoadingTokens: false,
-  isLoadingNfts: false,
   tokenPriceData: null,
   isTransactionModalOpen: false,
   transactionType: "",
@@ -76,6 +62,7 @@ const initialState: WalletState = {
   transactions: [],
   isFetchingWalletInfo: false,
   isDisconnectingWallet: false,
+  walletType: "none",
 };
 
 let connection = new Connection(RPC_CONNECTION, "confirmed");
@@ -86,7 +73,6 @@ export const fetchTokens = createAsyncThunk(
   async (publicKey: string) => {
     try {
       // TODO: GET THE SOL OF THE ACCOUNT WITH `getBalance`
-      // TODO: differentiate between NFTS/tokens
 
       const solanaLamportsInWallet = await connection.getBalance(
         new PublicKey(publicKey)
@@ -114,7 +100,7 @@ export const fetchTokens = createAsyncThunk(
         const tokenData = {
           ...tokenInfo,
           mint: token.account.data.parsed.info.mint,
-          owner: token.account.data.parsed.info.owner.toBase58(),
+          owner: token.account.data.parsed.info.owner,
           tokenAmount: token.account.data.parsed.info.tokenAmount,
         };
 
@@ -160,29 +146,7 @@ export const fetchTokens = createAsyncThunk(
 
       return { tokens: tokens, tokenPriceData: tokenPriceObject };
     } catch (e) {
-      console.log("error", e);
       return { tokens: [] };
-    }
-  }
-);
-
-export const fetchNfts = createAsyncThunk(
-  "wallet/fetchNfts",
-  async (publicKey: string) => {
-    try {
-      const nftResponse = await axios.get(
-        "https://api.cybertino.io/querier/getSolNftByAddress",
-        {
-          params: {
-            address: publicKey,
-          },
-        }
-      );
-
-      return { nfts: nftResponse.data.results };
-    } catch (e) {
-      console.log("error", e);
-      return { nfts: [] };
     }
   }
 );
@@ -223,7 +187,6 @@ export const fetchTransactions = createAsyncThunk(
 
       return { transactions: transactionsParsed };
     } catch (e) {
-      console.log("error", e);
       return { transactions: [] };
     }
   }
@@ -232,164 +195,39 @@ export const fetchTransactions = createAsyncThunk(
 export const castVote = createAsyncThunk(
   "wallet/castVote",
   async (
-    { publicKey, transactionData, selectedDelegate, isCommunityVote }: any,
+    { transactionData, selectedDelegate, isCommunityVote }: any,
     { getState }
   ) => {
     try {
       const { realms, wallet, members } = getState() as RootState;
-      const { proposal, action } = transactionData;
       const { selectedRealm } = realms;
-      const walletPubkey = new PublicKey(wallet.publicKey);
-      let tokenOwnerRecord;
-      const governanceAuthority = walletPubkey;
 
-      // if Member has a token, use their own token
-      if (members.membersMap[wallet.publicKey] && !selectedDelegate) {
-        tokenOwnerRecord = members.membersMap[wallet.publicKey];
-      } else {
-        // else get the token from the tokens that have been delegated to them
-        tokenOwnerRecord = members.membersMap[selectedDelegate];
-      }
-
-      // each member can have a token record for community or council.
-      let tokenRecordPublicKey = isCommunityVote
-        ? tokenOwnerRecord?.communityPublicKey
-        : tokenOwnerRecord?.councilPublicKey;
-      // 1. Check if current wallet is member and has token to be voted with
-      // 2. If it does, do vote with that token
-      // 3. If not check if current wallet is delegated from an token owner record
-      // 4. if it is, check if it has the token for the proposal
-      // 5. if it does, attempt vote
-
-      const payer = walletPubkey;
-
-      const signers: Keypair[] = [];
-      const instructions: TransactionInstruction[] = [];
-
-      const programVersion = await getGovernanceProgramVersion(
-        connection,
-        new PublicKey(selectedRealm!.governanceId)
+      const transaction = await createCastVoteTransaction(
+        selectedRealm,
+        wallet.publicKey,
+        transactionData,
+        members.membersMap,
+        selectedDelegate,
+        isCommunityVote
       );
 
-      const privateKey = wallet.privateKey;
+      const privateKey = await SecureStore.getItemAsync("privateKey");
+      if (!privateKey) {
+        throw Error();
+      }
       const walletKeypair = Keypair.fromSecretKey(bs58.decode(privateKey));
-
-      console.log("instructions before plugin", instructions);
-      console.log("token owner record", tokenOwnerRecord);
-      // PLUGIN STUFF
-      let votePlugin;
-      // TODO: update this to handle any vsr plugin, rn only runs for mango dao
-      if (
-        selectedRealm?.realmId ===
-        "DPiH3H3c7t47BMxqTxLsuPQpEC6Kne8GA9VXbxpnZxFE"
-      ) {
-        votePlugin = await getVotingPlugin(
-          selectedRealm,
-          walletKeypair,
-          new PublicKey(tokenOwnerRecord.walletId),
-          instructions
-        );
-      }
-      // END PLUGIN STUFF
-      console.log("instructions after plugin", instructions);
-
-      await withCastVote(
-        instructions,
-        new PublicKey(selectedRealm!.governanceId), //  realm/governance PublicKey
-        programVersion, // version object, version of realm
-        new PublicKey(selectedRealm!.pubKey), // realms publicKey
-        new PublicKey(proposal.governanceId), // proposal governance Public key
-        new PublicKey(proposal.proposalId), // proposal public key
-        new PublicKey(proposal.tokenOwnerRecord), // proposal token owner record, publicKey
-        new PublicKey(tokenRecordPublicKey), // publicKey of tokenOwnerRecord
-        governanceAuthority, // wallet publicKey
-        new PublicKey(proposal.governingTokenMint), // proposal governanceMint publicKey
-        Vote.fromYesNoVote(action), //  *Vote* class? 1 = no, 0 = yes
-        payer,
-        // TODO: handle plugin stuff here.
-        votePlugin?.voterWeightPk,
-        votePlugin?.maxVoterWeightRecord
-      );
-
-      const recentBlock = await connection.getLatestBlockhash();
-
-      const transaction = new Transaction({ feePayer: walletPubkey });
-      transaction.recentBlockhash = recentBlock.blockhash;
-
-      transaction.add(...instructions);
       transaction.sign(walletKeypair);
-
       const response = await sendAndConfirmTransaction(
         connection,
         transaction,
         [walletKeypair]
       );
-      console.log("response", response);
       return { transactionError: "" };
     } catch (error) {
-      console.log("error", error);
       return { transactionError: error };
     }
   }
 );
-
-// signTransaction(tx: Transaction): Promise<Transaction>;
-// signAllTransactions(txs: Transaction[]): Promise<Transaction[]>;
-// get publicKey(): PublicKey;
-
-const getVotingPlugin = async (
-  selectedRealm: any,
-  walletKeypair: any,
-  walletPubkey: any,
-  instructions: any
-) => {
-  const options = AnchorProvider.defaultOptions();
-  const provider = new AnchorProvider(
-    connection,
-    walletKeypair as unknown as Wallet,
-    options
-  );
-  const client = await VsrClient.connect(provider, false);
-  const clientProgramId = client!.program.programId;
-  const { registrar } = await getRegistrarPDA(
-    new PublicKey(selectedRealm!.realmId),
-    new PublicKey(selectedRealm!.communityMint),
-    clientProgramId
-  );
-  const { voter } = await getVoterPDA(registrar, walletPubkey, clientProgramId);
-  const { voterWeightPk } = await getVoterWeightPDA(
-    registrar,
-    walletPubkey,
-    clientProgramId
-  );
-
-  console.log("system program", SYSTEM_PROGRAM_ID.toBase58());
-
-  console.log("realmid", new PublicKey(selectedRealm!.realmId).toBase58());
-  console.log(
-    "communitymint",
-    new PublicKey(selectedRealm!.communityMint).toBase58()
-  );
-  console.log("CLIENT", client);
-  console.log("walletPubkey", walletPubkey.toBase58());
-  console.log("REGISTRAR", registrar.toBase58());
-  console.log("VOTER", voter.toBase58());
-  console.log("VoterweightPK", voterWeightPk.toBase58());
-
-  const updateVoterWeightRecordIx = await client!.program.methods
-    .updateVoterWeightRecord()
-    .accounts({
-      registrar,
-      voter,
-      voterWeightRecord: voterWeightPk,
-      systemProgram: SYSTEM_PROGRAM_ID,
-    })
-    .instruction();
-
-  instructions.push(updateVoterWeightRecordIx);
-  console.log("INSTRUCTIONS IN FUNCTION", instructions);
-  return { voterWeightPk, maxVoterWeightRecord: undefined };
-};
 
 export const fetchWalletInfo = createAsyncThunk(
   "wallet/fetchWalletInfo",
@@ -397,15 +235,14 @@ export const fetchWalletInfo = createAsyncThunk(
     try {
       const walletInfoJSON = await AsyncStorage.getItem("@walletInfo");
       const walletInfoData = JSON.parse(walletInfoJSON);
-      const privateKey = await SecureStore.getItemAsync("privateKey");
 
       return {
         publicKey: walletInfoData.publicKey,
-        privateKey: privateKey,
         userInfo: walletInfoData.userInfo,
+        walletType: walletInfoData.walletType,
       };
     } catch (e) {
-      return { publicKey: "", privateKey: "", userInfo: {} };
+      return { publicKey: "", userInfo: {} };
     }
   }
 );
@@ -419,6 +256,7 @@ export const disconnectWallet = createAsyncThunk(
       const jsonValue = JSON.stringify({
         publicKey: "",
         userInfo: null,
+        walletType: "none",
       });
       AsyncStorage.setItem("@walletInfo", jsonValue);
 
@@ -435,8 +273,8 @@ export const walletSlice = createSlice({
   reducers: {
     setWallet: (state, action) => {
       state.publicKey = action.payload.publicKey;
-      state.privateKey = action.payload.privateKey;
       state.userInfo = action.payload.userInfo;
+      state.walletType = action.payload.walletType;
       state.isWalletOpen = true;
     },
     openWallet: (state, action) => {
@@ -460,6 +298,12 @@ export const walletSlice = createSlice({
       state.transactionData = null;
       state.transactionState = "none";
     },
+    setTransactionLoading: (state, action: { payload: boolean }) => {
+      state.isSendingTransaction = action?.payload;
+    },
+    setTransactionState: (state, action: { payload: "success" }) => {
+      state.transactionState = action?.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -473,16 +317,6 @@ export const walletSlice = createSlice({
         state.isLoadingTokens = false;
         state.tokens = action.payload.tokens;
         state.tokenPriceData = action.payload.tokenPriceData;
-      })
-      .addCase(fetchNfts.pending, (state) => {
-        state.isLoadingNfts = true;
-      })
-      .addCase(fetchNfts.rejected, (state) => {
-        state.isLoadingNfts = false;
-      })
-      .addCase(fetchNfts.fulfilled, (state, action: any) => {
-        state.isLoadingNfts = false;
-        state.nfts = action.payload.nfts;
       })
       .addCase(castVote.pending, (state) => {
         state.isSendingTransaction = true;
@@ -520,10 +354,9 @@ export const walletSlice = createSlice({
       })
       .addCase(fetchWalletInfo.fulfilled, (state, action: any) => {
         state.isFetchingWalletInfo = false;
-        state.privateKey = action.payload.privateKey;
         state.publicKey = action.payload.publicKey;
         state.userInfo = action.payload.userInfo;
-        // state.nfts = action.payload.nfts;
+        state.walletType = action.payload.walletType;
       })
       .addCase(disconnectWallet.pending, (state) => {
         state.isDisconnectingWallet = true;
@@ -534,7 +367,7 @@ export const walletSlice = createSlice({
       .addCase(disconnectWallet.fulfilled, (state, action: any) => {
         state.isDisconnectingWallet = false;
         state.publicKey = "";
-        state.privateKey = "";
+        state.walletType = "none";
         state.userInfo = null;
         state.isWalletOpen = false;
       });
@@ -548,6 +381,8 @@ export const {
   closeWallet,
   openTransactionModal,
   closeTransactionModal,
+  setTransactionLoading,
+  setTransactionState,
 } = walletSlice.actions;
 
 export default walletSlice.reducer;

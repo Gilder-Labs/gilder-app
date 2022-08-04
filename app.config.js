@@ -4,12 +4,12 @@ export default {
   expo: {
     name: "Gilder",
     slug: "gilder-app",
-    version: "1.0.31",
+    version: "1.0.32",
     orientation: "portrait",
     icon: "./assets/images/DarkIcon.png",
     scheme: "gilder",
     userInterfaceStyle: "automatic",
-    plugins: ["sentry-expo"],
+    plugins: [],
     splash: {
       image: "./assets/images/GilderSplash.png",
       resizeMode: "contain",
@@ -29,9 +29,21 @@ export default {
         foregroundImage: "./assets/images/DarkIconAndroid.png",
         backgroundColor: "#000000",
       },
-      versionCode: 5,
+      versionCode: 6,
       googleServicesFile: "./google-services.json",
       package: "com.dawggydawg.gilderapp",
+    },
+    androidNavigationBar: {
+      /*
+       Configure the navigation bar icons to have light or dark color.
+       Valid values: "light-content", "dark-content".
+     */
+      barStyle: "light-content",
+      /*
+       Configuration for android navigation bar.
+       6 character long hex color string, eg: "#000000"
+     */
+      backgroundColor: "#131313",
     },
     web: {
       favicon: "./assets/images/favicon.png",
@@ -43,16 +55,7 @@ export default {
       streamApiKey: process.env.STREAM_API_KEY,
     },
     hooks: {
-      postPublish: [
-        {
-          file: "sentry-expo/upload-sourcemaps",
-          config: {
-            organization: "gilder",
-            project: "gilder",
-            authToken: process.env.SENTRY_API_TOKEN,
-          },
-        },
-      ],
+      postPublish: [],
     },
   },
   name: "gilder-app",

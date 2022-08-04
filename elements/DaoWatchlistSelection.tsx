@@ -65,7 +65,7 @@ export const DaoWatchlistSelection = ({
     if (!newText) {
       setFilteredRealms(realms);
     } else {
-      const filtRealms = realms.filter(
+      const filtRealms = realms?.filter(
         (realm) =>
           realm.name.toLowerCase().includes(normalizedText) ||
           realm.pubKey.toLowerCase() === normalizedText

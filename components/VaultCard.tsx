@@ -12,6 +12,26 @@ import { getFilteredTokens } from "../utils";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faChevronRight } from "@fortawesome/pro-regular-svg-icons/faChevronRight";
 import { faChevronDown } from "@fortawesome/pro-regular-svg-icons/faChevronDown";
+import { useQuery, gql } from "@apollo/client";
+
+const GET_WALLET_NFTS = gql`
+  query nfts($owners: [PublicKey!]) {
+    nfts(owners: $owners, limit: 10000, offset: 0) {
+      name
+      mintAddress
+      address
+      image
+      updateAuthorityAddress
+      collection {
+        creators {
+          verified
+          address
+        }
+        mintAddress
+      }
+    }
+  }
+`;
 
 interface VaultCardProps {
   vaultId: string;
@@ -27,6 +47,10 @@ export const VaultCard = ({
   const { tokenPriceData, vaultsNfts } = useAppSelector(
     (state) => state.treasury
   );
+  const { loading, error, data } = useQuery(GET_WALLET_NFTS, {
+    variables: { owners: [vaultId] },
+  });
+
   const [nftSectionOpen, setNftSectionOpen] = useState(true);
   const [tokenSectionOpen, setTokenSectionOpen] = useState(true);
   const theme = useTheme();
@@ -42,7 +66,7 @@ export const VaultCard = ({
     return totalValue;
   };
 
-  const nfts = vaultsNfts[vaultId];
+  const nfts = data?.nfts ? data?.nfts : [];
   const filteredTokens = getFilteredTokens(nfts, tokens);
   const totalValue = getVaultTotalValue();
 
@@ -91,7 +115,7 @@ export const VaultCard = ({
             <TokenList
               tokens={filteredTokens}
               tokenPriceData={tokenPriceData}
-              vaultId={vaultId}
+              walletId={vaultId}
               // hideUnknownTokens={true}
             />
           </ExpandableSection>
@@ -127,7 +151,7 @@ export const VaultCard = ({
             }
             onPress={() => setNftSectionOpen(!nftSectionOpen)}
           >
-            <NftList nfts={nfts} vaultId={vaultId} />
+            <NftList nfts={data?.nfts ? data?.nfts : []} walletId={vaultId} />
           </ExpandableSection>
         </SectionContainer>
       )}

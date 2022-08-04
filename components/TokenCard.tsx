@@ -11,17 +11,22 @@ interface TokenCardProps {
   token: any;
   tokenPriceData: any;
   hideUnknownTokens: boolean;
+  hideLowNumberTokens: boolean;
 }
 
 export const TokenCard = ({
   token,
   tokenPriceData,
   hideUnknownTokens,
+  hideLowNumberTokens = false,
 }: TokenCardProps) => {
   const coinGeckoId = token?.extensions?.coingeckoId;
   const theme = useTheme();
 
-  if (!token.name && hideUnknownTokens) {
+  if (
+    (!token.name && hideUnknownTokens) ||
+    (hideLowNumberTokens && token?.tokenAmount?.uiAmount === 0)
+  ) {
     return null;
   }
 

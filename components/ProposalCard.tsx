@@ -27,6 +27,7 @@ const proposalStatusKey = {
   Executing: "pending",
   Voting: "pending",
   Defeated: "error",
+  ExecutingWithErrors: "error",
 };
 
 export const ProposalCard = ({
@@ -249,8 +250,8 @@ const ProposalTitle = styled.Text`
   font-size: 18px;
   line-height: 24px;
   flex-wrap: wrap;
-  max-width: 240px;
   padding-right: ${(props: any) => props.theme.spacing[2]};
+  flex: 1;
 `;
 
 const DateText = styled.Text`

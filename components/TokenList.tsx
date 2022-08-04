@@ -8,38 +8,48 @@ interface TokenCardProps {
   tokens: Array<any>;
   tokenPriceData: any;
   hideUnknownTokens?: boolean;
-  vaultId?: string;
+  walletId?: string;
   isScrollable?: boolean;
+  hideLowNumberTokens?: boolean;
+  addSpacing?: boolean;
 }
 
 export const TokenList = ({
   tokens,
   tokenPriceData,
   hideUnknownTokens = false,
-  vaultId = "",
+  walletId = "",
   isScrollable = false,
+  hideLowNumberTokens = false,
+  addSpacing = false,
 }: TokenCardProps) => {
   const renderToken = ({ item }) => {
     return (
       <TokenCard
         token={item}
-        key={item.mint + item.vaultId}
+        key={`${item.address}-${item.owner}`}
         tokenPriceData={tokenPriceData}
         hideUnknownTokens={hideUnknownTokens}
+        hideLowNumberTokens={hideLowNumberTokens}
       />
     );
   };
 
   return (
     <FlatList
-      listKey={"token" + vaultId}
+      listKey={"token" + walletId}
       data={tokens}
       renderItem={renderToken}
-      keyExtractor={(item) => item.mint}
       scrollEnabled={isScrollable}
+      keyExtractor={(item, index) => `${index}-${item.owner} `}
       // columnWrapperStyle={{ marginBottom: 8 }}
-      scrollIndicatorInsets={{ right: 1 }}
-      initialNumToRender={10}
+      scrollIndicatorInsets={{}}
+      initialNumToRender={50}
+      style={{
+        paddingLeft: addSpacing ? 16 : 0,
+        paddingRight: addSpacing ? 16 : 0,
+        minWidth: "100%",
+      }}
     />
   );
 };
