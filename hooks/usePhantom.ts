@@ -11,6 +11,7 @@ import {
   SystemProgram,
   Transaction,
 } from "@solana/web3.js";
+import Constants, { AppOwnership } from "expo-constants";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
@@ -24,15 +25,25 @@ import {
 } from "../store/walletSlice";
 import * as SecureStore from "expo-secure-store";
 
-const onConnectRedirectLink = Linking.createURL("onConnect");
-const onDisconnectRedirectLink = Linking.createURL("onDisconnect");
-const onSignAndSendTransactionRedirectLink = Linking.createURL(
-  "onSignAndSendTransaction"
-);
-const onSignAllTransactionsRedirectLink = Linking.createURL(
-  "onSignAllTransactions"
-);
-const onSignTransactionRedirectLink = Linking.createURL("onSignTransaction");
+const scheme = "gilder";
+
+const onConnectRedirectLink =
+  Constants.appOwnership == AppOwnership.Expo ||
+  Constants.appOwnership == AppOwnership.Guest
+    ? Linking.createURL("onConnect", {})
+    : Linking.createURL("onConnect", { scheme: scheme });
+
+const onDisconnectRedirectLink =
+  Constants.appOwnership == AppOwnership.Expo ||
+  Constants.appOwnership == AppOwnership.Guest
+    ? Linking.createURL("onDisconnect", {})
+    : Linking.createURL("onDisconnect", { scheme: scheme });
+const onSignAndSendTransactionRedirectLink =
+  Constants.appOwnership == AppOwnership.Expo ||
+  Constants.appOwnership == AppOwnership.Guest
+    ? Linking.createURL("onSignAndSendTransaction", {})
+    : Linking.createURL("onSignAndSendTransaction", { scheme: scheme });
+
 const onSignMessageRedirectLink = Linking.createURL("onSignMessage");
 
 const buildUrl = (path: string, params: URLSearchParams) =>
