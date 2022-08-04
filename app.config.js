@@ -33,6 +33,19 @@ export default {
       googleServicesFile: "./google-services.json",
       package: "com.dawggydawg.gilderapp",
     },
+    androidNavigationBar: {
+      /*
+       Configure the navigation bar icons to have light or dark color.
+       Valid values: "light-content", "dark-content".
+     */
+      visible: true,
+      barStyle: "light-content",
+      /*
+       Configuration for android navigation bar.
+       6 character long hex color string, eg: "#000000"
+     */
+      backgroundColor: "#131313",
+    },
     web: {
       favicon: "./assets/images/favicon.png",
     },
