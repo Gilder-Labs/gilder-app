@@ -16,7 +16,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { useEffect, useState } from "react";
 import { RPC_CONNECTION } from "../constants/Solana";
-import { setWallet, disconnectWallet } from "../store/walletSlice";
+import {
+  setWallet,
+  disconnectWallet,
+  setTransactionLoading,
+  setTransactionState,
+} from "../store/walletSlice";
 import * as SecureStore from "expo-secure-store";
 
 const onConnectRedirectLink = Linking.createURL("onConnect");
@@ -116,7 +121,9 @@ export const usePhantom = () => {
         const jsonValue = JSON.stringify({
           publicKey: connectData.public_key,
           userInfo: {},
+          walletType: "phantom",
         });
+        AsyncStorage.setItem("@walletInfo", jsonValue);
 
         // Securely store phantom info
         const securePhantomInfo = JSON.stringify({
@@ -131,7 +138,6 @@ export const usePhantom = () => {
 
         await SecureStore.setItemAsync("phantomInfo", securePhantomInfo);
 
-        AsyncStorage.setItem("@walletInfo", jsonValue);
         dispatch(
           setWallet({
             publicKey: connectData.public_key,
@@ -139,6 +145,21 @@ export const usePhantom = () => {
             walletType: "phantom",
           })
         );
+      } else if (/onSignAndSendTransaction/.test(url.pathname)) {
+        const walletInfoJSON = await SecureStore.getItemAsync("phantomInfo");
+        const phantomInfo = walletInfoJSON ? JSON.parse(walletInfoJSON) : {};
+        const { session, sharedSecretDapp, dappKeyPair } = phantomInfo;
+
+        const signAndSendTransactionData = decryptPayload(
+          params.get("data")!,
+          params.get("nonce")!,
+          Uint8Array.from(sharedSecretDapp)
+        );
+
+        dispatch(setTransactionLoading(false));
+        dispatch(setTransactionState("success"));
+
+        console.log(JSON.stringify(signAndSendTransactionData, null, 2));
       } else if (/onDisconnect/.test(url.pathname)) {
         dispatch(disconnectWallet());
       }
@@ -168,6 +189,40 @@ export const usePhantom = () => {
     });
 
     const url = buildUrl("disconnect", params);
+    Linking.openURL(url);
+  };
+
+  const signAndSendTransaction = async (transaction: Transaction) => {
+    const walletInfoJSON = await SecureStore.getItemAsync("phantomInfo");
+    const phantomInfo = walletInfoJSON ? JSON.parse(walletInfoJSON) : {};
+    const { session, sharedSecretDapp, dappKeyPair } = phantomInfo;
+
+    dispatch(setTransactionLoading(true));
+
+    const serializedTransaction = transaction.serialize({
+      requireAllSignatures: false,
+    });
+
+    const payload = {
+      session,
+      transaction: bs58.encode(serializedTransaction),
+    };
+    const [nonce, encryptedPayload] = encryptPayload(
+      payload,
+      Uint8Array.from(sharedSecretDapp)
+    );
+
+    const params = new URLSearchParams({
+      dapp_encryption_public_key: bs58.encode(
+        Uint8Array.from(dappKeyPair?.publicKey)
+      ),
+      nonce: bs58.encode(nonce),
+      redirect_link: onSignAndSendTransactionRedirectLink,
+      payload: bs58.encode(encryptedPayload),
+    });
+
+    const url = buildUrl("signAndSendTransaction", params);
+
     Linking.openURL(url);
   };
 
@@ -206,12 +261,12 @@ export const usePhantom = () => {
     const params = new URLSearchParams({
       dapp_encryption_public_key: bs58.encode(dappKeyPair.publicKey),
       cluster: "mainnet-beta",
-      app_url: "https://phantom.app",
+      app_url: "https://gilder.xyz/",
       redirect_link: onConnectRedirectLink,
     });
 
     const url = buildUrl("connect", params);
     Linking.openURL(url);
   };
-  return { disconnect, connect, signMessage };
+  return { disconnect, connect, signMessage, signAndSendTransaction };
 };
