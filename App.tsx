@@ -30,7 +30,8 @@ Sentry.init({
     const regex =
       /privateKey|dappKeyPair|sharedSecretDapp|secretKey|session/gim;
 
-    if (event.message?.match(regex) || event.logger?.match(regex)) {
+    const eventString = JSON.stringify(event);
+    if (eventString?.match(regex)) {
       return {};
     }
     return event;
