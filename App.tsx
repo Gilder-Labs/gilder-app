@@ -25,6 +25,16 @@ Sentry.init({
   dsn: "https://ab84075ed2ab481c80a159488d0fdab8@o1171301.ingest.sentry.io/6265617",
   enableInExpoDevelopment: false,
   debug: process.env.NODE_ENV === "development" ? true : false, // If `true`, Sentry will try to print out useful debugging information if something goes wrong with sending the event. Set it to `false` in production
+  beforeSend(event: Sentry.Native.Event) {
+    // anything related to secrets we want to make sure never gets sent
+    const regex =
+      /privateKey|dappKeyPair|sharedSecretDapp|secretKey|session/gim;
+
+    if (event.message?.match(regex) || event.logger?.match(regex)) {
+      return {};
+    }
+    return event;
+  },
 });
 
 LogBox.ignoreAllLogs();
