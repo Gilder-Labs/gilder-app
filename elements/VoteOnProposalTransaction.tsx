@@ -270,8 +270,11 @@ export const VoteOnProposalTransaction = ({}: VoteOnProposalTransaction) => {
               disabled={isSendingTransaction || !publicKey || !selectedDelegate}
               title="Approve"
               onPress={handleApprove}
-              shade="900"
+              shade="600"
               color="secondary"
+              shade2="800"
+              color2="secondary"
+              hasGradient={true}
             />
           </>
         )}
@@ -279,8 +282,11 @@ export const VoteOnProposalTransaction = ({}: VoteOnProposalTransaction) => {
           <Button
             title="Done"
             onPress={handleClose}
-            shade="800"
+            shade="600"
             color="secondary"
+            shade2="800"
+            color2="secondary"
+            hasGradient={true}
           />
         )}
         {transactionState === "error" && (

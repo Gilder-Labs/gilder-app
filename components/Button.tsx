@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { Typography } from "./Typography";
 import { useTheme } from "styled-components";
+import { LinearGradient } from "expo-linear-gradient";
 
 interface ButtonProps {
   title: string;
@@ -17,6 +18,25 @@ interface ButtonProps {
     | "purple"
     | "error"
     | "warning";
+  color2?:
+    | "gray"
+    | "primary"
+    | "secondary"
+    | "aqua"
+    | "purple"
+    | "error"
+    | "warning";
+  shade2?:
+    | "100"
+    | "200"
+    | "300"
+    | "400"
+    | "500"
+    | "600"
+    | "700"
+    | "800"
+    | "900";
+  hasGradient?: boolean;
   isLoading?: boolean;
   disabled?: boolean;
 }
@@ -28,8 +48,11 @@ export const Button = ({
   marginRight = false,
   shade = "800",
   color = "gray",
+  shade2 = "800",
+  color2 = "gray",
   isLoading = false,
   disabled = false,
+  hasGradient = false,
 }: ButtonProps) => {
   const theme = useTheme();
   return (
@@ -40,11 +63,26 @@ export const Button = ({
       color={color}
       disabled={disabled}
     >
-      {isLoading ? (
-        <Loading color={theme.gray[300]} />
-      ) : (
-        <Typography text={title} bold={true} marginBottom="0" />
-      )}
+      <LinearGradient
+        colors={[
+          hasGradient ? theme[color][shade] : "transparent",
+          hasGradient ? theme[color2][shade2] : "transparent",
+        ]}
+        style={{
+          height: "100%",
+          padding: theme.spacing[2],
+          borderRadius: 4,
+          flex: 1,
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        {isLoading ? (
+          <Loading color={theme.gray[300]} />
+        ) : (
+          <Typography text={title} bold={true} marginBottom="0" />
+        )}
+      </LinearGradient>
     </ButtonContainer>
   );
 };
@@ -70,7 +108,7 @@ const ButtonContainer = styled.TouchableOpacity<{
   justify-content: center;
   border-radius: 4px;
   margin-right: ${(props) => (props.marginRight ? props.theme.spacing[3] : 0)};
-  padding: ${(props: any) => props.theme.spacing[2]};
+
   background: ${(props) => props.theme[props.color][props.shade]};
   opacity: ${(props) => (props.disabled ? 0.5 : 1)};
 `;
