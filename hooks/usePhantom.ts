@@ -102,6 +102,8 @@ export const usePhantom = () => {
       const params = url.searchParams;
 
       if (params.get("errorCode")) {
+        // something goes wrong or user cancels transaction
+        dispatch(setTransactionLoading(false));
         return;
       }
 

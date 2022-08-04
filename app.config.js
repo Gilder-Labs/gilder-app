@@ -38,7 +38,6 @@ export default {
        Configure the navigation bar icons to have light or dark color.
        Valid values: "light-content", "dark-content".
      */
-      visible: true,
       barStyle: "light-content",
       /*
        Configuration for android navigation bar.
