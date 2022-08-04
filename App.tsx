@@ -47,10 +47,10 @@ export default function App() {
         <Provider store={store}>
           <ApolloProvider client={client}>
             <ThemeProvider theme={darkTheme}>
-              <OverlayProvider value={{ style: ChatTheme }}>
-                <StatusBar style="light" />
-                <Navigation />
-              </OverlayProvider>
+              {/* <OverlayProvider value={{ style: ChatTheme }}> */}
+              <StatusBar style="light" />
+              <Navigation />
+              {/* </OverlayProvider> */}
             </ThemeProvider>
           </ApolloProvider>
         </Provider>
