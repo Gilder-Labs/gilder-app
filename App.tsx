@@ -15,10 +15,17 @@ import Navigation from "./navigation";
 import { LogBox } from "react-native";
 import { OverlayProvider } from "stream-chat-expo"; // Or stream-chat-expo
 import { defaultTheme as ChatTheme } from "./constants/ChatTheme";
+import * as Sentry from "sentry-expo";
 
 // fontawesome
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
+
+Sentry.init({
+  dsn: "https://ab84075ed2ab481c80a159488d0fdab8@o1171301.ingest.sentry.io/6265617",
+  enableInExpoDevelopment: false,
+  debug: process.env.NODE_ENV === "development" ? true : false, // If `true`, Sentry will try to print out useful debugging information if something goes wrong with sending the event. Set it to `false` in production
+});
 
 LogBox.ignoreAllLogs();
 
