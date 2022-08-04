@@ -1,4 +1,9 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  AnyAction,
+  createAsyncThunk,
+  createSlice,
+  PayloadAction,
+} from "@reduxjs/toolkit";
 import {
   PublicKey,
   ConfirmedSignatureInfo,
@@ -155,7 +160,6 @@ export const fetchTokens = createAsyncThunk(
 
       return { tokens: tokens, tokenPriceData: tokenPriceObject };
     } catch (e) {
-      console.log("error", e);
       return { tokens: [] };
     }
   }
@@ -167,10 +171,6 @@ export const fetchTransactions = createAsyncThunk(
     try {
       let rawTransactionsFilled;
       let transactionsParsed = [];
-
-      //c229aafc-cac2-4d60-8a1d-d6ac21beb28f
-      // const url =
-      //   "https://api.helius.xyz/v0/addresses/EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i/names?api-key=c229aafc-cac2-4d60-8a1d-d6ac21beb28f";
 
       let transactions = await connection.getConfirmedSignaturesForAddress2(
         new PublicKey(publicKey),
@@ -201,7 +201,6 @@ export const fetchTransactions = createAsyncThunk(
 
       return { transactions: transactionsParsed };
     } catch (e) {
-      console.log("error", e);
       return { transactions: [] };
     }
   }
@@ -303,10 +302,8 @@ export const castVote = createAsyncThunk(
         transaction,
         [walletKeypair]
       );
-      console.log("response", response);
       return { transactionError: "" };
     } catch (error) {
-      console.log("error", error);
       return { transactionError: error };
     }
   }
@@ -382,7 +379,7 @@ export const disconnectWallet = createAsyncThunk(
       const jsonValue = JSON.stringify({
         publicKey: "",
         userInfo: null,
-        walletType: "",
+        walletType: "none",
       });
       AsyncStorage.setItem("@walletInfo", jsonValue);
 

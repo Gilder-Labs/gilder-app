@@ -81,6 +81,7 @@ export const ConnectWeb3AuthButton = ({}: ConnectWalletProps) => {
           publicKey: pubKey,
           privateKey: privateKey,
           userInfo: userInfo,
+          phantomInfo: null,
           walletType: "web3auth",
         })
       );

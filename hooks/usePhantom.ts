@@ -16,7 +16,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { useEffect, useState } from "react";
 import { RPC_CONNECTION } from "../constants/Solana";
-import { setWallet } from "../store/walletSlice";
+import { setWallet, disconnectWallet } from "../store/walletSlice";
+import * as SecureStore from "expo-secure-store";
 
 const onConnectRedirectLink = Linking.createURL("onConnect");
 const onDisconnectRedirectLink = Linking.createURL("onDisconnect");
@@ -64,18 +65,12 @@ const encryptPayload = (payload: any, sharedSecret?: Uint8Array) => {
   return [nonce, encryptedPayload];
 };
 
-let sharedSecret: Uint8Array;
-
 export const usePhantom = () => {
   const dispatch = useAppDispatch();
   const { publicKey } = useAppSelector((state) => state.wallet);
   const [deepLink, setDeepLink] = useState<string>("");
   const connection = new Connection(RPC_CONNECTION);
-  // store dappKeyPair, sharedSecret, session and account SECURELY on device
-  // to avoid having to reconnect users.
-  const [dappKeyPair] = useState(nacl.box.keyPair());
-  // const [sharedSecret, setSharedSecret] = useState<Uint8Array>();
-  const [session, setSession] = useState<string>();
+  const [dappKeyPair, setDappKeyPair] = useState(nacl.box.keyPair());
 
   useEffect(() => {
     (async () => {
@@ -95,65 +90,78 @@ export const usePhantom = () => {
   };
 
   useEffect(() => {
-    if (!deepLink) return;
+    (async () => {
+      if (!deepLink) return;
 
-    const url = new URL(deepLink);
-    const params = url.searchParams;
+      const url = new URL(deepLink);
+      const params = url.searchParams;
 
-    if (params.get("errorCode")) {
-      return;
-    }
+      if (params.get("errorCode")) {
+        return;
+      }
 
-    if (/onConnect/.test(url.pathname)) {
-      const sharedSecretDapp = nacl.box.before(
-        bs58.decode(params.get("phantom_encryption_public_key")!),
-        dappKeyPair.secretKey
-      );
+      if (/onConnect/.test(url.pathname)) {
+        const sharedSecretDapp = nacl.box.before(
+          bs58.decode(params.get("phantom_encryption_public_key")!),
+          dappKeyPair.secretKey
+        );
 
-      const connectData = decryptPayload(
-        params.get("data")!,
-        params.get("nonce")!,
-        sharedSecretDapp
-      );
+        const connectData = decryptPayload(
+          params.get("data")!,
+          params.get("nonce")!,
+          sharedSecretDapp
+        );
 
-      // setSharedSecret(sharedSecretDapp);
-      sharedSecret = sharedSecretDapp;
-      setSession(connectData.session);
-
-      const jsonValue = JSON.stringify({
-        publicKey: connectData.public_key,
-        userInfo: {},
-      });
-
-      AsyncStorage.setItem("@walletInfo", jsonValue);
-      dispatch(
-        setWallet({
+        // Keep track of public key
+        const jsonValue = JSON.stringify({
           publicKey: connectData.public_key,
-          privateKey: "",
           userInfo: {},
-          walletType: "phantom",
-        })
-      );
-    } else if (/onDisconnect/.test(url.pathname)) {
-      dispatch(
-        setWallet({
-          publicKey: "",
-          privateKey: "",
-          userInfo: {},
-          walletType: "none",
-        })
-      );
-    }
+        });
+
+        // Securely store phantom info
+        const securePhantomInfo = JSON.stringify({
+          session: connectData.session,
+          // convert to regular array for storage, can't store uint8Array
+          sharedSecretDapp: Array.from(sharedSecretDapp),
+          dappKeyPair: {
+            publicKey: Array.from(dappKeyPair.publicKey),
+            secretKey: Array.from(dappKeyPair.secretKey),
+          },
+        });
+
+        await SecureStore.setItemAsync("phantomInfo", securePhantomInfo);
+
+        AsyncStorage.setItem("@walletInfo", jsonValue);
+        dispatch(
+          setWallet({
+            publicKey: connectData.public_key,
+            userInfo: {},
+            walletType: "phantom",
+          })
+        );
+      } else if (/onDisconnect/.test(url.pathname)) {
+        dispatch(disconnectWallet());
+      }
+    })();
   }, [deepLink]);
 
   const disconnect = async () => {
+    const walletInfoJSON = await SecureStore.getItemAsync("phantomInfo");
+    const phantomInfo = walletInfoJSON ? JSON.parse(walletInfoJSON) : {};
+    const { session, sharedSecretDapp, dappKeyPair } = phantomInfo;
+
     const payload = {
-      session,
+      session: session,
     };
-    const [nonce, encryptedPayload] = encryptPayload(payload, sharedSecret);
+    const [nonce, encryptedPayload] = encryptPayload(
+      payload,
+      Uint8Array.from(sharedSecretDapp)
+    );
 
     const params = new URLSearchParams({
-      dapp_encryption_public_key: bs58.encode(dappKeyPair.publicKey),
+      dapp_encryption_public_key: bs58.encode(
+        Uint8Array.from(dappKeyPair?.publicKey)
+      ),
       nonce: bs58.encode(nonce),
       redirect_link: onDisconnectRedirectLink,
       payload: bs58.encode(encryptedPayload),
@@ -167,15 +175,24 @@ export const usePhantom = () => {
     const message =
       "To avoid digital dognappers, sign below to authenticate with CryptoCorgis.";
 
+    const walletInfoJSON = await SecureStore.getItemAsync("phantomInfo");
+    const phantomInfo = walletInfoJSON ? JSON.parse(walletInfoJSON) : {};
+    const { session, sharedSecretDapp, dappKeyPair } = phantomInfo;
+
     const payload = {
-      session,
+      session: session,
       message: bs58.encode(Buffer.from(message)),
     };
 
-    const [nonce, encryptedPayload] = encryptPayload(payload, sharedSecret);
+    const [nonce, encryptedPayload] = encryptPayload(
+      payload,
+      Uint8Array.from(sharedSecretDapp)
+    );
 
     const params = new URLSearchParams({
-      dapp_encryption_public_key: bs58.encode(dappKeyPair.publicKey),
+      dapp_encryption_public_key: bs58.encode(
+        Uint8Array.from(dappKeyPair.publicKey)
+      ),
       nonce: bs58.encode(nonce),
       redirect_link: onSignMessageRedirectLink,
       payload: bs58.encode(encryptedPayload),
