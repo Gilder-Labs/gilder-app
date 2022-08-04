@@ -28,7 +28,7 @@ Sentry.init({
   beforeSend(event: Sentry.Native.Event) {
     // anything related to secrets we want to make sure never gets sent
     const regex =
-      /privateKey|dappKeyPair|sharedSecretDapp|secretKey|session/gim;
+      /privateKey|dappKeyPair|sharedSecretDapp|secretKey|session|mnemonic/gim;
 
     const eventString = JSON.stringify(event);
     if (eventString?.match(regex)) {
