@@ -65,12 +65,12 @@ export const Button = ({
     >
       <LinearGradient
         colors={[
-          hasGradient ? theme[color][shade] : "transparent",
-          hasGradient ? theme[color2][shade2] : "transparent",
+          hasGradient ? theme[color][shade] : theme[color][shade],
+          hasGradient ? theme[color2][shade2] : theme[color][shade],
         ]}
         style={{
           height: "100%",
-          padding: theme.spacing[2],
+          padding: 8,
           borderRadius: 4,
           flex: 1,
           alignItems: "center",

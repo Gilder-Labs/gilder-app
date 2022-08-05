@@ -73,7 +73,10 @@ function DrawerScreen() {
 
   useEffect(() => {
     const getPushToken = async () => {
-      const token = await registerForPushNotificationsAsync();
+      let token;
+      if (!token) {
+        token = await registerForPushNotificationsAsync();
+      }
       if (token) {
         dispatch(setToken(token));
       }

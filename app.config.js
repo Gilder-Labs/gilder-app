@@ -4,12 +4,12 @@ export default {
   expo: {
     name: "Gilder",
     slug: "gilder-app",
-    version: "1.0.32",
+    version: "1.0.35",
     orientation: "portrait",
     icon: "./assets/images/DarkIcon.png",
     scheme: "gilder",
     userInterfaceStyle: "automatic",
-    plugins: [],
+    plugins: ["sentry-expo"],
     splash: {
       image: "./assets/images/GilderSplash.png",
       resizeMode: "contain",
@@ -29,7 +29,7 @@ export default {
         foregroundImage: "./assets/images/DarkIconAndroid.png",
         backgroundColor: "#000000",
       },
-      versionCode: 6,
+      versionCode: 8,
       googleServicesFile: "./google-services.json",
       package: "com.dawggydawg.gilderapp",
     },
@@ -55,7 +55,16 @@ export default {
       streamApiKey: process.env.STREAM_API_KEY,
     },
     hooks: {
-      postPublish: [],
+      postPublish: [
+        {
+          file: "sentry-expo/upload-sourcemaps",
+          config: {
+            organization: "gilder",
+            project: "gilder",
+            authToken: process.env.SENTRY_API_TOKEN,
+          },
+        },
+      ],
     },
   },
   name: "gilder-app",

@@ -25,7 +25,7 @@ export const ConnectSolanaWalletAdapter = ({}: ConnectWalletProps) => {
   };
 
   return (
-    <ConnectButton onPress={() => {}}>
+    <ConnectButton onPress={() => {}} disabled={true}>
       <LinearGradient
         colors={[`#9945FF`, "#5A95CC"]}
         start={{ x: 0, y: 0 }}
