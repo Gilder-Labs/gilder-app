@@ -4,7 +4,7 @@ export default {
   expo: {
     name: "Gilder",
     slug: "gilder-app",
-    version: "1.0.35",
+    version: "1.0.36",
     orientation: "portrait",
     icon: "./assets/images/DarkIcon.png",
     scheme: "gilder",
