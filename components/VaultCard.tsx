@@ -79,7 +79,7 @@ export const VaultCard = ({
   return (
     <Container>
       <TitleContainer>
-        <PublicKeyTextCopy publicKey={vaultId} fontSize={14} />
+        <PublicKeyTextCopy publicKey={vaultId} fontSize={14} shade="500" />
         <VaultValue>{numeral(totalValue).format("$0,0")}</VaultValue>
       </TitleContainer>
 
@@ -93,7 +93,7 @@ export const VaultCard = ({
                 <Typography
                   text={`Tokens (${filteredTokens?.length})`}
                   size="body"
-                  shade="400"
+                  shade="300"
                 />
                 {tokenSectionOpen ? (
                   <FontAwesomeIcon
@@ -132,7 +132,7 @@ export const VaultCard = ({
                 <Typography
                   text={`Nfts (${nfts?.length})`}
                   size="body"
-                  shade="400"
+                  shade="300"
                 />
                 {nftSectionOpen ? (
                   <FontAwesomeIcon

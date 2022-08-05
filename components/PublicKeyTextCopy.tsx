@@ -58,7 +58,7 @@ export const PublicKeyTextCopy = ({
           <FontAwesomeIcon
             icon={faCopy}
             size={fontSize}
-            color={theme.gray[400]}
+            color={theme.gray[shade]}
           />
         </IconContainer>
       )}
