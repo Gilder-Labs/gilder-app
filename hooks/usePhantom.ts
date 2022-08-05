@@ -107,17 +107,14 @@ export const usePhantom = () => {
   useEffect(() => {
     (async () => {
       if (!deepLink) return;
+      alert(`URL DEEPLINK: ${deepLink}`);
+      alert(`URL PATHNAME: ${new URL(deepLink).pathname}`);
 
       const url = new URL(deepLink);
       const params = url.searchParams;
 
       if (params.get("errorCode")) {
         // something goes wrong or user cancels transaction
-        alert(JSON.stringify(Object.fromEntries([...params]), null, 2));
-        console.error(
-          "Error In Response",
-          JSON.stringify(Object.fromEntries([...params]), null, 2)
-        );
         dispatch(setTransactionLoading(false));
         return;
       }
@@ -135,8 +132,6 @@ export const usePhantom = () => {
             sharedSecretDapp
           );
 
-          alert(JSON.stringify(connectData));
-
           // Keep track of public key
           const jsonValue = JSON.stringify({
             publicKey: connectData.public_key,
@@ -144,8 +139,6 @@ export const usePhantom = () => {
             walletType: "phantom",
           });
           AsyncStorage.setItem("@walletInfo", jsonValue);
-
-          alert(jsonValue);
 
           // Securely store phantom info
           const securePhantomInfo = JSON.stringify({
@@ -168,7 +161,7 @@ export const usePhantom = () => {
             })
           );
         } catch (error) {
-          alert(error);
+          console.error(error);
         }
       } else if (/onSignAndSendTransaction/.test(url.pathname)) {
         const walletInfoJSON = await SecureStore.getItemAsync("phantomInfo");
