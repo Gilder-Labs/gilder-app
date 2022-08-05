@@ -13,7 +13,7 @@ import { SplashScreen } from "./components";
 import useCachedResources from "./hooks/useCachedResources";
 import Navigation from "./navigation";
 import { LogBox } from "react-native";
-import { OverlayProvider } from "stream-chat-expo"; // Or stream-chat-expo
+import { OverlayProvider } from "stream-chat-expo";
 import { defaultTheme as ChatTheme } from "./constants/ChatTheme";
 import * as Sentry from "sentry-expo";
 
@@ -57,10 +57,10 @@ export default function App() {
         <Provider store={store}>
           <ApolloProvider client={client}>
             <ThemeProvider theme={darkTheme}>
-              {/* <OverlayProvider value={{ style: ChatTheme }}> */}
-              <StatusBar style="light" />
-              <Navigation />
-              {/* </OverlayProvider> */}
+              <OverlayProvider value={{ style: ChatTheme }}>
+                <StatusBar style="light" />
+                <Navigation />
+              </OverlayProvider>
             </ThemeProvider>
           </ApolloProvider>
         </Provider>
