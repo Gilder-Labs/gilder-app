@@ -8,8 +8,6 @@ import * as Linking from "expo-linking";
 
 import { usePhantom } from "../hooks/usePhantom";
 
-const onConnectRedirectLink = Linking.createURL("onConnect");
-
 interface ConnectWalletProps {}
 
 export const ConnectPhantomButton = ({}: ConnectWalletProps) => {
