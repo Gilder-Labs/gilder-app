@@ -123,45 +123,53 @@ export const usePhantom = () => {
       }
 
       if (/onConnect/.test(url.pathname)) {
-        const sharedSecretDapp = nacl.box.before(
-          bs58.decode(params.get("phantom_encryption_public_key")!),
-          dappKeyPair.secretKey
-        );
+        try {
+          const sharedSecretDapp = nacl.box.before(
+            bs58.decode(params.get("phantom_encryption_public_key")!),
+            dappKeyPair.secretKey
+          );
 
-        const connectData = decryptPayload(
-          params.get("data")!,
-          params.get("nonce")!,
-          sharedSecretDapp
-        );
+          const connectData = decryptPayload(
+            params.get("data")!,
+            params.get("nonce")!,
+            sharedSecretDapp
+          );
 
-        // Keep track of public key
-        const jsonValue = JSON.stringify({
-          publicKey: connectData.public_key,
-          userInfo: {},
-          walletType: "phantom",
-        });
-        AsyncStorage.setItem("@walletInfo", jsonValue);
+          alert(JSON.stringify(connectData));
 
-        // Securely store phantom info
-        const securePhantomInfo = JSON.stringify({
-          session: connectData.session,
-          // convert to regular array for storage, can't store uint8Array
-          sharedSecretDapp: Array.from(sharedSecretDapp),
-          dappKeyPair: {
-            publicKey: Array.from(dappKeyPair.publicKey),
-            secretKey: Array.from(dappKeyPair.secretKey),
-          },
-        });
-
-        await SecureStore.setItemAsync("phantomInfo", securePhantomInfo);
-
-        dispatch(
-          setWallet({
+          // Keep track of public key
+          const jsonValue = JSON.stringify({
             publicKey: connectData.public_key,
             userInfo: {},
             walletType: "phantom",
-          })
-        );
+          });
+          AsyncStorage.setItem("@walletInfo", jsonValue);
+
+          alert(jsonValue);
+
+          // Securely store phantom info
+          const securePhantomInfo = JSON.stringify({
+            session: connectData.session,
+            // convert to regular array for storage, can't store uint8Array
+            sharedSecretDapp: Array.from(sharedSecretDapp),
+            dappKeyPair: {
+              publicKey: Array.from(dappKeyPair.publicKey),
+              secretKey: Array.from(dappKeyPair.secretKey),
+            },
+          });
+
+          await SecureStore.setItemAsync("phantomInfo", securePhantomInfo);
+
+          dispatch(
+            setWallet({
+              publicKey: connectData.public_key,
+              userInfo: {},
+              walletType: "phantom",
+            })
+          );
+        } catch (error) {
+          alert(error);
+        }
       } else if (/onSignAndSendTransaction/.test(url.pathname)) {
         const walletInfoJSON = await SecureStore.getItemAsync("phantomInfo");
         const phantomInfo = walletInfoJSON ? JSON.parse(walletInfoJSON) : {};
