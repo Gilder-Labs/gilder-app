@@ -107,8 +107,6 @@ export const usePhantom = () => {
   useEffect(() => {
     (async () => {
       if (!deepLink) return;
-      alert(`URL DEEPLINK: ${deepLink}`);
-      alert(`URL PATHNAME: ${new URL(deepLink).pathname}`);
 
       const url = new URL(deepLink);
       const params = url.searchParams;
@@ -119,7 +117,7 @@ export const usePhantom = () => {
         return;
       }
 
-      if (/onConnect/.test(url.pathname)) {
+      if (/onConnect/.test(url.href)) {
         try {
           const sharedSecretDapp = nacl.box.before(
             bs58.decode(params.get("phantom_encryption_public_key")!),
@@ -163,22 +161,10 @@ export const usePhantom = () => {
         } catch (error) {
           console.error(error);
         }
-      } else if (/onSignAndSendTransaction/.test(url.pathname)) {
-        const walletInfoJSON = await SecureStore.getItemAsync("phantomInfo");
-        const phantomInfo = walletInfoJSON ? JSON.parse(walletInfoJSON) : {};
-        const { session, sharedSecretDapp, dappKeyPair } = phantomInfo;
-
-        const signAndSendTransactionData = decryptPayload(
-          params.get("data")!,
-          params.get("nonce")!,
-          Uint8Array.from(sharedSecretDapp)
-        );
-
+      } else if (/onSignAndSendTransaction/.test(url.href)) {
         dispatch(setTransactionLoading(false));
         dispatch(setTransactionState("success"));
-
-        console.log(JSON.stringify(signAndSendTransactionData, null, 2));
-      } else if (/onDisconnect/.test(url.pathname)) {
+      } else if (/onDisconnect/.test(url.href)) {
         dispatch(disconnectWallet());
       }
     })();
@@ -214,8 +200,6 @@ export const usePhantom = () => {
     const walletInfoJSON = await SecureStore.getItemAsync("phantomInfo");
     const phantomInfo = walletInfoJSON ? JSON.parse(walletInfoJSON) : {};
     const { session, sharedSecretDapp, dappKeyPair } = phantomInfo;
-
-    dispatch(setTransactionLoading(true));
 
     const serializedTransaction = transaction.serialize({
       requireAllSignatures: false,
