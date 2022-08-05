@@ -93,9 +93,10 @@ export const usePhantom = () => {
         setDeepLink(initialUrl);
       }
     })();
-    Linking.addEventListener("url", handleDeepLink);
+
+    const event = Linking.addEventListener("url", handleDeepLink);
     return () => {
-      Linking.removeEventListener("url", handleDeepLink);
+      event.remove();
     };
   }, []);
 
@@ -112,7 +113,7 @@ export const usePhantom = () => {
 
       if (params.get("errorCode")) {
         // something goes wrong or user cancels transaction
-        console.log("Error In Response", { params });
+        console.error("Error In Response", { params });
         dispatch(setTransactionLoading(false));
         return;
       }
