@@ -14,18 +14,7 @@ const linking: LinkingOptions<RootStackParamList> = {
   config: {
     screens: {
       Root: {
-        screens: {
-          Vault: {
-            screens: {
-              TabOneScreen: "one",
-            },
-          },
-          Members: {
-            screens: {
-              TabTwoScreen: "two",
-            },
-          },
-        },
+        screens: {},
       },
       Modal: "modal",
       NotFound: "*",

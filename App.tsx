@@ -18,7 +18,6 @@ import { defaultTheme as ChatTheme } from "./constants/ChatTheme";
 import * as Sentry from "sentry-expo";
 
 // fontawesome
-import { library } from "@fortawesome/fontawesome-svg-core";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 
 Sentry.init({

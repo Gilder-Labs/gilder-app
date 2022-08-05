@@ -1,28 +1,11 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React from "react";
 import styled from "styled-components/native";
-import { useTheme } from "styled-components";
-import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import * as Haptics from "expo-haptics";
-import { useNavigation } from "@react-navigation/native";
-import * as SecureStore from "expo-secure-store";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { setWallet, openWallet } from "../store/walletSlice";
 
 import { LinearGradient } from "expo-linear-gradient";
 import PhantomGhostLogo from "../assets/images/phantomGhostLogo.svg";
 import PhantomTextLogo from "../assets/images/phantomTextLogo.svg";
 import * as Linking from "expo-linking";
-import nacl from "tweetnacl";
-import bs58 from "bs58";
-import {
-  clusterApiUrl,
-  Connection,
-  Keypair,
-  PublicKey,
-  SystemProgram,
-  Transaction,
-} from "@solana/web3.js";
-import { RPC_CONNECTION } from "../constants/Solana";
+
 import { usePhantom } from "../hooks/usePhantom";
 
 const onConnectRedirectLink = Linking.createURL("onConnect");

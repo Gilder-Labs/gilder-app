@@ -5800,7 +5800,7 @@ expo-modules-core@0.11.3:
     compare-versions "^3.4.0"
     invariant "^2.2.4"
 
-expo-notifications@~0.16.1:
+expo-notifications@^0.16.1:
   version "0.16.1"
   resolved "https://registry.yarnpkg.com/expo-notifications/-/expo-notifications-0.16.1.tgz#4e6c74fb6b3aa615a36f587e0fd4876ca48ecf91"
   integrity sha512-GYXZnR5VCU79tM/2senPJ0jWq04PFAvh3chFYaz9qvUjJwl/AV/BQz0xOUNXGXmm8nBf6FA8B4exDV8h4KhV6g==

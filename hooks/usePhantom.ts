@@ -32,7 +32,6 @@ const onConnectRedirectLink =
   Constants.appOwnership == AppOwnership.Guest
     ? Linking.createURL("onConnect", {})
     : Linking.createURL("onConnect", { scheme: scheme });
-
 const onDisconnectRedirectLink =
   Constants.appOwnership == AppOwnership.Expo ||
   Constants.appOwnership == AppOwnership.Guest
@@ -43,7 +42,6 @@ const onSignAndSendTransactionRedirectLink =
   Constants.appOwnership == AppOwnership.Guest
     ? Linking.createURL("onSignAndSendTransaction", {})
     : Linking.createURL("onSignAndSendTransaction", { scheme: scheme });
-
 const onSignMessageRedirectLink = Linking.createURL("onSignMessage");
 
 const buildUrl = (path: string, params: URLSearchParams) =>
@@ -114,6 +112,7 @@ export const usePhantom = () => {
 
       if (params.get("errorCode")) {
         // something goes wrong or user cancels transaction
+        console.log("Error In Response", { params });
         dispatch(setTransactionLoading(false));
         return;
       }
@@ -281,5 +280,6 @@ export const usePhantom = () => {
     const url = buildUrl("connect", params);
     Linking.openURL(url);
   };
+
   return { disconnect, connect, signMessage, signAndSendTransaction };
 };
