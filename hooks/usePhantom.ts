@@ -113,67 +113,58 @@ export const usePhantom = () => {
 
       if (params.get("errorCode")) {
         // something goes wrong or user cancels transaction
-        console.error("Error In Response", { params });
         dispatch(setTransactionLoading(false));
         return;
       }
 
-      if (/onConnect/.test(url.pathname)) {
-        const sharedSecretDapp = nacl.box.before(
-          bs58.decode(params.get("phantom_encryption_public_key")!),
-          dappKeyPair.secretKey
-        );
+      if (/onConnect/.test(url.href)) {
+        try {
+          const sharedSecretDapp = nacl.box.before(
+            bs58.decode(params.get("phantom_encryption_public_key")!),
+            dappKeyPair.secretKey
+          );
 
-        const connectData = decryptPayload(
-          params.get("data")!,
-          params.get("nonce")!,
-          sharedSecretDapp
-        );
+          const connectData = decryptPayload(
+            params.get("data")!,
+            params.get("nonce")!,
+            sharedSecretDapp
+          );
 
-        // Keep track of public key
-        const jsonValue = JSON.stringify({
-          publicKey: connectData.public_key,
-          userInfo: {},
-          walletType: "phantom",
-        });
-        AsyncStorage.setItem("@walletInfo", jsonValue);
-
-        // Securely store phantom info
-        const securePhantomInfo = JSON.stringify({
-          session: connectData.session,
-          // convert to regular array for storage, can't store uint8Array
-          sharedSecretDapp: Array.from(sharedSecretDapp),
-          dappKeyPair: {
-            publicKey: Array.from(dappKeyPair.publicKey),
-            secretKey: Array.from(dappKeyPair.secretKey),
-          },
-        });
-
-        await SecureStore.setItemAsync("phantomInfo", securePhantomInfo);
-
-        dispatch(
-          setWallet({
+          // Keep track of public key
+          const jsonValue = JSON.stringify({
             publicKey: connectData.public_key,
             userInfo: {},
             walletType: "phantom",
-          })
-        );
-      } else if (/onSignAndSendTransaction/.test(url.pathname)) {
-        const walletInfoJSON = await SecureStore.getItemAsync("phantomInfo");
-        const phantomInfo = walletInfoJSON ? JSON.parse(walletInfoJSON) : {};
-        const { session, sharedSecretDapp, dappKeyPair } = phantomInfo;
+          });
+          AsyncStorage.setItem("@walletInfo", jsonValue);
 
-        const signAndSendTransactionData = decryptPayload(
-          params.get("data")!,
-          params.get("nonce")!,
-          Uint8Array.from(sharedSecretDapp)
-        );
+          // Securely store phantom info
+          const securePhantomInfo = JSON.stringify({
+            session: connectData.session,
+            // convert to regular array for storage, can't store uint8Array
+            sharedSecretDapp: Array.from(sharedSecretDapp),
+            dappKeyPair: {
+              publicKey: Array.from(dappKeyPair.publicKey),
+              secretKey: Array.from(dappKeyPair.secretKey),
+            },
+          });
 
+          await SecureStore.setItemAsync("phantomInfo", securePhantomInfo);
+
+          dispatch(
+            setWallet({
+              publicKey: connectData.public_key,
+              userInfo: {},
+              walletType: "phantom",
+            })
+          );
+        } catch (error) {
+          console.error(error);
+        }
+      } else if (/onSignAndSendTransaction/.test(url.href)) {
         dispatch(setTransactionLoading(false));
         dispatch(setTransactionState("success"));
-
-        console.log(JSON.stringify(signAndSendTransactionData, null, 2));
-      } else if (/onDisconnect/.test(url.pathname)) {
+      } else if (/onDisconnect/.test(url.href)) {
         dispatch(disconnectWallet());
       }
     })();
@@ -209,8 +200,6 @@ export const usePhantom = () => {
     const walletInfoJSON = await SecureStore.getItemAsync("phantomInfo");
     const phantomInfo = walletInfoJSON ? JSON.parse(walletInfoJSON) : {};
     const { session, sharedSecretDapp, dappKeyPair } = phantomInfo;
-
-    dispatch(setTransactionLoading(true));
 
     const serializedTransaction = transaction.serialize({
       requireAllSignatures: false,

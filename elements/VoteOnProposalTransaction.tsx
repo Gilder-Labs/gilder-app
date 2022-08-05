@@ -12,7 +12,11 @@ import { faCheck } from "@fortawesome/pro-solid-svg-icons/faCheck";
 import { faXmark } from "@fortawesome/pro-solid-svg-icons/faXmark";
 
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { closeTransactionModal, castVote } from "../store/walletSlice";
+import {
+  closeTransactionModal,
+  castVote,
+  setTransactionLoading,
+} from "../store/walletSlice";
 import { useTheme } from "styled-components";
 import { fetchRealmProposals } from "../store/proposalsSlice";
 import { abbreviatePublicKey } from "../utils";
@@ -54,6 +58,7 @@ export const VoteOnProposalTransaction = ({}: VoteOnProposalTransaction) => {
 
   const handleApprove = async () => {
     if (walletType === "phantom") {
+      dispatch(setTransactionLoading(true));
       const transaction = await createCastVoteTransaction(
         selectedRealm,
         publicKey,
