@@ -113,7 +113,11 @@ export const usePhantom = () => {
 
       if (params.get("errorCode")) {
         // something goes wrong or user cancels transaction
-        console.error("Error In Response", { params });
+        alert(JSON.stringify(Object.fromEntries([...params]), null, 2));
+        console.error(
+          "Error In Response",
+          JSON.stringify(Object.fromEntries([...params]), null, 2)
+        );
         dispatch(setTransactionLoading(false));
         return;
       }
