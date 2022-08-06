@@ -239,12 +239,15 @@ const styles = StyleSheet.create({
 });
 
 const Header = styled.View`
-  height: 64px;
   background-color: ${(props) => props.theme.gray[900]};
   justify-content: flex-end;
   width: 100%;
   align-items: center;
   flex-direction: row;
+
+  margin-top: ${(props) => props.theme.spacing[4]};
+  margin-bottom: ${(props) => props.theme.spacing[2]};
+
   padding-left: ${(props) => props.theme.spacing[2]};
   padding-right: ${(props) => props.theme.spacing[2]};
 `;

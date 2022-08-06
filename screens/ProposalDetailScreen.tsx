@@ -330,14 +330,14 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
                   disabled={
                     !publicKey ||
                     (!delegateMap[publicKey] && !membersMap[publicKey]) ||
-                    timeLeft?.isVotingTimeOver
+                    !timeLeft?.isTimeLeft
                   }
                 />
                 <Button
                   disabled={
                     !publicKey ||
                     (!delegateMap[publicKey] && !membersMap[publicKey]) ||
-                    timeLeft.isVotingTimeOver
+                    !timeLeft?.isTimeLeft
                   }
                   title="Vote Yes"
                   onPress={() => vote(0)}

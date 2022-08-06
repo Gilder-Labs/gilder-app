@@ -81,7 +81,7 @@ export const DelegateButton = ({
       onPress={onPress}
       disabled={!!delegatesVote}
     >
-      <IconContainer color={color}>
+      <IconContainer>
         <LinearGradient
           // Background Linear Gradient
           colors={[`${theme[color][500]}`, `${theme[color2][900]}`]}
@@ -156,7 +156,6 @@ export const DelegateButton = ({
 };
 
 const IconContainer = styled.View<{ color: string }>`
-  background: ${(props: any) => props.theme[props.color][800]};
   flex-direction: row;
   align-items: center;
   overflow: hidden;
