@@ -10,15 +10,9 @@ import {
 } from "stream-chat-expo"; // Or stream-chat-expo
 import { useNavigation } from "@react-navigation/native";
 import { ChatAuthButton } from "./ChatAuthButton";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 
-export const chatUserId = "gilder-test";
-// const filters = {
-//   example: "example-apps",
-//   members: { $in: ["gilder-test"] },
-//   type: "messaging",
-// };
-
-const sort = { last_message_at: -1 };
+const sort = { created_at: 1 };
 const options = {
   state: true,
   watch: true,
@@ -54,16 +48,24 @@ const CustomListItem = (props: any) => {
 
 export const ChatRoomList = ({ navigation, ...props }: any): any => {
   const { clientIsReady } = useChatClient();
+  const { selectedRealm } = useAppSelector((state) => state.realms);
+  const { publicKey } = useAppSelector((state) => state.wallet);
+
+  const filters = {
+    members: { $in: [publicKey] },
+    team: { $in: [selectedRealm?.pubKey] },
+    type: "team",
+  };
 
   return (
     <Container>
+      <ChatAuthButton />
       <ChannelList
-        // filters={filters}
+        filters={filters}
         Preview={(props) => <CustomListItem channelData={props} />}
         options={options}
         sort={sort}
       />
-      <ChatAuthButton />
     </Container>
   );
 };
