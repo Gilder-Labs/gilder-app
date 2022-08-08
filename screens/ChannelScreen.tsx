@@ -25,8 +25,6 @@ export default function ChannelScreen(props: any) {
     setTopInset(headerHeight);
   }, [headerHeight]);
 
-  // console.log("channel", channel);
-
   return (
     <Container>
       <SafeAreaView style={styles.container}>

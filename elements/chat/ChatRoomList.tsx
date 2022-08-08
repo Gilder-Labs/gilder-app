@@ -9,6 +9,7 @@ import {
   ChannelProps,
 } from "stream-chat-expo"; // Or stream-chat-expo
 import { useNavigation } from "@react-navigation/native";
+import { ChatAuthButton } from "./ChatAuthButton";
 
 export const chatUserId = "gilder-test";
 // const filters = {
@@ -27,8 +28,6 @@ const CustomListItem = (props: any) => {
   const { channel } = props.channelData;
   const { data } = channel;
   const navigation = useNavigation();
-
-  // console.log("navigation", navigation.getState());
 
   const isUnread = channel?.state?.unreadCount > 0;
 
@@ -64,10 +63,10 @@ export const ChatRoomList = ({ navigation, ...props }: any): any => {
         options={options}
         sort={sort}
       />
+      <ChatAuthButton />
     </Container>
   );
 };
-
 const Container = styled.View`
   flex: 1;
   height: 100%;

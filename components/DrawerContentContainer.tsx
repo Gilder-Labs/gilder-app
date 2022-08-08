@@ -132,16 +132,16 @@ export function DrawerContentContainer(props: any) {
               </IconButton>
             </RealmNameContainer>
             <DrawerItemList {...props} />
-            {/* <Typography
-              text="Chat Channels"
-              shade="300"
+            <ChatDivider />
+            <Typography
+              text="Chat"
+              shade="400"
               bold={true}
               marginLeft="3"
-              marginTop="2"
               size="subtitle"
               marginBottom="2"
             />
-            <ChatRoomList navigation={navigation} /> */}
+            <ChatRoomList navigation={navigation} />
           </Content>
           <ConnectWalletButton />
         </DrawerContentContainerWrapper>
@@ -222,6 +222,16 @@ const Divider = styled.View`
   margin-bottom: ${(props) => props.theme.spacing[3]};
   margin-left: ${(props) => props.theme.spacing[1]};
   margin-right: ${(props) => props.theme.spacing[1]};
+`;
+
+const ChatDivider = styled.View`
+  height: 2px;
+  max-height: 2px;
+  border-radius: 4px;
+  background-color: ${(props) => props.theme.gray[800]};
+  margin-bottom: ${(props) => props.theme.spacing[3]};
+  margin-left: ${(props) => props.theme.spacing[3]};
+  margin-right: ${(props) => props.theme.spacing[3]};
 `;
 
 const DrawerContentContainerWrapper = styled.View`
