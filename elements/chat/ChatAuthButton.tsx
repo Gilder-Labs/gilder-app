@@ -12,6 +12,7 @@ export const ChatAuthButton = () => {
   const { chatUserToken, isAuthenticating } = useAppSelector(
     (state) => state.chat
   );
+  const { selectedRealm } = useAppSelector((state) => state.realms);
 
   const dispatch = useAppDispatch();
 
@@ -35,7 +36,7 @@ export const ChatAuthButton = () => {
     if (publicKey && walletType === "web3auth") {
       loginWithWeb3auth();
     }
-  }, [publicKey]);
+  }, [publicKey, selectedRealm?.pubKey]);
 
   const authIntoChat = async () => {
     if (walletType === "phantom") {
