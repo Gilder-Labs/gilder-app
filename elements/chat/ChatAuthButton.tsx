@@ -48,9 +48,17 @@ export const ChatAuthButton = () => {
 
   return (
     <SignInContainer>
-      <Button title="Auth into chat" onPress={authIntoChat} />
+      <Button
+        title="Sign auth message"
+        onPress={authIntoChat}
+        textColor="gray"
+        textShade="400"
+      />
     </SignInContainer>
   );
 };
 
-const SignInContainer = styled.View``;
+const SignInContainer = styled.View`
+  padding-left: ${(props) => props.theme.spacing[3]};
+  padding-right: ${(props) => props.theme.spacing[3]};
+`;

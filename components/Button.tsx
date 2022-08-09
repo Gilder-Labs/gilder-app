@@ -10,6 +10,24 @@ interface ButtonProps {
   onPress: any;
   marginRight?: boolean;
   shade?: "100" | "200" | "300" | "400" | "500" | "600" | "700" | "800" | "900";
+  textShade?:
+    | "100"
+    | "200"
+    | "300"
+    | "400"
+    | "500"
+    | "600"
+    | "700"
+    | "800"
+    | "900";
+  textColor?:
+    | "gray"
+    | "primary"
+    | "secondary"
+    | "aqua"
+    | "purple"
+    | "error"
+    | "warning";
   color?:
     | "gray"
     | "primary"
@@ -53,6 +71,8 @@ export const Button = ({
   isLoading = false,
   disabled = false,
   hasGradient = false,
+  textColor = "gray",
+  textShade = "100",
 }: ButtonProps) => {
   const theme = useTheme();
   return (
@@ -80,7 +100,13 @@ export const Button = ({
         {isLoading ? (
           <Loading color={theme.gray[300]} />
         ) : (
-          <Typography text={title} bold={true} marginBottom="0" />
+          <Typography
+            text={title}
+            bold={true}
+            marginBottom="0"
+            shade={textShade}
+            color={textColor}
+          />
         )}
       </LinearGradient>
     </ButtonContainer>

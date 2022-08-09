@@ -3,23 +3,30 @@ import { StreamChat } from "stream-chat";
 import { chatApiKey } from "../constants/Chat";
 import { abbreviatePublicKey } from "../utils";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
+import { useCardinalIdentity } from "./useCardinaldentity";
 
 const chatClient = StreamChat.getInstance(chatApiKey);
 
 export const useChatClient = () => {
   const [clientIsReady, setClientIsReady] = useState(false);
   const dispatch = useAppDispatch();
-  const { publicKey, walletType } = useAppSelector((state) => state.wallet);
+  const { publicKey, walletType, userInfo } = useAppSelector(
+    (state) => state.wallet
+  );
   const { chatUserToken } = useAppSelector((state) => state.chat);
+  const [twitterURL, twitterHandle] = useCardinalIdentity(publicKey);
 
   useEffect(() => {
     const setupClient = async () => {
       try {
         const user = {
           id: publicKey,
-          name: abbreviatePublicKey(publicKey),
-          // image:
-          //   "https://pbs.twimg.com/profile_images/1537771549641453568/6i7oLK_z_400x400.png",
+          name: twitterHandle
+            ? twitterHandle
+            : userInfo?.name
+            ? userInfo?.name
+            : abbreviatePublicKey(publicKey),
+          image: twitterURL ? twitterURL : userInfo?.profileImage,
         };
         await chatClient.connectUser(user, chatUserToken);
         setClientIsReady(true);
@@ -32,10 +39,25 @@ export const useChatClient = () => {
       }
     };
 
+    const disconnectClient = async () => {
+      try {
+        await chatClient.disconnectUser();
+        setClientIsReady(false);
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error(
+            `An error occurred while disconnecting the user: ${error.message}`
+          );
+        }
+      }
+    };
+
     // If the chat client has a value in the field `userID`, a user is already connected
     // and we can skip trying to connect the user again.
     if (!chatClient.userID && publicKey && chatUserToken) {
       setupClient();
+    } else if (!publicKey) {
+      disconnectClient;
     }
   }, [publicKey, chatUserToken]);
 

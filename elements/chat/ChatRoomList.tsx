@@ -57,6 +57,9 @@ export const ChatRoomList = ({ navigation, ...props }: any): any => {
   const { clientIsReady } = useChatClient();
   const { selectedRealm } = useAppSelector((state) => state.realms);
   const { publicKey } = useAppSelector((state) => state.wallet);
+  const { isAuthenticating, chatUserToken } = useAppSelector(
+    (state) => state.chat
+  );
 
   const filters = {
     members: { $in: [publicKey] },
@@ -66,8 +69,7 @@ export const ChatRoomList = ({ navigation, ...props }: any): any => {
 
   return (
     <Container>
-      <ChatAuthButton />
-      {clientIsReady ? (
+      {clientIsReady && publicKey ? (
         <ChannelList
           filters={filters}
           Preview={(props) => <CustomListItem channelData={props} />}
@@ -75,8 +77,10 @@ export const ChatRoomList = ({ navigation, ...props }: any): any => {
           sort={sort}
           emptyStateIndicator={() => <EmptyChannelList />}
         />
-      ) : (
+      ) : isAuthenticating && publicKey ? (
         <ActivityIndicator />
+      ) : (
+        <ChatAuthButton />
       )}
     </Container>
   );

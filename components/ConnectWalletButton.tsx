@@ -10,18 +10,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faWallet } from "@fortawesome/pro-solid-svg-icons/faWallet";
 import { ConnectWalletChoiceModal } from "../elements/ConnectWalletChoiceModal";
 import Modal from "react-native-modal";
+import { useCardinalIdentity } from "../hooks/useCardinaldentity";
 
 interface ConnectWalletProps {}
 
 export const ConnectWalletButton = ({}: ConnectWalletProps) => {
   const theme = useTheme();
-  const dispatch = useAppDispatch();
   const { publicKey } = useAppSelector((state) => state.wallet);
-  const [key, setKey] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const { height, width } = useWindowDimensions();
+  const [twitterURL, twitterHandle] = useCardinalIdentity(publicKey);
 
   useEffect(() => {
     if (publicKey && modalVisible) {
