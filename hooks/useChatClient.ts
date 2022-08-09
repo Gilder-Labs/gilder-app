@@ -1,27 +1,26 @@
 import { useEffect, useState } from "react";
 import { StreamChat } from "stream-chat";
 import { chatApiKey } from "../constants/Chat";
-
-// TODO: Get chat auth token from our backend middleware
-export const chatUserToken =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZ2lsZGVyLXRlc3QifQ.sNSNzApt4nlHLkXje_3WimFMfvGFmIoyoFEXIOAYyMo";
-export const chatUserName = "gilder-test";
-export const chatUserId = "gilder-test";
-const user = {
-  id: chatUserId,
-  name: chatUserName,
-  image:
-    "https://pbs.twimg.com/profile_images/1388190472544264193/TH223rLe_400x400.jpg",
-};
+import { abbreviatePublicKey } from "../utils";
+import { useAppDispatch, useAppSelector } from "../hooks/redux";
 
 const chatClient = StreamChat.getInstance(chatApiKey);
 
 export const useChatClient = () => {
   const [clientIsReady, setClientIsReady] = useState(false);
+  const dispatch = useAppDispatch();
+  const { publicKey, walletType } = useAppSelector((state) => state.wallet);
+  const { chatUserToken } = useAppSelector((state) => state.chat);
 
   useEffect(() => {
     const setupClient = async () => {
       try {
+        const user = {
+          id: publicKey,
+          name: abbreviatePublicKey(publicKey),
+          // image:
+          //   "https://pbs.twimg.com/profile_images/1537771549641453568/6i7oLK_z_400x400.png",
+        };
         await chatClient.connectUser(user, chatUserToken);
         setClientIsReady(true);
       } catch (error) {
@@ -35,10 +34,10 @@ export const useChatClient = () => {
 
     // If the chat client has a value in the field `userID`, a user is already connected
     // and we can skip trying to connect the user again.
-    if (!chatClient.userID) {
+    if (!chatClient.userID && publicKey && chatUserToken) {
       setupClient();
     }
-  }, []);
+  }, [publicKey, chatUserToken]);
 
   return {
     clientIsReady,

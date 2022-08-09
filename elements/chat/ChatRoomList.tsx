@@ -1,6 +1,4 @@
-import { RootTabScreenProps } from "../../types";
 import styled from "styled-components/native";
-import { useState, useRef, useEffect } from "react";
 import { Button, Typography, Loading } from "../../components";
 import { useChatClient } from "../../hooks/useChatClient";
 import {
@@ -11,6 +9,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { ChatAuthButton } from "./ChatAuthButton";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import { ActivityIndicator } from "react-native";
 
 const sort = { created_at: 1 };
 const options = {
@@ -46,6 +45,14 @@ const CustomListItem = (props: any) => {
   );
 };
 
+const EmptyChannelList = () => {
+  return (
+    <NoChannelsContainer>
+      <Typography text="HELLO WORLD" />
+    </NoChannelsContainer>
+  );
+};
+
 export const ChatRoomList = ({ navigation, ...props }: any): any => {
   const { clientIsReady } = useChatClient();
   const { selectedRealm } = useAppSelector((state) => state.realms);
@@ -60,12 +67,17 @@ export const ChatRoomList = ({ navigation, ...props }: any): any => {
   return (
     <Container>
       <ChatAuthButton />
-      <ChannelList
-        filters={filters}
-        Preview={(props) => <CustomListItem channelData={props} />}
-        options={options}
-        sort={sort}
-      />
+      {clientIsReady ? (
+        <ChannelList
+          filters={filters}
+          Preview={(props) => <CustomListItem channelData={props} />}
+          options={options}
+          sort={sort}
+          emptyStateIndicator={() => <EmptyChannelList />}
+        />
+      ) : (
+        <ActivityIndicator />
+      )}
     </Container>
   );
 };
@@ -86,3 +98,9 @@ const ChannelItemButton = styled.TouchableOpacity<{ isSelected: boolean }>`
 `;
 
 const EmptyView = styled.View``;
+
+const NoChannelsContainer = styled.View`
+  flex: 1;
+  width: 400px;
+  height: 400px;
+`;
