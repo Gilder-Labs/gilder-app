@@ -1,9 +1,10 @@
 import type { ImageStyle, TextStyle, ViewStyle } from "react-native";
 import type { CircleProps, Color, StopProps } from "react-native-svg";
-import { vh, IconProps } from "stream-chat-expo";
+import { vh, vw, IconProps } from "stream-chat-expo";
 import { darkTheme } from "./Theme";
 
 export const DEFAULT_STATUS_ICON_SIZE = 16;
+const maxWidth = vw(100) - 72;
 
 export const Colors = {
   accent_blue: darkTheme.gray[400],
@@ -15,7 +16,7 @@ export const Colors = {
   blue_alice: darkTheme.gray[800],
   border: darkTheme.gray[800],
   grey: darkTheme.gray[500],
-  grey_gainsboro: darkTheme.gray[700], // message color
+  grey_gainsboro: darkTheme.gray[800], // message color
   grey_whisper: darkTheme.gray[800], // border color on input
   icon_background: "#FFFFFF",
   modal_shadow: "#000000",
@@ -838,7 +839,10 @@ export const defaultTheme: Theme = {
       container: {},
     },
     avatarWrapper: {
-      container: {},
+      container: {
+        alignItems: "flex-start",
+        height: "100%",
+      },
       leftAlign: {
         marginRight: 8,
       },
@@ -846,7 +850,7 @@ export const defaultTheme: Theme = {
         marginLeft: 8,
       },
       spacer: {
-        height: 28,
+        height: 36,
         width: 32, // same as BASE_AVATAR_SIZE
       },
     },
@@ -869,13 +873,24 @@ export const defaultTheme: Theme = {
         paddingLeft: 8,
       },
     },
-    container: {},
+    container: {
+      width: maxWidth,
+    },
     content: {
       container: {
-        borderRadiusL: 16,
-        borderRadiusS: 0,
+        borderRadiusL: 4,
+        borderRadiusS: 4,
+        borderWidth: 0,
+        width: maxWidth,
+        padding: 0,
+        backgroundColor: "transparent",
       },
-      containerInner: {}, // chat styles here
+      containerInner: {
+        borderWidth: 0,
+        backgroundColor: "transparent",
+        borderTopEndRadius: 4,
+        borderTopLeftRadius: 4,
+      }, // chat styles here
       deletedContainer: {},
       deletedContainerInner: {},
       deletedMetaText: {
@@ -909,7 +924,7 @@ export const defaultTheme: Theme = {
       messageUser: {
         fontSize: 12,
         fontWeight: "700",
-        paddingRight: 6,
+        padding: 0,
       },
       metaContainer: {
         flexDirection: "row",
@@ -922,8 +937,19 @@ export const defaultTheme: Theme = {
       replyContainer: {},
       textContainer: {
         onlyEmojiMarkdown: { text: { fontSize: 50 } },
+        width: maxWidth,
+        maxWidth: maxWidth,
+        paddingTop: 4,
+        paddingLeft: 0,
+        paddingBottom: 0,
+        borderRadius: 0,
+        borderTopEndRadius: 0,
+        borderTopLeftRadius: 0,
+        margin: 0,
+        marginLeft: 0,
+        marginTop: -8,
       },
-      wrapper: {},
+      wrapper: { width: maxWidth },
     },
     file: {
       container: {},
@@ -943,7 +969,7 @@ export const defaultTheme: Theme = {
       image: {},
       imageContainer: {},
       maxHeight: 300,
-      maxWidth: 256,
+      maxWidth: maxWidth - 2,
       minHeight: 100,
       minWidth: 170,
       moreImagesContainer: {},
@@ -952,13 +978,19 @@ export const defaultTheme: Theme = {
     giphy: {
       buttonContainer: {},
       cancel: {},
-      container: {},
+      container: {
+        width: maxWidth,
+      },
       giphy: {},
       giphyContainer: {},
       giphyHeaderText: {},
       giphyHeaderTitle: {},
-      giphyMask: {},
-      giphyMaskText: {},
+      giphyMask: {
+        opacity: 0.4,
+      },
+      giphyMaskText: {
+        color: "white",
+      },
       header: {},
       selectionContainer: {},
       send: {},
@@ -1043,7 +1075,10 @@ export const defaultTheme: Theme = {
     imageAttachment: {},
     markdownStyles: {},
     messageContainer: {},
-    textContainer: {},
+    textContainer: {
+      maxWidth: undefined,
+      width: undefined,
+    },
   },
   screenPadding: 8,
   spinner: {},

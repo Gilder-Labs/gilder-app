@@ -33,66 +33,44 @@ export default function ChannelScreen(props: any) {
         <Channel
           channel={route?.params?.channel}
           keyboardVerticalOffset={headerHeight}
-          enableMessageGroupingByUser={true}
+          enableMessageGroupingByUser={false}
           forceAlignMessages={"left"}
           // ReactionList={ReactionList}
           MessageFooter={() => null}
           deletedMessagesVisibilityType={"never"}
-          MessageAvatar={() => {
-            return null;
-          }}
           MessageHeader={(props) => (
-            <View
-              style={{
-                flexDirection: "row",
-              }}
-            >
-              <AnimatedImage
-                style={{
-                  width: 32,
-                  height: 32,
-                  overflow: "hidden",
-                  borderRadius: 100,
-                }}
-                source={{
-                  uri: props?.message?.user?.image,
-                }}
+            <MessageHeaderContainer>
+              <Typography
+                text={props?.message?.user?.name || ""}
+                size="subtitle"
+                color="gray"
+                shade="200"
+                bold={true}
+                marginRight="1"
+                marginBottom="0"
               />
-              {console.log("message header props", props)}
-              <MessageHeaderContainer>
-                <Typography
-                  text={props?.message?.user?.name || ""}
-                  size="subtitle"
-                  color="gray"
-                  shade="200"
-                  bold={true}
-                  marginRight="1"
-                  marginLeft="2"
-                  marginBottom="0"
-                />
-                <Typography
-                  text={`(${abbreviatePublicKey(
-                    props?.message?.user?.id || "",
-                    2
-                  )})`}
-                  size="caption"
-                  color="gray"
-                  shade="600"
-                  bold={true}
-                  marginRight="1"
-                  marginBottom="0"
-                />
-                <Typography
-                  text={props?.formattedDate || ""}
-                  size="caption"
-                  color="gray"
-                  shade="600"
-                  bold={true}
-                  marginRight="1"
-                  marginBottom="0"
-                />
-              </MessageHeaderContainer>
-            </View>
+              <Typography
+                text={`(${abbreviatePublicKey(
+                  props?.message?.user?.id || "",
+                  2
+                )})`}
+                size="caption"
+                color="gray"
+                shade="500"
+                bold={true}
+                marginRight="1"
+                marginBottom="0"
+              />
+              <Typography
+                text={props?.formattedDate || ""}
+                size="caption"
+                color="gray"
+                shade="500"
+                bold={true}
+                marginRight="1"
+                marginBottom="0"
+              />
+            </MessageHeaderContainer>
           )}
         >
           <MessageList
@@ -121,9 +99,8 @@ const Container = styled.View`
 `;
 
 const MessageHeaderContainer = styled.View`
-  /* align-items: center; */
   flex-direction: row;
-  /* background: green; */
-  height: 20px;
+  flex: 1;
   align-items: center;
+  justify-content: flex-start;
 `;
