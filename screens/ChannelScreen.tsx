@@ -103,4 +103,6 @@ const MessageHeaderContainer = styled.View`
   flex: 1;
   align-items: center;
   justify-content: flex-start;
+  margin-bottom: ${(props) => props.theme.spacing[2]};
+  margin-top: -4px;
 `;
