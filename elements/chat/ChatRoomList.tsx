@@ -48,7 +48,11 @@ const CustomListItem = (props: any) => {
 const EmptyChannelList = () => {
   return (
     <NoChannelsContainer>
-      <Typography text="HELLO WORLD" />
+      <Typography
+        size="subtitle"
+        shade="500"
+        text="Become a member to have access to chat channels."
+      />
     </NoChannelsContainer>
   );
 };
@@ -74,8 +78,8 @@ export const ChatRoomList = ({ navigation, ...props }: any): any => {
           filters={filters}
           Preview={(props) => <CustomListItem channelData={props} />}
           options={options}
-          sort={sort}
-          emptyStateIndicator={() => <EmptyChannelList />}
+          // sort={sort}
+          EmptyStateIndicator={() => <EmptyChannelList />}
         />
       ) : isAuthenticating && publicKey ? (
         <ActivityIndicator />
@@ -105,6 +109,6 @@ const EmptyView = styled.View``;
 
 const NoChannelsContainer = styled.View`
   flex: 1;
-  width: 400px;
-  height: 400px;
+  padding-left: ${(props: any) => props.theme.spacing[3]};
+  padding-right: ${(props: any) => props.theme.spacing[3]};
 `;

@@ -11034,17 +11034,17 @@ stream-buffers@2.2.x:
   resolved "https://registry.yarnpkg.com/stream-buffers/-/stream-buffers-2.2.0.tgz#91d5f5130d1cef96dcfa7f726945188741d09ee4"
   integrity sha512-uyQK/mx5QjHun80FLJTfaWE7JtwfRMKBLkMne6udYOmvH0CawotVa7TfgYHzAnpphn4+TweIx1QKMnRIbipmUg==
 
-stream-chat-expo@^4.13.0:
-  version "4.13.0"
-  resolved "https://registry.yarnpkg.com/stream-chat-expo/-/stream-chat-expo-4.13.0.tgz#5c26b757534198786d9e698a2f8416726adfe184"
-  integrity sha512-7++uf3AGIPWCAi/POvGcVYpnXsOG2IEB+IRh40YXs6Uz+azcwGw+Ty/H4oxGc0Fb3+372uhO1IGdtqnCkYzh8w==
+stream-chat-expo@^4.14.0:
+  version "4.14.0"
+  resolved "https://registry.yarnpkg.com/stream-chat-expo/-/stream-chat-expo-4.14.0.tgz#0492d4f4209e4c58da3f6f56ff5e775f30639993"
+  integrity sha512-oLEOrjzrpQmffShJBxX1FO+OjijI4oEDeXdWLnIr3TbRdrH4K3pwMU4qqPVY6lJTeAuZ3BkvLRuOwg/2icGDxg==
   dependencies:
-    stream-chat-react-native-core "4.13.0"
+    stream-chat-react-native-core "4.14.0"
 
-stream-chat-react-native-core@4.13.0:
-  version "4.13.0"
-  resolved "https://registry.yarnpkg.com/stream-chat-react-native-core/-/stream-chat-react-native-core-4.13.0.tgz#09d18c6756d9604165b1a8147662afe28fb1b6c4"
-  integrity sha512-bOgCZa030QxmxaS5474zby7tcnSo2JwP/eNrGYXO2efbf9Gp68s8Gx51PNsTvZwheWMBGRSxozX2QM9RvDueZg==
+stream-chat-react-native-core@4.14.0:
+  version "4.14.0"
+  resolved "https://registry.yarnpkg.com/stream-chat-react-native-core/-/stream-chat-react-native-core-4.14.0.tgz#937fcdc6dd9e865fb12b8ea4b9d108751ff6ab87"
+  integrity sha512-FGWlzyNwi3SkZwRD9PnKrOc1jmbon7YeEhY8gHq2BGLiVJu6t3z3AQDoyq7dWyQmsYDEH6/md5qdHpyar27+iQ==
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@gorhom/bottom-sheet" "^4.1.6"

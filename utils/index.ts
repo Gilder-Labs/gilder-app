@@ -3,8 +3,13 @@ import numeral from "numeral";
 export * from "./cleanData";
 export * from "./member";
 
-export const abbreviatePublicKey = (publicKey: string) => {
-  return `${publicKey.slice(0, 4)}...${publicKey.slice(-4)}`;
+export const abbreviatePublicKey = (
+  publicKey: string,
+  numberOfLetter: number = 4
+) => {
+  return `${publicKey.slice(0, numberOfLetter)}...${publicKey.slice(
+    -numberOfLetter
+  )}`;
 };
 
 export const formatVoteWeight = (tokenAmt: string, decimal: number): string => {

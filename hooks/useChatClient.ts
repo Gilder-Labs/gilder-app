@@ -56,7 +56,7 @@ export const useChatClient = () => {
     // and we can skip trying to connect the user again.
     if (!chatClient.userID && publicKey && chatUserToken) {
       setupClient();
-    } else if (!publicKey) {
+    } else if (!publicKey && clientIsReady) {
       disconnectClient;
     }
   }, [publicKey, chatUserToken]);

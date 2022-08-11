@@ -11,6 +11,8 @@ import { useHeaderHeight } from "@react-navigation/elements";
 import { useEffect } from "react";
 import { useChatClient } from "../hooks/useChatClient";
 import { Typography } from "../components";
+import { abbreviatePublicKey } from "../utils";
+import { AnimatedImage } from "react-native-ui-lib";
 
 export default function ChannelScreen(props: any) {
   const { route, navigation } = props;
@@ -36,33 +38,60 @@ export default function ChannelScreen(props: any) {
           // ReactionList={ReactionList}
           MessageFooter={() => null}
           deletedMessagesVisibilityType={"never"}
+          MessageAvatar={() => {
+            return null;
+          }}
           MessageHeader={(props) => (
             <View
               style={{
                 flexDirection: "row",
-                // backgroundColor: "green",
-                justifyContent: "center",
-                alignItems: "flex-end",
               }}
             >
-              <Typography
-                text={props?.message?.user?.name || ""}
-                size="subtitle"
-                color="gray"
-                shade="400"
-                bold={true}
-                marginRight="1"
-                marginBottom="1"
+              <AnimatedImage
+                style={{
+                  width: 32,
+                  height: 32,
+                  overflow: "hidden",
+                  borderRadius: 100,
+                }}
+                source={{
+                  uri: props?.message?.user?.image,
+                }}
               />
-              <Typography
-                text={props?.formattedDate || ""}
-                size="caption"
-                color="gray"
-                shade="600"
-                bold={true}
-                marginRight="1"
-                marginBottom="1"
-              />
+              {console.log("message header props", props)}
+              <MessageHeaderContainer>
+                <Typography
+                  text={props?.message?.user?.name || ""}
+                  size="subtitle"
+                  color="gray"
+                  shade="200"
+                  bold={true}
+                  marginRight="1"
+                  marginLeft="2"
+                  marginBottom="0"
+                />
+                <Typography
+                  text={`(${abbreviatePublicKey(
+                    props?.message?.user?.id || "",
+                    2
+                  )})`}
+                  size="caption"
+                  color="gray"
+                  shade="600"
+                  bold={true}
+                  marginRight="1"
+                  marginBottom="0"
+                />
+                <Typography
+                  text={props?.formattedDate || ""}
+                  size="caption"
+                  color="gray"
+                  shade="600"
+                  bold={true}
+                  marginRight="1"
+                  marginBottom="0"
+                />
+              </MessageHeaderContainer>
             </View>
           )}
         >
@@ -89,4 +118,12 @@ const styles = StyleSheet.create({
 
 const Container = styled.View`
   flex: 1;
+`;
+
+const MessageHeaderContainer = styled.View`
+  /* align-items: center; */
+  flex-direction: row;
+  /* background: green; */
+  height: 20px;
+  align-items: center;
 `;
