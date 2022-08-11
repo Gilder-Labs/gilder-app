@@ -9,8 +9,10 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { ChatAuthButton } from "./ChatAuthButton";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import { ActivityIndicator } from "react-native";
 import { setChannelId } from "../../store/chatSlice";
+import { useEffect } from "react";
+import { signMessageWithKey } from "../../utils/signMessageWithKey";
+import { fetchChatUserToken } from "../../store/chatSlice";
 
 const sort = { created_at: 1 };
 const options = {
@@ -64,13 +66,28 @@ const EmptyChannelList = () => {
 export const ChatRoomList = (props: any): any => {
   const { clientIsReady } = useChatClient();
   const { selectedRealm } = useAppSelector((state) => state.realms);
-  const { publicKey } = useAppSelector((state) => state.wallet);
+  const { publicKey, walletType } = useAppSelector((state) => state.wallet);
   const { isAuthenticating, chatUserToken } = useAppSelector(
     (state) => state.chat
   );
+  const dispatch = useAppDispatch();
 
-  // const navIndex = props.navigation.getState().index;
-  // const selectedRoute = props.state.routes?.[navIndex].name;
+  useEffect(() => {
+    // If wallet type is web3auth we can automatically fetch user token for chat
+    const loginWithWeb3auth = async () => {
+      const message =
+        "Proving DAO membership to authenticate into Gilder Chat.";
+      const web3AuthSignedMessage = await signMessageWithKey(message);
+      dispatch(
+        fetchChatUserToken({ publicKey, signedMessage: web3AuthSignedMessage })
+      );
+    };
+
+    if (publicKey && walletType === "web3auth") {
+      console.log("TRYING TO LOG INTO CHAT AGAIN");
+      loginWithWeb3auth();
+    }
+  }, [publicKey, selectedRealm?.realmId]);
 
   const filters = {
     members: { $in: [publicKey] },
@@ -80,7 +97,7 @@ export const ChatRoomList = (props: any): any => {
 
   return (
     <Container>
-      {clientIsReady && publicKey ? (
+      {clientIsReady && publicKey && !isAuthenticating ? (
         <ChannelList
           filters={filters}
           Preview={(props) => <CustomListItem channelData={props} />}
@@ -88,8 +105,6 @@ export const ChatRoomList = (props: any): any => {
           // sort={sort}
           EmptyStateIndicator={() => <EmptyChannelList />}
         />
-      ) : isAuthenticating && publicKey ? (
-        <ActivityIndicator />
       ) : (
         <ChatAuthButton />
       )}

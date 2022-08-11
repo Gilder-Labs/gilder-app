@@ -59,7 +59,7 @@ export const chatSlice = createSlice({
         state.isAuthenticating = false;
       })
       .addCase(fetchChatUserToken.fulfilled, (state, action: any) => {
-        state.isAuthenticating = true;
+        state.isAuthenticating = false;
         state.chatUserToken = action.payload.chatUserToken;
       });
   },
