@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import { Button } from "../../components";
+import { Button, Typography } from "../../components";
 import { usePhantom } from "../../hooks/usePhantom";
 import { signMessageWithKey } from "../../utils/signMessageWithKey";
 import { fetchChatUserToken } from "../../store/chatSlice";
@@ -48,12 +48,21 @@ export const ChatAuthButton = () => {
 
   return (
     <SignInContainer>
-      <Button
-        title="Sign auth message"
-        onPress={authIntoChat}
-        textColor="gray"
-        textShade="400"
-      />
+      {publicKey ? (
+        <Button
+          title={"Sign in with Wallet"}
+          onPress={authIntoChat}
+          disabled={!publicKey}
+          textColor="gray"
+          textShade="400"
+        />
+      ) : (
+        <Typography
+          size="subtitle"
+          shade="500"
+          text="Connect wallet to access chat."
+        />
+      )}
     </SignInContainer>
   );
 };

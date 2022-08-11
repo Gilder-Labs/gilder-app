@@ -141,7 +141,7 @@ export function DrawerContentContainer(props: any) {
               size="subtitle"
               marginBottom="2"
             />
-            <ChatRoomList navigation={navigation} />
+            <ChatRoomList {...props} />
           </Content>
           <ConnectWalletButton />
         </DrawerContentContainerWrapper>

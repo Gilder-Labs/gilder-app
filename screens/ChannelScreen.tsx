@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Channel,
   MessageList,
@@ -21,7 +22,6 @@ export default function ChannelScreen(props: any) {
   } = route;
   const headerHeight = useHeaderHeight();
   const { setTopInset } = useAttachmentPickerContext();
-  const { chatClient } = useChatClient();
 
   useEffect(() => {
     setTopInset(headerHeight);
@@ -31,7 +31,7 @@ export default function ChannelScreen(props: any) {
     <Container>
       <SafeAreaView style={styles.container}>
         <Channel
-          channel={route?.params?.channel}
+          channel={channel}
           keyboardVerticalOffset={headerHeight}
           enableMessageGroupingByUser={false}
           forceAlignMessages={"left"}

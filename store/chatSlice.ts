@@ -5,11 +5,13 @@ import { RootState } from "./index";
 export interface ChatState {
   isAuthenticating: boolean;
   chatUserToken: string;
+  selectedChannelId: string;
 }
 
 const initialState: ChatState = {
   isAuthenticating: false,
   chatUserToken: "",
+  selectedChannelId: "",
 };
 
 const API_URL = "https://gilderapi.ctrlrlabs.com";
@@ -44,7 +46,9 @@ export const chatSlice = createSlice({
   name: "chat",
   initialState,
   reducers: {
-    setToken: (state, action) => {},
+    setChannelId: (state, action) => {
+      state.selectedChannelId = action.payload.channelId;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -61,6 +65,6 @@ export const chatSlice = createSlice({
   },
 });
 
-export const {} = chatSlice.actions;
+export const { setChannelId } = chatSlice.actions;
 
 export default chatSlice.reducer;

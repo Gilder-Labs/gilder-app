@@ -351,7 +351,7 @@ export default function Navigation({}: {}) {
                 title: "Proposal Details",
               })}
             />
-            <Drawer.Screen
+            <Stack.Screen
               name="ChannelScreen"
               component={ChannelScreen}
               options={({ route }) => ({
