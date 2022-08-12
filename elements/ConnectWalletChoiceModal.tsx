@@ -13,25 +13,23 @@ export const ConnectWalletChoiceModal = () => {
   const dispatch = useAppDispatch();
 
   return (
-    <ModalContainer>
-      <Container>
-        <FloatingBarContainer>
-          <FloatingBar />
-        </FloatingBarContainer>
-        <Typography
-          text="Connect Wallet"
-          marginTop="5"
-          marginBottom="0"
-          size="h4"
-          bold={true}
-        />
-        <Row>
-          <ConnectWeb3AuthButton />
-          <ConnectPhantomButton />
-          <ConnectSolanaWalletAdapter />
-        </Row>
-      </Container>
-    </ModalContainer>
+    <Container>
+      <FloatingBarContainer>
+        <FloatingBar />
+      </FloatingBarContainer>
+      <Typography
+        text="Connect Wallet"
+        marginTop="5"
+        marginBottom="0"
+        size="h4"
+        bold={true}
+      />
+      <Row>
+        <ConnectWeb3AuthButton />
+        <ConnectPhantomButton />
+        <ConnectSolanaWalletAdapter />
+      </Row>
+    </Container>
   );
 };
 
@@ -45,8 +43,8 @@ const ModalContainer = styled.View`
 const Container = styled.View`
   position: relative;
   background: ${(props) => props.theme.gray[800]};
+  margin-top: auto;
   height: 50%;
-
   align-items: center;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;

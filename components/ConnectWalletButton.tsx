@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
+import { View } from "react-native";
 import { useTheme } from "styled-components";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { abbreviatePublicKey } from "../utils";
@@ -65,7 +66,12 @@ export const ConnectWalletButton = ({}: ConnectWalletProps) => {
         // coverScreen={true}
         onBackButtonPress={() => setModalVisible(false)}
         onBackdropPress={() => setModalVisible(false)}
-        style={{ width: "100%", padding: 0, margin: 0, height: "100%" }}
+        customBackdrop={
+          <BackDropContainer onPress={() => setModalVisible(false)}>
+            <View style={{ flex: 1 }} />
+          </BackDropContainer>
+        }
+        style={{ width: "100%", padding: 0, margin: 0 }}
       >
         <ConnectWalletChoiceModal />
       </Modal>
@@ -95,4 +101,8 @@ const ConnectButton = styled.TouchableOpacity`
   margin-bottom: 80px;
 
   background: ${(props) => props.theme.gray[800]};
+`;
+
+const BackDropContainer = styled.TouchableWithoutFeedback`
+  flex: 1;
 `;
