@@ -304,7 +304,9 @@ const WatchlistContainer = styled.ScrollView`
 
 const SearchBar = styled.TextInput`
   margin: ${(props) => props.theme.spacing[2]};
-  padding: ${(props) => props.theme.spacing[3]};
+  padding-left: ${(props) => props.theme.spacing[3]};
+  padding-right: ${(props) => props.theme.spacing[3]};
+  height: 40px;
   font-size: 14px;
   background-color: ${(props) => props.theme.gray[800]}44;
   border-radius: 4px;
@@ -318,6 +320,7 @@ const SearchBarContainer = styled.View`
   background-color: ${(props) => props.theme.gray[900]};
   margin-bottom: ${(props) => props.theme.spacing[2]};
   justify-content: space-between;
+  height: 64px;
 `;
 
 const IconContainer = styled.TouchableOpacity`
@@ -326,7 +329,7 @@ const IconContainer = styled.TouchableOpacity`
   top: 20; */
   top: 0px;
   right: 0px;
-  bottom: 0px;
+  bottom: 8px;
   justify-content: center;
   align-items: flex-end;
   margin-right: 24px;

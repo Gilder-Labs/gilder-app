@@ -22,66 +22,46 @@ export default function ThreadScreen(props: any) {
       thread={route?.params?.message}
       threadList
       keyboardVerticalOffset={headerHeight}
-      enableMessageGroupingByUser={true}
+      enableMessageGroupingByUser={false}
       forceAlignMessages={"left"}
       // ReactionList={ReactionList}
       MessageFooter={() => null}
       deletedMessagesVisibilityType={"never"}
-      MessageAvatar={() => {
-        return null;
-      }}
-      // MessageContent={() => <MessageContentContainer />}
+      MessageRepliesAvatars={(props) => (
+        <AvatarsContainer>
+          <MessageRepliesAvatars {...props} />
+        </AvatarsContainer>
+      )}
       MessageHeader={(props) => (
-        <View
-          style={{
-            flexDirection: "row",
-          }}
-        >
-          <AnimatedImage
-            style={{
-              width: 36,
-              height: 36,
-              overflow: "hidden",
-              borderRadius: 100,
-            }}
-            source={{
-              uri: props?.message?.user?.image,
-            }}
+        <MessageHeaderContainer>
+          <Typography
+            text={props?.message?.user?.name || ""}
+            size="subtitle"
+            color="gray"
+            shade="200"
+            bold={true}
+            marginRight="1"
+            marginBottom="0"
           />
-          <MessageHeaderContainer>
-            <Typography
-              text={props?.message?.user?.name || ""}
-              size="subtitle"
-              color="gray"
-              shade="200"
-              bold={true}
-              marginRight="1"
-              marginLeft="2"
-              marginBottom="0"
-            />
-            <Typography
-              text={`(${abbreviatePublicKey(
-                props?.message?.user?.id || "",
-                2
-              )})`}
-              size="caption"
-              color="gray"
-              shade="500"
-              bold={true}
-              marginRight="1"
-              marginBottom="0"
-            />
-            <Typography
-              text={props?.formattedDate || ""}
-              size="caption"
-              color="gray"
-              shade="500"
-              bold={true}
-              marginRight="1"
-              marginBottom="0"
-            />
-          </MessageHeaderContainer>
-        </View>
+          <Typography
+            text={`(${abbreviatePublicKey(props?.message?.user?.id || "", 2)})`}
+            size="caption"
+            color="gray"
+            shade="500"
+            bold={true}
+            marginRight="1"
+            marginBottom="0"
+          />
+          <Typography
+            text={props?.formattedDate || ""}
+            size="caption"
+            color="gray"
+            shade="500"
+            bold={true}
+            marginRight="1"
+            marginBottom="0"
+          />
+        </MessageHeaderContainer>
       )}
     >
       <Thread />
@@ -91,6 +71,9 @@ export default function ThreadScreen(props: any) {
 
 const MessageHeaderContainer = styled.View`
   flex-direction: row;
-  height: 20px;
+  flex: 1;
   align-items: center;
+  justify-content: flex-start;
+  margin-bottom: ${(props) => props.theme.spacing[1]};
+  margin-top: -4px;
 `;

@@ -32,7 +32,6 @@ export const fetchChatUserToken = createAsyncThunk(
         },
       });
 
-      console.log("RESPONSE IN REDUX", response);
       return {
         chatUserToken: response?.data?.streamToken,
       };

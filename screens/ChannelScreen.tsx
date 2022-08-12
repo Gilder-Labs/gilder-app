@@ -38,7 +38,7 @@ export default function ChannelScreen(props: any) {
     setToggleChannel(true);
     const timer = setTimeout(() => {
       setToggleChannel(false);
-    }, 100);
+    }, 50);
 
     return () => clearTimeout(timer);
   }, [channel]);
@@ -135,7 +135,7 @@ const MessageHeaderContainer = styled.View`
   flex: 1;
   align-items: center;
   justify-content: flex-start;
-  margin-bottom: ${(props) => props.theme.spacing[2]};
+  margin-bottom: ${(props) => props.theme.spacing[1]};
   margin-top: -4px;
 `;
 
