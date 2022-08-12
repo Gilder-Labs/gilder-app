@@ -1122,6 +1122,8 @@ export const defaultTheme: Theme = {
   thread: {
     newThread: {
       text: {},
+      backgroundGradientStart: darkTheme.gray[900],
+      backgroundGradientStop: darkTheme.gray[900],
     },
   },
   typingIndicator: {

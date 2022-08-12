@@ -6,6 +6,8 @@ import {
   useAttachmentPickerContext,
   ReactionList,
   MessageSimple,
+  MessageReplies,
+  MessageRepliesAvatars,
 } from "stream-chat-expo"; // Or stream-chat-expo
 import { StyleSheet, Text, SafeAreaView, View } from "react-native";
 import styled from "styled-components";
@@ -15,9 +17,11 @@ import { useChatClient } from "../hooks/useChatClient";
 import { Typography } from "../components";
 import { abbreviatePublicKey } from "../utils";
 import { AnimatedImage } from "react-native-ui-lib";
+import { useTheme } from "styled-components";
 
 export default function ChannelScreen(props: any) {
   const { route, navigation } = props;
+  const theme = useTheme();
   const {
     params: { channel },
   } = route;
@@ -55,6 +59,17 @@ export default function ChannelScreen(props: any) {
           MessageSimple={() => <MessageSimple />}
           MessageFooter={() => null}
           deletedMessagesVisibilityType={"never"}
+          MessageReplies={() => (
+            <MessageReplies
+              repliesCurveColor={theme.gray[500]}
+              noBorder={true}
+            />
+          )}
+          MessageRepliesAvatars={(props) => (
+            <AvatarsContainer>
+              <MessageRepliesAvatars {...props} />
+            </AvatarsContainer>
+          )}
           MessageHeader={(props) => (
             <MessageHeaderContainer>
               <Typography
@@ -122,4 +137,10 @@ const MessageHeaderContainer = styled.View`
   justify-content: flex-start;
   margin-bottom: ${(props) => props.theme.spacing[2]};
   margin-top: -4px;
+`;
+
+const AvatarsContainer = styled.View`
+  /* background-color: green; */
+  margin-top: 5px;
+  /* position: absolute; */
 `;
