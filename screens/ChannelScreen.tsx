@@ -8,6 +8,7 @@ import {
   MessageSimple,
   MessageReplies,
   MessageRepliesAvatars,
+  MessageTouchableHandlerPayload,
 } from "stream-chat-expo"; // Or stream-chat-expo
 import { StyleSheet, Text, SafeAreaView, View } from "react-native";
 import styled from "styled-components";
@@ -16,8 +17,9 @@ import { useEffect } from "react";
 import { useChatClient } from "../hooks/useChatClient";
 import { Typography } from "../components";
 import { abbreviatePublicKey } from "../utils";
-import { AnimatedImage } from "react-native-ui-lib";
 import { useTheme } from "styled-components";
+import { ChatActionModal } from "../elements/chat/ChatActionModal";
+import * as Haptics from "expo-haptics";
 
 export default function ChannelScreen(props: any) {
   const { route, navigation } = props;
@@ -28,6 +30,9 @@ export default function ChannelScreen(props: any) {
   const headerHeight = useHeaderHeight();
   const { setTopInset } = useAttachmentPickerContext();
   const [toggleChannel, setToggleChannel] = useState(false);
+  const [isVisble, setModalVisible] = useState(false);
+  const [selectedMessage, setSelectedMessage] =
+    useState<MessageTouchableHandlerPayload | null>(null);
 
   useEffect(() => {
     setTopInset(headerHeight);
@@ -47,8 +52,19 @@ export default function ChannelScreen(props: any) {
     return <Container />;
   }
 
+  const handleMessageLongPress = (message: MessageTouchableHandlerPayload) => {
+    setSelectedMessage(message);
+    setModalVisible(true);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+  };
+
   return (
     <Container>
+      <ChatActionModal
+        isVisible={isVisble}
+        setModalVisible={(isVisible) => setModalVisible(isVisible)}
+        message={selectedMessage}
+      />
       <SafeAreaView style={styles.container}>
         <Channel
           channel={channel}
@@ -58,6 +74,7 @@ export default function ChannelScreen(props: any) {
           // ReactionList={ReactionList}
           MessageSimple={() => <MessageSimple />}
           MessageFooter={() => null}
+          onLongPressMessage={(props) => handleMessageLongPress(props)}
           deletedMessagesVisibilityType={"never"}
           MessageReplies={() => (
             <MessageReplies

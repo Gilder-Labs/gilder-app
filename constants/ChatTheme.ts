@@ -752,8 +752,8 @@ export const defaultTheme: Theme = {
       upload: {},
     },
     inputBox: {
+      alignItems: "center",
       alignContent: "center",
-      alignSelf: "center",
       justifyContent: "center",
     },
     inputBoxContainer: {
@@ -761,7 +761,7 @@ export const defaultTheme: Theme = {
       borderRadius: 16,
       paddingTop: 0,
       paddingBottom: 0,
-      height: 44,
+      minHeight: 44,
       alignItems: "center",
       alignContent: "center",
       justifyContent: "center",
@@ -937,7 +937,9 @@ export const defaultTheme: Theme = {
         height: 16,
         width: 16,
       },
-      markdown: {},
+      markdown: {
+        mentions: {},
+      },
       messageUser: {
         fontSize: 12,
         fontWeight: "700",

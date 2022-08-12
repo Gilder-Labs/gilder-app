@@ -28,7 +28,9 @@ export const useChatClient = () => {
             : abbreviatePublicKey(publicKey),
           image: twitterURL ? twitterURL : userInfo?.profileImage,
         };
-        await chatClient.connectUser(user, chatUserToken);
+        if (chatUserToken) {
+          await chatClient.connectUser(user, chatUserToken);
+        }
         setClientIsReady(true);
       } catch (error) {
         if (error instanceof Error) {
@@ -41,7 +43,9 @@ export const useChatClient = () => {
 
     const disconnectClient = async () => {
       try {
-        await chatClient.disconnectUser();
+        if (chatUserToken) {
+          await chatClient.disconnectUser();
+        }
         setClientIsReady(false);
       } catch (error) {
         if (error instanceof Error) {
@@ -54,7 +58,7 @@ export const useChatClient = () => {
 
     // If the chat client has a value in the field `userID`, a user is already connected
     // and we can skip trying to connect the user again.
-    if (!chatClient.userID && publicKey && chatUserToken) {
+    if (publicKey && chatUserToken) {
       setupClient();
     } else if (!publicKey && clientIsReady) {
       disconnectClient;

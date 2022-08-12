@@ -134,8 +134,6 @@ const ChannelItemButton = styled.TouchableOpacity<{ isSelected: boolean }>`
     props.isSelected ? `${props.theme.gray[800]}aa` : props.theme.gray[900]};
 `;
 
-const EmptyView = styled.View``;
-
 const NoChannelsContainer = styled.View`
   flex: 1;
   padding-left: ${(props: any) => props.theme.spacing[3]};
