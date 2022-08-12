@@ -75,8 +75,7 @@ export const ChatRoomList = (props: any): any => {
   useEffect(() => {
     // If wallet type is web3auth we can automatically fetch user token for chat
     const loginWithWeb3auth = async () => {
-      const message =
-        "Proving DAO membership to authenticate into Gilder Chat.";
+      const message = "Proving DAO membership to authenticate into chat.";
       const web3AuthSignedMessage = await signMessageWithKey(message);
       dispatch(
         fetchChatUserToken({ publicKey, signedMessage: web3AuthSignedMessage })
@@ -84,7 +83,6 @@ export const ChatRoomList = (props: any): any => {
     };
 
     if (publicKey && walletType === "web3auth") {
-      console.log("TRYING TO LOG INTO CHAT AGAIN");
       loginWithWeb3auth();
     }
   }, [publicKey, selectedRealm?.realmId]);

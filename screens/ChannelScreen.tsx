@@ -5,6 +5,7 @@ import {
   MessageInput,
   useAttachmentPickerContext,
   ReactionList,
+  MessageSimple,
 } from "stream-chat-expo"; // Or stream-chat-expo
 import { StyleSheet, Text, SafeAreaView, View } from "react-native";
 import styled from "styled-components";
@@ -22,10 +23,25 @@ export default function ChannelScreen(props: any) {
   } = route;
   const headerHeight = useHeaderHeight();
   const { setTopInset } = useAttachmentPickerContext();
+  const [toggleChannel, setToggleChannel] = useState(false);
 
   useEffect(() => {
     setTopInset(headerHeight);
   }, [headerHeight]);
+
+  // Stupid hack to update channel with drawers becuse <Channel> doesn't update when changing channel/route.
+  useEffect(() => {
+    setToggleChannel(true);
+    const timer = setTimeout(() => {
+      setToggleChannel(false);
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [channel]);
+
+  if (toggleChannel) {
+    return <Container />;
+  }
 
   return (
     <Container>
@@ -36,6 +52,7 @@ export default function ChannelScreen(props: any) {
           enableMessageGroupingByUser={false}
           forceAlignMessages={"left"}
           // ReactionList={ReactionList}
+          MessageSimple={() => <MessageSimple />}
           MessageFooter={() => null}
           deletedMessagesVisibilityType={"never"}
           MessageHeader={(props) => (

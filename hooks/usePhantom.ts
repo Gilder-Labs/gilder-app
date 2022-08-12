@@ -246,7 +246,7 @@ export const usePhantom = () => {
   };
 
   const signMessage = async () => {
-    const message = "Proving DAO membership to authenticate into Gilder Chat.";
+    const message = "Proving DAO membership to authenticate into chat.";
 
     const walletInfoJSON = await SecureStore.getItemAsync("phantomInfo");
     const phantomInfo = walletInfoJSON ? JSON.parse(walletInfoJSON) : {};
