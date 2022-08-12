@@ -14,7 +14,6 @@ import { useEffect } from "react";
 import { signMessageWithKey } from "../../utils/signMessageWithKey";
 import { fetchChatUserToken } from "../../store/chatSlice";
 
-const sort = { created_at: 1 };
 const options = {
   state: true,
   watch: true,
@@ -63,6 +62,12 @@ const EmptyChannelList = () => {
   );
 };
 
+const sort = [
+  {
+    name: 1,
+  },
+];
+
 export const ChatRoomList = (props: any): any => {
   const { clientIsReady } = useChatClient();
   const { selectedRealm } = useAppSelector((state) => state.realms);
@@ -100,7 +105,8 @@ export const ChatRoomList = (props: any): any => {
           filters={filters}
           Preview={(props) => <CustomListItem channelData={props} />}
           options={options}
-          // sort={sort}
+          sort={sort}
+          lockChannelOrder={true}
           EmptyStateIndicator={() => <EmptyChannelList />}
         />
       ) : (

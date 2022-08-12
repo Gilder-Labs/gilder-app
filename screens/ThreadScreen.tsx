@@ -27,11 +27,6 @@ export default function ThreadScreen(props: any) {
       // ReactionList={ReactionList}
       MessageFooter={() => null}
       deletedMessagesVisibilityType={"never"}
-      MessageRepliesAvatars={(props) => (
-        <AvatarsContainer>
-          <MessageRepliesAvatars {...props} />
-        </AvatarsContainer>
-      )}
       MessageHeader={(props) => (
         <MessageHeaderContainer>
           <Typography

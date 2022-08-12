@@ -7,7 +7,7 @@ export const DEFAULT_STATUS_ICON_SIZE = 16;
 const maxWidth = vw(100) - 72;
 
 export const Colors = {
-  accent_blue: darkTheme.gray[400],
+  accent_blue: darkTheme.blue[500],
   accent_green: darkTheme.success[500],
   accent_red: darkTheme.error[500],
   bg_gradient_end: darkTheme.gray[700],
