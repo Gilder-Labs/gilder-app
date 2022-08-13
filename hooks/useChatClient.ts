@@ -9,6 +9,7 @@ const chatClient = StreamChat.getInstance(chatApiKey);
 
 export const useChatClient = () => {
   const [clientIsReady, setClientIsReady] = useState(false);
+  const [clientConnecting, setClientConnecting] = useState(false);
   const dispatch = useAppDispatch();
   const { publicKey, walletType, userInfo } = useAppSelector(
     (state) => state.wallet
@@ -28,7 +29,8 @@ export const useChatClient = () => {
             : abbreviatePublicKey(publicKey),
           image: twitterURL ? twitterURL : userInfo?.profileImage,
         };
-        if (chatUserToken) {
+        if (chatUserToken && !clientConnecting) {
+          setClientConnecting(true);
           await chatClient.connectUser(user, chatUserToken);
         }
         setClientIsReady(true);
@@ -38,6 +40,7 @@ export const useChatClient = () => {
             `An error occurred while connecting the user: ${error.message}`
           );
         }
+        setClientConnecting(false);
       }
     };
 
@@ -47,6 +50,7 @@ export const useChatClient = () => {
           await chatClient.disconnectUser();
         }
         setClientIsReady(false);
+        setClientConnecting(false);
       } catch (error) {
         if (error instanceof Error) {
           console.error(

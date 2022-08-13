@@ -60,11 +60,6 @@ export default function ChannelScreen(props: any) {
 
   return (
     <Container>
-      <ChatActionModal
-        isVisible={isVisble}
-        setModalVisible={(isVisible) => setModalVisible(isVisible)}
-        message={selectedMessage}
-      />
       <SafeAreaView style={styles.container}>
         <Channel
           channel={channel}
@@ -122,6 +117,11 @@ export default function ChannelScreen(props: any) {
             </MessageHeaderContainer>
           )}
         >
+          <ChatActionModal
+            isVisible={isVisble}
+            setModalVisible={(isVisible) => setModalVisible(isVisible)}
+            message={selectedMessage}
+          />
           <MessageList
             onThreadSelect={(message) => {
               if (route?.params?.channel?.id) {

@@ -1,4 +1,10 @@
-import { Thread, Channel, useAttachmentPickerContext } from "stream-chat-expo"; // Or stream-chat-expo
+import { useState } from "react";
+import {
+  Thread,
+  Channel,
+  useAttachmentPickerContext,
+  MessageTouchableHandlerPayload,
+} from "stream-chat-expo"; // Or stream-chat-expo
 import { useHeaderHeight } from "@react-navigation/elements";
 import { useEffect } from "react";
 import { Typography } from "../components";
@@ -6,11 +12,22 @@ import { AnimatedImage } from "react-native-ui-lib";
 import { View } from "react-native";
 import styled from "styled-components/native";
 import { abbreviatePublicKey } from "../utils";
+import { ChatActionModal } from "../elements/chat/ChatActionModal";
+import * as Haptics from "expo-haptics";
 
 export default function ThreadScreen(props: any) {
   const { route } = props;
   const headerHeight = useHeaderHeight();
   const { setTopInset } = useAttachmentPickerContext();
+  const [isVisble, setModalVisible] = useState(false);
+  const [selectedMessage, setSelectedMessage] =
+    useState<MessageTouchableHandlerPayload | null>(null);
+
+  const handleMessageLongPress = (message: MessageTouchableHandlerPayload) => {
+    setSelectedMessage(message);
+    setModalVisible(true);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+  };
 
   useEffect(() => {
     setTopInset(headerHeight);
@@ -24,6 +41,7 @@ export default function ThreadScreen(props: any) {
       keyboardVerticalOffset={headerHeight}
       enableMessageGroupingByUser={false}
       forceAlignMessages={"left"}
+      onLongPressMessage={(props) => handleMessageLongPress(props)}
       // ReactionList={ReactionList}
       MessageFooter={() => null}
       deletedMessagesVisibilityType={"never"}
@@ -59,6 +77,12 @@ export default function ThreadScreen(props: any) {
         </MessageHeaderContainer>
       )}
     >
+      <ChatActionModal
+        isVisible={isVisble}
+        setModalVisible={(isVisible) => setModalVisible(isVisible)}
+        message={selectedMessage}
+        isInThread={true}
+      />
       <Thread />
     </Channel>
   );

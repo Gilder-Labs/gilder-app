@@ -6,9 +6,19 @@ import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import * as Haptics from "expo-haptics";
 import { useWindowDimensions } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { MessageTouchableHandlerPayload } from "stream-chat-expo";
+import {
+  MessageTouchableHandlerPayload,
+  useMessageContext,
+  useThreadContext,
+} from "stream-chat-expo";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faWallet } from "@fortawesome/pro-solid-svg-icons/faWallet";
+import { faCopy } from "@fortawesome/pro-solid-svg-icons/faCopy";
+import { faReply } from "@fortawesome/pro-solid-svg-icons/faReply";
+import { faPenToSquare } from "@fortawesome/pro-solid-svg-icons/faPenToSquare";
+import { faTrashCan } from "@fortawesome/pro-solid-svg-icons/faTrashCan";
+import { faComments } from "@fortawesome/pro-solid-svg-icons/faComments";
+
 import Modal from "react-native-modal";
 import { Typography } from "../../components";
 import { useChatClient } from "../../hooks/useChatClient";
@@ -18,18 +28,23 @@ interface ChatActionModalProps {
   isVisible: boolean;
   setModalVisible: (isOpen: boolean) => any;
   message: MessageTouchableHandlerPayload | null;
+  isInThread?: boolean;
 }
 
 export const ChatActionModal = ({
   isVisible = false,
   setModalVisible,
   message,
+  isInThread = false,
 }: ChatActionModalProps) => {
   const theme = useTheme();
   const navigation = useNavigation();
   const { height, width } = useWindowDimensions();
   const { chatClient } = useChatClient();
   const { publicKey } = useAppSelector((state) => state.wallet);
+  const threadContext = useThreadContext();
+  const messageContext = useMessageContext();
+
   console.log("message", message);
 
   const handleAction = (type: string) => {
@@ -42,6 +57,9 @@ export const ChatActionModal = ({
       actionHandlers?.deleteMessage();
     } else if (type === "thread") {
       // TODO: handle creating threads
+      if (message?.message) {
+        // threadContext.openThread(message?.message);
+      }
     } else if (type === "copy") {
       // TODO: handle copy;
       var strippedHtml = message?.message?.html?.replace(/<[^>]+>/g, "");
@@ -81,45 +99,67 @@ export const ChatActionModal = ({
             <ActionButton onPress={() => handleAction("edit")}>
               <FontAwesomeIcon
                 style={{ marginBottom: 4 }}
-                icon={faWallet}
+                icon={faPenToSquare}
                 size={20}
                 color={theme.gray[400]}
               />
-              <Typography size="caption" shade="300" text="Edit" />
+              <Typography
+                size="caption"
+                shade="300"
+                text="Edit"
+                marginBottom="0"
+              />
             </ActionButton>
           )}
           <ActionButton onPress={() => handleAction("reply")}>
             <FontAwesomeIcon
               style={{ marginBottom: 4 }}
-              icon={faWallet}
+              icon={faReply}
               size={20}
               color={theme.gray[400]}
             />
-            <Typography size="caption" shade="300" text="Reply" />
+            <Typography
+              size="caption"
+              shade="300"
+              text="Reply"
+              marginBottom="0"
+            />
           </ActionButton>
           <ActionButton onPress={() => handleAction("copy")}>
             <FontAwesomeIcon
               style={{ marginBottom: 4 }}
-              icon={faWallet}
+              icon={faCopy}
               size={20}
               color={theme.gray[400]}
             />
-            <Typography size="caption" shade="300" text="Copy" />
-          </ActionButton>
-          <ActionButton onPress={() => handleAction("thread")}>
-            <FontAwesomeIcon
-              style={{ marginBottom: 4 }}
-              icon={faWallet}
-              size={20}
-              color={theme.gray[400]}
+            <Typography
+              size="caption"
+              shade="300"
+              text="Copy"
+              marginBottom="0"
             />
-            <Typography size="caption" shade="300" text="Thread Reply" />
           </ActionButton>
+          {/* {!isInThread && (
+            <ActionButton onPress={() => handleAction("thread")}>
+              <FontAwesomeIcon
+                style={{ marginBottom: 4 }}
+                icon={faComments}
+                size={20}
+                color={theme.gray[400]}
+              />
+              <Typography
+                size="caption"
+                shade="300"
+                text="Thread Reply"
+                marginBottom="0"
+              />
+            </ActionButton>
+          )} */}
           {publicKey === message?.message?.user?.id && (
             <ActionButton onPress={() => handleAction("delete")}>
               <FontAwesomeIcon
                 style={{ marginBottom: 4 }}
-                icon={faWallet}
+                icon={faTrashCan}
                 size={20}
                 color={theme.error[400]}
               />
@@ -128,6 +168,7 @@ export const ChatActionModal = ({
                 color="error"
                 shade="400"
                 text="Delete"
+                marginBottom="0"
               />
             </ActionButton>
           )}
