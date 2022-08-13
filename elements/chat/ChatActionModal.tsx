@@ -10,6 +10,7 @@ import {
   MessageTouchableHandlerPayload,
   useMessageContext,
   useThreadContext,
+  useChannelContext,
 } from "stream-chat-expo";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faWallet } from "@fortawesome/pro-solid-svg-icons/faWallet";
@@ -43,7 +44,7 @@ export const ChatActionModal = ({
   const { chatClient } = useChatClient();
   const { publicKey } = useAppSelector((state) => state.wallet);
   const threadContext = useThreadContext();
-  const messageContext = useMessageContext();
+  const channelContext = useChannelContext();
 
   console.log("message", message);
 
@@ -57,8 +58,12 @@ export const ChatActionModal = ({
       actionHandlers?.deleteMessage();
     } else if (type === "thread") {
       // TODO: handle creating threads
+      const { channel } = channelContext;
       if (message?.message) {
-        // threadContext.openThread(message?.message);
+        navigation.navigate("ThreadScreen", {
+          channel,
+          message: message?.message,
+        });
       }
     } else if (type === "copy") {
       // TODO: handle copy;
@@ -139,7 +144,7 @@ export const ChatActionModal = ({
               marginBottom="0"
             />
           </ActionButton>
-          {/* {!isInThread && (
+          {!isInThread && (
             <ActionButton onPress={() => handleAction("thread")}>
               <FontAwesomeIcon
                 style={{ marginBottom: 4 }}
@@ -154,7 +159,7 @@ export const ChatActionModal = ({
                 marginBottom="0"
               />
             </ActionButton>
-          )} */}
+          )}
           {publicKey === message?.message?.user?.id && (
             <ActionButton onPress={() => handleAction("delete")}>
               <FontAwesomeIcon
