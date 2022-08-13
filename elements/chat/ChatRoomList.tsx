@@ -33,15 +33,27 @@ const CustomListItem = ({ channelData }: any) => {
     navigation.navigate("ChannelScreen", { channel });
   };
 
+  const currentRouteIndex = navigation.getState()?.routes?.[0].state?.index;
+  let isOnChannelRoute;
+  if (currentRouteIndex) {
+    isOnChannelRoute =
+      navigation.getState()?.routes?.[0].state?.routes?.[currentRouteIndex]
+        ?.name === "ChannelScreen";
+  }
+
   return (
     <ChannelItemButton
       // @ts-ignore
       onPress={() => handleSelect()}
-      isSelected={selectedChannelId === channel?.cid}
+      isSelected={selectedChannelId === channel?.cid && isOnChannelRoute}
     >
       <Typography
         text={`#  ${data?.name}`}
-        shade={isUnread || selectedChannelId === channel?.cid ? "300" : "500"}
+        shade={
+          isUnread || (selectedChannelId === channel?.cid && isOnChannelRoute)
+            ? "300"
+            : "500"
+        }
         marginLeft="5"
         bold={isUnread ? true : false}
         marginBottom="0"
