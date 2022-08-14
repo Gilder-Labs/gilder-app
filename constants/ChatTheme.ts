@@ -1059,7 +1059,7 @@ export const defaultTheme: Theme = {
       radius: 2, // not recommended to change this
       reactionBubble: {},
       reactionBubbleBackground: {},
-      reactionSize: 24,
+      reactionSize: 0,
       strokeSize: 1, // not recommended to change this
     },
     replies: {

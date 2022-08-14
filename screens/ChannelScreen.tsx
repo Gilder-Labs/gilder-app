@@ -66,9 +66,10 @@ export default function ChannelScreen(props: any) {
           keyboardVerticalOffset={headerHeight}
           enableMessageGroupingByUser={false}
           forceAlignMessages={"left"}
-          // ReactionList={ReactionList}
+          ReactionList={() => null} // TODO: update this
+          maxTimeBetweenGroupedMessages={30000}
           MessageSimple={() => <MessageSimple />}
-          MessageFooter={() => null}
+          MessageFooter={() => null} // TODO: render reactions here
           onLongPressMessage={(props) => handleMessageLongPress(props)}
           deletedMessagesVisibilityType={"never"}
           MessageReplies={() => (

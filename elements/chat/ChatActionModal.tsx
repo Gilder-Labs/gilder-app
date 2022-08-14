@@ -19,8 +19,9 @@ import { faReply } from "@fortawesome/pro-solid-svg-icons/faReply";
 import { faPenToSquare } from "@fortawesome/pro-solid-svg-icons/faPenToSquare";
 import { faTrashCan } from "@fortawesome/pro-solid-svg-icons/faTrashCan";
 import { faComments } from "@fortawesome/pro-solid-svg-icons/faComments";
-
+import { faFaceSmilePlus } from "@fortawesome/pro-solid-svg-icons/faFaceSmilePlus";
 import Modal from "react-native-modal";
+
 import { Typography } from "../../components";
 import { useChatClient } from "../../hooks/useChatClient";
 import * as Clipboard from "expo-clipboard";
@@ -41,12 +42,8 @@ export const ChatActionModal = ({
   const theme = useTheme();
   const navigation = useNavigation();
   const { height, width } = useWindowDimensions();
-  const { chatClient } = useChatClient();
   const { publicKey } = useAppSelector((state) => state.wallet);
-  const threadContext = useThreadContext();
   const channelContext = useChannelContext();
-
-  console.log("message", message);
 
   const handleAction = (type: string) => {
     const actionHandlers = message?.actionHandlers;
@@ -76,6 +73,14 @@ export const ChatActionModal = ({
     setModalVisible(false);
   };
 
+  const toggleReaction = (reaction: string) => {
+    console.log("toggling reaction");
+    message?.actionHandlers?.toggleReaction("smile");
+    setModalVisible(false);
+  };
+
+  console.log("MESSAGE", message);
+
   return (
     <Modal
       isVisible={isVisible}
@@ -97,7 +102,28 @@ export const ChatActionModal = ({
           <FloatingBar />
         </FloatingBarContainer>
         <ReactionRow>
-          <Typography size="caption" shade="300" text="reactions" />
+          <EmojiIconContainer onPress={() => toggleReaction("fire")}>
+            <Typography text="🔥" size="h4" marginBottom="0" />
+          </EmojiIconContainer>
+          <EmojiIconContainer onPress={() => toggleReaction("heart")}>
+            <Typography text="❤️" size="h4" marginBottom="0" />
+          </EmojiIconContainer>
+          <EmojiIconContainer onPress={() => toggleReaction("thumbsup")}>
+            <Typography text="👍" size="h4" marginBottom="0" />
+          </EmojiIconContainer>
+          <EmojiIconContainer onPress={() => toggleReaction("joy")}>
+            <Typography text="😂" size="h4" marginBottom="0" />
+          </EmojiIconContainer>
+          <EmojiIconContainer onPress={() => toggleReaction("tada")}>
+            <Typography text="🎉" size="h4" marginBottom="0" />
+          </EmojiIconContainer>
+          {/* <EmojiIconContainer onPress={() => toggleReaction("something")}>
+            <FontAwesomeIcon
+              icon={faFaceSmilePlus}
+              size={28}
+              color={theme.gray[400]}
+            />
+          </EmojiIconContainer> */}
         </ReactionRow>
         <ActionContainer>
           {publicKey === message?.message?.user?.id && (
@@ -219,7 +245,7 @@ const FloatingBar = styled.View`
 `;
 
 const ActionContainer = styled.View`
-  padding: ${(props: any) => props.theme.spacing[4]};
+  padding: ${(props: any) => props.theme.spacing[2]};
   flex: 1;
   flex-direction: row;
   justify-content: space-around;
@@ -240,6 +266,21 @@ const ActionButton = styled.TouchableOpacity`
 `;
 
 const ReactionRow = styled.View`
-  padding: ${(props: any) => props.theme.spacing[4]};
-  margin-bottom: ${(props: any) => props.theme.spacing[2]};
+  padding-left: ${(props: any) => props.theme.spacing[4]};
+  padding-right: ${(props: any) => props.theme.spacing[4]};
+
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: ${(props: any) => props.theme.spacing[5]};
+`;
+
+const EmojiIconContainer = styled.TouchableOpacity`
+  width: 48px;
+  height: 48px;
+
+  border-radius: 100;
+  justify-content: center;
+  align-items: center;
+  background: ${(props: any) => props.theme.gray[900]};
 `;
