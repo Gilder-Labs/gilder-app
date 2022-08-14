@@ -5,10 +5,12 @@ import { usePhantom } from "../../hooks/usePhantom";
 import { fetchChatUserToken } from "../../store/chatSlice";
 import styled from "styled-components/native";
 import { ActivityIndicator } from "react-native";
+import { useChatClient } from "../../hooks/useChatClient";
 
 export const ChatAuthButton = () => {
   const { signedMessage, signMessage } = usePhantom();
   const { publicKey, walletType } = useAppSelector((state) => state.wallet);
+  const { clientIsReady } = useChatClient();
   const dispatch = useAppDispatch();
   const { isAuthenticating, chatUserToken } = useAppSelector(
     (state) => state.chat
@@ -28,13 +30,13 @@ export const ChatAuthButton = () => {
     }
   };
 
-  if (isAuthenticating) {
+  if (isAuthenticating || (clientIsReady && walletType === "web3auth")) {
     return <ActivityIndicator />;
   }
 
   return (
     <SignInContainer>
-      {publicKey ? (
+      {publicKey && !walletType ? (
         <Button
           title={"Sign in with Wallet"}
           onPress={authIntoChat}

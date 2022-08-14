@@ -7,7 +7,7 @@ export const DEFAULT_STATUS_ICON_SIZE = 16;
 const maxWidth = vw(100) - 72;
 
 export const Colors = {
-  accent_blue: darkTheme.blue[500],
+  accent_blue: darkTheme.gray[200],
   accent_green: darkTheme.success[500],
   accent_red: darkTheme.error[500],
   bg_gradient_end: darkTheme.gray[700],
@@ -950,7 +950,9 @@ export const defaultTheme: Theme = {
         width: 16,
       },
       markdown: {
-        mentions: {},
+        mentions: {
+          color: darkTheme.blue[500],
+        },
       },
       messageUser: {
         fontSize: 12,
@@ -1043,6 +1045,7 @@ export const defaultTheme: Theme = {
         borderTopLeftRadius: 8,
         borderBottomLeftRadius: 8,
         borderTopRightRadius: 8,
+        marginTop: 4,
       },
       giphy: {
         width: maxWidth,
@@ -1084,7 +1087,9 @@ export const defaultTheme: Theme = {
       container: {},
       leftAvatarsContainer: {},
       leftCurve: {},
-      messageRepliesText: {},
+      messageRepliesText: {
+        color: darkTheme.blue[500],
+      },
       rightAvatarsContainer: {},
       rightCurve: {},
     },
