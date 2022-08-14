@@ -129,7 +129,7 @@ export const ChatActionModal = ({
                 style={{ marginBottom: 4 }}
                 icon={faPenToSquare}
                 size={20}
-                color={theme.gray[400]}
+                color={theme.gray[300]}
               />
               <Typography
                 size="caption"
@@ -144,7 +144,7 @@ export const ChatActionModal = ({
               style={{ marginBottom: 4 }}
               icon={faReply}
               size={20}
-              color={theme.gray[400]}
+              color={theme.gray[300]}
             />
             <Typography
               size="caption"
@@ -158,7 +158,7 @@ export const ChatActionModal = ({
               style={{ marginBottom: 4 }}
               icon={faCopy}
               size={20}
-              color={theme.gray[400]}
+              color={theme.gray[300]}
             />
             <Typography
               size="caption"
@@ -173,7 +173,7 @@ export const ChatActionModal = ({
                 style={{ marginBottom: 4 }}
                 icon={faComments}
                 size={20}
-                color={theme.gray[400]}
+                color={theme.gray[300]}
               />
               <Typography
                 size="caption"
@@ -258,7 +258,7 @@ const ActionButton = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
   margin: ${(props: any) => props.theme.spacing[2]};
-  background: ${(props: any) => props.theme.gray[900]};
+  background: ${(props: any) => props.theme.gray[1000]};
   flex: 1;
 `;
 
@@ -279,5 +279,5 @@ const EmojiIconContainer = styled.TouchableOpacity`
   border-radius: 100;
   justify-content: center;
   align-items: center;
-  background: ${(props: any) => props.theme.gray[900]};
+  background: ${(props: any) => props.theme.gray[1000]};
 `;

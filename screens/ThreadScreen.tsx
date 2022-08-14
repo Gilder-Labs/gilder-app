@@ -15,6 +15,7 @@ import { abbreviatePublicKey } from "../utils";
 import { ChatActionModal } from "../elements/chat/ChatActionModal";
 import * as Haptics from "expo-haptics";
 import { ChatMessageFooter } from "../elements/chat/ChatMessageFooter";
+import { Messagereply } from "../elements/chat/MessageReply";
 
 export default function ThreadScreen(props: any) {
   const { route } = props;
@@ -46,6 +47,7 @@ export default function ThreadScreen(props: any) {
       // ReactionList={ReactionList}
       MessageFooter={() => <ChatMessageFooter />}
       deletedMessagesVisibilityType={"never"}
+      Reply={() => <Messagereply />}
       MessageHeader={(props) => (
         <MessageHeaderContainer>
           <Typography

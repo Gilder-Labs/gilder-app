@@ -45,12 +45,10 @@ export const ReactionItem = React.memo(
           styles.reactionItemContainer,
           {
             backgroundColor: isOwnReaction
-              ? `${theme.secondary[900]}55`
+              ? `${theme.blue[900]}55`
               : theme.gray[800],
 
-            borderColor: isOwnReaction
-              ? `${theme.secondary[600]}`
-              : "transparent",
+            borderColor: isOwnReaction ? `${theme.blue[600]}` : "transparent",
           },
         ]}
       >

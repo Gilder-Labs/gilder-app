@@ -21,6 +21,7 @@ import { useTheme } from "styled-components";
 import { ChatActionModal } from "../elements/chat/ChatActionModal";
 import * as Haptics from "expo-haptics";
 import { ChatMessageFooter } from "../elements/chat/ChatMessageFooter";
+import { Messagereply } from "../elements/chat/MessageReply";
 
 export default function ChannelScreen(props: any) {
   const { route, navigation } = props;
@@ -67,7 +68,7 @@ export default function ChannelScreen(props: any) {
           keyboardVerticalOffset={headerHeight}
           enableMessageGroupingByUser={false}
           forceAlignMessages={"left"}
-          ReactionList={() => null} // TODO: update this
+          ReactionList={() => null}
           maxTimeBetweenGroupedMessages={30000}
           MessageSimple={() => <MessageSimple />}
           MessageFooter={() => <ChatMessageFooter />}
@@ -79,6 +80,7 @@ export default function ChannelScreen(props: any) {
               noBorder={true}
             />
           )}
+          Reply={() => <Messagereply />}
           MessageRepliesAvatars={(props) => (
             <AvatarsContainer>
               <MessageRepliesAvatars {...props} />
@@ -119,11 +121,6 @@ export default function ChannelScreen(props: any) {
             </MessageHeaderContainer>
           )}
         >
-          <ChatActionModal
-            isVisible={isVisble}
-            setModalVisible={(isVisible) => setModalVisible(isVisible)}
-            message={selectedMessage}
-          />
           <MessageList
             onThreadSelect={(message) => {
               if (route?.params?.channel?.id) {
@@ -132,6 +129,11 @@ export default function ChannelScreen(props: any) {
             }}
           />
           <MessageInput />
+          <ChatActionModal
+            isVisible={isVisble}
+            setModalVisible={(isVisible) => setModalVisible(isVisible)}
+            message={selectedMessage}
+          />
         </Channel>
       </SafeAreaView>
     </Container>
@@ -154,7 +156,7 @@ const MessageHeaderContainer = styled.View`
   flex: 1;
   align-items: center;
   justify-content: flex-start;
-  margin-bottom: ${(props) => props.theme.spacing[1]};
+  /* margin-bottom: ${(props) => props.theme.spacing[1]}; */
   margin-top: -4px;
 `;
 
