@@ -23,7 +23,7 @@ export const Messagereply = () => {
       <ReplyContentContainer>
         <Image
           style={{ width: 24, height: 24, borderRadius: 100, marginRight: 4 }}
-          source={{ uri: message?.user?.image }}
+          source={{ uri: message?.quoted_message?.user?.image }}
         />
         <Typography
           text={
