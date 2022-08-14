@@ -119,7 +119,13 @@ export const ChatRoomList = (props: any): any => {
           options={options}
           sort={sort}
           lockChannelOrder={true}
-          EmptyStateIndicator={() => <EmptyChannelList />}
+          EmptyStateIndicator={() =>
+            !chatUserToken && walletType === "phantom" ? (
+              <EmptyChannelList />
+            ) : (
+              <ChatAuthButton />
+            )
+          }
         />
       ) : (
         <ChatAuthButton />
