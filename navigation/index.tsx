@@ -130,6 +130,7 @@ function DrawerScreen() {
         drawerStyle: {
           width: 320,
         },
+        keyboardDismissMode: "none",
         headerTintColor: "#f4f4f5", //Set Header text color
         swipeEdgeWidth: 500, // Allows user to open drawer swiping left with on any part of screen
       }}
