@@ -20,6 +20,7 @@ import { abbreviatePublicKey } from "../utils";
 import { useTheme } from "styled-components";
 import { ChatActionModal } from "../elements/chat/ChatActionModal";
 import * as Haptics from "expo-haptics";
+import { ChatMessageFooter } from "../elements/chat/ChatMessageFooter";
 
 export default function ChannelScreen(props: any) {
   const { route, navigation } = props;
@@ -69,7 +70,7 @@ export default function ChannelScreen(props: any) {
           ReactionList={() => null} // TODO: update this
           maxTimeBetweenGroupedMessages={30000}
           MessageSimple={() => <MessageSimple />}
-          MessageFooter={() => null} // TODO: render reactions here
+          MessageFooter={() => <ChatMessageFooter />}
           onLongPressMessage={(props) => handleMessageLongPress(props)}
           deletedMessagesVisibilityType={"never"}
           MessageReplies={() => (

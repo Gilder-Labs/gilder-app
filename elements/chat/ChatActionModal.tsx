@@ -74,12 +74,9 @@ export const ChatActionModal = ({
   };
 
   const toggleReaction = (reaction: string) => {
-    console.log("toggling reaction");
-    message?.actionHandlers?.toggleReaction("smile");
+    message?.actionHandlers?.toggleReaction(reaction);
     setModalVisible(false);
   };
-
-  console.log("MESSAGE", message);
 
   return (
     <Modal
@@ -102,19 +99,19 @@ export const ChatActionModal = ({
           <FloatingBar />
         </FloatingBarContainer>
         <ReactionRow>
-          <EmojiIconContainer onPress={() => toggleReaction("fire")}>
+          <EmojiIconContainer onPress={() => toggleReaction("768")}>
             <Typography text="🔥" size="h4" marginBottom="0" />
           </EmojiIconContainer>
-          <EmojiIconContainer onPress={() => toggleReaction("heart")}>
+          <EmojiIconContainer onPress={() => toggleReaction("365")}>
             <Typography text="❤️" size="h4" marginBottom="0" />
           </EmojiIconContainer>
-          <EmojiIconContainer onPress={() => toggleReaction("thumbsup")}>
+          <EmojiIconContainer onPress={() => toggleReaction("333")}>
             <Typography text="👍" size="h4" marginBottom="0" />
           </EmojiIconContainer>
-          <EmojiIconContainer onPress={() => toggleReaction("joy")}>
+          <EmojiIconContainer onPress={() => toggleReaction("209")}>
             <Typography text="😂" size="h4" marginBottom="0" />
           </EmojiIconContainer>
-          <EmojiIconContainer onPress={() => toggleReaction("tada")}>
+          <EmojiIconContainer onPress={() => toggleReaction("127")}>
             <Typography text="🎉" size="h4" marginBottom="0" />
           </EmojiIconContainer>
           {/* <EmojiIconContainer onPress={() => toggleReaction("something")}>

@@ -14,6 +14,7 @@ import styled from "styled-components/native";
 import { abbreviatePublicKey } from "../utils";
 import { ChatActionModal } from "../elements/chat/ChatActionModal";
 import * as Haptics from "expo-haptics";
+import { ChatMessageFooter } from "../elements/chat/ChatMessageFooter";
 
 export default function ThreadScreen(props: any) {
   const { route } = props;
@@ -43,7 +44,7 @@ export default function ThreadScreen(props: any) {
       forceAlignMessages={"left"}
       onLongPressMessage={(props) => handleMessageLongPress(props)}
       // ReactionList={ReactionList}
-      MessageFooter={() => null}
+      MessageFooter={() => <ChatMessageFooter />}
       deletedMessagesVisibilityType={"never"}
       MessageHeader={(props) => (
         <MessageHeaderContainer>
