@@ -112,11 +112,6 @@ const Container = styled.View`
   flex: 1;
 `;
 
-const DateSeparator = styled.Text`
-  background: green;
-  height: 20px;
-`;
-
 const EmptyView = styled.View`
   height: 150px;
 `;

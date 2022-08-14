@@ -128,7 +128,7 @@ export default function ChannelScreen(props: any) {
               }
             }}
           />
-          <MessageInput />
+          <MessageInput Reply={() => null} />
           <ChatActionModal
             isVisible={isVisble}
             setModalVisible={(isVisible) => setModalVisible(isVisible)}

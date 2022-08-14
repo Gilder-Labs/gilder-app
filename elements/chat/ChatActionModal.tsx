@@ -64,9 +64,8 @@ export const ChatActionModal = ({
       }
     } else if (type === "copy") {
       // TODO: handle copy;
-      var strippedHtml = message?.message?.html?.replace(/<[^>]+>/g, "");
 
-      Clipboard.setStringAsync(strippedHtml || "");
+      Clipboard.setStringAsync(message?.message?.text || "");
     }
 
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
