@@ -869,17 +869,29 @@ export const defaultTheme: Theme = {
     },
     card: {
       authorName: {},
-      authorNameContainer: {},
+      authorNameContainer: {
+        display: "none",
+      },
       authorNameFooter: {},
       authorNameFooterContainer: {},
       authorNameMask: {},
-      container: {},
+      container: {
+        backgroundColor: darkTheme.gray[800],
+        borderRadius: 8,
+        paddingTop: 4,
+        width: "100%",
+      },
       cover: {},
       footer: {
-        description: {},
+        description: {
+          color: darkTheme.gray[300],
+        },
         title: {
           fontWeight: "700",
+          fontSize: 14,
+          color: darkTheme.gray[100],
         },
+        padding: 4,
       },
       noURI: {
         borderLeftWidth: 2,
@@ -1024,14 +1036,17 @@ export const defaultTheme: Theme = {
       buttonContainer: {},
       cancel: {},
       container: {
-        width: maxWidth,
+        paddingLeft: 0,
+        paddingRight: 0,
         paddingTop: 0,
         borderBottomRightRadius: 8,
         borderTopLeftRadius: 8,
         borderBottomLeftRadius: 8,
         borderTopRightRadius: 8,
       },
-      giphy: { width: maxWidth },
+      giphy: {
+        width: maxWidth,
+      },
       giphyContainer: {},
       giphyHeaderText: {},
       giphyHeaderTitle: {},

@@ -74,6 +74,7 @@ export default function ChannelScreen(props: any) {
           MessageFooter={() => <ChatMessageFooter />}
           onLongPressMessage={(props) => handleMessageLongPress(props)}
           deletedMessagesVisibilityType={"never"}
+          autoCompleteTriggerSettings={() => ({})}
           MessageReplies={() => (
             <MessageReplies
               repliesCurveColor={theme.gray[500]}
