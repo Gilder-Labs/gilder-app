@@ -172,7 +172,7 @@ export const usePhantom = () => {
       } else if (/onDisconnect/.test(url.href)) {
         dispatch(disconnectWallet());
         setSignedMessage("");
-      } else if (/onSignMessage/.test(url.pathname)) {
+      } else if (/onSignMessage/.test(url.href)) {
         const walletInfoJSON = await SecureStore.getItemAsync("phantomInfo");
         const phantomInfo = walletInfoJSON ? JSON.parse(walletInfoJSON) : {};
         const { sharedSecretDapp } = phantomInfo;
