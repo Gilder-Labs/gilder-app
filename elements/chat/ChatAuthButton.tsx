@@ -36,7 +36,7 @@ export const ChatAuthButton = () => {
 
   return (
     <SignInContainer>
-      {publicKey && walletType ? (
+      {publicKey && walletType && !chatUserToken ? (
         <Button
           title={"Sign in with Wallet"}
           onPress={authIntoChat}
