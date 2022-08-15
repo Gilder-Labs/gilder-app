@@ -16,7 +16,8 @@ export const SendButton = () => {
     <SendContainer disabled={isMessageEmpty} onPress={sendMessage}>
       <FontAwesomeIcon
         icon={faPaperPlaneTop}
-        size={20}
+        size={16}
+        style={{ marginLeft: 2 }}
         color={!isMessageEmpty ? theme.gray[300] : theme.gray[400]}
       />
     </SendContainer>
@@ -27,8 +28,8 @@ const SendContainer = styled.TouchableOpacity`
   border-radius: 100;
   justify-content: center;
   align-items: center;
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   background: ${(props: any) =>
-    props.disabled ? props.theme.gray[800] : props.theme.secondary[800]};
+    props.disabled ? props.theme.gray[800] : props.theme.secondary[700]};
 `;

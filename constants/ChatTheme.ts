@@ -773,7 +773,12 @@ export const defaultTheme: Theme = {
       display: "none",
     },
     sendButton: {},
-    sendButtonContainer: {},
+    sendButtonContainer: {
+      alignItems: "center",
+
+      paddingTop: 2,
+      paddingBottom: 2,
+    },
     sendMessageDisallowedIndicator: {
       container: {},
       text: {},
