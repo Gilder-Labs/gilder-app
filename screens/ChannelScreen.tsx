@@ -77,6 +77,7 @@ export default function ChannelScreen(props: any) {
           onLongPressMessage={(props) => handleMessageLongPress(props)}
           deletedMessagesVisibilityType={"never"}
           // autoCompleteTriggerSettings={() => ({})}
+          AutoCompleteSuggestionList={() => null} // TODO: make autocomplete popup
           MessageReplies={() => (
             <MessageReplies
               repliesCurveColor={theme.gray[500]}
