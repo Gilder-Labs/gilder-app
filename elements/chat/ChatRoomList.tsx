@@ -118,6 +118,7 @@ export const ChatRoomList = (props: any): any => {
           Preview={(props) => <CustomListItem channelData={props} />}
           options={options}
           sort={sort}
+          Skeleton={() => null}
           lockChannelOrder={true}
           EmptyStateIndicator={() =>
             !chatUserToken && walletType === "web3auth" ? (

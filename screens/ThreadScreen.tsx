@@ -45,6 +45,7 @@ export default function ThreadScreen(props: any) {
       MessageFooter={() => <ChatMessageFooter />}
       deletedMessagesVisibilityType={"never"}
       Reply={() => <Messagereply />}
+      AutoCompleteSuggestionList={() => null} // TODO: make autocomplete popup
       MessageHeader={(props) => <MessageHeader {...props} />}
       SendButton={() => <SendButton />}
     >
