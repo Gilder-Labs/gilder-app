@@ -12,19 +12,20 @@ export const MessageHeader = (props: MessageFooterProps) => {
   const { membersMap, delegateMap, isLoadingMembers } = useAppSelector(
     (state) => state.members
   );
-  const { publicKey } = useAppSelector((state) => state.wallet);
   const { selectedRealm } = useAppSelector((state) => state.realms);
 
   const getMemberTokens = () => {
-    if (membersMap?.[publicKey]) {
+    const message = props.message;
+    const walletId = message?.user?.id || "";
+    if (membersMap?.[walletId]) {
       return formatVoteWeight(
-        membersMap?.[publicKey]?.communityDepositAmount,
+        membersMap?.[walletId]?.communityDepositAmount,
         selectedRealm?.communityMintDecimals || 0,
         "0.0a"
       );
-    } else if (delegateMap?.[publicKey]) {
+    } else if (delegateMap?.[walletId]?.communityMembers) {
       return formatVoteWeight(
-        delegateMap?.[publicKey]?.communityDepositAmount,
+        delegateMap?.[walletId]?.communityMembers?.[0]?.communityDepositAmount,
         selectedRealm?.communityMintDecimals || 0,
         "0.0a"
       );
