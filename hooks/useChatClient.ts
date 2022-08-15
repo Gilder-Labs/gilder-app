@@ -65,7 +65,7 @@ export const useChatClient = () => {
         setTimeout(async () => {
           console.log("Disconnecting user?");
           await chatClient.disconnectUser();
-        }, 3000);
+        }, 1500);
       }
     } catch (error) {
       if (error instanceof Error) {
