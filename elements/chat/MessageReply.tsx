@@ -15,7 +15,6 @@ import { faImage } from "@fortawesome/pro-solid-svg-icons/faImage";
 export const Messagereply = () => {
   const { message } = useMessageContext();
   const theme = useTheme();
-  console.log("Message in reply", message);
 
   return (
     <ReplyContainer>

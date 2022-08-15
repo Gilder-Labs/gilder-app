@@ -7,16 +7,12 @@ import {
 } from "stream-chat-expo"; // Or stream-chat-expo
 import { useHeaderHeight } from "@react-navigation/elements";
 import { useEffect } from "react";
-import { Typography } from "../components";
-import { AnimatedImage } from "react-native-ui-lib";
-import { View } from "react-native";
-import styled from "styled-components/native";
-import { abbreviatePublicKey } from "../utils";
 import { ChatActionModal } from "../elements/chat/ChatActionModal";
 import * as Haptics from "expo-haptics";
 import { ChatMessageFooter } from "../elements/chat/ChatMessageFooter";
 import { Messagereply } from "../elements/chat/MessageReply";
 import { MessageHeader } from "../elements/chat/MessageHeader";
+import { SendButton } from "../elements/chat/ChatSendButton";
 
 export default function ThreadScreen(props: any) {
   const { route } = props;
@@ -50,6 +46,7 @@ export default function ThreadScreen(props: any) {
       deletedMessagesVisibilityType={"never"}
       Reply={() => <Messagereply />}
       MessageHeader={(props) => <MessageHeader {...props} />}
+      SendButton={() => <SendButton />}
     >
       <ChatActionModal
         isVisible={isVisble}
