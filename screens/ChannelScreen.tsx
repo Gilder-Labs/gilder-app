@@ -15,13 +15,13 @@ import styled from "styled-components";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { useEffect } from "react";
 import { useChatClient } from "../hooks/useChatClient";
-import { Typography } from "../components";
-import { abbreviatePublicKey } from "../utils";
 import { useTheme } from "styled-components";
 import { ChatActionModal } from "../elements/chat/ChatActionModal";
 import * as Haptics from "expo-haptics";
 import { ChatMessageFooter } from "../elements/chat/ChatMessageFooter";
 import { Messagereply } from "../elements/chat/MessageReply";
+import { SendButton } from "../elements/chat/ChatSendButton";
+import { MessageHeader } from "../elements/chat/MessageHeader";
 
 export default function ChannelScreen(props: any) {
   const { route, navigation } = props;
@@ -89,40 +89,7 @@ export default function ChannelScreen(props: any) {
               <MessageRepliesAvatars {...props} />
             </AvatarsContainer>
           )}
-          MessageHeader={(props) => (
-            <MessageHeaderContainer>
-              <Typography
-                text={props?.message?.user?.name || ""}
-                size="subtitle"
-                color="gray"
-                shade="200"
-                bold={true}
-                marginRight="1"
-                marginBottom="0"
-              />
-              <Typography
-                text={`(${abbreviatePublicKey(
-                  props?.message?.user?.id || "",
-                  2
-                )})`}
-                size="caption"
-                color="gray"
-                shade="500"
-                bold={true}
-                marginRight="1"
-                marginBottom="0"
-              />
-              <Typography
-                text={props?.formattedDate || ""}
-                size="caption"
-                color="gray"
-                shade="500"
-                bold={true}
-                marginRight="1"
-                marginBottom="0"
-              />
-            </MessageHeaderContainer>
-          )}
+          MessageHeader={(props) => <MessageHeader {...props} />}
         >
           <MessageList
             onThreadSelect={(message) => {
@@ -131,7 +98,7 @@ export default function ChannelScreen(props: any) {
               }
             }}
           />
-          <MessageInput Reply={() => null} />
+          <MessageInput Reply={() => null} SendButton={() => <SendButton />} />
           <ChatActionModal
             isVisible={isVisble}
             setModalVisible={(isVisible) => setModalVisible(isVisible)}
@@ -152,15 +119,6 @@ const styles = StyleSheet.create({
 
 const Container = styled.View`
   flex: 1;
-`;
-
-const MessageHeaderContainer = styled.View`
-  flex-direction: row;
-  flex: 1;
-  align-items: center;
-  justify-content: flex-start;
-  /* margin-bottom: ${(props) => props.theme.spacing[1]}; */
-  margin-top: -4px;
 `;
 
 const AvatarsContainer = styled.View`

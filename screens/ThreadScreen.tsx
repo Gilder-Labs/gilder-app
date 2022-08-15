@@ -16,6 +16,7 @@ import { ChatActionModal } from "../elements/chat/ChatActionModal";
 import * as Haptics from "expo-haptics";
 import { ChatMessageFooter } from "../elements/chat/ChatMessageFooter";
 import { Messagereply } from "../elements/chat/MessageReply";
+import { MessageHeader } from "../elements/chat/MessageHeader";
 
 export default function ThreadScreen(props: any) {
   const { route } = props;
@@ -48,37 +49,7 @@ export default function ThreadScreen(props: any) {
       MessageFooter={() => <ChatMessageFooter />}
       deletedMessagesVisibilityType={"never"}
       Reply={() => <Messagereply />}
-      MessageHeader={(props) => (
-        <MessageHeaderContainer>
-          <Typography
-            text={props?.message?.user?.name || ""}
-            size="subtitle"
-            color="gray"
-            shade="200"
-            bold={true}
-            marginRight="1"
-            marginBottom="0"
-          />
-          <Typography
-            text={`(${abbreviatePublicKey(props?.message?.user?.id || "", 2)})`}
-            size="caption"
-            color="gray"
-            shade="500"
-            bold={true}
-            marginRight="1"
-            marginBottom="0"
-          />
-          <Typography
-            text={props?.formattedDate || ""}
-            size="caption"
-            color="gray"
-            shade="500"
-            bold={true}
-            marginRight="1"
-            marginBottom="0"
-          />
-        </MessageHeaderContainer>
-      )}
+      MessageHeader={(props) => <MessageHeader {...props} />}
     >
       <ChatActionModal
         isVisible={isVisble}
@@ -90,12 +61,3 @@ export default function ThreadScreen(props: any) {
     </Channel>
   );
 }
-
-const MessageHeaderContainer = styled.View`
-  flex-direction: row;
-  flex: 1;
-  align-items: center;
-  justify-content: flex-start;
-  margin-bottom: ${(props) => props.theme.spacing[1]};
-  margin-top: -4px;
-`;

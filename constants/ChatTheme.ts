@@ -768,7 +768,10 @@ export const defaultTheme: Theme = {
     },
     moreOptionsButton: {},
     optionsContainer: {},
-    replyContainer: {},
+    replyContainer: {
+      height: 0,
+      display: "none",
+    },
     sendButton: {},
     sendButtonContainer: {},
     sendMessageDisallowedIndicator: {
