@@ -857,7 +857,7 @@ export const defaultTheme: Theme = {
         height: "100%",
       },
       leftAlign: {
-        marginRight: 8,
+        marginRight: 16,
       },
       rightAlign: {
         marginLeft: 8,

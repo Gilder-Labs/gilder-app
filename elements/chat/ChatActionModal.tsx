@@ -23,7 +23,6 @@ import { faFaceSmilePlus } from "@fortawesome/pro-solid-svg-icons/faFaceSmilePlu
 import Modal from "react-native-modal";
 
 import { Typography } from "../../components";
-import { useChatClient } from "../../hooks/useChatClient";
 import * as Clipboard from "expo-clipboard";
 
 interface ChatActionModalProps {

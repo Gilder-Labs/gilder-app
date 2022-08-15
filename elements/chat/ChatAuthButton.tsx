@@ -36,7 +36,7 @@ export const ChatAuthButton = () => {
 
   return (
     <SignInContainer>
-      {publicKey && !walletType ? (
+      {publicKey && walletType ? (
         <Button
           title={"Sign in with Wallet"}
           onPress={authIntoChat}
@@ -48,7 +48,11 @@ export const ChatAuthButton = () => {
         <Typography
           size="subtitle"
           shade="500"
-          text="Connect wallet to access chat."
+          text={
+            chatUserToken && publicKey
+              ? "Become a member to have access to chat channels."
+              : "Connect wallet to access chat."
+          }
         />
       )}
     </SignInContainer>

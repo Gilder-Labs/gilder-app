@@ -36,6 +36,8 @@ export default function ChannelScreen(props: any) {
   const [selectedMessage, setSelectedMessage] =
     useState<MessageTouchableHandlerPayload | null>(null);
 
+  const { clientIsReady } = useChatClient();
+
   useEffect(() => {
     setTopInset(headerHeight);
   }, [headerHeight]);
@@ -50,7 +52,7 @@ export default function ChannelScreen(props: any) {
     return () => clearTimeout(timer);
   }, [channel]);
 
-  if (toggleChannel) {
+  if (toggleChannel || !clientIsReady) {
     return <Container />;
   }
 

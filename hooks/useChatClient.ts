@@ -4,6 +4,8 @@ import { chatApiKey } from "../constants/Chat";
 import { abbreviatePublicKey } from "../utils";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { useCardinalIdentity } from "./useCardinaldentity";
+import { disconnectChat } from "../store/chatSlice";
+import { useNavigation } from "@react-navigation/native";
 
 const chatClient = StreamChat.getInstance(chatApiKey);
 
@@ -14,6 +16,7 @@ export const useChatClient = () => {
   const { publicKey, walletType, userInfo } = useAppSelector(
     (state) => state.wallet
   );
+  const navigation = useNavigation();
   const { chatUserToken } = useAppSelector((state) => state.chat);
   const [twitterURL, twitterHandle] = useCardinalIdentity(publicKey);
 
@@ -44,33 +47,38 @@ export const useChatClient = () => {
       }
     };
 
-    const disconnectClient = async () => {
-      try {
-        if (chatUserToken) {
-          await chatClient.disconnectUser();
-        }
-        setClientIsReady(false);
-        setClientConnecting(false);
-      } catch (error) {
-        if (error instanceof Error) {
-          console.error(
-            `An error occurred while disconnecting the user: ${error.message}`
-          );
-        }
-      }
-    };
-
     // If the chat client has a value in the field `userID`, a user is already connected
     // and we can skip trying to connect the user again.
     if (publicKey && chatUserToken) {
       setupClient();
-    } else if (!publicKey && clientIsReady) {
-      disconnectClient;
     }
   }, [publicKey, chatUserToken]);
+
+  const disconnectClient = async () => {
+    try {
+      if (chatUserToken) {
+        setClientIsReady(false);
+        setClientConnecting(false);
+        dispatch(disconnectChat(""));
+
+        // Hacky way to fix race condition that happens when a user in on the channel screen but disconnects
+        setTimeout(async () => {
+          console.log("Disconnecting user?");
+          await chatClient.disconnectUser();
+        }, 3000);
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(
+          `An error occurred while disconnecting the user: ${error.message}`
+        );
+      }
+    }
+  };
 
   return {
     clientIsReady,
     chatClient,
+    disconnectClient,
   };
 };

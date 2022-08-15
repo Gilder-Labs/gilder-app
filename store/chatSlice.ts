@@ -48,6 +48,10 @@ export const chatSlice = createSlice({
     setChannelId: (state, action) => {
       state.selectedChannelId = action.payload.channelId;
     },
+    disconnectChat: (state, action) => {
+      state.chatUserToken = "";
+      state.selectedChannelId = "";
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -64,6 +68,6 @@ export const chatSlice = createSlice({
   },
 });
 
-export const { setChannelId } = chatSlice.actions;
+export const { setChannelId, disconnectChat } = chatSlice.actions;
 
 export default chatSlice.reducer;
