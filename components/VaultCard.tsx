@@ -44,9 +44,7 @@ export const VaultCard = ({
   tokens,
   isGovernanceVault,
 }: VaultCardProps) => {
-  const { tokenPriceData, vaultsNfts } = useAppSelector(
-    (state) => state.treasury
-  );
+  const { tokenPriceData } = useAppSelector((state) => state.treasury);
   const { loading, error, data } = useQuery(GET_WALLET_NFTS, {
     variables: { owners: [vaultId] },
   });

@@ -73,6 +73,7 @@ export const ConnectWeb3AuthButton = ({}: ConnectWalletProps) => {
       const jsonValue = JSON.stringify({
         publicKey: pubKey,
         userInfo: userInfo,
+        walletType: "web3auth",
       });
       AsyncStorage.setItem("@walletInfo", jsonValue);
 

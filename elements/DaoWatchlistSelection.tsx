@@ -109,124 +109,117 @@ export const DaoWatchlistSelection = ({
 
   return (
     <Container>
-      {isLoadingRealms ? (
-        <Loading />
-      ) : (
-        <ContentContainer>
-          <Row>
-            <Typography
-              text="Add DAOs"
-              size="h2"
-              bold={true}
-              marginLeft={"4"}
-            />
-            {isOnboarding && (
-              <CompleteOnboardingButton
-                onPress={handleFinishOnboarding}
-                disabled={!hasSomeRealmsSelected}
-              >
-                <LinearGradient
-                  colors={[
-                    hasSomeRealmsSelected
-                      ? theme.secondary[600]
-                      : theme.gray[700],
-                    hasSomeRealmsSelected ? theme.purple[700] : theme.gray[700],
-                  ]}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 1 }}
-                  style={{
-                    height: 36,
-                    borderRadius: 8,
-                    paddingHorizontal: 12,
-                    paddingVertical: 0,
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
-                  <Typography
-                    text="Enter App"
-                    marginBottom="0"
-                    marginRight="1"
-                    shade="50"
-                    color="gray"
-                    // hasTextShadow={true}
-                  />
-                  <FontAwesomeIcon
-                    icon={faArrowRight}
-                    size={16}
-                    color={theme.gray[100]}
-                    style={{ marginRight: -4 }}
-                  />
-                </LinearGradient>
-              </CompleteOnboardingButton>
-            )}
-          </Row>
-          <SearchBarContainer>
-            <SearchBar
-              placeholder="Search by name or public key"
-              onChangeText={handleSearchInputChange}
-              placeholderTextColor={theme.gray[400]}
-              selectionColor={theme.gray[200]}
-              autoCompleteType={"off"}
-              autoCapitalize={"none"}
-              autoCorrect={false}
-              value={searchText}
-            />
-            <IconContainer
-              disabled={!searchText}
-              onPress={() => setSearchText("")}
+      <ContentContainer>
+        <Row>
+          <Typography text="Add DAOs" size="h2" bold={true} marginLeft={"4"} />
+          {isOnboarding && (
+            <CompleteOnboardingButton
+              onPress={handleFinishOnboarding}
+              disabled={!hasSomeRealmsSelected}
             >
-              {searchText ? (
+              <LinearGradient
+                colors={[
+                  hasSomeRealmsSelected
+                    ? theme.secondary[600]
+                    : theme.gray[700],
+                  hasSomeRealmsSelected ? theme.purple[700] : theme.gray[700],
+                ]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={{
+                  height: 36,
+                  borderRadius: 8,
+                  paddingHorizontal: 12,
+                  paddingVertical: 0,
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <Typography
+                  text="Enter App"
+                  marginBottom="0"
+                  marginRight="1"
+                  shade="50"
+                  color="gray"
+                  // hasTextShadow={true}
+                />
+                <FontAwesomeIcon
+                  icon={faArrowRight}
+                  size={16}
+                  color={theme.gray[100]}
+                  style={{ marginRight: -4 }}
+                />
+              </LinearGradient>
+            </CompleteOnboardingButton>
+          )}
+        </Row>
+        <SearchBarContainer>
+          <SearchBar
+            placeholder="Search by name or public key"
+            onChangeText={handleSearchInputChange}
+            placeholderTextColor={theme.gray[400]}
+            selectionColor={theme.gray[200]}
+            autoCompleteType={"off"}
+            autoCapitalize={"none"}
+            autoCorrect={false}
+            value={searchText}
+          />
+          <IconContainer
+            disabled={!searchText}
+            onPress={() => setSearchText("")}
+          >
+            {searchText ? (
+              <FontAwesomeIcon
+                icon={faXmark}
+                size={16}
+                color={theme.gray[300]}
+              />
+            ) : (
+              <FontAwesomeIcon
+                icon={faMagnifyingGlass}
+                size={16}
+                color={theme.gray[300]}
+              />
+            )}
+          </IconContainer>
+        </SearchBarContainer>
+        <Typography
+          text="Watchlist"
+          size="h4"
+          bold={true}
+          shade="300"
+          marginLeft={"4"}
+        />
+        <WatchlistContainer
+          horizontal={true}
+          scrollIndicatorInsets={{ bottom: -12 }}
+          contentContainerStyle={{
+            alignContent: "center",
+            justifyContent: "center",
+            alignItems: "center",
+            paddingLeft: 8,
+            paddingRight: 24,
+          }}
+        >
+          {realmWatchlist.map((realmId) => (
+            <RealmIconContainer key={realmId}>
+              <RealmIcon size={54} realmId={realmId} />
+              <RemoveContainer
+                onPress={() => handleRealmToggle(realmId, false)}
+              >
                 <FontAwesomeIcon
                   icon={faXmark}
-                  size={16}
-                  color={theme.gray[300]}
+                  size={12}
+                  color={theme.gray[500]}
                 />
-              ) : (
-                <FontAwesomeIcon
-                  icon={faMagnifyingGlass}
-                  size={16}
-                  color={theme.gray[300]}
-                />
-              )}
-            </IconContainer>
-          </SearchBarContainer>
-          <Typography
-            text="Watchlist"
-            size="h4"
-            bold={true}
-            shade="300"
-            marginLeft={"4"}
-          />
-          <WatchlistContainer
-            horizontal={true}
-            scrollIndicatorInsets={{ bottom: -12 }}
-            contentContainerStyle={{
-              alignContent: "center",
-              justifyContent: "center",
-              alignItems: "center",
-              paddingLeft: 8,
-              paddingRight: 24,
-            }}
-          >
-            {realmWatchlist.map((realmId) => (
-              <RealmIconContainer key={realmId}>
-                <RealmIcon size={54} realmId={realmId} />
-                <RemoveContainer
-                  onPress={() => handleRealmToggle(realmId, false)}
-                >
-                  <FontAwesomeIcon
-                    icon={faXmark}
-                    size={12}
-                    color={theme.gray[500]}
-                  />
-                </RemoveContainer>
-              </RealmIconContainer>
-            ))}
-          </WatchlistContainer>
+              </RemoveContainer>
+            </RealmIconContainer>
+          ))}
+        </WatchlistContainer>
 
-          {/* TODO: Featured daos in block list */}
-
+        {isLoadingRealms ? (
+          <Loading />
+        ) : (
           <FlatList
             data={filteredRealms}
             renderItem={renderRealmCard}
@@ -287,18 +280,8 @@ export const DaoWatchlistSelection = ({
               />
             }
           />
-
-          {/* TODO: DAO's in realmsdata list */}
-          {/* Only show if a user is searching for daos */}
-          {/* <Typography
-            text="Search"
-            size="h4"
-            bold={true}
-            marginLeft={"4"}
-            shade="300"
-          /> */}
-        </ContentContainer>
-      )}
+        )}
+      </ContentContainer>
     </Container>
   );
 };
@@ -321,7 +304,9 @@ const WatchlistContainer = styled.ScrollView`
 
 const SearchBar = styled.TextInput`
   margin: ${(props) => props.theme.spacing[2]};
-  padding: ${(props) => props.theme.spacing[3]};
+  padding-left: ${(props) => props.theme.spacing[3]};
+  padding-right: ${(props) => props.theme.spacing[3]};
+  height: 40px;
   font-size: 14px;
   background-color: ${(props) => props.theme.gray[800]}44;
   border-radius: 4px;
@@ -335,6 +320,7 @@ const SearchBarContainer = styled.View`
   background-color: ${(props) => props.theme.gray[900]};
   margin-bottom: ${(props) => props.theme.spacing[2]};
   justify-content: space-between;
+  height: 64px;
 `;
 
 const IconContainer = styled.TouchableOpacity`
@@ -343,7 +329,7 @@ const IconContainer = styled.TouchableOpacity`
   top: 20; */
   top: 0px;
   right: 0px;
-  bottom: 0px;
+  bottom: 8px;
   justify-content: center;
   align-items: flex-end;
   margin-right: 24px;

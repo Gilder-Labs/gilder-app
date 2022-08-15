@@ -1,72 +1,95 @@
+import { useState } from "react";
 import {
   Channel,
   MessageList,
   MessageInput,
   useAttachmentPickerContext,
   ReactionList,
+  MessageSimple,
+  MessageReplies,
+  MessageRepliesAvatars,
+  MessageTouchableHandlerPayload,
 } from "stream-chat-expo"; // Or stream-chat-expo
 import { StyleSheet, Text, SafeAreaView, View } from "react-native";
 import styled from "styled-components";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { useEffect } from "react";
 import { useChatClient } from "../hooks/useChatClient";
-import { Typography } from "../components";
+import { useTheme } from "styled-components";
+import { ChatActionModal } from "../elements/chat/ChatActionModal";
+import * as Haptics from "expo-haptics";
+import { ChatMessageFooter } from "../elements/chat/ChatMessageFooter";
+import { Messagereply } from "../elements/chat/MessageReply";
+import { SendButton } from "../elements/chat/ChatSendButton";
+import { MessageHeader } from "../elements/chat/MessageHeader";
 
 export default function ChannelScreen(props: any) {
   const { route, navigation } = props;
+  const theme = useTheme();
   const {
     params: { channel },
   } = route;
   const headerHeight = useHeaderHeight();
   const { setTopInset } = useAttachmentPickerContext();
-  const { chatClient } = useChatClient();
+  const [toggleChannel, setToggleChannel] = useState(false);
+  const [isVisble, setModalVisible] = useState(false);
+  const [selectedMessage, setSelectedMessage] =
+    useState<MessageTouchableHandlerPayload | null>(null);
+
+  const { clientIsReady } = useChatClient();
 
   useEffect(() => {
     setTopInset(headerHeight);
   }, [headerHeight]);
 
-  // console.log("channel", channel);
+  // Stupid hack to update channel with drawers becuse <Channel> doesn't update when changing channel/route.
+  useEffect(() => {
+    setToggleChannel(true);
+    const timer = setTimeout(() => {
+      setToggleChannel(false);
+    }, 50);
+
+    return () => clearTimeout(timer);
+  }, [channel]);
+
+  if (toggleChannel || !clientIsReady) {
+    return <Container />;
+  }
+
+  const handleMessageLongPress = (message: MessageTouchableHandlerPayload) => {
+    setSelectedMessage(message);
+    setModalVisible(true);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+  };
 
   return (
     <Container>
       <SafeAreaView style={styles.container}>
         <Channel
-          channel={route?.params?.channel}
+          channel={channel}
           keyboardVerticalOffset={headerHeight}
-          enableMessageGroupingByUser={true}
+          enableMessageGroupingByUser={false}
           forceAlignMessages={"left"}
-          // ReactionList={ReactionList}
-          MessageFooter={() => null}
+          ReactionList={() => null}
+          maxTimeBetweenGroupedMessages={30000}
+          MessageSimple={() => <MessageSimple />}
+          MessageFooter={() => <ChatMessageFooter />}
+          onLongPressMessage={(props) => handleMessageLongPress(props)}
           deletedMessagesVisibilityType={"never"}
-          MessageHeader={(props) => (
-            <View
-              style={{
-                flexDirection: "row",
-                // backgroundColor: "green",
-                justifyContent: "center",
-                alignItems: "flex-end",
-              }}
-            >
-              <Typography
-                text={props?.message?.user?.name || ""}
-                size="subtitle"
-                color="gray"
-                shade="400"
-                bold={true}
-                marginRight="1"
-                marginBottom="1"
-              />
-              <Typography
-                text={props?.formattedDate || ""}
-                size="caption"
-                color="gray"
-                shade="600"
-                bold={true}
-                marginRight="1"
-                marginBottom="1"
-              />
-            </View>
+          // autoCompleteTriggerSettings={() => ({})}
+          MessageReplies={() => (
+            <MessageReplies
+              repliesCurveColor={theme.gray[500]}
+              noBorder={true}
+            />
           )}
+          Reply={() => <Messagereply />}
+          MessageRepliesAvatars={(props) => (
+            <AvatarsContainer>
+              <MessageRepliesAvatars {...props} />
+            </AvatarsContainer>
+          )}
+          MessageHeader={(props) => <MessageHeader {...props} />}
         >
           <MessageList
             onThreadSelect={(message) => {
@@ -75,7 +98,12 @@ export default function ChannelScreen(props: any) {
               }
             }}
           />
-          <MessageInput />
+          <MessageInput Reply={() => null} SendButton={() => <SendButton />} />
+          <ChatActionModal
+            isVisible={isVisble}
+            setModalVisible={(isVisible) => setModalVisible(isVisible)}
+            message={selectedMessage}
+          />
         </Channel>
       </SafeAreaView>
     </Container>
@@ -91,4 +119,10 @@ const styles = StyleSheet.create({
 
 const Container = styled.View`
   flex: 1;
+`;
+
+const AvatarsContainer = styled.View`
+  /* background-color: green; */
+  margin-top: 5px;
+  /* position: absolute; */
 `;

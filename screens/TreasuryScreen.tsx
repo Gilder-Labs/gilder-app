@@ -50,7 +50,7 @@ export default function TreasuryScreen({
       (a, b) => b?.vaultValue - a?.vaultValue
     );
 
-    return vaultsWithValue;
+    return vaultsWithValue || [];
   };
 
   useEffect(() => {

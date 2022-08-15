@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
+import { View } from "react-native";
 import { useTheme } from "styled-components";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { abbreviatePublicKey } from "../utils";
@@ -10,18 +11,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faWallet } from "@fortawesome/pro-solid-svg-icons/faWallet";
 import { ConnectWalletChoiceModal } from "../elements/ConnectWalletChoiceModal";
 import Modal from "react-native-modal";
+import { useCardinalIdentity } from "../hooks/useCardinaldentity";
 
 interface ConnectWalletProps {}
 
 export const ConnectWalletButton = ({}: ConnectWalletProps) => {
   const theme = useTheme();
-  const dispatch = useAppDispatch();
   const { publicKey } = useAppSelector((state) => state.wallet);
-  const [key, setKey] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const { height, width } = useWindowDimensions();
+  const [twitterURL, twitterHandle] = useCardinalIdentity(publicKey);
 
   useEffect(() => {
     if (publicKey && modalVisible) {
@@ -66,7 +66,12 @@ export const ConnectWalletButton = ({}: ConnectWalletProps) => {
         // coverScreen={true}
         onBackButtonPress={() => setModalVisible(false)}
         onBackdropPress={() => setModalVisible(false)}
-        style={{ width: "100%", padding: 0, margin: 0, height: "100%" }}
+        customBackdrop={
+          <BackDropContainer onPress={() => setModalVisible(false)}>
+            <View style={{ flex: 1 }} />
+          </BackDropContainer>
+        }
+        style={{ width: "100%", padding: 0, margin: 0 }}
       >
         <ConnectWalletChoiceModal />
       </Modal>
@@ -96,4 +101,8 @@ const ConnectButton = styled.TouchableOpacity`
   margin-bottom: 80px;
 
   background: ${(props) => props.theme.gray[800]};
+`;
+
+const BackDropContainer = styled.TouchableWithoutFeedback`
+  flex: 1;
 `;

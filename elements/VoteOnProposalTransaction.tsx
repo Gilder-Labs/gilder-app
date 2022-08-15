@@ -168,7 +168,7 @@ export const VoteOnProposalTransaction = ({}: VoteOnProposalTransaction) => {
           </Row>
           <>
             <Row>
-              <Typography text={"Delegate To Vote as:"} shade={"500"} />
+              <Typography text={"Vote as:"} shade={"500"} />
             </Row>
             <DelegateScrollView
               horizontal={true}

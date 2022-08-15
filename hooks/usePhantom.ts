@@ -42,7 +42,11 @@ const onSignAndSendTransactionRedirectLink =
   Constants.appOwnership == AppOwnership.Guest
     ? Linking.createURL("onSignAndSendTransaction", {})
     : Linking.createURL("onSignAndSendTransaction", { scheme: scheme });
-const onSignMessageRedirectLink = Linking.createURL("onSignMessage");
+const onSignMessageRedirectLink =
+  Constants.appOwnership == AppOwnership.Expo ||
+  Constants.appOwnership == AppOwnership.Guest
+    ? Linking.createURL("onSignMessage", {})
+    : Linking.createURL("onSignMessage", { scheme: scheme });
 
 const buildUrl = (path: string, params: URLSearchParams) =>
   `https://phantom.app/ul/v1/${path}?${params.toString()}`;
@@ -85,6 +89,7 @@ export const usePhantom = () => {
   const [deepLink, setDeepLink] = useState<string>("");
   const connection = new Connection(RPC_CONNECTION);
   const [dappKeyPair, setDappKeyPair] = useState(nacl.box.keyPair());
+  const [signedMessage, setSignedMessage] = useState("");
 
   useEffect(() => {
     (async () => {
@@ -166,6 +171,18 @@ export const usePhantom = () => {
         dispatch(setTransactionState("success"));
       } else if (/onDisconnect/.test(url.href)) {
         dispatch(disconnectWallet());
+        setSignedMessage("");
+      } else if (/onSignMessage/.test(url.pathname)) {
+        const walletInfoJSON = await SecureStore.getItemAsync("phantomInfo");
+        const phantomInfo = walletInfoJSON ? JSON.parse(walletInfoJSON) : {};
+        const { sharedSecretDapp } = phantomInfo;
+
+        const signMessageData = decryptPayload(
+          params.get("data")!,
+          params.get("nonce")!,
+          Uint8Array.from(sharedSecretDapp)
+        );
+        setSignedMessage(signMessageData.signature);
       }
     })();
   }, [deepLink]);
@@ -229,8 +246,7 @@ export const usePhantom = () => {
   };
 
   const signMessage = async () => {
-    const message =
-      "To avoid digital dognappers, sign below to authenticate with CryptoCorgis.";
+    const message = "Proving DAO membership to authenticate into chat.";
 
     const walletInfoJSON = await SecureStore.getItemAsync("phantomInfo");
     const phantomInfo = walletInfoJSON ? JSON.parse(walletInfoJSON) : {};
@@ -271,5 +287,11 @@ export const usePhantom = () => {
     Linking.openURL(url);
   };
 
-  return { disconnect, connect, signMessage, signAndSendTransaction };
+  return {
+    disconnect,
+    connect,
+    signMessage,
+    signAndSendTransaction,
+    signedMessage,
+  };
 };

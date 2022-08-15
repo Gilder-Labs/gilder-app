@@ -3,5 +3,6 @@
   "compilerOptions": {
     "strict": true
   },
-  "types": ["jest", "styled-components-react-native"]
+  "types": ["jest", "styled-components-react-native"],
+  "jsx": "react"
 }

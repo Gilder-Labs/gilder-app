@@ -1,12 +1,13 @@
 import type { ImageStyle, TextStyle, ViewStyle } from "react-native";
 import type { CircleProps, Color, StopProps } from "react-native-svg";
-import { vh, IconProps } from "stream-chat-expo";
+import { vh, vw, IconProps } from "stream-chat-expo";
 import { darkTheme } from "./Theme";
 
 export const DEFAULT_STATUS_ICON_SIZE = 16;
+const maxWidth = vw(100) - 72;
 
 export const Colors = {
-  accent_blue: darkTheme.blue[500],
+  accent_blue: darkTheme.gray[200],
   accent_green: darkTheme.success[500],
   accent_red: darkTheme.error[500],
   bg_gradient_end: darkTheme.gray[700],
@@ -15,9 +16,9 @@ export const Colors = {
   blue_alice: darkTheme.gray[800],
   border: darkTheme.gray[800],
   grey: darkTheme.gray[500],
-  grey_gainsboro: darkTheme.gray[700], // message color
+  grey_gainsboro: darkTheme.gray[800], // message color
   grey_whisper: darkTheme.gray[800], // border color on input
-  icon_background: "#FFFFFF",
+  icon_background: darkTheme.gray[500],
   modal_shadow: "#000000",
   overlay: `${darkTheme.gray[700]}88`, // overlay color when long press
   shadow_icon: `${darkTheme.gray[700]}88`,
@@ -750,13 +751,34 @@ export const defaultTheme: Theme = {
       itemContainer: {},
       upload: {},
     },
-    inputBox: {},
-    inputBoxContainer: {},
+    inputBox: {
+      alignItems: "center",
+      alignContent: "center",
+      justifyContent: "center",
+    },
+    inputBoxContainer: {
+      backgroundColor: darkTheme.gray[800],
+      borderRadius: 16,
+      paddingTop: 0,
+      paddingBottom: 0,
+      minHeight: 44,
+      alignItems: "center",
+      alignContent: "center",
+      justifyContent: "center",
+    },
     moreOptionsButton: {},
     optionsContainer: {},
-    replyContainer: {},
+    replyContainer: {
+      height: 0,
+      display: "none",
+    },
     sendButton: {},
-    sendButtonContainer: {},
+    sendButtonContainer: {
+      alignItems: "center",
+
+      paddingTop: 2,
+      paddingBottom: 2,
+    },
     sendMessageDisallowedIndicator: {
       container: {},
       text: {},
@@ -838,44 +860,74 @@ export const defaultTheme: Theme = {
       container: {},
     },
     avatarWrapper: {
-      container: {},
+      container: {
+        alignItems: "flex-start",
+        height: "100%",
+      },
       leftAlign: {
-        marginRight: 8,
+        marginRight: 16,
       },
       rightAlign: {
         marginLeft: 8,
       },
       spacer: {
-        height: 28,
+        height: 36,
         width: 32, // same as BASE_AVATAR_SIZE
       },
     },
     card: {
       authorName: {},
-      authorNameContainer: {},
+      authorNameContainer: {
+        display: "none",
+      },
       authorNameFooter: {},
       authorNameFooterContainer: {},
       authorNameMask: {},
-      container: {},
+      container: {
+        backgroundColor: darkTheme.gray[800],
+        borderRadius: 8,
+        paddingTop: 4,
+        width: "100%",
+      },
       cover: {},
       footer: {
-        description: {},
+        description: {
+          color: darkTheme.gray[300],
+        },
         title: {
           fontWeight: "700",
+          fontSize: 14,
+          color: darkTheme.gray[100],
         },
+        padding: 4,
       },
       noURI: {
         borderLeftWidth: 2,
         paddingLeft: 8,
       },
     },
-    container: {},
+    container: {
+      width: maxWidth,
+    },
     content: {
       container: {
-        borderRadiusL: 16,
-        borderRadiusS: 0,
+        borderRadiusL: 8,
+        borderRadiusS: 8,
+        borderBottomRightRadius: 8,
+        borderTopLeftRadius: 8,
+        borderBottomLeftRadius: 8,
+        borderTopRightRadius: 8,
+        borderWidth: 0,
+        width: maxWidth,
+        padding: 0,
+        backgroundColor: "transparent",
       },
-      containerInner: {}, // chat styles here
+      containerInner: {
+        borderWidth: 0,
+        backgroundColor: "transparent",
+        borderTopEndRadius: 4,
+        borderTopLeftRadius: 4,
+      }, // chat styles here
       deletedContainer: {},
       deletedContainerInner: {},
       deletedMetaText: {
@@ -905,11 +957,15 @@ export const defaultTheme: Theme = {
         height: 16,
         width: 16,
       },
-      markdown: {},
+      markdown: {
+        mentions: {
+          color: darkTheme.blue[500],
+        },
+      },
       messageUser: {
         fontSize: 12,
         fontWeight: "700",
-        paddingRight: 6,
+        padding: 0,
       },
       metaContainer: {
         flexDirection: "row",
@@ -922,28 +978,65 @@ export const defaultTheme: Theme = {
       replyContainer: {},
       textContainer: {
         onlyEmojiMarkdown: { text: { fontSize: 50 } },
+        width: maxWidth,
+        maxWidth: maxWidth,
+        paddingLeft: 0,
+        paddingBottom: 0,
+        borderRadius: 8,
+        borderTopEndRadius: 8,
+        borderTopLeftRadius: 8,
+        margin: 0,
+        marginLeft: 0,
+        marginTop: -8,
       },
-      wrapper: {},
+      wrapper: { width: maxWidth },
     },
     file: {
-      container: {},
+      container: {
+        borderBottomRightRadius: 8,
+        borderTopLeftRadius: 8,
+        borderBottomLeftRadius: 8,
+        borderTopRightRadius: 8,
+      },
       details: {},
       fileSize: {},
       icon: {},
       title: {},
     },
     fileAttachmentGroup: {
-      container: {},
+      container: {
+        borderRadius: 4,
+      },
     },
     gallery: {
-      galleryContainer: {},
-      galleryItemColumn: {},
+      galleryContainer: {
+        borderBottomRightRadius: 8,
+        borderTopLeftRadius: 8,
+        borderBottomLeftRadius: 8,
+        borderTopRightRadius: 8,
+      },
+      galleryItemColumn: {
+        borderBottomRightRadius: 8,
+        borderTopLeftRadius: 8,
+        borderBottomLeftRadius: 8,
+        borderTopRightRadius: 8,
+      },
       gridHeight: 195,
       gridWidth: 256,
-      image: {},
-      imageContainer: {},
+      image: {
+        borderBottomRightRadius: 8,
+        borderTopLeftRadius: 8,
+        borderBottomLeftRadius: 8,
+        borderTopRightRadius: 8,
+      },
+      imageContainer: {
+        borderBottomRightRadius: 8,
+        borderTopLeftRadius: 8,
+        borderBottomLeftRadius: 8,
+        borderTopRightRadius: 8,
+      },
       maxHeight: 300,
-      maxWidth: 256,
+      maxWidth: maxWidth - 2,
       minHeight: 100,
       minWidth: 170,
       moreImagesContainer: {},
@@ -952,15 +1045,32 @@ export const defaultTheme: Theme = {
     giphy: {
       buttonContainer: {},
       cancel: {},
-      container: {},
-      giphy: {},
+      container: {
+        paddingLeft: 0,
+        paddingRight: 0,
+        paddingTop: 0,
+        borderBottomRightRadius: 8,
+        borderTopLeftRadius: 8,
+        borderBottomLeftRadius: 8,
+        borderTopRightRadius: 8,
+        marginTop: 4,
+      },
+      giphy: {
+        width: maxWidth,
+      },
       giphyContainer: {},
       giphyHeaderText: {},
       giphyHeaderTitle: {},
-      giphyMask: {},
-      giphyMaskText: {},
+      giphyMask: {
+        opacity: 0.0,
+      },
+      giphyMaskText: {
+        color: "white",
+      },
       header: {},
-      selectionContainer: {},
+      selectionContainer: {
+        width: maxWidth,
+      },
       send: {},
       shuffle: {},
       title: {},
@@ -975,7 +1085,7 @@ export const defaultTheme: Theme = {
       radius: 2, // not recommended to change this
       reactionBubble: {},
       reactionBubbleBackground: {},
-      reactionSize: 24,
+      reactionSize: 0,
       strokeSize: 1, // not recommended to change this
     },
     replies: {
@@ -985,7 +1095,9 @@ export const defaultTheme: Theme = {
       container: {},
       leftAvatarsContainer: {},
       leftCurve: {},
-      messageRepliesText: {},
+      messageRepliesText: {
+        color: darkTheme.blue[500],
+      },
       rightAvatarsContainer: {},
       rightCurve: {},
     },
@@ -1042,14 +1154,29 @@ export const defaultTheme: Theme = {
     fileAttachmentContainer: {},
     imageAttachment: {},
     markdownStyles: {},
-    messageContainer: {},
-    textContainer: {},
+    messageContainer: {
+      borderRadius: 0,
+      borderColor: "transparent",
+      backgroundColor: "transparent",
+      borderTopEndRadius: 0,
+      borderTopLeftRadius: 0,
+      margin: 0,
+      marginLeft: 0,
+      // backgroundColor: "green",
+    },
+    textContainer: {
+      maxWidth: undefined,
+      width: undefined,
+      // backgroundColor: "green",
+    },
   },
   screenPadding: 8,
   spinner: {},
   thread: {
     newThread: {
       text: {},
+      backgroundGradientStart: darkTheme.gray[900],
+      backgroundGradientStop: darkTheme.gray[900],
     },
   },
   typingIndicator: {

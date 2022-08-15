@@ -3,14 +3,23 @@ import numeral from "numeral";
 export * from "./cleanData";
 export * from "./member";
 
-export const abbreviatePublicKey = (publicKey: string) => {
-  return `${publicKey.slice(0, 4)}...${publicKey.slice(-4)}`;
+export const abbreviatePublicKey = (
+  publicKey: string,
+  numberOfLetter: number = 4
+) => {
+  return `${publicKey.slice(0, numberOfLetter)}...${publicKey.slice(
+    -numberOfLetter
+  )}`;
 };
 
-export const formatVoteWeight = (tokenAmt: string, decimal: number): string => {
-  const formattedWeight = decimal > 0 ? tokenAmt.slice(0, -decimal) : tokenAmt;
+export const formatVoteWeight = (
+  tokenAmt: string,
+  decimal: number,
+  customFormat: string = "0,0"
+): string => {
+  const formattedWeight = decimal > 0 ? tokenAmt?.slice(0, -decimal) : tokenAmt;
 
-  return numeral(Number(formattedWeight)).format("0,0");
+  return numeral(Number(formattedWeight)).format(customFormat);
 };
 
 export const getFilteredTokens = (nfts: Array<any>, tokens: Array<Token>) => {

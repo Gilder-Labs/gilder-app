@@ -30,6 +30,7 @@ import { Incubator } from "react-native-ui-lib";
 const { Toast } = Incubator;
 import { useQuery, gql } from "@apollo/client";
 import { usePhantom } from "../hooks/usePhantom";
+import { useChatClient } from "../hooks/useChatClient";
 
 interface RealmSelectModalProps {}
 
@@ -70,15 +71,19 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
   const { loading, error, data } = useQuery(GET_WALLET_NFTS, {
     variables: { owners: [publicKey] },
   });
+  const { disconnectClient } = useChatClient();
   const { isShowingToast } = useAppSelector((state) => state.utility);
   const [twitterURL, twitterHandle] = useCardinalIdentity(publicKey);
 
-  const handleDisconnect = () => {
+  const handleDisconnect = async () => {
     navigation.pop(1);
     if (walletType === "phantom") {
       disconnect();
     }
     dispatch(disconnectWallet());
+    navigation.navigate("Proposals");
+    await disconnectClient();
+
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
   };
 
@@ -239,12 +244,15 @@ const styles = StyleSheet.create({
 });
 
 const Header = styled.View`
-  height: 64px;
   background-color: ${(props) => props.theme.gray[900]};
   justify-content: flex-end;
   width: 100%;
   align-items: center;
   flex-direction: row;
+
+  margin-top: ${(props) => props.theme.spacing[4]};
+  margin-bottom: ${(props) => props.theme.spacing[2]};
+
   padding-left: ${(props) => props.theme.spacing[2]};
   padding-right: ${(props) => props.theme.spacing[2]};
 `;
