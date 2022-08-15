@@ -41,6 +41,7 @@ export const MessageHeader = (props: MessageFooterProps) => {
         size="subtitle"
         color="gray"
         shade="200"
+        maxLength={16}
         bold={true}
         marginRight="1"
         marginBottom="0"
