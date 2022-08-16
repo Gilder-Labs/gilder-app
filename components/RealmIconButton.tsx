@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { fetchRealm, selectRealm } from "../store/realmSlice";
 import { RealmIcon } from "./RealmIcon";
 import * as Haptics from "expo-haptics";
+import { useChatClient } from "../hooks/useChatClient";
 
 interface RealmIconButtonProps {
   realmId: string;
@@ -22,6 +23,7 @@ export const RealmIconButton = ({
     (state) => state.realms
   );
   const dispatch = useAppDispatch();
+  const { realmsWithUnread } = useChatClient();
 
   const handleRealmIconClick = () => {
     // if user selects realm they are already on, don't do anything
@@ -46,6 +48,7 @@ export const RealmIconButton = ({
       showSelected={showSelected}
       size={size}
     >
+      {realmsWithUnread?.[realmId] && <UnreadNotification />}
       <Container>
         {/* {isSelected && <RealmSelectedIndicator />} */}
         <RealmIcon realmId={realmId} size={size} />
@@ -53,6 +56,17 @@ export const RealmIconButton = ({
     </ContainerButton>
   );
 };
+
+const UnreadNotification = styled.View`
+  width: 5px;
+  background-color: ${(props: any) => props.theme.gray[500]};
+  height: 10px;
+  position: absolute;
+  left: -10px;
+  top: 18px;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+`;
 
 const ContainerButton = styled.TouchableOpacity<{
   isSelected: boolean;
