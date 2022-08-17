@@ -5,7 +5,6 @@ import { abbreviatePublicKey } from "../utils";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { useCardinalIdentity } from "./useCardinaldentity";
 import { disconnectChat } from "../store/chatSlice";
-import { useNavigation } from "@react-navigation/native";
 
 interface genericObj {
   [key: string]: any;
@@ -20,7 +19,6 @@ export const useChatClient = () => {
   const { publicKey, walletType, userInfo } = useAppSelector(
     (state) => state.wallet
   );
-  const navigation = useNavigation();
   const { chatUserToken } = useAppSelector((state) => state.chat);
   const [twitterURL, twitterHandle] = useCardinalIdentity(publicKey);
   const [realmsWithUnread, setRealmsWithUnread] = useState<genericObj>({});
