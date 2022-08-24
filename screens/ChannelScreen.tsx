@@ -10,7 +10,7 @@ import {
   MessageRepliesAvatars,
   MessageTouchableHandlerPayload,
 } from "stream-chat-expo"; // Or stream-chat-expo
-import { StyleSheet, Text, SafeAreaView, View } from "react-native";
+import { StyleSheet, Text, SafeAreaView, Keyboard } from "react-native";
 import styled from "styled-components";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { useEffect } from "react";
@@ -62,6 +62,7 @@ export default function ChannelScreen(props: any) {
     setSelectedMessage(message);
     bottomSheetModalRef?.current?.present();
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    Keyboard.dismiss();
   };
 
   return (

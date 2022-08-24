@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   Thread,
   Channel,
@@ -6,13 +6,13 @@ import {
   MessageTouchableHandlerPayload,
 } from "stream-chat-expo"; // Or stream-chat-expo
 import { useHeaderHeight } from "@react-navigation/elements";
-import { useEffect } from "react";
 import { ChatActionModal } from "../elements/chat/ChatActionModal";
 import * as Haptics from "expo-haptics";
 import { ChatMessageFooter } from "../elements/chat/ChatMessageFooter";
 import { Messagereply } from "../elements/chat/MessageReply";
 import { MessageHeader } from "../elements/chat/MessageHeader";
 import { SendButton } from "../elements/chat/ChatSendButton";
+import { Keyboard } from "react-native";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 
 export default function ThreadScreen(props: any) {
@@ -27,6 +27,7 @@ export default function ThreadScreen(props: any) {
     setSelectedMessage(message);
     bottomSheetModalRef?.current?.present();
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    Keyboard.dismiss();
   };
 
   useEffect(() => {

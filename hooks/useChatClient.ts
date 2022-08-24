@@ -113,13 +113,12 @@ export const useChatClient = () => {
       if (chatUserToken) {
         setClientIsReady(false);
         setClientConnecting(false);
-        dispatch(disconnectChat(""));
 
         // Hacky way to fix race condition that happens when a user in on the channel screen but disconnects
         setTimeout(async () => {
-          console.log("Disconnecting user?");
+          dispatch(disconnectChat(""));
           await chatClient.disconnectUser();
-        }, 1500);
+        }, 1000);
       }
     } catch (error) {
       if (error instanceof Error) {
