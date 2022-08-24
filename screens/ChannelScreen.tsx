@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
   Channel,
   MessageList,
@@ -22,6 +22,7 @@ import { ChatMessageFooter } from "../elements/chat/ChatMessageFooter";
 import { Messagereply } from "../elements/chat/MessageReply";
 import { SendButton } from "../elements/chat/ChatSendButton";
 import { MessageHeader } from "../elements/chat/MessageHeader";
+import { BottomSheetModal } from "@gorhom/bottom-sheet";
 
 export default function ChannelScreen(props: any) {
   const { route, navigation } = props;
@@ -32,9 +33,10 @@ export default function ChannelScreen(props: any) {
   const headerHeight = useHeaderHeight();
   const { setTopInset } = useAttachmentPickerContext();
   const [toggleChannel, setToggleChannel] = useState(false);
-  const [isVisble, setModalVisible] = useState(false);
   const [selectedMessage, setSelectedMessage] =
     useState<MessageTouchableHandlerPayload | null>(null);
+
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
   const { clientIsReady } = useChatClient();
 
@@ -58,7 +60,7 @@ export default function ChannelScreen(props: any) {
 
   const handleMessageLongPress = (message: MessageTouchableHandlerPayload) => {
     setSelectedMessage(message);
-    setModalVisible(true);
+    bottomSheetModalRef?.current?.present();
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
   };
 
@@ -101,9 +103,8 @@ export default function ChannelScreen(props: any) {
           />
           <MessageInput Reply={() => null} SendButton={() => <SendButton />} />
           <ChatActionModal
-            isVisible={isVisble}
-            setModalVisible={(isVisible) => setModalVisible(isVisible)}
             message={selectedMessage}
+            bottomSheetModalRef={bottomSheetModalRef}
           />
         </Channel>
       </SafeAreaView>

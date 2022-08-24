@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
   Thread,
   Channel,
@@ -13,18 +13,19 @@ import { ChatMessageFooter } from "../elements/chat/ChatMessageFooter";
 import { Messagereply } from "../elements/chat/MessageReply";
 import { MessageHeader } from "../elements/chat/MessageHeader";
 import { SendButton } from "../elements/chat/ChatSendButton";
+import { BottomSheetModal } from "@gorhom/bottom-sheet";
 
 export default function ThreadScreen(props: any) {
   const { route } = props;
   const headerHeight = useHeaderHeight();
   const { setTopInset } = useAttachmentPickerContext();
-  const [isVisble, setModalVisible] = useState(false);
   const [selectedMessage, setSelectedMessage] =
     useState<MessageTouchableHandlerPayload | null>(null);
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
   const handleMessageLongPress = (message: MessageTouchableHandlerPayload) => {
     setSelectedMessage(message);
-    setModalVisible(true);
+    bottomSheetModalRef?.current?.present();
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
   };
 
@@ -49,13 +50,11 @@ export default function ThreadScreen(props: any) {
       MessageHeader={(props) => <MessageHeader {...props} />}
       SendButton={() => <SendButton />}
     >
-      <ChatActionModal
-        isVisible={isVisble}
-        setModalVisible={(isVisible) => setModalVisible(isVisible)}
-        message={selectedMessage}
-        isInThread={true}
-      />
       <Thread />
+      <ChatActionModal
+        message={selectedMessage}
+        bottomSheetModalRef={bottomSheetModalRef}
+      />
     </Channel>
   );
 }

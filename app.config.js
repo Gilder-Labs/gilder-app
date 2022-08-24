@@ -23,7 +23,7 @@ export default {
     ios: {
       supportsTablet: true,
       bundleIdentifier: "com.dawggydawg.gilderapp",
-      buildNumber: 12,
+      buildNumber: "12",
     },
     android: {
       adaptiveIcon: {
