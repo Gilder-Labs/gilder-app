@@ -4,7 +4,7 @@ export default {
   expo: {
     name: "Gilder",
     slug: "gilder-app",
-    version: "1.0.43",
+    version: "1.0.44",
     orientation: "portrait",
     icon: "./assets/images/DarkIcon.png",
     scheme: "gilder",
@@ -23,14 +23,14 @@ export default {
     ios: {
       supportsTablet: true,
       bundleIdentifier: "com.dawggydawg.gilderapp",
-      buildNumber: "12",
+      buildNumber: "13",
     },
     android: {
       adaptiveIcon: {
         foregroundImage: "./assets/images/DarkIconAndroid.png",
         backgroundColor: "#000000",
       },
-      versionCode: 12,
+      versionCode: 13,
       googleServicesFile: "./google-services.json",
       package: "com.dawggydawg.gilderapp",
     },
