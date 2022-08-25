@@ -8,7 +8,7 @@ import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { Platform } from "react-native";
+import { Platform, Keyboard } from "react-native";
 import { useTheme } from "styled-components";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { fetchRealms, fetchRealm, fetchStorage } from "../store/realmSlice";
@@ -70,6 +70,15 @@ function DrawerScreen() {
   const { pushToken } = useAppSelector((state) => state.notifications);
 
   const responseListener = useRef();
+
+  // hide keyboard when we change drawer state.
+  useEffect(() => {
+    const openingDrawer = navigation.addListener("state", (e) => {
+      Keyboard.dismiss();
+    });
+
+    return openingDrawer;
+  }, [navigation]);
 
   useEffect(() => {
     const getPushToken = async () => {
