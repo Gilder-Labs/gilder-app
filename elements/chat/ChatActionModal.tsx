@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useRef, useMemo, useCallback } from "react";
 import styled from "styled-components/native";
 import { View } from "react-native";
 import { useTheme } from "styled-components";
@@ -13,36 +13,40 @@ import {
   useChannelContext,
 } from "stream-chat-expo";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faWallet } from "@fortawesome/pro-solid-svg-icons/faWallet";
+
 import { faCopy } from "@fortawesome/pro-solid-svg-icons/faCopy";
 import { faReply } from "@fortawesome/pro-solid-svg-icons/faReply";
 import { faPenToSquare } from "@fortawesome/pro-solid-svg-icons/faPenToSquare";
 import { faTrashCan } from "@fortawesome/pro-solid-svg-icons/faTrashCan";
 import { faComments } from "@fortawesome/pro-solid-svg-icons/faComments";
 import { faFaceSmilePlus } from "@fortawesome/pro-solid-svg-icons/faFaceSmilePlus";
-import Modal from "react-native-modal";
+import {
+  BottomSheetModal,
+  BottomSheetModalProvider,
+} from "@gorhom/bottom-sheet";
 
 import { Typography } from "../../components";
 import * as Clipboard from "expo-clipboard";
 
 interface ChatActionModalProps {
-  isVisible: boolean;
-  setModalVisible: (isOpen: boolean) => any;
   message: MessageTouchableHandlerPayload | null;
   isInThread?: boolean;
+  bottomSheetModalRef: any;
 }
 
 export const ChatActionModal = ({
-  isVisible = false,
-  setModalVisible,
   message,
   isInThread = false,
+  bottomSheetModalRef,
 }: ChatActionModalProps) => {
   const theme = useTheme();
   const navigation = useNavigation();
   const { height, width } = useWindowDimensions();
   const { publicKey } = useAppSelector((state) => state.wallet);
   const channelContext = useChannelContext();
+  // ref
+  // variables
+  const snapPoints = useMemo(() => ["50%", "75%"], []);
 
   const handleAction = (type: string) => {
     const actionHandlers = message?.actionHandlers;
@@ -68,175 +72,161 @@ export const ChatActionModal = ({
     }
 
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    setModalVisible(false);
+    bottomSheetModalRef.current?.close();
   };
 
   const toggleReaction = (reaction: string) => {
     message?.actionHandlers?.toggleReaction(reaction);
-    setModalVisible(false);
+    bottomSheetModalRef.current?.close();
   };
 
   return (
-    <Modal
-      isVisible={isVisible}
-      onSwipeComplete={() => setModalVisible(false)}
-      swipeDirection="down"
-      deviceWidth={width}
-      // coverScreen={true}
-      onBackButtonPress={() => setModalVisible(false)}
-      onBackdropPress={() => setModalVisible(false)}
-      style={{ width: "100%", padding: 0, margin: 0 }}
-      customBackdrop={
-        <BackDropContainer onPress={() => setModalVisible(false)}>
-          <View style={{ flex: 1 }} />
-        </BackDropContainer>
-      }
-    >
-      <ContentContainer>
-        <FloatingBarContainer>
-          <FloatingBar />
-        </FloatingBarContainer>
-        <ReactionRow>
-          <EmojiIconContainer onPress={() => toggleReaction("768")}>
-            <Typography text="🔥" size="h4" marginBottom="0" />
-          </EmojiIconContainer>
-          <EmojiIconContainer onPress={() => toggleReaction("365")}>
-            <Typography text="❤️" size="h4" marginBottom="0" />
-          </EmojiIconContainer>
-          <EmojiIconContainer onPress={() => toggleReaction("333")}>
-            <Typography text="👍" size="h4" marginBottom="0" />
-          </EmojiIconContainer>
-          <EmojiIconContainer onPress={() => toggleReaction("209")}>
-            <Typography text="😂" size="h4" marginBottom="0" />
-          </EmojiIconContainer>
-          <EmojiIconContainer onPress={() => toggleReaction("127")}>
-            <Typography text="🎉" size="h4" marginBottom="0" />
-          </EmojiIconContainer>
-          {/* <EmojiIconContainer onPress={() => toggleReaction("something")}>
+    // <Modal
+    //   isVisible={isVisible}
+    //   onSwipeComplete={() => setModalVisible(false)}
+    //   swipeDirection="down"
+    //   deviceWidth={width}
+    //   // coverScreen={true}
+    //   onBackButtonPress={() => setModalVisible(false)}
+    //   onBackdropPress={() => setModalVisible(false)}
+    //   style={{ width: "100%", padding: 0, margin: 0 }}
+    //   customBackdrop={
+    //     <BackDropContainer onPress={() => setModalVisible(false)}>
+    //       <View style={{ flex: 1 }} />
+    //     </BackDropContainer>
+    //   }
+    // >
+    <BottomSheetModalProvider>
+      <BottomSheetModal
+        ref={bottomSheetModalRef}
+        index={0}
+        snapPoints={snapPoints}
+        handleStyle={{
+          backgroundColor: theme.gray[800],
+          borderTopRightRadius: 8,
+          borderTopLeftRadius: 8,
+        }}
+        handleIndicatorStyle={{
+          backgroundColor: theme.gray[500],
+        }}
+        backgroundStyle={{
+          backgroundColor: theme.gray[800],
+        }}
+      >
+        <ContentContainer>
+          <ReactionRow>
+            <EmojiIconContainer onPress={() => toggleReaction("768")}>
+              <Typography text="🔥" size="h4" marginBottom="0" />
+            </EmojiIconContainer>
+            <EmojiIconContainer onPress={() => toggleReaction("365")}>
+              <Typography text="❤️" size="h4" marginBottom="0" />
+            </EmojiIconContainer>
+            <EmojiIconContainer onPress={() => toggleReaction("333")}>
+              <Typography text="👍" size="h4" marginBottom="0" />
+            </EmojiIconContainer>
+            <EmojiIconContainer onPress={() => toggleReaction("209")}>
+              <Typography text="😂" size="h4" marginBottom="0" />
+            </EmojiIconContainer>
+            <EmojiIconContainer onPress={() => toggleReaction("127")}>
+              <Typography text="🎉" size="h4" marginBottom="0" />
+            </EmojiIconContainer>
+            {/* <EmojiIconContainer onPress={() => toggleReaction("something")}>
             <FontAwesomeIcon
               icon={faFaceSmilePlus}
               size={28}
               color={theme.gray[400]}
             />
           </EmojiIconContainer> */}
-        </ReactionRow>
-        <ActionContainer>
-          {publicKey === message?.message?.user?.id && (
-            <ActionButton onPress={() => handleAction("edit")}>
+          </ReactionRow>
+          <ActionContainer>
+            {publicKey === message?.message?.user?.id && (
+              <ActionButton onPress={() => handleAction("edit")}>
+                <FontAwesomeIcon
+                  style={{ marginBottom: 4 }}
+                  icon={faPenToSquare}
+                  size={20}
+                  color={theme.gray[300]}
+                />
+                <Typography
+                  size="caption"
+                  shade="300"
+                  text="Edit"
+                  marginBottom="0"
+                />
+              </ActionButton>
+            )}
+            <ActionButton onPress={() => handleAction("reply")}>
               <FontAwesomeIcon
                 style={{ marginBottom: 4 }}
-                icon={faPenToSquare}
+                icon={faReply}
                 size={20}
                 color={theme.gray[300]}
               />
               <Typography
                 size="caption"
                 shade="300"
-                text="Edit"
+                text="Reply"
                 marginBottom="0"
               />
             </ActionButton>
-          )}
-          <ActionButton onPress={() => handleAction("reply")}>
-            <FontAwesomeIcon
-              style={{ marginBottom: 4 }}
-              icon={faReply}
-              size={20}
-              color={theme.gray[300]}
-            />
-            <Typography
-              size="caption"
-              shade="300"
-              text="Reply"
-              marginBottom="0"
-            />
-          </ActionButton>
-          <ActionButton onPress={() => handleAction("copy")}>
-            <FontAwesomeIcon
-              style={{ marginBottom: 4 }}
-              icon={faCopy}
-              size={20}
-              color={theme.gray[300]}
-            />
-            <Typography
-              size="caption"
-              shade="300"
-              text="Copy"
-              marginBottom="0"
-            />
-          </ActionButton>
-          {!isInThread && (
-            <ActionButton onPress={() => handleAction("thread")}>
+            <ActionButton onPress={() => handleAction("copy")}>
               <FontAwesomeIcon
                 style={{ marginBottom: 4 }}
-                icon={faComments}
+                icon={faCopy}
                 size={20}
                 color={theme.gray[300]}
               />
               <Typography
                 size="caption"
                 shade="300"
-                text="Thread Reply"
+                text="Copy"
                 marginBottom="0"
               />
             </ActionButton>
-          )}
-          {publicKey === message?.message?.user?.id && (
-            <ActionButton onPress={() => handleAction("delete")}>
-              <FontAwesomeIcon
-                style={{ marginBottom: 4 }}
-                icon={faTrashCan}
-                size={20}
-                color={theme.error[400]}
-              />
-              <Typography
-                size="caption"
-                color="error"
-                shade="400"
-                text="Delete"
-                marginBottom="0"
-              />
-            </ActionButton>
-          )}
-        </ActionContainer>
-      </ContentContainer>
-    </Modal>
+            {!isInThread && (
+              <ActionButton onPress={() => handleAction("thread")}>
+                <FontAwesomeIcon
+                  style={{ marginBottom: 4 }}
+                  icon={faComments}
+                  size={20}
+                  color={theme.gray[300]}
+                />
+                <Typography
+                  size="caption"
+                  shade="300"
+                  text="Thread Reply"
+                  marginBottom="0"
+                />
+              </ActionButton>
+            )}
+            {publicKey === message?.message?.user?.id && (
+              <ActionButton onPress={() => handleAction("delete")}>
+                <FontAwesomeIcon
+                  style={{ marginBottom: 4 }}
+                  icon={faTrashCan}
+                  size={20}
+                  color={theme.error[400]}
+                />
+                <Typography
+                  size="caption"
+                  color="error"
+                  shade="400"
+                  text="Delete"
+                  marginBottom="0"
+                />
+              </ActionButton>
+            )}
+          </ActionContainer>
+        </ContentContainer>
+      </BottomSheetModal>
+    </BottomSheetModalProvider>
   );
 };
 
-const BackDropContainer = styled.TouchableWithoutFeedback`
-  flex: 1;
-`;
-
 const ContentContainer = styled.View`
   /* flex: 1; */
-  margin-top: auto;
-  height: 50%;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
+  height: 100%;
   background: ${(props: any) => props.theme.gray[800]};
-`;
-
-const FloatingBarContainer = styled.View`
-  position: absolute;
-
-  width: 100%;
-  padding-top: ${(props: any) => props.theme.spacing[2]};
-  top: 0;
-  left: 0;
-  z-index: 100;
-
-  justify-content: center;
-  align-items: center;
-`;
-
-const FloatingBar = styled.View`
-  height: 4px;
-  width: 40px;
-  z-index: 100;
-  background: #ffffff88;
-  top: 0;
-  border-radius: 8px;
 `;
 
 const ActionContainer = styled.View`
@@ -267,7 +257,6 @@ const ReactionRow = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-top: ${(props: any) => props.theme.spacing[5]};
 `;
 
 const EmojiIconContainer = styled.TouchableOpacity`

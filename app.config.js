@@ -4,7 +4,7 @@ export default {
   expo: {
     name: "Gilder",
     slug: "gilder-app",
-    version: "1.0.41",
+    version: "1.0.44",
     orientation: "portrait",
     icon: "./assets/images/DarkIcon.png",
     scheme: "gilder",
@@ -23,13 +23,14 @@ export default {
     ios: {
       supportsTablet: true,
       bundleIdentifier: "com.dawggydawg.gilderapp",
+      buildNumber: "13",
     },
     android: {
       adaptiveIcon: {
         foregroundImage: "./assets/images/DarkIconAndroid.png",
         backgroundColor: "#000000",
       },
-      versionCode: 11,
+      versionCode: 13,
       googleServicesFile: "./google-services.json",
       package: "com.dawggydawg.gilderapp",
     },
@@ -53,6 +54,9 @@ export default {
       rpcNetwork: process.env.MAINNET_RPC || "https://ssc-dao.genesysgo.net/",
       indexRPC: process.env.INDEX_RPC || "https://ssc-dao.genesysgo.net/",
       streamApiKey: process.env.STREAM_API_KEY,
+      eas: {
+        projectId: "d43ad13f-8eb8-4f37-9f5b-dca8e8f129c1",
+      },
     },
     hooks: {
       postPublish: [

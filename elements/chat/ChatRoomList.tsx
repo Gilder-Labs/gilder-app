@@ -102,7 +102,7 @@ export const ChatRoomList = (props: any): any => {
     if (publicKey && walletType === "web3auth") {
       loginWithWeb3auth();
     }
-  }, [publicKey, selectedRealm?.realmId]);
+  }, [publicKey]);
 
   const filters = {
     members: { $in: [publicKey] },
