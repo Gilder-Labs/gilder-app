@@ -23,7 +23,6 @@ export const RealmIconButton = ({
     (state) => state.realms
   );
   const dispatch = useAppDispatch();
-  const { realmsWithUnread } = useChatClient();
 
   const handleRealmIconClick = () => {
     // if user selects realm they are already on, don't do anything
@@ -48,7 +47,7 @@ export const RealmIconButton = ({
       showSelected={showSelected}
       size={size}
     >
-      {realmsWithUnread?.[realmId] && <UnreadNotification />}
+      {/* {realmsWithUnread?.[realmId] && <UnreadNotification />} */}
       <Container>
         {/* {isSelected && <RealmSelectedIndicator />} */}
         <RealmIcon realmId={realmId} size={size} />

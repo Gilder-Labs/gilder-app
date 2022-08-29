@@ -71,7 +71,6 @@ function DrawerScreen() {
 
   const responseListener = useRef();
 
-  // hide keyboard when we change drawer state.
   useEffect(() => {
     const openingDrawer = navigation.addListener("state", (e) => {
       Keyboard.dismiss();
