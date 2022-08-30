@@ -13,6 +13,8 @@ const cache: Record<string, any> = {};
 export const useCardinalIdentity = (walletId: string) => {
   const [twitterURL, setTwitterURL] = useState("");
   const [twitterHandle, setTwitterHandle] = useState("");
+  const [twitterDescription, setTwitterDescription] = useState("");
+
   const [isLoading, setIsLoading] = useState(false);
 
   let userUrl = cache?.[walletId]?.twitterURL;
@@ -36,13 +38,19 @@ export const useCardinalIdentity = (walletId: string) => {
         const response = await axios.get(
           `https://api.cardinal.so/namespaces/twitter/proxy?url=https://api.twitter.com/2/users/by&usernames=${handleFormatted}&user.fields=profile_image_url`
         );
+        const descriptionResponse = await axios.get(
+          `https://api.cardinal.so/namespaces/twitter/proxy?url=https://api.twitter.com/2/users/by&usernames=${handleFormatted}`
+        );
+        const description = descriptionResponse?.data?.data?.[0]?.description;
         const twitterImage = response?.data?.data?.[0]?.profile_image_url;
         cache[walletId] = {
           twitterURL: twitterImage,
           twitterHandle: handleFormatted,
+          description: description || "",
         };
 
         setTwitterURL(twitterImage);
+        setTwitterDescription(description);
       }
       setIsLoading(false);
     };
@@ -60,5 +68,5 @@ export const useCardinalIdentity = (walletId: string) => {
     }
   }, [walletId, userUrl, isLoading]);
 
-  return [twitterURL, twitterHandle];
+  return [twitterURL, twitterHandle, twitterDescription];
 };
