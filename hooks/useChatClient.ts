@@ -20,7 +20,7 @@ export const useChatClient = () => {
     (state) => state.wallet
   );
   const { chatUserToken } = useAppSelector((state) => state.chat);
-  const [twitterURL, twitterHandle] = useCardinalIdentity(publicKey);
+  const { twitterURL, twitterHandle } = useCardinalIdentity(publicKey);
   const [realmsWithUnread, setRealmsWithUnread] = useState<genericObj>({});
 
   // useEffect(() => {

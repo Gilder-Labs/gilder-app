@@ -75,7 +75,7 @@ export const VoteCard = ({ vote, proposal, member, realm }: VoteCardProps) => {
                 <FontAwesomeIcon
                   icon={faCircleXmark}
                   size={14}
-                  color={theme.success[400]}
+                  color={theme.error[400]}
                 />
               )}
             </IconContainer>
@@ -91,12 +91,13 @@ export const VoteCard = ({ vote, proposal, member, realm }: VoteCardProps) => {
 
 const Container = styled.View`
   background: ${(props) => props.theme.gray[800]};
-  margin-top: ${(props) => props.theme.spacing[3]};
   padding: ${(props) => props.theme.spacing[3]};
   border-radius: 8px;
   flex-direction: row;
-  margin-left: ${(props) => props.theme.spacing[3]};
   margin-right: ${(props) => props.theme.spacing[3]};
+  /* min-width: 200px; */
+  height: 120px;
+  margin-bottom: ${(props) => props.theme.spacing[2]};
 `;
 
 const ProposalName = styled.Text`

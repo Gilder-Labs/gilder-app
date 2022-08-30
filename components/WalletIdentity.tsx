@@ -39,7 +39,7 @@ export const WalletIdentity = ({
   // const { loading, error, data } = useQuery(GET_CYBERCONNECT_IDENTITY, {
   //   variables: { publicKey: memberPublicKey },
   // });
-  const [twitterURL, twitterHandle] = useCardinalIdentity(memberPublicKey);
+  const { twitterURL, twitterHandle } = useCardinalIdentity(memberPublicKey);
 
   const identityName = twitterHandle;
   const avatarUrl = twitterURL;

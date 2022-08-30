@@ -38,7 +38,7 @@ export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
   //   variables: { publicKey: member.walletId },
   // });
 
-  const [twitterURL, twitterHandle] = useCardinalIdentity(member.walletId);
+  const { twitterURL, twitterHandle } = useCardinalIdentity(member.walletId);
 
   const { selectedRealm } = useAppSelector((state) => state.realms);
 

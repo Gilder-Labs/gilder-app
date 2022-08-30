@@ -1,13 +1,13 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { PublicKey, ConfirmedSignatureInfo, Connection } from "@solana/web3.js";
 import {
-  getRealms,
-  getRealm,
   getAllTokenOwnerRecords, // returns all members of a realm, 1 token record for community or council holding
   getVoteRecordsByVoter, // get all votes a member did
   getGovernanceChatMessagesByVoter,
   GOVERNANCE_CHAT_PROGRAM_ID,
 } from "@solana/spl-governance";
+import Constants from "expo-constants";
+import axios from "axios";
 
 import {
   REALM_GOVERNANCE_PKEY,
@@ -28,6 +28,8 @@ export interface realmState {
   isLoadingMembers: boolean;
   isLoadingChat: boolean;
   isLoadingVotes: boolean;
+  isLoadingDomains: boolean;
+  solDomains: Array<string>;
   isRefreshingMembers: boolean;
   delegateMap: any;
   tokenRecordToWalletMap: genericObj;
@@ -44,10 +46,13 @@ const initialState: realmState = {
   isRefreshingMembers: false,
   delegateMap: {},
   tokenRecordToWalletMap: {},
+  solDomains: [],
+  isLoadingDomains: false,
 };
 
 let connection = new Connection(RPC_CONNECTION, "confirmed");
 const indexConnection = new Connection(INDEX_RPC_CONNECTION, "recent");
+const heliusApiKey = Constants?.manifest?.extra?.heliusApiKey;
 
 // TODO: map tokenRecord -> walletid
 //
@@ -263,6 +268,31 @@ export const fetchMemberVotes = createAsyncThunk(
   }
 );
 
+export const fetchWalletSolDomains = createAsyncThunk(
+  "realms/fetchWalletSolDomains",
+  async (walletAddress: string) => {
+    console.log("WALLET ADDRESS", walletAddress);
+    console.log("api key", heliusApiKey);
+    try {
+      const { data } = await axios.get(
+        `https://api.helius.xyz/v0/addresses/${walletAddress}/names?api-key=${heliusApiKey}`
+      );
+
+      //       import { getAllDomains } from "@bonfida/spl-name-service";
+
+      // // ...
+
+      // const domains = await getAllDomains(connection, user);
+      console.log("DOMAIN NAMES", data);
+      return data?.domainNames;
+    } catch (error) {
+      console.log("error", error);
+    }
+
+    return [];
+  }
+);
+
 export const memberSlice = createSlice({
   name: "realms",
   initialState,
@@ -296,6 +326,16 @@ export const memberSlice = createSlice({
       .addCase(fetchMemberChat.fulfilled, (state, action: any) => {
         state.isLoadingChat = false;
         state.memberChat = action.payload;
+      })
+      .addCase(fetchWalletSolDomains.pending, (state) => {
+        state.isLoadingDomains = true;
+      })
+      .addCase(fetchWalletSolDomains.rejected, (state) => {
+        state.isLoadingDomains = false;
+      })
+      .addCase(fetchWalletSolDomains.fulfilled, (state, action: any) => {
+        state.isLoadingDomains = false;
+        state.solDomains = action.payload;
       })
       .addCase(fetchMemberVotes.pending, (state) => {
         state.isLoadingVotes = true;

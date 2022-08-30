@@ -54,6 +54,7 @@ export default {
       rpcNetwork: process.env.MAINNET_RPC || "https://ssc-dao.genesysgo.net/",
       indexRPC: process.env.INDEX_RPC || "https://ssc-dao.genesysgo.net/",
       streamApiKey: process.env.STREAM_API_KEY,
+      heliusApiKey: process.env.HELIUS_API_KEY,
       eas: {
         projectId: "d43ad13f-8eb8-4f37-9f5b-dca8e8f129c1",
       },

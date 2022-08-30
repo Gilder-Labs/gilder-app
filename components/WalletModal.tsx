@@ -73,7 +73,7 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
   });
   const { disconnectClient } = useChatClient();
   const { isShowingToast } = useAppSelector((state) => state.utility);
-  const [twitterURL, twitterHandle] = useCardinalIdentity(publicKey);
+  const { twitterURL, twitterHandle } = useCardinalIdentity(publicKey);
 
   const handleDisconnect = async () => {
     navigation.pop(1);
