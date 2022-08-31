@@ -3,8 +3,12 @@ import { FlatList } from "react-native";
 import styled from "styled-components/native";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { useTheme } from "styled-components";
-import { fetchWalletSolDomains, fetchMemberVotes } from "../store/memberSlice";
-import { VoteCard, PublicKeyTextCopy } from "../components";
+import {
+  fetchWalletSolDomains,
+  fetchMemberVotes,
+  fetchMemberDaos,
+} from "../store/memberSlice";
+import { VoteCard, PublicKeyTextCopy, RealmCard } from "../components";
 import { useQuery, gql } from "@apollo/client";
 import { useCardinalIdentity } from "../hooks/useCardinaldentity";
 import { Typography } from "../components";
@@ -12,6 +16,7 @@ import { AnimatedImage } from "react-native-ui-lib";
 import { getColorType } from "../utils";
 import { LinearGradient } from "expo-linear-gradient";
 import { createIconSetFromFontello } from "@expo/vector-icons";
+import { ActivityIndicator } from "react-native";
 
 interface MemberProfileProps {
   open: boolean;
@@ -21,17 +26,16 @@ interface MemberProfileProps {
 
 export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
   const dispatch = useAppDispatch();
-  const { isLoadingVotes, memberVotes, membersMap } = useAppSelector(
-    (state) => state.members
-  );
+  const { isLoadingVotes, memberDAOs, memberVotes, membersMap } =
+    useAppSelector((state) => state.members);
   const theme = useTheme();
 
-  const { selectedRealm } = useAppSelector((state) => state.realms);
+  const { selectedRealm, realmsMap } = useAppSelector((state) => state.realms);
   const { proposalsMap } = useAppSelector((state) => state.proposals);
   const { walletId } = route?.params;
-  const member = membersMap[walletId];
+  const member = membersMap?.[walletId];
   const { twitterURL, twitterHandle, twitterDescription } = useCardinalIdentity(
-    member.walletId
+    member?.walletId
   );
   const identityName = twitterHandle;
 
@@ -42,6 +46,7 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
     if (member) {
       dispatch(fetchMemberVotes({ member, realm: selectedRealm }));
       dispatch(fetchWalletSolDomains(member.walletId));
+      dispatch(fetchMemberDaos(member.walletId));
     }
   }, [member]);
 
@@ -55,6 +60,10 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
         realm={selectedRealm}
       />
     );
+  };
+
+  const renderDAO = ({ item }: any) => {
+    return <RealmCard realm={realmsMap[item]} navigateOnClick={true} />;
   };
 
   return (
@@ -106,7 +115,7 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
               shade="500"
               size="subtitle"
               backgroundShade="900"
-              publicKey={member.walletId}
+              publicKey={member?.walletId || ""}
               noPadding={true}
               hideIcon={true}
             />
@@ -124,38 +133,65 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
         </NameRow>
       </ProfileHeaderRow>
 
-      <Row>
+      <DAOColumn>
         <Typography
           text={"DAO membership"}
-          shade="300"
-          size="h4"
-          bold={true}
-          marginBottom={"2"}
-        />
-      </Row>
-
-      <Column>
-        <Typography
-          text={"Latest Votes"}
-          shade="300"
-          size="h4"
+          shade="400"
+          size="body"
           bold={true}
           marginBottom={"2"}
         />
         <FlatList
-          data={memberVotes}
-          renderItem={renderVotes}
-          keyExtractor={(item) => item.proposalId}
+          data={memberDAOs}
+          renderItem={renderDAO}
+          keyExtractor={(item) => item}
           scrollIndicatorInsets={{ right: 1 }}
           initialNumToRender={10}
           horizontal={true}
+          style={{ marginBottom: 8 }}
+          contentContainerStyle={{
+            backgroundColor: theme.gray[1000],
+            paddingTop: 12,
+            borderRadius: 8,
+          }}
         />
-      </Column>
+      </DAOColumn>
+
+      <VotesColumn>
+        <Typography
+          text={"Latest Votes"}
+          shade="400"
+          size="body"
+          bold={true}
+          marginBottom={"2"}
+        />
+        {isLoadingVotes ? (
+          <ActivityIndicator />
+        ) : (
+          <FlatList
+            data={memberVotes}
+            renderItem={renderVotes}
+            keyExtractor={(item) => item.proposalId}
+            scrollIndicatorInsets={{ right: 1 }}
+            initialNumToRender={10}
+            horizontal={true}
+            contentContainerStyle={{
+              backgroundColor: theme.gray[1000],
+              paddingTop: 12,
+              paddingLeft: 8,
+              borderRadius: 8,
+            }}
+            ListEmptyComponent={
+              <Typography text="Looks like this user hasn't voted on anything yet." />
+            }
+          />
+        )}
+      </VotesColumn>
       <Row>
         <Typography
-          text={"Sol domains"}
-          shade="300"
-          size="h4"
+          text={"Domains"}
+          shade="400"
+          size="body"
           bold={true}
           marginBottom={"2"}
         />
@@ -198,11 +234,16 @@ const Row = styled.View`
   flex-direction: row;
 `;
 
+const DAOColumn = styled.View`
+  flex-direction: column;
+  min-height: 100px;
+`;
 const DescriptionContainer = styled.View`
   flex-direction: row;
   margin-right: 128px; // so react native doesn't overflow outside screen
 `;
 
-const Column = styled.View`
+const VotesColumn = styled.View`
   flex-direction: column;
+  min-height: 200px;
 `;

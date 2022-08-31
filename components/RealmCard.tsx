@@ -4,40 +4,58 @@ import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { RealmIcon } from "./RealmIcon";
 import * as Haptics from "expo-haptics";
 import { Typography } from "../components";
-import { toggleRealmInWatchlist } from "../store/realmSlice";
+import {
+  toggleRealmInWatchlist,
+  selectRealm,
+  fetchRealm,
+} from "../store/realmSlice";
 import { subscribeToNotifications } from "../store/notificationSlice";
 import { LinearGradient } from "expo-linear-gradient";
 
 import { useTheme } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faCheck } from "@fortawesome/pro-solid-svg-icons/faCheck";
+import { useNavigation } from "@react-navigation/native";
 
 interface RealmCardProps {
   realm: any;
+  navigateOnClick: boolean;
 }
 
-export const RealmCard = ({ realm }: RealmCardProps) => {
+export const RealmCard = ({
+  realm,
+  navigateOnClick = false,
+}: RealmCardProps) => {
   const { realmsData, realmWatchlist } = useAppSelector(
     (state) => state.realms
   );
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const { pushToken } = useAppSelector((state) => state.notifications);
+  const navigation = useNavigation();
 
   const realmInfo = realmsData[realm.pubKey];
   const isSelected = realmWatchlist.includes(realm.realmId);
 
   const handleRealmClick = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    dispatch(toggleRealmInWatchlist(realm.realmId));
-    if (pushToken) {
-      dispatch(
-        subscribeToNotifications({
-          pushToken: pushToken,
-          realmId: realm.realmId,
-          isSubscribing: !isSelected,
-        })
-      );
+
+    if (navigateOnClick) {
+      navigation.popToTop();
+
+      dispatch(selectRealm(realm));
+      dispatch(fetchRealm(realm.realmId));
+    } else {
+      dispatch(toggleRealmInWatchlist(realm.realmId));
+      if (pushToken) {
+        dispatch(
+          subscribeToNotifications({
+            pushToken: pushToken,
+            realmId: realm.realmId,
+            isSubscribing: !isSelected,
+          })
+        );
+      }
     }
   };
 
@@ -76,6 +94,8 @@ export const RealmCard = ({ realm }: RealmCardProps) => {
           bold={true}
           marginBottom={"0"}
           hasTextShadow={true}
+          marginLeft="2"
+          marginRight="2"
         />
       </LinearGradient>
       {isSelected && (
@@ -99,6 +119,7 @@ const ContainerButton = styled.TouchableOpacity<{ isSelected: boolean }>`
   margin-right: ${(props: any) => props.theme.spacing[2]};
   border-radius: 10px;
   background: ${(props: any) => props.theme.gray[800]};
+  min-width: 120px;
   /* border: ${(props: any) =>
     props.isSelected
       ? `2px solid  ${props.theme.gray[400]}`

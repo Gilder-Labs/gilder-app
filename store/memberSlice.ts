@@ -5,6 +5,7 @@ import {
   getVoteRecordsByVoter, // get all votes a member did
   getGovernanceChatMessagesByVoter,
   GOVERNANCE_CHAT_PROGRAM_ID,
+  getTokenOwnerRecordsByOwner,
 } from "@solana/spl-governance";
 import Constants from "expo-constants";
 import axios from "axios";
@@ -29,6 +30,8 @@ export interface realmState {
   isLoadingChat: boolean;
   isLoadingVotes: boolean;
   isLoadingDomains: boolean;
+  isLoadingMemberDaos: boolean;
+  memberDAOs: Array<string>;
   solDomains: Array<string>;
   isRefreshingMembers: boolean;
   delegateMap: any;
@@ -47,6 +50,8 @@ const initialState: realmState = {
   delegateMap: {},
   tokenRecordToWalletMap: {},
   solDomains: [],
+  isLoadingMemberDaos: false,
+  memberDAOs: [],
   isLoadingDomains: false,
 };
 
@@ -268,6 +273,34 @@ export const fetchMemberVotes = createAsyncThunk(
   }
 );
 
+export const fetchMemberDaos = createAsyncThunk(
+  "realms/fetchMemberDaos",
+  async (walletAddress: string) => {
+    try {
+      const GOVERNANCE_PROGRAM_ID =
+        "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw";
+      const programId = new PublicKey(GOVERNANCE_PROGRAM_ID);
+      const ownerRecordsbyOwner = await getTokenOwnerRecordsByOwner(
+        connection,
+        programId,
+        new PublicKey(walletAddress)
+      );
+      console.log("ownerRecordsBYOwner", ownerRecordsbyOwner);
+      const daosSet = new Set();
+
+      ownerRecordsbyOwner.map((realm) => {
+        daosSet.add(realm.account.realm.toBase58());
+      });
+
+      return Array.from(daosSet);
+    } catch (error) {
+      console.log("error", error);
+    }
+
+    return [];
+  }
+);
+
 export const fetchWalletSolDomains = createAsyncThunk(
   "realms/fetchWalletSolDomains",
   async (walletAddress: string) => {
@@ -328,6 +361,16 @@ export const memberSlice = createSlice({
       .addCase(fetchWalletSolDomains.fulfilled, (state, action: any) => {
         state.isLoadingDomains = false;
         state.solDomains = action.payload;
+      })
+      .addCase(fetchMemberDaos.pending, (state) => {
+        state.isLoadingMemberDaos = true;
+      })
+      .addCase(fetchMemberDaos.rejected, (state) => {
+        state.isLoadingMemberDaos = false;
+      })
+      .addCase(fetchMemberDaos.fulfilled, (state, action: any) => {
+        state.isLoadingMemberDaos = false;
+        state.memberDAOs = action.payload;
       })
       .addCase(fetchMemberVotes.pending, (state) => {
         state.isLoadingVotes = true;
