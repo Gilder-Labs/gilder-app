@@ -3,11 +3,11 @@ import styled from "styled-components/native";
 import { Typography } from "./Typography";
 import { useTheme } from "styled-components";
 import { abbreviatePublicKey } from "../utils";
-import { useQuery, gql } from "@apollo/client";
 import { getColorType } from "../utils";
 import { LinearGradient } from "expo-linear-gradient";
 import { AnimatedImage } from "react-native-ui-lib";
 import { useCardinalIdentity } from "../hooks/useCardinaldentity";
+import { useNavigation } from "@react-navigation/native";
 
 interface WalletIdentity {
   memberPublicKey: string;
@@ -16,19 +16,6 @@ interface WalletIdentity {
   avatarSize?: number;
 }
 
-// const GET_CYBERCONNECT_IDENTITY = gql`
-//   query FullIdentityQuery($publicKey: String!) {
-//     identity(address: $publicKey, network: SOLANA) {
-//       address
-//       domain
-//       social {
-//         twitter
-//       }
-//       avatar
-//     }
-//   }
-// `;
-
 export const WalletIdentity = ({
   memberPublicKey,
   shade = "100",
@@ -36,9 +23,8 @@ export const WalletIdentity = ({
   avatarSize = 32,
 }: WalletIdentity) => {
   const theme = useTheme();
-  // const { loading, error, data } = useQuery(GET_CYBERCONNECT_IDENTITY, {
-  //   variables: { publicKey: memberPublicKey },
-  // });
+  const navigation = useNavigation();
+
   const { twitterURL, twitterHandle } = useCardinalIdentity(memberPublicKey);
 
   const identityName = twitterHandle;
@@ -47,8 +33,15 @@ export const WalletIdentity = ({
   const color = getColorType(memberPublicKey);
   const color2 = getColorType(memberPublicKey.slice(-1) || "string");
 
+  const handleMemberSelect = () => {
+    //@ts-ignore
+    navigation.push("MemberDetails", {
+      walletId: memberPublicKey,
+    });
+  };
+
   return (
-    <WalletIdentityContainer>
+    <WalletIdentityContainer onPress={() => handleMemberSelect()}>
       <IconContainer color={color}>
         <LinearGradient
           // Background Linear Gradient
@@ -93,7 +86,7 @@ const IconContainer = styled.View<{ color: string }>`
   margin-right: ${(props: any) => props.theme.spacing[2]};
 `;
 
-const WalletIdentityContainer = styled.View`
+const WalletIdentityContainer = styled.TouchableOpacity`
   border-radius: 4px;
   align-items: center;
   flex-direction: row;

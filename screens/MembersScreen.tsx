@@ -21,14 +21,10 @@ export default function MemberScreen({
   const dispatch = useAppDispatch();
   const theme = useTheme();
 
-  const handleMemberSelect = (
-    member: Member,
-    memberInfo: { name: string; avatarUrl: string }
-  ) => {
+  const handleMemberSelect = (walletId: string) => {
     //@ts-ignore
     navigation.push("MemberDetails", {
-      member: member,
-      memberInfo: memberInfo,
+      walletId: walletId,
     });
   };
 
@@ -37,7 +33,7 @@ export default function MemberScreen({
       <MemberCard
         key={item.walletId}
         member={item}
-        onSelect={(memberInfo: any) => handleMemberSelect(item, memberInfo)}
+        onSelect={() => handleMemberSelect(item.walletId)}
       />
     );
   };

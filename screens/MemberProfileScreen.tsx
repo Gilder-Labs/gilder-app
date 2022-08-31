@@ -15,21 +15,21 @@ import { createIconSetFromFontello } from "@expo/vector-icons";
 
 interface MemberProfileProps {
   open: boolean;
-  member: Member;
   route: any;
   navigation: any;
 }
 
 export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
   const dispatch = useAppDispatch();
-  const { isLoadingVotes, memberVotes } = useAppSelector(
+  const { isLoadingVotes, memberVotes, membersMap } = useAppSelector(
     (state) => state.members
   );
   const theme = useTheme();
 
   const { selectedRealm } = useAppSelector((state) => state.realms);
   const { proposalsMap } = useAppSelector((state) => state.proposals);
-  const { member, memberInfo } = route?.params;
+  const { walletId } = route?.params;
+  const member = membersMap[walletId];
   const { twitterURL, twitterHandle, twitterDescription } = useCardinalIdentity(
     member.walletId
   );
@@ -56,8 +56,6 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
       />
     );
   };
-
-  console.log("re rendering");
 
   return (
     <Container>
@@ -136,6 +134,23 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
         />
       </Row>
 
+      <Column>
+        <Typography
+          text={"Latest Votes"}
+          shade="300"
+          size="h4"
+          bold={true}
+          marginBottom={"2"}
+        />
+        <FlatList
+          data={memberVotes}
+          renderItem={renderVotes}
+          keyExtractor={(item) => item.proposalId}
+          scrollIndicatorInsets={{ right: 1 }}
+          initialNumToRender={10}
+          horizontal={true}
+        />
+      </Column>
       <Row>
         <Typography
           text={"Sol domains"}
@@ -145,22 +160,6 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
           marginBottom={"2"}
         />
       </Row>
-
-      <Typography
-        text={"Latest Votes"}
-        shade="300"
-        size="h4"
-        bold={true}
-        marginBottom={"2"}
-      />
-      {/* <FlatList
-        data={memberVotes}
-        renderItem={renderVotes}
-        keyExtractor={(item) => item.proposalId}
-        scrollIndicatorInsets={{ right: 1 }}
-        initialNumToRender={10}
-        horizontal={true}
-      /> */}
     </Container>
   );
 };
@@ -202,4 +201,8 @@ const Row = styled.View`
 const DescriptionContainer = styled.View`
   flex-direction: row;
   margin-right: 128px; // so react native doesn't overflow outside screen
+`;
+
+const Column = styled.View`
+  flex-direction: column;
 `;

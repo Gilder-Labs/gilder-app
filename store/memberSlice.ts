@@ -271,19 +271,11 @@ export const fetchMemberVotes = createAsyncThunk(
 export const fetchWalletSolDomains = createAsyncThunk(
   "realms/fetchWalletSolDomains",
   async (walletAddress: string) => {
-    console.log("WALLET ADDRESS", walletAddress);
-    console.log("api key", heliusApiKey);
     try {
       const { data } = await axios.get(
         `https://api.helius.xyz/v0/addresses/${walletAddress}/names?api-key=${heliusApiKey}`
       );
 
-      //       import { getAllDomains } from "@bonfida/spl-name-service";
-
-      // // ...
-
-      // const domains = await getAllDomains(connection, user);
-      console.log("DOMAIN NAMES", data);
       return data?.domainNames;
     } catch (error) {
       console.log("error", error);

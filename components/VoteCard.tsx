@@ -1,12 +1,14 @@
 import React from "react";
 import styled from "styled-components/native";
 import { useTheme } from "styled-components";
-import { Badge } from "../components";
+import { Badge, Typography } from "../components";
 import numeral from "numeral";
 import { formatVoteWeight } from "../utils";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faCircleCheck } from "@fortawesome/pro-regular-svg-icons/faCircleCheck";
 import { faCheck } from "@fortawesome/pro-solid-svg-icons/faCheck";
+import * as Haptics from "expo-haptics";
+import { useNavigation } from "@react-navigation/native";
 
 import { faCircleXmark } from "@fortawesome/pro-regular-svg-icons/faCircleXmark";
 
@@ -34,6 +36,7 @@ const proposalStatusKey = {
 
 export const VoteCard = ({ vote, proposal, member, realm }: VoteCardProps) => {
   const theme = useTheme();
+  const navigation = useNavigation();
 
   // Vote for proposal not in dao so we hide it.
   if (!proposal) {
@@ -58,23 +61,40 @@ export const VoteCard = ({ vote, proposal, member, realm }: VoteCardProps) => {
     }
   };
 
+  const handleProposalSelect = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+
+    //@ts-ignore
+    navigation.push("ProposalDetail", {
+      proposalId: proposal.proposalId,
+    });
+  };
+
   return (
-    <Container>
+    <Container onPress={() => handleProposalSelect()}>
       <Column>
-        <ProposalName>{proposal?.name} </ProposalName>
+        <TitleContainer>
+          <Typography
+            text={proposal?.name}
+            bold={true}
+            shade="200"
+            marginBottom="2"
+            maxLength={45}
+          />
+        </TitleContainer>
         <Row>
           <VoteRow>
             <IconContainer isApproved={vote.voteWeightYes ? true : false}>
               {vote.voteWeightYes ? (
                 <FontAwesomeIcon
                   icon={faCheck}
-                  size={14}
+                  size={16}
                   color={theme.success[400]}
                 />
               ) : (
                 <FontAwesomeIcon
                   icon={faCircleXmark}
-                  size={14}
+                  size={16}
                   color={theme.error[400]}
                 />
               )}
@@ -89,27 +109,21 @@ export const VoteCard = ({ vote, proposal, member, realm }: VoteCardProps) => {
   );
 };
 
-const Container = styled.View`
+const Container = styled.TouchableOpacity`
   background: ${(props) => props.theme.gray[800]};
   padding: ${(props) => props.theme.spacing[3]};
   border-radius: 8px;
   flex-direction: row;
   margin-right: ${(props) => props.theme.spacing[3]};
-  /* min-width: 200px; */
-  height: 120px;
+  justify-content: center;
   margin-bottom: ${(props) => props.theme.spacing[2]};
-`;
-
-const ProposalName = styled.Text`
-  color: ${(props) => props.theme.gray[100]};
-  font-weight: bold;
-  margin-bottom: ${(props) => props.theme.spacing[3]};
 `;
 
 const Row = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: ${(props) => props.theme.spacing[2]};
 `;
 
 const VoteRow = styled.View`
@@ -132,7 +146,7 @@ const VoteAmount = styled.Text`
 `;
 
 const Column = styled.View`
-  flex: 1;
+  justify-content: space-between;
 `;
 
 const IconContainer = styled.View<{ isApproved: boolean }>`
@@ -144,3 +158,7 @@ const IconContainer = styled.View<{ isApproved: boolean }>`
 `;
 
 const EmptyView = styled.View``;
+
+const TitleContainer = styled.View`
+  max-width: 140px;
+`;

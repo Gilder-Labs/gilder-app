@@ -44,7 +44,6 @@ export const useCardinalIdentity = (walletId: string) => {
           `https://api.cardinal.so/namespaces/twitter/proxy?url=https://api.twitter.com/2/users/by&usernames=${handleFormatted}&user.fields=description,profile_image_url`
         );
         const description = response?.data?.data?.[0]?.description;
-        console.log("description response", description);
         const twitterImage = response?.data?.data?.[0]?.profile_image_url;
         cache[walletId] = {
           twitterURL: twitterImage.replace("normal", "400x400"),
