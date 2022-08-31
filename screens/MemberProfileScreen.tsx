@@ -144,7 +144,12 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
       <VotesContainer>
         {member?.councilDepositAmount && (
           <VoteContainer>
-            <Typography text="Council" shade="500" marginBottom="0" />
+            <Typography
+              text="Council Votes"
+              shade="500"
+              marginBottom="0"
+              size="caption"
+            />
             <Column>
               <Row>
                 <RealmIcon realmId={selectedRealm.pubKey} size={32} />
@@ -155,6 +160,7 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
                     selectedRealm?.councilMintDecimals
                   )}
                   marginRight="2"
+                  marginLeft="2"
                   size="h4"
                   bold={true}
                   marginBottom="0"
@@ -163,12 +169,12 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
               <Row>
                 <FontAwesomeIcon
                   icon={faCheckToSlot}
-                  size={16}
+                  size={14}
                   color={theme.gray[400]}
                 />
                 <Typography
                   text={member.totalVotesCouncil}
-                  size="body"
+                  size="subtitle"
                   marginRight="2"
                   marginLeft="2"
                   shade="400"
@@ -181,7 +187,12 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
 
         {member?.communityDepositAmount && (
           <VoteContainer>
-            <Typography text="Community" shade="500" marginBottom="0" />
+            <Typography
+              text="Community Votes"
+              shade="500"
+              marginBottom="0"
+              size="caption"
+            />
             <Column>
               <Row>
                 <RealmIcon realmId={selectedRealm.pubKey} size={32} />
@@ -191,6 +202,7 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
                     selectedRealm?.communityMintDecimals
                   )}
                   bold={true}
+                  marginLeft="2"
                   size="h4"
                   marginRight="2"
                   marginBottom="0"
@@ -199,12 +211,12 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
               <Row>
                 <FontAwesomeIcon
                   icon={faCheckToSlot}
-                  size={16}
+                  size={14}
                   color={theme.gray[400]}
                 />
                 <Typography
                   text={member.totalVotesCommunity}
-                  size="body"
+                  size="subtitle"
                   marginRight="2"
                   marginLeft="2"
                   shade="400"
@@ -220,9 +232,9 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
         <Typography
           text={"DAO membership"}
           shade="400"
-          size="body"
+          size="subtitle"
           bold={true}
-          marginBottom={"2"}
+          marginBottom={"1"}
         />
         <FlatList
           data={memberDAOs}
@@ -231,7 +243,7 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
           scrollIndicatorInsets={{ right: 1 }}
           initialNumToRender={10}
           horizontal={true}
-          style={{ marginBottom: 8 }}
+          style={{ marginBottom: 16 }}
           contentContainerStyle={{
             backgroundColor: theme.gray[1000],
             paddingTop: 12,
@@ -244,9 +256,9 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
         <Typography
           text={"Latest Votes"}
           shade="400"
-          size="body"
+          size="subtitle"
           bold={true}
-          marginBottom={"2"}
+          marginBottom={"1"}
         />
         {isLoadingVotes ? (
           <ActivityIndicator />
@@ -258,27 +270,20 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
             scrollIndicatorInsets={{ right: 1 }}
             initialNumToRender={10}
             horizontal={true}
+            style={{ marginBottom: 16 }}
             contentContainerStyle={{
               backgroundColor: theme.gray[1000],
               paddingTop: 12,
               paddingLeft: 8,
               borderRadius: 8,
             }}
+            style={{ paddingBottom: 200 }}
             ListEmptyComponent={
               <Typography text="Looks like this user hasn't voted on anything yet." />
             }
           />
         )}
       </InfoColumn>
-      {/* <Row>
-        <Typography
-          text={"Domains"}
-          shade="400"
-          size="body"
-          bold={true}
-          marginBottom={"2"}
-        />
-      </Row> */}
     </Container>
   );
 };
@@ -289,9 +294,7 @@ const Container = styled.ScrollView`
   height: 100%;
 `;
 
-const EmptyView = styled.View`
-  height: 200px;
-`;
+const EmptyView = styled.View``;
 
 const ProfilePictureContainer = styled.View<{ color: string }>`
   background: ${(props: any) => props.theme.gray[800]};
@@ -315,7 +318,7 @@ const NameRow = styled.View`
 
 const VotesContainer = styled.View`
   flex-direction: row;
-  margin-bottom: ${(props) => props.theme.spacing[2]};
+  margin-bottom: ${(props) => props.theme.spacing[3]};
   margin-left: -${(props) => props.theme.spacing[2]};
   margin-right: -${(props) => props.theme.spacing[2]};
 `;

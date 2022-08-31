@@ -285,7 +285,6 @@ export const fetchMemberDaos = createAsyncThunk(
         programId,
         new PublicKey(walletAddress)
       );
-      console.log("ownerRecordsBYOwner", ownerRecordsbyOwner);
       const daosSet = new Set();
 
       ownerRecordsbyOwner.map((realm) => {
