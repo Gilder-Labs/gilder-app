@@ -1,12 +1,11 @@
 import React from "react";
 import styled from "styled-components/native";
 import { useTheme } from "styled-components";
-import { Badge, Typography } from "../components";
+import { Badge, Typography, RealmIcon } from "../components";
 import numeral from "numeral";
 import { formatVoteWeight } from "../utils";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faCircleCheck } from "@fortawesome/pro-regular-svg-icons/faCircleCheck";
-import { faCheck } from "@fortawesome/pro-solid-svg-icons/faCheck";
 import * as Haptics from "expo-haptics";
 import { useNavigation } from "@react-navigation/native";
 
@@ -84,23 +83,30 @@ export const VoteCard = ({ vote, proposal, member, realm }: VoteCardProps) => {
         </TitleContainer>
         <Row>
           <VoteRow>
-            <IconContainer isApproved={vote.voteWeightYes ? true : false}>
-              {vote.voteWeightYes ? (
-                <FontAwesomeIcon
-                  icon={faCheck}
-                  size={16}
-                  color={theme.success[400]}
-                />
-              ) : (
-                <FontAwesomeIcon
-                  icon={faCircleXmark}
-                  size={16}
-                  color={theme.error[400]}
-                />
-              )}
-            </IconContainer>
-            <VoteText>Votes -</VoteText>
-            <VoteAmount>{getVoteWeight()}</VoteAmount>
+            {vote.voteWeightYes ? (
+              <FontAwesomeIcon
+                icon={faCircleCheck}
+                size={16}
+                color={theme.success[400]}
+                style={{ marginRight: 8 }}
+              />
+            ) : (
+              <FontAwesomeIcon
+                icon={faCircleXmark}
+                size={16}
+                color={theme.error[400]}
+                style={{ marginRight: 8 }}
+              />
+            )}
+            <RealmIcon realmId={realm.pubKey} size={28} />
+            <Typography
+              text={getVoteWeight()}
+              marginBottom="0"
+              marginLeft="1"
+              size="subtitle"
+              bold={true}
+              shade="300"
+            />
           </VoteRow>
           <Badge title={status} type={proposalStatusKey[status]} />
         </Row>
@@ -132,17 +138,12 @@ const VoteRow = styled.View`
   align-items: center;
   align-items: center;
   border-radius: 8px;
-`;
+  background: ${(props) => props.theme.gray[900]};
+  padding: ${(props) => props.theme.spacing[1]};
+  padding-left: ${(props) => props.theme.spacing[2]};
+  padding-right: ${(props) => props.theme.spacing[2]};
 
-const VoteText = styled.Text`
-  color: ${(props) => props.theme.gray[300]};
-  margin-right: ${(props) => props.theme.spacing[1]};
-`;
-
-const VoteAmount = styled.Text`
-  color: ${(props) => props.theme.gray[100]};
-  font-weight: bold;
-  margin-right: ${(props) => props.theme.spacing[3]};
+  margin-right: ${(props) => props.theme.spacing[2]};
 `;
 
 const Column = styled.View`

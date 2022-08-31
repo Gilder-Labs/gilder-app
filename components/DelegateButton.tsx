@@ -72,7 +72,7 @@ export const DelegateButton = ({
     return numeral(Number(voteString)).format("0,0");
   };
 
-  const delegatesVote = walletToVoteMap[memberPublicKey];
+  const delegatesVote = walletToVoteMap?.[memberPublicKey];
   const isYesVote = delegatesVote?.voteWeightYes ? true : false;
 
   return (
