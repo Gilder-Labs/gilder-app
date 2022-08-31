@@ -8,15 +8,23 @@ import {
   fetchMemberVotes,
   fetchMemberDaos,
 } from "../store/memberSlice";
-import { VoteCard, PublicKeyTextCopy, RealmCard } from "../components";
+import {
+  VoteCard,
+  PublicKeyTextCopy,
+  RealmCard,
+  RealmIcon,
+} from "../components";
 import { useQuery, gql } from "@apollo/client";
 import { useCardinalIdentity } from "../hooks/useCardinaldentity";
 import { Typography } from "../components";
 import { AnimatedImage } from "react-native-ui-lib";
 import { getColorType } from "../utils";
 import { LinearGradient } from "expo-linear-gradient";
-import { createIconSetFromFontello } from "@expo/vector-icons";
 import { ActivityIndicator } from "react-native";
+import { formatVoteWeight } from "../utils";
+
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faCheckToSlot } from "@fortawesome/pro-solid-svg-icons/faCheckToSlot";
 
 interface MemberProfileProps {
   open: boolean;
@@ -133,6 +141,81 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
         </NameRow>
       </ProfileHeaderRow>
 
+      <VotesContainer>
+        {member?.councilDepositAmount && (
+          <VoteContainer>
+            <Typography text="Council" shade="500" marginBottom="0" />
+            <Column>
+              <Row>
+                <RealmIcon realmId={selectedRealm.pubKey} size={32} />
+
+                <Typography
+                  text={formatVoteWeight(
+                    member.councilDepositAmount,
+                    selectedRealm?.councilMintDecimals
+                  )}
+                  marginRight="2"
+                  size="h4"
+                  bold={true}
+                  marginBottom="0"
+                />
+              </Row>
+              <Row>
+                <FontAwesomeIcon
+                  icon={faCheckToSlot}
+                  size={16}
+                  color={theme.gray[400]}
+                />
+                <Typography
+                  text={member.totalVotesCouncil}
+                  size="body"
+                  marginRight="2"
+                  marginLeft="2"
+                  shade="400"
+                  marginBottom="0"
+                />
+              </Row>
+            </Column>
+          </VoteContainer>
+        )}
+
+        {member?.communityDepositAmount && (
+          <VoteContainer>
+            <Typography text="Community" shade="500" marginBottom="0" />
+            <Column>
+              <Row>
+                <RealmIcon realmId={selectedRealm.pubKey} size={32} />
+                <Typography
+                  text={formatVoteWeight(
+                    member.communityDepositAmount,
+                    selectedRealm?.communityMintDecimals
+                  )}
+                  bold={true}
+                  size="h4"
+                  marginRight="2"
+                  marginBottom="0"
+                />
+              </Row>
+              <Row>
+                <FontAwesomeIcon
+                  icon={faCheckToSlot}
+                  size={16}
+                  color={theme.gray[400]}
+                />
+                <Typography
+                  text={member.totalVotesCommunity}
+                  size="body"
+                  marginRight="2"
+                  marginLeft="2"
+                  shade="400"
+                  marginBottom="0"
+                />
+              </Row>
+            </Column>
+          </VoteContainer>
+        )}
+      </VotesContainer>
+
       <DAOColumn>
         <Typography
           text={"DAO membership"}
@@ -157,7 +240,7 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
         />
       </DAOColumn>
 
-      <VotesColumn>
+      <InfoColumn>
         <Typography
           text={"Latest Votes"}
           shade="400"
@@ -186,8 +269,8 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
             }
           />
         )}
-      </VotesColumn>
-      <Row>
+      </InfoColumn>
+      {/* <Row>
         <Typography
           text={"Domains"}
           shade="400"
@@ -195,12 +278,12 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
           bold={true}
           marginBottom={"2"}
         />
-      </Row>
+      </Row> */}
     </Container>
   );
 };
 
-const Container = styled.View`
+const Container = styled.ScrollView`
   padding: ${(props) => props.theme.spacing[3]};
   background: ${(props: any) => props.theme.gray[900]};
   height: 100%;
@@ -230,8 +313,11 @@ const NameRow = styled.View`
   margin-left: ${(props) => props.theme.spacing[3]};
 `;
 
-const Row = styled.View`
+const VotesContainer = styled.View`
   flex-direction: row;
+  margin-bottom: ${(props) => props.theme.spacing[2]};
+  margin-left: -${(props) => props.theme.spacing[2]};
+  margin-right: -${(props) => props.theme.spacing[2]};
 `;
 
 const DAOColumn = styled.View`
@@ -243,7 +329,38 @@ const DescriptionContainer = styled.View`
   margin-right: 128px; // so react native doesn't overflow outside screen
 `;
 
-const VotesColumn = styled.View`
+const InfoColumn = styled.View`
   flex-direction: column;
   min-height: 200px;
+`;
+
+const VoteContainer = styled.View`
+  background: ${(props: any) => props.theme.gray[800]};
+  padding: ${(props) => props.theme.spacing[2]};
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  margin-left: ${(props) => props.theme.spacing[2]};
+  margin-right: ${(props) => props.theme.spacing[2]};
+`;
+
+const Row = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+`;
+
+const Column = styled.View`
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Divider = styled.View`
+  height: 24px;
+  width: 2px;
+  background: ${(props: any) => props.theme.gray[700]};
+  margin-right: ${(props) => props.theme.spacing[2]};
+  border-radius: 8px;
 `;
