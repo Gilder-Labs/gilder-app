@@ -29,7 +29,7 @@ import MembersScreen from "../screens/MembersScreen";
 import ProposalsScreen from "../screens/ProposalsScreen";
 
 import LinkingConfiguration from "./LinkingConfiguration";
-import { MemberProfile } from "../screens/MemberProfile";
+import { MemberProfileScreen } from "../screens/MemberProfileScreen";
 import { ProposalDetailScreen } from "../screens/ProposalDetailScreen";
 import { WalletModal } from "../components/WalletModal";
 import { SplashScreen } from "../components";
@@ -129,7 +129,7 @@ function DrawerScreen() {
 
   return (
     <Drawer.Navigator
-      initialRouteName="Proposals"
+      initialRouteName="Members"
       drawerContent={(props) => <DrawerContentContainer {...props} />}
       screenOptions={{
         drawerActiveBackgroundColor: `${theme?.gray[800]}aa`,
@@ -345,15 +345,10 @@ export default function Navigation({}: {}) {
             />
             <Stack.Screen
               name="MemberDetails"
-              component={MemberProfile}
+              component={MemberProfileScreen}
               // options={{ headerShown: false }}
               options={({ route }) => ({
-                title: route?.params?.memberInfo?.name
-                  ? route?.params?.memberInfo?.name
-                  : `${route?.params?.member?.walletId?.slice(
-                      0,
-                      4
-                    )}...${route?.params?.member?.walletId?.slice(-4)}`,
+                title: "Profile",
               })}
             />
             <Stack.Screen

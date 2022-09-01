@@ -45,12 +45,14 @@ export default function MemberScreen({
   const getTotalVotes = () => {
     let totalVotes = 0;
 
-    members.forEach((member: Member) => {
-      totalVotes += member?.totalVotesCommunity
-        ? member.totalVotesCommunity
-        : 0;
-      totalVotes += member?.totalVotesCouncil ? member.totalVotesCouncil : 0;
-    });
+    if (members?.length) {
+      members.forEach((member: Member) => {
+        totalVotes += member?.totalVotesCommunity
+          ? member.totalVotesCommunity
+          : 0;
+        totalVotes += member?.totalVotesCouncil ? member.totalVotesCouncil : 0;
+      });
+    }
     return totalVotes;
   };
 
@@ -87,7 +89,7 @@ export default function MemberScreen({
 
               <TextContainer>
                 <SubtitleText>Members</SubtitleText>
-                <HeaderTitle>{members.length}</HeaderTitle>
+                <HeaderTitle>{members ? members.length : 0}</HeaderTitle>
               </TextContainer>
             </HeaderContainer>
           }

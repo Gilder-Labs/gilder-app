@@ -14,7 +14,6 @@ import {
   RealmCard,
   RealmIcon,
 } from "../components";
-import { useQuery, gql } from "@apollo/client";
 import { useCardinalIdentity } from "../hooks/useCardinaldentity";
 import { Typography } from "../components";
 import { AnimatedImage } from "react-native-ui-lib";
@@ -22,6 +21,7 @@ import { getColorType } from "../utils";
 import { LinearGradient } from "expo-linear-gradient";
 import { ActivityIndicator } from "react-native";
 import { formatVoteWeight } from "../utils";
+import numeral from "numeral";
 
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faCheckToSlot } from "@fortawesome/pro-solid-svg-icons/faCheckToSlot";
@@ -155,13 +155,15 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
                 <RealmIcon realmId={selectedRealm.pubKey} size={32} />
 
                 <Typography
-                  text={formatVoteWeight(
-                    member.councilDepositAmount,
-                    selectedRealm?.councilMintDecimals
-                  )}
+                  text={numeral(
+                    formatVoteWeight(
+                      member.councilDepositAmount,
+                      selectedRealm?.councilMintDecimals
+                    )
+                  ).format("0,0")}
                   marginRight="2"
-                  marginLeft="2"
-                  size="h4"
+                  marginLeft="1"
+                  size="h3"
                   bold={true}
                   marginBottom="0"
                 />
@@ -175,7 +177,6 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
                 <Typography
                   text={member.totalVotesCouncil}
                   size="subtitle"
-                  marginRight="2"
                   marginLeft="2"
                   shade="400"
                   marginBottom="0"
@@ -197,13 +198,15 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
               <Row>
                 <RealmIcon realmId={selectedRealm.pubKey} size={32} />
                 <Typography
-                  text={formatVoteWeight(
-                    member.communityDepositAmount,
-                    selectedRealm?.communityMintDecimals
-                  )}
+                  text={numeral(
+                    formatVoteWeight(
+                      member.communityDepositAmount,
+                      selectedRealm?.communityMintDecimals
+                    )
+                  ).format("0.0a")}
                   bold={true}
-                  marginLeft="2"
-                  size="h4"
+                  marginLeft="1"
+                  size="h3"
                   marginRight="2"
                   marginBottom="0"
                 />
@@ -217,7 +220,6 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
                 <Typography
                   text={member.totalVotesCommunity}
                   size="subtitle"
-                  marginRight="2"
                   marginLeft="2"
                   shade="400"
                   marginBottom="0"
@@ -277,7 +279,6 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
               paddingLeft: 8,
               borderRadius: 8,
             }}
-            style={{ paddingBottom: 200 }}
             ListEmptyComponent={
               <Typography text="Looks like this user hasn't voted on anything yet." />
             }
@@ -296,7 +297,7 @@ const Container = styled.ScrollView`
 
 const EmptyView = styled.View``;
 
-const ProfilePictureContainer = styled.View<{ color: string }>`
+const ProfilePictureContainer = styled.View`
   background: ${(props: any) => props.theme.gray[800]};
   overflow: hidden;
   border: 1px solid ${(props: any) => props.theme.gray[900]};
@@ -319,8 +320,8 @@ const NameRow = styled.View`
 const VotesContainer = styled.View`
   flex-direction: row;
   margin-bottom: ${(props) => props.theme.spacing[3]};
-  margin-left: -${(props) => props.theme.spacing[2]};
-  margin-right: -${(props) => props.theme.spacing[2]};
+  margin-left: -${(props) => props.theme.spacing[1]};
+  margin-right: -${(props) => props.theme.spacing[1]};
 `;
 
 const DAOColumn = styled.View`
@@ -344,8 +345,8 @@ const VoteContainer = styled.View`
   justify-content: center;
   align-items: center;
   border-radius: 8px;
-  margin-left: ${(props) => props.theme.spacing[2]};
-  margin-right: ${(props) => props.theme.spacing[2]};
+  margin-left: ${(props) => props.theme.spacing[1]};
+  margin-right: ${(props) => props.theme.spacing[1]};
 `;
 
 const Row = styled.View`
@@ -358,12 +359,4 @@ const Column = styled.View`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-`;
-
-const Divider = styled.View`
-  height: 24px;
-  width: 2px;
-  background: ${(props: any) => props.theme.gray[700]};
-  margin-right: ${(props) => props.theme.spacing[2]};
-  border-radius: 8px;
 `;
