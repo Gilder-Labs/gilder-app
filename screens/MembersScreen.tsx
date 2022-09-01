@@ -90,7 +90,7 @@ export default function MemberScreen({
       );
     }
 
-    setFilteredAndSortedMembers([...sortedMembers]);
+    setFilteredAndSortedMembers(sortedMembers);
     setSortType(value);
   };
 
