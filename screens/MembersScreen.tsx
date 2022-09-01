@@ -7,7 +7,7 @@ import { FlatList } from "react-native";
 import { RefreshControl } from "react-native";
 import { useTheme } from "styled-components";
 import { fetchRealmMembers } from "../store/memberSlice";
-import { debounce, filter, sortBy } from "lodash";
+import { debounce } from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faXmark } from "@fortawesome/pro-solid-svg-icons/faXmark";
 import { faMagnifyingGlass } from "@fortawesome/pro-regular-svg-icons/faMagnifyingGlass";
@@ -62,41 +62,36 @@ export default function MemberScreen({
   }, []);
 
   const handleSortChange = (value: any) => {
-    let sortedMembers = filteredAndSortedMembers;
-    setSortType(value);
+    let sortedMembers = [...filteredAndSortedMembers];
 
-    if (sortType === "totalVotesCommunity") {
-      sortedMembers = filteredAndSortedMembers
-        .slice()
-        .sort((a, b) => b?.totalVotesCommunity - a?.totalVotesCommunity);
-    } else if (sortType === "totalVotesCouncil") {
-      sortedMembers = filteredAndSortedMembers
-        .slice()
-        .sort(
-          (member1, member2) =>
-            member2?.totalVotesCouncil - member1?.totalVotesCouncil
-        );
-    } else if (sortType === "voteWeightCommunity") {
-      sortedMembers = filteredAndSortedMembers
-        .slice()
-        .sort(
-          (member1, member2) =>
-            Number(member2?.communityDepositAmount || 0) -
-            Number(member1?.communityDepositAmount || 0)
-        );
-    } else if (sortType === "voteWeightCouncil") {
-      sortedMembers = filteredAndSortedMembers
-        .slice()
-        .sort(
-          (member1, member2) =>
-            Number(member2?.councilDepositAmount || 0) -
-            Number(member1?.councilDepositAmount || 0)
-        );
+    if (value === "totalVotesCommunity") {
+      // console.log("Trying to sort by totalVotesCommunity");
+      sortedMembers.sort(
+        (member1, member2) =>
+          (member2?.totalVotesCommunity || 0) -
+          (member1?.totalVotesCommunity || 0)
+      );
+    } else if (value === "totalVotesCouncil") {
+      sortedMembers.sort(
+        (member1, member2) =>
+          (member2?.totalVotesCouncil || 0) - (member1?.totalVotesCouncil || 0)
+      );
+    } else if (value === "voteWeightCommunity") {
+      sortedMembers.sort(
+        (member1, member2) =>
+          Number(member2?.communityDepositAmount || 0) -
+          Number(member1?.communityDepositAmount || 0)
+      );
+    } else if (value === "voteWeightCouncil") {
+      sortedMembers.sort(
+        (member1, member2) =>
+          Number(member2?.councilDepositAmount || 0) -
+          Number(member1?.councilDepositAmount || 0)
+      );
     }
 
-    console.log("sortedmembers", sortedMembers);
-
-    setFilteredAndSortedMembers(sortedMembers);
+    setFilteredAndSortedMembers([...sortedMembers]);
+    setSortType(value);
   };
 
   const handleSearchChange = (newText: string) => {
