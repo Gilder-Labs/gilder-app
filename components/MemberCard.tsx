@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { useTheme } from "styled-components";
-import { LinearGradient } from "expo-linear-gradient";
 import { getColorType } from "../utils";
 import { useQuery, gql } from "@apollo/client";
 import { Typography } from "../components";
@@ -10,35 +9,22 @@ import { formatVoteWeight } from "../utils";
 import { useAppSelector } from "../hooks/redux";
 import { PublicKeyTextCopy } from "./PublicKeyTextCopy";
 import { useCardinalIdentity } from "../hooks/useCardinaldentity";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faAngleDoubleRight } from "@fortawesome/pro-solid-svg-icons/faAngleDoubleRight";
+import { RealmIcon } from "../components";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faCheckToSlot } from "@fortawesome/pro-solid-svg-icons/faCheckToSlot";
+import numeral from "numeral";
+import { LinearGradient } from "expo-linear-gradient";
 
 interface MemberCardProps {
   member: any;
   onSelect: any;
 }
 
-// const GET_CYBERCONNECT_IDENTITY = gql`
-//   query FullIdentityQuery($publicKey: String!) {
-//     identity(address: $publicKey, network: SOLANA) {
-//       address
-//       domain
-//       social {
-//         twitter
-//       }
-//       avatar
-//     }
-//   }
-// `;
-
 export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
   const theme = useTheme();
-  // Fetch cyberconnect wallet data
-  // const { loading, error, data } = useQuery(GET_CYBERCONNECT_IDENTITY, {
-  //   variables: { publicKey: member.walletId },
-  // });
 
-  const [twitterURL, twitterHandle] = useCardinalIdentity(member.walletId);
+  const { twitterURL, twitterHandle } = useCardinalIdentity(member.walletId);
 
   const { selectedRealm } = useAppSelector((state) => state.realms);
 
@@ -52,54 +38,45 @@ export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
     onSelect({ name: identityName, avatarUrl: avatarUrl });
   };
 
-  // console.log("member", member);
-
   return (
     <Container onLongPress={handleProfileClick} activeOpacity={0.5}>
-      <LinearGradient
-        // Background Linear Gradient
-        colors={[`${theme[color][500]}44`, `${theme[color][700]}aa`]}
-        style={{ height: 48, flex: 1, width: "100%" }}
-        start={{ x: 0.1, y: 0.2 }}
-      ></LinearGradient>
-
-      <IconContainer color={color}>
-        <LinearGradient
-          // Background Linear Gradient
-          colors={[`${theme[color][500]}`, `${theme[color2][900]}`]}
-          style={{ height: 44, width: 44 }}
-          start={{ x: 0.1, y: 0.2 }}
-        >
-          {!!avatarUrl && (
-            <AnimatedImage
-              style={{
-                width: 44,
-                height: 44,
-                overflow: "hidden",
-              }}
-              source={{
-                uri: avatarUrl,
-              }}
-            />
-          )}
-        </LinearGradient>
-      </IconContainer>
       <ContentContainer>
         <TitleRow>
+          <ProfilePictureContainer>
+            <LinearGradient
+              // Background Linear Gradient
+              colors={[`${theme[color][500]}`, `${theme[color2][900]}`]}
+              style={{ minHeight: 36, minWidth: 36 }}
+              start={{ x: 0.1, y: 0.2 }}
+            >
+              {!!twitterURL && (
+                <AnimatedImage
+                  style={{
+                    width: 36,
+                    height: 36,
+                    overflow: "hidden",
+                  }}
+                  source={{
+                    uri: twitterURL,
+                  }}
+                />
+              )}
+            </LinearGradient>
+          </ProfilePictureContainer>
           <Column>
             <MemberNameContainer>
               {identityName ? (
                 <Typography
                   text={identityName}
                   shade="300"
-                  size="h4"
+                  size="body"
                   bold={true}
                   marginBottom={"0"}
                 />
               ) : (
                 <PublicKeyTextCopy
                   shade="300"
-                  size="h4"
+                  size="body"
                   publicKey={member.walletId}
                   noPadding={true}
                   hideIcon={true}
@@ -109,7 +86,7 @@ export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
               {identityName ? (
                 <PublicKeyTextCopy
                   shade="500"
-                  size="subtitle"
+                  size="caption"
                   publicKey={member.walletId}
                   noPadding={true}
                   hideIcon={true}
@@ -126,48 +103,92 @@ export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
           </IconButton>
         </TitleRow>
 
-        <TextContainer>
-          <DetailContainer>
-            <SubtitleText>Community Votes</SubtitleText>
-            <VotesCast>
-              {member.totalVotesCommunity ? member.totalVotesCommunity : 0}
-            </VotesCast>
-          </DetailContainer>
+        <VotesContainer>
+          {member?.councilDepositAmount && (
+            <VoteContainer>
+              <Typography
+                text="Council Votes"
+                shade="500"
+                marginBottom="0"
+                size="caption"
+              />
+              <Column>
+                <Row>
+                  <RealmIcon realmId={selectedRealm?.pubKey || ""} size={24} />
 
-          <DetailContainer>
-            <SubtitleText style={{ textAlign: "right" }}>
-              Vote Weight
-            </SubtitleText>
-            <VoteWeight>
-              {member?.communityDepositAmount &&
-              selectedRealm?.communityMintDecimals
-                ? formatVoteWeight(
-                    member.communityDepositAmount,
-                    selectedRealm?.communityMintDecimals
-                  )
-                : 0}
-            </VoteWeight>
-          </DetailContainer>
-        </TextContainer>
-        {member?.councilDepositAmount && (
-          <TextContainer style={{ marginTop: 4 }}>
-            <DetailContainer>
-              <SubtitleText>Council Votes</SubtitleText>
-              <VotesCast>{member.totalVotesCouncil}</VotesCast>
-            </DetailContainer>
-            <DetailContainer>
-              <SubtitleText>Council Vote Weight</SubtitleText>
-              <VoteWeight>
-                {member?.councilDepositAmount && selectedRealm?.councilMint
-                  ? formatVoteWeight(
-                      member.councilDepositAmount,
-                      selectedRealm?.councilMintDecimals
-                    )
-                  : 0}
-              </VoteWeight>
-            </DetailContainer>
-          </TextContainer>
-        )}
+                  <Typography
+                    text={numeral(
+                      formatVoteWeight(
+                        member.councilDepositAmount,
+                        selectedRealm?.councilMintDecimals
+                      )
+                    ).format("0,0")}
+                    marginLeft="1"
+                    size="h4"
+                    bold={true}
+                    marginBottom="0"
+                  />
+                </Row>
+                <Row>
+                  <FontAwesomeIcon
+                    icon={faCheckToSlot}
+                    size={14}
+                    color={theme.gray[400]}
+                  />
+                  <Typography
+                    text={member.totalVotesCouncil || "0"}
+                    size="caption"
+                    marginLeft="2"
+                    shade="400"
+                    marginBottom="0"
+                  />
+                </Row>
+              </Column>
+            </VoteContainer>
+          )}
+
+          {member?.communityDepositAmount && (
+            <VoteContainer>
+              <Typography
+                text="Community Votes"
+                shade="500"
+                marginBottom="0"
+                size="caption"
+              />
+              <Column>
+                <Row>
+                  <RealmIcon realmId={selectedRealm?.pubKey} size={24} />
+                  <Typography
+                    text={numeral(
+                      formatVoteWeight(
+                        member.communityDepositAmount,
+                        selectedRealm?.communityMintDecimals
+                      )
+                    ).format("0.0a")}
+                    bold={true}
+                    marginLeft="1"
+                    size="h4"
+                    marginBottom="0"
+                  />
+                </Row>
+                <Row>
+                  <FontAwesomeIcon
+                    icon={faCheckToSlot}
+                    size={14}
+                    color={theme.gray[400]}
+                  />
+                  <Typography
+                    text={member.totalVotesCommunity || "0"}
+                    size="caption"
+                    marginLeft="2"
+                    shade="400"
+                    marginBottom="0"
+                  />
+                </Row>
+              </Column>
+            </VoteContainer>
+          )}
+        </VotesContainer>
       </ContentContainer>
     </Container>
   );
@@ -185,59 +206,16 @@ const Container = styled.TouchableOpacity`
 `;
 
 const ContentContainer = styled.View`
-  padding: ${(props: any) => props.theme.spacing[3]};
-  padding-left: ${(props: any) => props.theme.spacing[5]};
-  padding-right: ${(props: any) => props.theme.spacing[5]};
+  padding: ${(props: any) => props.theme.spacing[2]};
+  padding-left: ${(props: any) => props.theme.spacing[2]};
+  padding-right: ${(props: any) => props.theme.spacing[2]};
   width: 100%;
   /* justify-content: space-between; */
 `;
 
 const MemberNameContainer = styled.View`
-  margin-top: ${(props: any) => props.theme.spacing[4]};
   align-items: flex-start;
-`;
-
-const TextContainer = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-`;
-
-const Column = styled.View`
-  margin-bottom: ${(props: any) => props.theme.spacing[3]};
-  align-items: flex-start;
-`;
-
-const VotesCast = styled.Text`
-  color: ${(props: any) => props.theme.gray[100]};
-  font-size: 24px;
-  font-weight: bold;
-`;
-
-const VoteWeight = styled.Text`
-  color: ${(props: any) => props.theme.gray[100]};
-  font-size: 24px;
-  font-weight: bold;
-  text-align: right;
-`;
-
-const DetailContainer = styled.View``;
-
-const SubtitleText = styled.Text`
-  color: ${(props: any) => props.theme.gray[400]};
-  font-size: 12px;
-`;
-
-const IconContainer = styled.View<{ color: string }>`
-  /* border-radius: 100px, */
-  background: ${(props: any) => props.theme[props.color][800]};
-  flex-direction: row;
-  align-items: center;
-  position: absolute;
-  left: 20px;
-  top: 24px;
-  overflow: hidden;
-  border: 2px solid ${(props: any) => props.theme.gray[900]};
-  border-radius: 100px;
+  margin-left: ${(props: any) => props.theme.spacing[2]};
 `;
 
 const IconButton = styled.TouchableOpacity`
@@ -246,11 +224,48 @@ const IconButton = styled.TouchableOpacity`
   width: 40px;
   height: 40px;
   border-radius: 100px;
-  background: ${(props: any) => props.theme.gray[700]};
-  /* margin-left: ${(props: any) => props.theme.spacing[3]}; */
+  margin-left: auto;
 `;
 
 const TitleRow = styled.View`
   flex-direction: row;
-  justify-content: space-between;
+  margin-bottom: ${(props) => props.theme.spacing[2]};
+`;
+
+const VotesContainer = styled.View`
+  flex-direction: row;
+  margin-left: -${(props) => props.theme.spacing[1]};
+  margin-right: -${(props) => props.theme.spacing[1]};
+`;
+
+const VoteContainer = styled.View`
+  background: ${(props: any) => props.theme.gray[900]};
+  padding: ${(props) => props.theme.spacing[2]};
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  margin-left: ${(props) => props.theme.spacing[1]};
+  margin-right: ${(props) => props.theme.spacing[1]};
+`;
+
+const Row = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+`;
+
+const Column = styled.View`
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ProfilePictureContainer = styled.View`
+  background: ${(props: any) => props.theme.gray[800]};
+  overflow: hidden;
+  border: 1px solid ${(props: any) => props.theme.gray[900]};
+  border-radius: 100px;
+  height: 36px;
+  width: 36px;
 `;

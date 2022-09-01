@@ -21,7 +21,7 @@ export const ConnectWalletButton = ({}: ConnectWalletProps) => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const { height, width } = useWindowDimensions();
-  const [twitterURL, twitterHandle] = useCardinalIdentity(publicKey);
+  const { twitterURL, twitterHandle } = useCardinalIdentity(publicKey);
 
   useEffect(() => {
     if (publicKey && modalVisible) {

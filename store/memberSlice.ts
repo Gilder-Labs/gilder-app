@@ -1,13 +1,14 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { PublicKey, ConfirmedSignatureInfo, Connection } from "@solana/web3.js";
 import {
-  getRealms,
-  getRealm,
   getAllTokenOwnerRecords, // returns all members of a realm, 1 token record for community or council holding
   getVoteRecordsByVoter, // get all votes a member did
   getGovernanceChatMessagesByVoter,
   GOVERNANCE_CHAT_PROGRAM_ID,
+  getTokenOwnerRecordsByOwner,
 } from "@solana/spl-governance";
+import Constants from "expo-constants";
+import axios from "axios";
 
 import {
   REALM_GOVERNANCE_PKEY,
@@ -28,6 +29,10 @@ export interface realmState {
   isLoadingMembers: boolean;
   isLoadingChat: boolean;
   isLoadingVotes: boolean;
+  isLoadingDomains: boolean;
+  isLoadingMemberDaos: boolean;
+  memberDAOs: Array<string>;
+  solDomains: Array<string>;
   isRefreshingMembers: boolean;
   delegateMap: any;
   tokenRecordToWalletMap: genericObj;
@@ -44,10 +49,15 @@ const initialState: realmState = {
   isRefreshingMembers: false,
   delegateMap: {},
   tokenRecordToWalletMap: {},
+  solDomains: [],
+  isLoadingMemberDaos: false,
+  memberDAOs: [],
+  isLoadingDomains: false,
 };
 
 let connection = new Connection(RPC_CONNECTION, "confirmed");
 const indexConnection = new Connection(INDEX_RPC_CONNECTION, "recent");
+const heliusApiKey = Constants?.manifest?.extra?.heliusApiKey;
 
 // TODO: map tokenRecord -> walletid
 //
@@ -263,6 +273,50 @@ export const fetchMemberVotes = createAsyncThunk(
   }
 );
 
+export const fetchMemberDaos = createAsyncThunk(
+  "realms/fetchMemberDaos",
+  async (walletAddress: string) => {
+    try {
+      const GOVERNANCE_PROGRAM_ID =
+        "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw";
+      const programId = new PublicKey(GOVERNANCE_PROGRAM_ID);
+      const ownerRecordsbyOwner = await getTokenOwnerRecordsByOwner(
+        connection,
+        programId,
+        new PublicKey(walletAddress)
+      );
+      const daosSet = new Set();
+
+      ownerRecordsbyOwner.map((realm) => {
+        daosSet.add(realm.account.realm.toBase58());
+      });
+
+      return Array.from(daosSet);
+    } catch (error) {
+      console.log("error", error);
+    }
+
+    return [];
+  }
+);
+
+export const fetchWalletSolDomains = createAsyncThunk(
+  "realms/fetchWalletSolDomains",
+  async (walletAddress: string) => {
+    try {
+      const { data } = await axios.get(
+        `https://api.helius.xyz/v0/addresses/${walletAddress}/names?api-key=${heliusApiKey}`
+      );
+
+      return data?.domainNames;
+    } catch (error) {
+      console.log("error", error);
+    }
+
+    return [];
+  }
+);
+
 export const memberSlice = createSlice({
   name: "realms",
   initialState,
@@ -296,6 +350,26 @@ export const memberSlice = createSlice({
       .addCase(fetchMemberChat.fulfilled, (state, action: any) => {
         state.isLoadingChat = false;
         state.memberChat = action.payload;
+      })
+      .addCase(fetchWalletSolDomains.pending, (state) => {
+        state.isLoadingDomains = true;
+      })
+      .addCase(fetchWalletSolDomains.rejected, (state) => {
+        state.isLoadingDomains = false;
+      })
+      .addCase(fetchWalletSolDomains.fulfilled, (state, action: any) => {
+        state.isLoadingDomains = false;
+        state.solDomains = action.payload;
+      })
+      .addCase(fetchMemberDaos.pending, (state) => {
+        state.isLoadingMemberDaos = true;
+      })
+      .addCase(fetchMemberDaos.rejected, (state) => {
+        state.isLoadingMemberDaos = false;
+      })
+      .addCase(fetchMemberDaos.fulfilled, (state, action: any) => {
+        state.isLoadingMemberDaos = false;
+        state.memberDAOs = action.payload;
       })
       .addCase(fetchMemberVotes.pending, (state) => {
         state.isLoadingVotes = true;

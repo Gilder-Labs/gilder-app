@@ -18,6 +18,16 @@ interface PublicKeyTextCopyProps {
   size?: "h1" | "h2" | "h3" | "h4" | "body" | "subtitle" | "caption";
   hideIcon?: boolean;
   bold?: boolean;
+  backgroundShade:
+    | "100"
+    | "200"
+    | "300"
+    | "400"
+    | "500"
+    | "600"
+    | "700"
+    | "800"
+    | "900";
 }
 
 export const PublicKeyTextCopy = ({
@@ -28,6 +38,7 @@ export const PublicKeyTextCopy = ({
   shade = "300",
   hideIcon = false,
   bold = false,
+  backgroundShade = "800",
 }: PublicKeyTextCopyProps) => {
   const theme = useTheme();
 
@@ -44,6 +55,7 @@ export const PublicKeyTextCopy = ({
       activeOpacity={0.4}
       onPress={copyToClipboard}
       noPadding={noPadding}
+      backgroundShade={backgroundShade}
     >
       <Typography
         shade={shade}
@@ -66,12 +78,23 @@ export const PublicKeyTextCopy = ({
   );
 };
 
-const Container = styled.TouchableOpacity<{ noPadding: boolean }>`
+const Container = styled.TouchableOpacity<{
+  noPadding: boolean;
+  backgroundShade:
+    | "100"
+    | "200"
+    | "300"
+    | "400"
+    | "500"
+    | "600"
+    | "700"
+    | "800"
+    | "900";
+}>`
   justify-content: center;
   align-items: center;
-  background: ${(props) => props.theme.gray[900]};
   flex-direction: row;
-  background: ${(props) => props.theme.gray[800]};
+  background: ${(props) => props.theme.gray[props.backgroundShade]};
   padding-top: ${(props) =>
     props.noPadding ? props.theme.spacing[0] : props.theme.spacing[1]};
   padding-bottom: ${(props) =>

@@ -73,7 +73,7 @@ export const DiscoverCard = ({
                     width: 40,
                     height: 40,
                     overflow: "hidden",
-                    borderRadius: 100,
+                    borderRadius: "100px",
                   }}
                   source={{
                     uri: ogImage,

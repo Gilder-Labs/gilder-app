@@ -65,15 +65,15 @@ ${(props: any) => {
   padding-bottom: ${(props: any) => props.theme.spacing[1]}
   padding-left: ${(props: any) => props.theme.spacing[2]}
   padding-right: ${(props: any) => props.theme.spacing[2]}
-  min-height: 28px;
 
   align-items: center;
+  justify-content: center;
 `;
 
 const BadgeText = styled.Text<{
   type: "success" | "pending" | "error" | "gray";
 }>`
-  font-size: 14px;
+  font-size: 12px;
 
   ${(props: any) => {
     if (props.type === "success") {

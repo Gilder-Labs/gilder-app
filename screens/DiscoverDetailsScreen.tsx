@@ -113,7 +113,7 @@ export default function DiscoverDetailsScreen({
                   width: 64,
                   height: 64,
                   overflow: "hidden",
-                  borderRadius: 100,
+                  borderRadius: "100px",
                 }}
                 source={{
                   uri: ogImage,

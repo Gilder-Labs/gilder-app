@@ -13,6 +13,8 @@ const cache: Record<string, any> = {};
 export const useCardinalIdentity = (walletId: string) => {
   const [twitterURL, setTwitterURL] = useState("");
   const [twitterHandle, setTwitterHandle] = useState("");
+  const [twitterDescription, setTwitterDescription] = useState("");
+
   const [isLoading, setIsLoading] = useState(false);
 
   let userUrl = cache?.[walletId]?.twitterURL;
@@ -20,13 +22,18 @@ export const useCardinalIdentity = (walletId: string) => {
   useEffect(() => {
     const getTwitterIdentity = async () => {
       const walletKey = new PublicKey(walletId);
-      cache[walletId] = { twitterURL: undefined, twitterHandle: "" };
+      cache[walletId] = {
+        twitterURL: undefined,
+        twitterHandle: "",
+        twitterDescription: "",
+      };
       const cardinalData = await tryGetName(indexConnection, walletKey);
 
       const handle = cardinalData?.[0];
       cache[walletId] = {
         twitterURL: undefined,
         twitterHandle: cardinalData?.[0],
+        twitterDescription: "",
       };
 
       if (handle) {
@@ -34,15 +41,18 @@ export const useCardinalIdentity = (walletId: string) => {
         const handleFormatted = handle.slice(1);
 
         const response = await axios.get(
-          `https://api.cardinal.so/twitter/proxy?url=https://api.twitter.com/2/users/by&usernames=${handleFormatted}&user.fields=profile_image_url`
+          `https://api.cardinal.so/namespaces/twitter/proxy?url=https://api.twitter.com/2/users/by&usernames=${handleFormatted}&user.fields=description,profile_image_url`
         );
+        const description = response?.data?.data?.[0]?.description;
         const twitterImage = response?.data?.data?.[0]?.profile_image_url;
         cache[walletId] = {
-          twitterURL: twitterImage,
+          twitterURL: twitterImage.replace("normal", "400x400"),
           twitterHandle: handleFormatted,
+          twitterDescription: description || "",
         };
 
         setTwitterURL(twitterImage);
+        setTwitterDescription(description);
       }
       setIsLoading(false);
     };
@@ -51,6 +61,7 @@ export const useCardinalIdentity = (walletId: string) => {
     if (cache[walletId]?.twitterHandle) {
       setTwitterURL(cache[walletId].twitterURL);
       setTwitterHandle(cache[walletId].twitterHandle);
+      setTwitterDescription(cache[walletId].twitterDescription);
     } else if (walletId && cache[walletId]) {
       // do nothing because we are waiting for the request to finish
     } else if (walletId && !cache[walletId]) {
@@ -60,5 +71,5 @@ export const useCardinalIdentity = (walletId: string) => {
     }
   }, [walletId, userUrl, isLoading]);
 
-  return [twitterURL, twitterHandle];
+  return { twitterURL, twitterHandle, twitterDescription };
 };

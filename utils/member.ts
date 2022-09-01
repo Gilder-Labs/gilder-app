@@ -1,4 +1,4 @@
-export const getColorType = (walletId: string) => {
+export const getColorType = (walletId = "something") => {
   const colorArray = [
     "primary",
     "secondary",

@@ -23,3 +23,4 @@ export * from "./ConnectWalletButton";
 export * from "./ConnectWeb3AuthButton";
 export * from "./ConnectPhantomButton";
 export * from "./ConnectSolanaWalletAdapter";
+export * from "./VoteCard";

@@ -558,7 +558,9 @@ export const defaultTheme: Theme = {
   },
   avatar: {
     BASE_AVATAR_SIZE: 32,
-    container: {},
+    container: {
+      backgroundColor: darkTheme.gray[800],
+    },
     image: {
       borderRadius: 16,
       height: 32,
@@ -1089,7 +1091,7 @@ export const defaultTheme: Theme = {
       strokeSize: 1, // not recommended to change this
     },
     replies: {
-      avatar: {},
+      avatar: { backgroundColor: darkTheme.gray[800] },
       avatarContainerMultiple: {},
       avatarContainerSingle: {},
       container: {},

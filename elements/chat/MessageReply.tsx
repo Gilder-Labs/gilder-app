@@ -21,7 +21,13 @@ export const Messagereply = () => {
       <ReplyCurve />
       <ReplyContentContainer>
         <Image
-          style={{ width: 24, height: 24, borderRadius: 100, marginRight: 4 }}
+          style={{
+            width: 24,
+            height: 24,
+            borderRadius: "100px",
+            marginRight: 4,
+            backgroundColor: theme.gray[800],
+          }}
           source={{ uri: message?.quoted_message?.user?.image }}
         />
         <Typography

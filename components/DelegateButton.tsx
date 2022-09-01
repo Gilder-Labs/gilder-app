@@ -50,7 +50,7 @@ export const DelegateButton = ({
   // });
   const { selectedRealm } = useAppSelector((state) => state.realms);
   const { walletToVoteMap } = useAppSelector((state) => state.proposals);
-  const [twitterURL, twitterHandle] = useCardinalIdentity(memberPublicKey);
+  const { twitterURL, twitterHandle } = useCardinalIdentity(memberPublicKey);
 
   const identityName = twitterHandle;
   const avatarUrl = twitterURL;
@@ -72,7 +72,7 @@ export const DelegateButton = ({
     return numeral(Number(voteString)).format("0,0");
   };
 
-  const delegatesVote = walletToVoteMap[memberPublicKey];
+  const delegatesVote = walletToVoteMap?.[memberPublicKey];
   const isYesVote = delegatesVote?.voteWeightYes ? true : false;
 
   return (

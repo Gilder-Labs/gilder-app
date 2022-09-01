@@ -6,12 +6,15 @@ import styled from "styled-components/native";
 import { abbreviatePublicKey } from "../../utils";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { formatVoteWeight } from "../../utils";
+import { useNavigation } from "@react-navigation/native";
 
 export const MessageHeader = (props: MessageFooterProps) => {
   const theme = useTheme();
   const { membersMap, delegateMap, isLoadingMembers } = useAppSelector(
     (state) => state.members
   );
+  const navigation = useNavigation();
+
   const { selectedRealm } = useAppSelector((state) => state.realms);
 
   const getMemberTokens = () => {
@@ -34,8 +37,25 @@ export const MessageHeader = (props: MessageFooterProps) => {
     return "";
   };
 
+  const handleMemberSelect = () => {
+    let memberWalletId = props?.message?.user?.id;
+
+    // if not an actual member, but delegate, lets take the user to the delegates page
+    if (!membersMap?.[memberWalletId]) {
+      const delegate = delegateMap?.[memberWalletId];
+      memberWalletId = delegate.communityMembers.length
+        ? delegate.communityMembers[0].walletId
+        : delegate.councilMembers[0].walletId;
+    }
+
+    //@ts-ignore
+    navigation.push("MemberDetails", {
+      walletId: memberWalletId,
+    });
+  };
+
   return (
-    <MessageHeaderContainer>
+    <MessageHeaderContainer onPress={() => handleMemberSelect()}>
       <Typography
         text={props?.message?.user?.name || ""}
         size="subtitle"
@@ -84,7 +104,7 @@ export const MessageHeader = (props: MessageFooterProps) => {
   );
 };
 
-const MessageHeaderContainer = styled.View`
+const MessageHeaderContainer = styled.TouchableOpacity`
   flex-direction: row;
   flex: 1;
   align-items: center;
