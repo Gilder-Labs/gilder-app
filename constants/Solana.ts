@@ -19,4 +19,4 @@ export const RPC_CONNECTION =
   Constants?.manifest?.extra?.rpcNetwork || "https://ssc-dao.genesysgo.net/";
 
 export const INDEX_RPC_CONNECTION =
-  Constants?.manifest?.extra?.indexRPC || "https://ssc-dao.genesysgo.net/";
+  Constants?.manifest?.extra?.rpcNetwork || "https://ssc-dao.genesysgo.net/";
