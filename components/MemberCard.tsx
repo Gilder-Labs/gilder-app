@@ -123,7 +123,6 @@ export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
                         selectedRealm?.councilMintDecimals
                       )
                     ).format("0,0")}
-                    marginRight="2"
                     marginLeft="1"
                     size="h4"
                     bold={true}
@@ -137,7 +136,7 @@ export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
                     color={theme.gray[400]}
                   />
                   <Typography
-                    text={member.totalVotesCouncil}
+                    text={member.totalVotesCouncil || "0"}
                     size="caption"
                     marginLeft="2"
                     shade="400"
@@ -179,7 +178,7 @@ export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
                     color={theme.gray[400]}
                   />
                   <Typography
-                    text={member.totalVotesCommunity}
+                    text={member.totalVotesCommunity || "0"}
                     size="caption"
                     marginLeft="2"
                     shade="400"
@@ -225,7 +224,6 @@ const IconButton = styled.TouchableOpacity`
   width: 40px;
   height: 40px;
   border-radius: 100px;
-  background: ${(props: any) => props.theme.gray[700]};
   margin-left: auto;
 `;
 

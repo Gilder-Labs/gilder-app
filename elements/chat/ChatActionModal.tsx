@@ -24,6 +24,7 @@ import {
   BottomSheetModal,
   BottomSheetModalProvider,
 } from "@gorhom/bottom-sheet";
+import CustomBackdrop from "../../components/FadeBackdropModal";
 
 import { Typography } from "../../components";
 import * as Clipboard from "expo-clipboard";
@@ -46,7 +47,7 @@ export const ChatActionModal = ({
   const channelContext = useChannelContext();
   // ref
   // variables
-  const snapPoints = useMemo(() => ["50%", "75%"], []);
+  const snapPoints = useMemo(() => ["25", "50%", "75%"], []);
 
   const handleAction = (type: string) => {
     const actionHandlers = message?.actionHandlers;
@@ -99,7 +100,7 @@ export const ChatActionModal = ({
     <BottomSheetModalProvider>
       <BottomSheetModal
         ref={bottomSheetModalRef}
-        index={0}
+        index={1}
         snapPoints={snapPoints}
         handleStyle={{
           backgroundColor: theme.gray[800],
@@ -112,6 +113,7 @@ export const ChatActionModal = ({
         backgroundStyle={{
           backgroundColor: theme.gray[800],
         }}
+        backdropComponent={CustomBackdrop}
       >
         <ContentContainer>
           <ReactionRow>

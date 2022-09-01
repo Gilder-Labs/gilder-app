@@ -175,7 +175,7 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
                   color={theme.gray[400]}
                 />
                 <Typography
-                  text={member.totalVotesCouncil}
+                  text={member.totalVotesCouncil || "0"}
                   size="subtitle"
                   marginLeft="2"
                   shade="400"
@@ -218,7 +218,7 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
                   color={theme.gray[400]}
                 />
                 <Typography
-                  text={member.totalVotesCommunity}
+                  text={member.totalVotesCommunity || "0"}
                   size="subtitle"
                   marginLeft="2"
                   shade="400"
