@@ -309,7 +309,7 @@ const SearchBar = styled.TextInput`
   height: 40px;
   font-size: 14px;
   background-color: ${(props) => props.theme.gray[800]}44;
-  border-radius: 4px;
+  border-radius: 8px;
   border: 1px solid ${(props) => props.theme.gray[600]};
   color: ${(props) => props.theme.gray[100]};
 `;

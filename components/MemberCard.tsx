@@ -114,7 +114,7 @@ export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
               />
               <Column>
                 <Row>
-                  <RealmIcon realmId={selectedRealm?.pubKey || ""} size={32} />
+                  <RealmIcon realmId={selectedRealm?.pubKey || ""} size={24} />
 
                   <Typography
                     text={numeral(
@@ -158,7 +158,7 @@ export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
               />
               <Column>
                 <Row>
-                  <RealmIcon realmId={selectedRealm.pubKey} size={32} />
+                  <RealmIcon realmId={selectedRealm?.pubKey} size={24} />
                   <Typography
                     text={numeral(
                       formatVoteWeight(
