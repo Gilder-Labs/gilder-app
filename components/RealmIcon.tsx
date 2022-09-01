@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { useAppSelector } from "../hooks/redux";
-import { AnimatedImage } from "react-native-ui-lib";
+import { AnimatedImage, Image } from "react-native-ui-lib";
 import { LinearGradient } from "expo-linear-gradient";
 import { getColorType } from "../utils";
 import { useTheme } from "styled-components";

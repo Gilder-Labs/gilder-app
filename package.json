@@ -84,7 +84,7 @@
     "react-devtools": "^4.22.1",
     "react-devtools-core": "^4.23.0",
     "react-dom": "18.0.0",
-    "react-native": "0.69.3",
+    "react-native": "0.69.5",
     "react-native-gesture-handler": "~2.5.0",
     "react-native-get-random-values": "~1.8.0",
     "react-native-hyperlink": "^0.0.19",
