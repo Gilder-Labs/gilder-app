@@ -240,13 +240,13 @@ export default function ProposalScreen({
                       )}
                     </IconContainer>
                   </SearchBarContainer>
-                  <SortButton onPress={handlePresentModalPress}>
+                  {/* <SortButton onPress={handlePresentModalPress}>
                     <FontAwesomeIcon
                       icon={faBarsSort}
                       size={18}
                       color={theme.gray[400]}
                     />
-                  </SortButton>
+                  </SortButton> */}
                 </SearchRow>
               </HeaderContainer>
             }
