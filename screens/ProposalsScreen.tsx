@@ -53,6 +53,10 @@ export default function ProposalScreen({
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const snapPoints = useMemo(() => ["25%", "50%"], []);
 
+  useEffect(() => {
+    setFilteredAndSortedProposals(proposals);
+  }, [proposals]);
+
   const handleProposalSelect = (proposal: Proposal) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 
