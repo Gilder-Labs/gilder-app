@@ -19,7 +19,6 @@ import {
   BottomSheetModalProvider,
 } from "@gorhom/bottom-sheet";
 import CustomBackdrop from "../components/FadeBackdropModal";
-import { RadioButton, RadioGroup } from "react-native-ui-lib";
 
 export default function ProposalScreen({
   navigation,
@@ -40,21 +39,15 @@ export default function ProposalScreen({
     (state) => state.realms
   );
 
+  const [filteredStatus, setFilteredStatus] = useState("");
   const [searchText, setSearchText] = useState("");
-  const [sortType, setSortType] = useState<
-    | "totalVotesCommunity"
-    | "totalVotesCouncil"
-    | "voteWeightCouncil"
-    | "voteWeightCommunity"
-  >("totalVotesCommunity");
-  const [filteredAndSortedProposals, setFilteredAndSortedProposals] =
-    useState(proposals);
+  const [filteredProposals, setFilteredProposals] = useState(proposals);
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const snapPoints = useMemo(() => ["25%", "50%"], []);
 
   useEffect(() => {
-    setFilteredAndSortedProposals(proposals);
+    setFilteredProposals(proposals);
   }, [proposals]);
 
   const handleProposalSelect = (proposal: Proposal) => {
@@ -86,27 +79,37 @@ export default function ProposalScreen({
     return activeProposals.toString();
   };
 
-  const handleSearchChange = (newText: string) => {
+  const handleFilterChange = (newText: string, filterStatus: string) => {
     const normalizedText = newText.toLowerCase();
+    let updatedProposals = proposals;
+
+    if (filteredStatus === filterStatus) {
+      setFilteredStatus("");
+    } else {
+      setFilteredStatus(filterStatus);
+      updatedProposals = proposals.filter(
+        (proposal) => proposal?.status === filterStatus
+      );
+    }
 
     if (!newText) {
-      setFilteredAndSortedProposals(proposals);
+      setFilteredProposals(updatedProposals);
     } else {
-      const filteredProposals = proposals?.filter((proposal) =>
+      const filteredProposals = updatedProposals?.filter((proposal) =>
         proposal.name.toLowerCase().includes(normalizedText)
       );
 
-      setFilteredAndSortedProposals(filteredProposals);
+      setFilteredProposals(filteredProposals);
     }
   };
 
-  const handleSearchInputChange = (newText: string) => {
+  const handleSearchInputChange = (newText: string, filter: string) => {
     setSearchText(newText);
-    debouncedChangeHandler(newText);
+    debouncedChangeHandler(newText, filter);
   };
 
   const debouncedChangeHandler = useCallback(
-    debounce(handleSearchChange, 300),
+    debounce(handleFilterChange, 300),
     [proposals]
   );
 
@@ -161,7 +164,7 @@ export default function ProposalScreen({
           <Loading />
         ) : (
           <FlatList
-            data={filteredAndSortedProposals}
+            data={filteredProposals}
             renderItem={renderProposal}
             keyExtractor={(item) => item.proposalId}
             style={{ padding: 16 }}
@@ -217,7 +220,9 @@ export default function ProposalScreen({
                   <SearchBarContainer>
                     <SearchBar
                       placeholder="Search by proposal name"
-                      onChangeText={handleSearchInputChange}
+                      onChangeText={(text: string) =>
+                        handleSearchInputChange(text, filteredStatus)
+                      }
                       placeholderTextColor={theme.gray[400]}
                       selectionColor={theme.gray[200]}
                       autoCompleteType={"off"}
@@ -227,7 +232,9 @@ export default function ProposalScreen({
                     />
                     <IconContainer
                       disabled={!searchText}
-                      onPress={() => handleSearchInputChange("")}
+                      onPress={() =>
+                        handleSearchInputChange("", filteredStatus)
+                      }
                     >
                       {searchText ? (
                         <FontAwesomeIcon
@@ -244,13 +251,13 @@ export default function ProposalScreen({
                       )}
                     </IconContainer>
                   </SearchBarContainer>
-                  {/* <SortButton onPress={handlePresentModalPress}>
+                  <SortButton onPress={handlePresentModalPress}>
                     <FontAwesomeIcon
                       icon={faBarsSort}
                       size={18}
                       color={theme.gray[400]}
                     />
-                  </SortButton> */}
+                  </SortButton>
                 </SearchRow>
               </HeaderContainer>
             }
@@ -275,14 +282,64 @@ export default function ProposalScreen({
           backdropComponent={CustomBackdrop}
         >
           <FilterContainer>
-            <Typography text="Sort by" bold={true} size="h4" marginBottom="4" />
+            <Typography
+              text="Filter by"
+              bold={true}
+              size="h4"
+              marginBottom="4"
+            />
+            <FilterBadgeRow>
+              <FilterBadge
+                onPress={() => handleFilterChange(searchText, "Succeeded")}
+                isSelected={filteredStatus === "Succeeded"}
+              >
+                <Typography marginBottom="0" text="Succeeded" />
+              </FilterBadge>
+              <FilterBadge
+                onPress={() => handleFilterChange(searchText, "Completed")}
+                isSelected={filteredStatus === "Completed"}
+              >
+                <Typography marginBottom="0" text="Completed" />
+              </FilterBadge>
+              <FilterBadge
+                onPress={() => handleFilterChange(searchText, "Cancelled")}
+                isSelected={filteredStatus === "Cancelled"}
+              >
+                <Typography marginBottom="0" text="Cancelled" />
+              </FilterBadge>
+              <FilterBadge
+                onPress={() => handleFilterChange(searchText, "Executing")}
+                isSelected={filteredStatus === "Executing"}
+              >
+                <Typography marginBottom="0" text="Executing" />
+              </FilterBadge>
+              <FilterBadge
+                onPress={() => handleFilterChange(searchText, "Voting")}
+                isSelected={filteredStatus === "Voting"}
+              >
+                <Typography marginBottom="0" text="Voting" />
+              </FilterBadge>
+              <FilterBadge
+                onPress={() => handleFilterChange(searchText, "Defeated")}
+                isSelected={filteredStatus === "Defeated"}
+              >
+                <Typography marginBottom="0" text="Defeated" />
+              </FilterBadge>
+              <FilterBadge
+                onPress={() =>
+                  handleFilterChange(searchText, "ExecutingWithErrors")
+                }
+                isSelected={filteredStatus === "ExecutingWithErrors"}
+              >
+                <Typography marginBottom="0" text="Executing with Errors" />
+              </FilterBadge>
+            </FilterBadgeRow>
           </FilterContainer>
         </BottomSheetModal>
       </Container>
     </BottomSheetModalProvider>
   );
 }
-
 const Container = styled.View`
   background-color: ${(props) => props.theme.gray[900]};
   flex: 1;
@@ -352,4 +409,26 @@ const SortButton = styled.TouchableOpacity`
   padding: ${(props) => props.theme.spacing[3]};
   border-radius: 8;
   margin-left: ${(props: any) => props.theme.spacing[2]};
+`;
+
+const FilterBadgeRow = styled.View`
+  flex-direction: row;
+  flex-wrap: wrap;
+  flex: 1;
+`;
+
+const FilterBadge = styled.TouchableOpacity<{ isSelected: boolean }>`
+  padding-left: ${(props: any) => props.theme.spacing[2]};
+  padding-right: ${(props: any) => props.theme.spacing[2]};
+  padding-top: ${(props: any) => props.theme.spacing[1]};
+  padding-bottom: ${(props: any) => props.theme.spacing[1]};
+
+  background: ${(props: any) =>
+    props.isSelected ? props.theme.secondary[600] : props.theme.gray[900]}55;
+  margin-right: ${(props: any) => props.theme.spacing[2]};
+  border-radius: 8;
+  margin-bottom: ${(props: any) => props.theme.spacing[1]};
+  border: 1px solid
+    ${(props: any) =>
+      props.isSelected ? props.theme.secondary[600] : props.theme.gray[600]};
 `;
