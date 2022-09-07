@@ -5,6 +5,9 @@ import {
   getAllProposals,
   getGovernanceChatMessages,
   GOVERNANCE_CHAT_PROGRAM_ID,
+  ProposalTransaction,
+  getGovernanceAccounts,
+  pubkeyFilter,
 } from "@solana/spl-governance";
 import { RPC_CONNECTION, INDEX_RPC_CONNECTION } from "../constants/Solana";
 import { getVoteRecords } from "../utils/gov-ui-functions/getVoteRecords";
@@ -18,8 +21,10 @@ export interface ProposalsState {
   isLoadingChatMessages: boolean;
   isRefreshingProposals: boolean;
   isLoadingVotes: boolean;
+  isLoadingInstructions: boolean;
   votes: Array<any>;
   walletToVoteMap: any;
+  proposalInstructions: any;
 }
 
 const initialState: ProposalsState = {
@@ -29,9 +34,11 @@ const initialState: ProposalsState = {
   chatMessages: [],
   isLoadingChatMessages: false,
   isLoadingVotes: false,
+  isLoadingInstructions: false,
   isRefreshingProposals: false,
   votes: [],
   walletToVoteMap: {},
+  proposalInstructions: null,
 };
 
 let connection = new Connection(RPC_CONNECTION, "confirmed");
@@ -63,6 +70,7 @@ export const fetchRealmProposals = createAsyncThunk(
         governanceId: proposal?.account?.governance.toBase58(),
         description: proposal?.account?.descriptionLink,
         name: proposal?.account?.name,
+        programId: proposal.owner.toBase58(),
         proposalId: proposalId,
         status: ProposalState[proposal?.account?.state],
         isVoteFinalized: proposal.account.isVoteFinalized(),
@@ -146,6 +154,24 @@ export const fetchProposalVotes = createAsyncThunk(
   }
 );
 
+export const fetchProposalInstructions = createAsyncThunk(
+  "realms/fetchProposalInstructions",
+  async ({ proposalId, programId }: any) => {
+    try {
+      const instructions = await getGovernanceAccounts(
+        connection,
+        new PublicKey(programId),
+        ProposalTransaction,
+        [pubkeyFilter(1, new PublicKey(proposalId))!]
+      );
+
+      return instructions;
+    } catch (error) {
+      console.log("error", error);
+    }
+  }
+);
+
 export const fetchProposalChat = createAsyncThunk(
   "realms/fetchProposalChat",
   async (proposalId: string) => {
@@ -212,6 +238,18 @@ export const proposalsSlice = createSlice({
       .addCase(fetchProposalChat.fulfilled, (state, action: any) => {
         state.isLoadingChatMessages = false;
         state.chatMessages = action?.payload;
+      })
+      .addCase(fetchProposalInstructions.pending, (state) => {
+        state.isLoadingInstructions = true;
+        state.votes = [];
+      })
+      .addCase(fetchProposalInstructions.rejected, (state) => {
+        state.isLoadingInstructions = false;
+      })
+      .addCase(fetchProposalInstructions.fulfilled, (state, action: any) => {
+        state.isLoadingInstructions = false;
+        state.votes = action.payload?.votes;
+        state.proposalInstructions = action.payload;
       })
       .addCase(fetchProposalVotes.pending, (state) => {
         state.isLoadingVotes = true;

@@ -280,6 +280,10 @@ export const fetchOwnVotes = createAsyncThunk(
   async ({ walletId, realm }: any) => {
     let rawVoteRecords;
 
+    if (!walletId) {
+      return {};
+    }
+
     try {
       rawVoteRecords = await getVoteRecordsByVoter(
         indexConnection,
@@ -302,11 +306,9 @@ export const fetchOwnVotes = createAsyncThunk(
         ownVotesMap[vote?.proposalId] = vote;
       });
 
-      // console.log("raw vote records", rawVoteRecords);
-      console.log("parsed vote records", parsedVoteRecords);
       return ownVotesMap;
     } catch (error) {
-      console.log("error", error);
+      console.error("error", error);
     }
 
     return [];

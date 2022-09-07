@@ -13,7 +13,11 @@ import {
 } from "../components";
 import { format, getUnixTime, formatDistance } from "date-fns";
 import numeral from "numeral";
-import { fetchProposalChat, fetchProposalVotes } from "../store/proposalsSlice";
+import {
+  fetchProposalChat,
+  fetchProposalVotes,
+  fetchProposalInstructions,
+} from "../store/proposalsSlice";
 import { openTransactionModal } from "../store/walletSlice";
 import * as Haptics from "expo-haptics";
 
@@ -57,6 +61,21 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
       dispatch(fetchProposalVotes(proposalId));
     }
   }, [proposalId, proposalsMap]);
+
+  useEffect(() => {
+    if (
+      proposalId &&
+      proposalsMap?.[proposalId] &&
+      selectedRealm?.governanceId
+    ) {
+      dispatch(
+        fetchProposalInstructions({
+          proposalId,
+          programId: selectedRealm.governanceId,
+        })
+      );
+    }
+  }, [proposalId, proposalsMap, selectedRealm]);
 
   if (
     !proposalId ||
@@ -294,7 +313,7 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
               {/* Quorum row */}
               <VoteCountRow>
                 <VoteColumn>
-                  <ApproveText>Approval Quorum</ApproveText>
+                  <ApproveText>Minimum Participation</ApproveText>
                   <VoteText>
                     {quorumData.hasMetQuorum
                       ? "Quorum Reached"

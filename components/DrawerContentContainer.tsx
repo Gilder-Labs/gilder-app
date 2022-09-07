@@ -40,10 +40,10 @@ export function DrawerContentContainer(props: any) {
   }, []);
 
   useEffect(() => {
-    if (selectedRealm && publicKey) {
+    if (selectedRealm) {
       dispatch(fetchOwnVotes({ walletId: publicKey, realm: selectedRealm }));
     }
-  }, [selectedRealm]);
+  }, [selectedRealm, publicKey]);
 
   const realmDisplayName = realmsData[selectedRealm?.pubKey]?.displayName;
 
