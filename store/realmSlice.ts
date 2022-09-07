@@ -15,7 +15,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export interface realmState {
   realms: Array<any>;
   realmsMap: any;
-  selectedRealm: Realm | null;
+  selectedRealm: Realm;
   selectedRealmId: string;
   realmsData: any;
   realmWatchlist: Array<string>;

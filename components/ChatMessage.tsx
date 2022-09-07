@@ -67,7 +67,13 @@ export const ChatMessage = ({
             </VoteButton>
           )}
         </Row>
-        <MessageBody>{body} </MessageBody>
+        <Typography
+          text={body}
+          size="subtitle"
+          shade={"100"}
+          selectable={true}
+          hasLinks={true}
+        />
       </Column>
     </Container>
   );
@@ -81,12 +87,6 @@ const Container = styled.View`
   flex-direction: row;
   margin-left: ${(props) => props.theme.spacing[3]};
   margin-right: ${(props) => props.theme.spacing[3]};
-`;
-
-const MessageBody = styled.Text`
-  color: ${(props) => props.theme.gray[200]};
-  font-size: 14px;
-  line-height: 20px;
 `;
 
 const MessageDate = styled.Text`

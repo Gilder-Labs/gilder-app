@@ -11,6 +11,7 @@ import {
   WalletIdentity,
   Typography,
 } from "../components";
+import { ProposalVoteInfo } from "../elements/ProposalVoteInfo";
 import { format, getUnixTime, formatDistance } from "date-fns";
 import numeral from "numeral";
 import { fetchProposalChat, fetchProposalVotes } from "../store/proposalsSlice";
@@ -47,15 +48,9 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
   const { chatMessages, isLoadingChatMessages, walletToVoteMap } =
     useAppSelector((state) => state.proposals);
   const { membersMap } = useAppSelector((state) => state.members);
-
   const { publicKey } = useAppSelector((state) => state.wallet);
   const { proposalsMap } = useAppSelector((state) => state.proposals);
-
   const { proposalId } = route?.params;
-
-  // TODO: Fetch vote records for this proposal
-  // 1. show them on comments
-  // 2. display them on delegates (disable if already voted)
 
   useEffect(() => {
     if (proposalId && proposalsMap?.[proposalId]) {
@@ -313,11 +308,12 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
               </QuorumContainer>
             </Votes>
             {/* {isVoting && isMember && ( */}
+
             <>
               <Typography
                 text="Voting"
                 bold={true}
-                size="h4"
+                size="body"
                 shade={"400"}
                 marginLeft={"3"}
                 marginBottom={"0"}
@@ -348,7 +344,7 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
             <Typography
               text="Description"
               bold={true}
-              size="h4"
+              size="body"
               shade={"400"}
               marginLeft={"3"}
               // marginBottom="2"
@@ -366,7 +362,7 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
             <Typography
               text="Discussion"
               bold={true}
-              size="h4"
+              size="body"
               shade={"400"}
               marginLeft={"3"}
               marginBottom="2"
