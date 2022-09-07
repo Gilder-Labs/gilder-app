@@ -14,6 +14,8 @@ import { faGear } from "@fortawesome/pro-regular-svg-icons/faGear";
 import { faGrid2 } from "@fortawesome/pro-regular-svg-icons/faGrid2";
 
 import { fetchRealm, selectRealm } from "../store/realmSlice";
+import { fetchOwnVotes } from "../store/memberSlice";
+
 import { Typography } from "./Typography";
 import { useNavigation } from "@react-navigation/native";
 import * as Haptics from "expo-haptics";
@@ -28,6 +30,7 @@ export function DrawerContentContainer(props: any) {
   const { selectedRealm, realmsData, realmWatchlist } = useAppSelector(
     (state) => state.realms
   );
+  const { publicKey } = useAppSelector((state) => state.wallet);
 
   useEffect(() => {
     // when a user enters app, if they don't have any realms selected, make the modal open to pick some
@@ -35,6 +38,12 @@ export function DrawerContentContainer(props: any) {
       setRealmSelectIsOpen(true);
     }
   }, []);
+
+  useEffect(() => {
+    if (selectedRealm && publicKey) {
+      dispatch(fetchOwnVotes({ walletId: publicKey, realm: selectedRealm }));
+    }
+  }, [selectedRealm]);
 
   const realmDisplayName = realmsData[selectedRealm?.pubKey]?.displayName;
 

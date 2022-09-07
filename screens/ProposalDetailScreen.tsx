@@ -11,7 +11,6 @@ import {
   WalletIdentity,
   Typography,
 } from "../components";
-import { ProposalVoteInfo } from "../elements/ProposalVoteInfo";
 import { format, getUnixTime, formatDistance } from "date-fns";
 import numeral from "numeral";
 import { fetchProposalChat, fetchProposalVotes } from "../store/proposalsSlice";

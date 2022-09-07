@@ -8,6 +8,7 @@ import { WalletIdentity } from "./WalletIdentity";
 import { Typography } from "./Typography";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faAngleDoubleRight } from "@fortawesome/pro-solid-svg-icons/faAngleDoubleRight";
+import { useAppSelector } from "../hooks/redux";
 
 interface ProposalCardProps {
   proposal: any;
@@ -47,9 +48,11 @@ export const ProposalCard = ({
     getNoVoteCount,
     isPreVotingState,
     votingAt,
+    proposalId,
   } = proposal;
 
   const theme = useTheme();
+  const { ownVotesMap } = useAppSelector((state) => state.members);
 
   // @ts-ignore
   const yesVotes = Number(getYesVoteCount);
@@ -133,12 +136,22 @@ export const ProposalCard = ({
   const timeLeft = getTimeToVoteEnd();
   const isVoting = status === "Voting";
 
+  const ownVote = ownVotesMap?.[proposalId]
+    ? ownVotesMap?.[proposalId]?.voteWeightYes
+      ? " - Yes"
+      : " - No"
+    : "";
+
   return (
     <Container onLongPress={onClick} activeOpacity={0.5}>
       <TextContainer>
         <ProposalTitle>{name}</ProposalTitle>
         <Badge
-          title={isVoting && !timeLeft.isTimeLeft ? "Finalizing" : status}
+          title={
+            isVoting && !timeLeft.isTimeLeft
+              ? `Finalizing${ownVote}`
+              : `${status}${ownVote}`
+          }
           type={proposalStatusKey[status]}
         />
       </TextContainer>
@@ -207,7 +220,7 @@ export const ProposalCard = ({
           {/* Quorum row */}
           <VoteCountRow>
             <VoteColumn>
-              <ApproveText>Approval Quorum</ApproveText>
+              <ApproveText>Required Participation</ApproveText>
               <VoteText>
                 {quorumData.hasMetQuorum
                   ? "Quorum Reached"
