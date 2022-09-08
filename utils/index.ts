@@ -7,7 +7,7 @@ export const abbreviatePublicKey = (
   publicKey: string,
   numberOfLetter: number = 4
 ) => {
-  return `${publicKey.slice(0, numberOfLetter)}...${publicKey.slice(
+  return `${publicKey?.slice(0, numberOfLetter)}...${publicKey?.slice(
     -numberOfLetter
   )}`;
 };

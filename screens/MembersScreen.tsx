@@ -98,7 +98,6 @@ export default function MemberScreen({
     const normalizedText = newText.toLowerCase();
 
     if (!newText) {
-      console.log("clearing members?");
       setFilteredAndSortedMembers(members);
     } else {
       const filteredMembers = members?.filter(

@@ -18,7 +18,7 @@ interface PublicKeyTextCopyProps {
   size?: "h1" | "h2" | "h3" | "h4" | "body" | "subtitle" | "caption";
   hideIcon?: boolean;
   bold?: boolean;
-  backgroundShade:
+  backgroundShade?:
     | "100"
     | "200"
     | "300"

@@ -26,6 +26,7 @@ export interface realmState {
   membersMap: any;
   memberChat: Array<ChatMessage>;
   memberVotes: Array<MemberVote>;
+  ownVotesMap: any;
   isLoadingMembers: boolean;
   isLoadingChat: boolean;
   isLoadingVotes: boolean;
@@ -43,6 +44,7 @@ const initialState: realmState = {
   membersMap: null,
   memberChat: [],
   memberVotes: [],
+  ownVotesMap: null,
   isLoadingMembers: false,
   isLoadingChat: false,
   isLoadingVotes: false,
@@ -273,6 +275,46 @@ export const fetchMemberVotes = createAsyncThunk(
   }
 );
 
+export const fetchOwnVotes = createAsyncThunk(
+  "realms/fetchOwnVotes",
+  async ({ walletId, realm }: any) => {
+    let rawVoteRecords;
+
+    if (!walletId) {
+      return {};
+    }
+
+    try {
+      rawVoteRecords = await getVoteRecordsByVoter(
+        indexConnection,
+        new PublicKey(realm.governanceId), // change this based on the dao program id
+        new PublicKey(walletId)
+      );
+
+      let parsedVoteRecords = rawVoteRecords.map((vote) => {
+        return {
+          proposalId: vote.account.proposal.toBase58(),
+          isRelinquished: vote.account.isRelinquished,
+          voterWeightNo: vote.account.getNoVoteWeight()?.toString(),
+          voteWeightYes: vote.account.getYesVoteWeight()?.toString(),
+        };
+      });
+
+      let ownVotesMap = {};
+
+      parsedVoteRecords.forEach((vote) => {
+        ownVotesMap[vote?.proposalId] = vote;
+      });
+
+      return ownVotesMap;
+    } catch (error) {
+      console.error("error", error);
+    }
+
+    return [];
+  }
+);
+
 export const fetchMemberDaos = createAsyncThunk(
   "realms/fetchMemberDaos",
   async (walletAddress: string) => {
@@ -370,6 +412,16 @@ export const memberSlice = createSlice({
       .addCase(fetchMemberDaos.fulfilled, (state, action: any) => {
         state.isLoadingMemberDaos = false;
         state.memberDAOs = action.payload;
+      })
+      .addCase(fetchOwnVotes.pending, (state) => {
+        state.isLoadingVotes = true;
+      })
+      .addCase(fetchOwnVotes.rejected, (state) => {
+        state.isLoadingVotes = false;
+      })
+      .addCase(fetchOwnVotes.fulfilled, (state, action: any) => {
+        state.isLoadingVotes = false;
+        state.ownVotesMap = action.payload;
       })
       .addCase(fetchMemberVotes.pending, (state) => {
         state.isLoadingVotes = true;
