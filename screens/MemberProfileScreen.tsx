@@ -161,7 +161,7 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
                       selectedRealm?.councilMintDecimals
                     )
                   ).format("0,0")}
-                  marginRight="2"
+                  // marginRight="2"
                   marginLeft="1"
                   size="h3"
                   bold={true}
@@ -205,9 +205,9 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
                     )
                   ).format("0.0a")}
                   bold={true}
-                  marginLeft="1"
                   size="h3"
-                  marginRight="2"
+                  marginLeft="1"
+                  // marginRight="2"
                   marginBottom="0"
                 />
               </Row>
