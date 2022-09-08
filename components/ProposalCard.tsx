@@ -223,8 +223,8 @@ export const ProposalCard = ({
               <ApproveText>Minimum Participation</ApproveText>
               <VoteText>
                 {quorumData.hasMetQuorum
-                  ? "Quorum Reached"
-                  : `${quorumData.votesNeeded} votes still needed.`}
+                  ? "Required votes met"
+                  : `${quorumData.votesNeeded} votes still needed`}
               </VoteText>
             </VoteColumn>
           </VoteCountRow>

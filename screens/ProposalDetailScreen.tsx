@@ -20,6 +20,7 @@ import {
 } from "../store/proposalsSlice";
 import { openTransactionModal } from "../store/walletSlice";
 import * as Haptics from "expo-haptics";
+import { InstructionCard } from "../elements";
 
 interface ProposalDetailScreen {
   route: any;
@@ -52,7 +53,9 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
     useAppSelector((state) => state.proposals);
   const { membersMap } = useAppSelector((state) => state.members);
   const { publicKey } = useAppSelector((state) => state.wallet);
-  const { proposalsMap } = useAppSelector((state) => state.proposals);
+  const { proposalsMap, proposalInstructions } = useAppSelector(
+    (state) => state.proposals
+  );
   const { proposalId } = route?.params;
 
   useEffect(() => {
@@ -222,6 +225,12 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   };
 
+  const renderInstructions = () => {
+    return proposalInstructions.map((instruction: any, index: number) => {
+      return <InstructionCard instruction={instruction} key={index} />;
+    });
+  };
+
   const quorumData = getQuorum();
 
   const timeLeft = getTimeToVoteEnd();
@@ -316,7 +325,7 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
                   <ApproveText>Minimum Participation</ApproveText>
                   <VoteText>
                     {quorumData.hasMetQuorum
-                      ? "Quorum Reached"
+                      ? "Required votes met"
                       : `${quorumData.votesNeeded} votes still needed`}
                   </VoteText>
                 </VoteColumn>
@@ -331,10 +340,10 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
               <Typography
                 text="Voting"
                 bold={true}
-                size="body"
-                shade={"400"}
+                size="h4"
+                shade={"200"}
                 marginLeft={"3"}
-                marginBottom={"0"}
+                marginBottom={"1"}
               />
               <VoteButtonContainer>
                 <Button
@@ -358,19 +367,18 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
                 />
               </VoteButtonContainer>
             </>
-            {/* )} */}
             <Typography
               text="Description"
               bold={true}
-              size="body"
-              shade={"400"}
+              size="h4"
+              shade={"200"}
               marginLeft={"3"}
-              // marginBottom="2"
+              marginBottom="1"
             />
             <Typography
-              text={description}
+              text={description ? description : "No description added."}
               size="body"
-              shade={"100"}
+              shade={"300"}
               marginLeft={"3"}
               marginRight="3"
               marginBottom="3"
@@ -378,12 +386,31 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
               hasLinks={true}
             />
             <Typography
+              text="Instructions"
+              bold={true}
+              size="h4"
+              shade={"200"}
+              marginLeft={"3"}
+              marginBottom={"1"}
+            />
+            {proposalInstructions?.length ? (
+              <>{renderInstructions()}</>
+            ) : (
+              <Typography
+                text="0 instructions in this proposal"
+                size="body"
+                shade={"300"}
+                marginLeft={"3"}
+                marginBottom={"3"}
+              />
+            )}
+            <Typography
               text="Discussion"
               bold={true}
-              size="body"
-              shade={"400"}
+              size="h4"
+              shade={"200"}
               marginLeft={"3"}
-              marginBottom="2"
+              marginBottom="1"
             />
             {isLoadingChatMessages && (
               <LoadingContainer>
@@ -414,7 +441,9 @@ const ProposalSubData = styled.View`
 `;
 
 const VoteButtonContainer = styled.View`
-  padding: ${(props: any) => props.theme.spacing[3]};
+  margin-bottom: ${(props: any) => props.theme.spacing[3]};
+  margin-left: ${(props: any) => props.theme.spacing[3]};
+  margin-right: ${(props: any) => props.theme.spacing[3]};
   flex-direction: row;
 `;
 
