@@ -107,8 +107,6 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
 
   const governance = governancesMap?.[proposal?.governanceId];
 
-  const voteThresholdPercentage = governance?.voteThresholdPercentage || 0;
-
   const {
     communityMint,
     communityMintSupply,
@@ -117,6 +115,11 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
     councilMintSupply,
     councilMintDecimals,
   } = selectedRealm;
+
+  const voteThresholdPercentage =
+    governingTokenMint === communityMint
+      ? governance?.communityVoteThresholdPercentage
+      : governance?.councilVoteThresholdPercentage;
 
   const mintSupply =
     governingTokenMint === communityMint

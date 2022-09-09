@@ -186,8 +186,6 @@ export const fetchVaults = createAsyncThunk(
           minInstructionHoldUpTime:
             governance.account.config.minInstructionHoldUpTime,
           maxVotingTime: governance.account.config.maxVotingTime,
-          voteTipping: governance.account.config.voteTipping,
-          proposalCoolOffTime: governance.account.config.proposalCoolOffTime,
           minCouncilTokensToCreateProposal: governance?.account?.config
             ?.minCouncilTokensToCreateProposal
             ? formatVoteWeight(
@@ -199,8 +197,11 @@ export const fetchVaults = createAsyncThunk(
           totalProposalCount: governance.account.proposalCount,
           votingProposalCount: governance.account.votingProposalCount,
           // percentage of total tokens that need to vote for there to be quorum
-          voteThresholdPercentage:
-            governance.account.config.voteThresholdPercentage.value.toString(),
+          communityVoteThresholdPercentage:
+            governance.account.config.communityVoteThreshold,
+          councilVoteThresholdPercentage:
+            governance?.account?.config?.councilVetoVoteThreshold,
+
           accountType: governance.account.accountType,
           isAccountGovernance: governance.account.isAccountGovernance(),
           isMintGovernance: governance.account.isMintGovernance(),

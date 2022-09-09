@@ -120,7 +120,8 @@ export default function ProposalScreen({
       return <EmptyView />;
     }
 
-    const { voteThresholdPercentage } = proposalGovernance;
+    const { communityVoteThresholdPercentage, councilVoteThresholdPercentage } =
+      proposalGovernance;
     const {
       communityMint,
       communityMintSupply,
@@ -148,7 +149,11 @@ export default function ProposalScreen({
             ? communityMintDecimals
             : councilMintDecimals
         }
-        voteThresholdPercentage={voteThresholdPercentage}
+        voteThresholdPercentage={
+          governingTokenMint === communityMint
+            ? communityVoteThresholdPercentage
+            : councilVoteThresholdPercentage
+        }
         creatorWalletId={tokenRecordToWalletMap[item.tokenOwnerRecord]}
       />
     );
