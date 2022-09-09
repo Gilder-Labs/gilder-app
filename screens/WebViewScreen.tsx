@@ -29,10 +29,7 @@ export default function WebViewScreen() {
     url: "",
   });
 
-  const onMessage = (event: any) => {
-    console.log("onMessage", event);
-    alert(event.nativeEvent.data);
-  };
+  const walletAdapter = new PhantomWalletAdapter();
 
   function returnDataToWebview(message: any, data: any) {
     if (webviewRef && webviewRef.current) {
@@ -40,13 +37,20 @@ export default function WebViewScreen() {
     }
   }
 
-  async function commHandler(payload: any) {
-    const parsed = JSON.parse(payload);
-    switch (parsed.message) {
+  async function commHandler(event: any) {
+    const data = JSON.parse(event.nativeEvent.data);
+
+    console.log("parsed", data);
+    switch (data?.message) {
       case "connect": {
-        console.log(parsed.payload);
-        const connectResult = await PhantomWalletAdapter.connect();
-        returnDataToWebview("connect", { ...connectResult });
+        console.log("Trying to connect");
+        const connectResult = await walletAdapter.connect();
+        console.log("connect result", connectResult);
+        returnDataToWebview("connect", {
+          PublicKey: new PublicKey(
+            "EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i"
+          ),
+        });
 
         break;
       }
@@ -60,92 +64,82 @@ export default function WebViewScreen() {
   };
 
   const runFirst = `
-    class Phantom {
-        async communicate(messageName) {
-        return new Promise(function (resolve, reject) {
-            function eventListener(event) {
-            try {
-                let parsed = JSON.parse(event.data);
-                if (parsed.message === messageName) {
-                window.removeEventListener('message', eventListener);
-                resolve(parsed.data);
-                }
-            } catch (e) {
-                reject(e);
-            }
-            }
-            window.addEventListener('message', eventListener);
-        });
-        }
+
+      class Phantom {
         async connect() {
           window.ReactNativeWebView.postMessage(
-              JSON.stringify({
+            JSON.stringify({
               message: 'connect',
               payload: {
-                  info: {
+                info: {
                   title: document.title, 
                   host: window.location.host
-                  }
+                }
               }
-          }),
-        );
-        let connectData = await this.communicate('connect');
+            }),
+          );
+          let connectData = await this.communicate('connect');
           return connectData;
         }
-        async disconnect() {
-        window.ReactNativeWebView.postMessage(
-            JSON.stringify({message: 'disconnect'}),
-        );
-        let disconnectData = this.communicate('disconnect');
-        return disconnectData;
-        }
-        async signTransaction(payload) {
-        window.ReactNativeWebView.postMessage(
-            JSON.stringify({
-            message: 'signTransaction', payload: {
-                transaction: payload,
-            info: {
-                title: document.title, 
-                host: window.location.host
-                }
-            }
-            }),
-        );
-        let txData = await this.communicate('signTransaction');
-        console.log("txData", txData);
-        return txData;
-        }
-        async signAllTransactions(payload) {
-        window.ReactNativeWebView.postMessage(
-            JSON.stringify({
-            message: 'signAllTransactions', 
-            payload: {
-                transactions: payload,
-                info: {
-                title: document.title, 
-                host: window.location.host
-                }
-            }
-            }),
-        );
-        let txData = await this.communicate('signAllTransactions');
-          console.log('txData', txData);
-         return txData;
-        }
-    };
+        isConnected: false;
+        isPhantom: true;
+      };
 
-      window.phantom.solana  = Phantom;
+      window.phantom.solana = Phantom;
       true; // note: this is required, or you'll sometimes get silent failures
     `;
+
+  const phantomTest = `
+
+    const communicate = async (messageName) => {
+      return new Promise(function (resolve, reject) {
+        function eventListener(event) {
+          try {
+            let parsed = JSON.parse(event.data);
+            if (parsed.message === messageName) {
+              window.removeEventListener('message', eventListener);
+              resolve(parsed.data);
+            }
+          } catch (e) {
+            reject(e);
+          }
+        }
+        window.addEventListener('message', eventListener);
+      });
+    }
+
+    window.phantom = {
+      solana: {
+        isPhantom: true,
+        connect: async () => {
+          window.ReactNativeWebView.postMessage(
+            JSON.stringify({
+              message: 'connect',
+              payload: {
+                info: {
+                  title: document.title, 
+                  host: window.location.host
+                }
+              }
+            }),
+          );
+        },
+        signTransaction: async () => {},
+      }
+    };
+    alert("phantom injected");
+    true;
+  `;
+
   return (
     <Container>
       <SafeAreaView style={styles.container}>
         <WebView
-          source={{ uri: "https://google.com" }}
+          source={{ uri: "https://trade.mango.markets" }}
           javaScriptEnabled={true}
           ref={webviewRef}
           onMessage={commHandler}
-          injectedJavaScript={runFirst}
+          injectedJavaScript={phantomTest}
           pullToRefreshEnabled={true}
           onNavigationStateChange={(navState) => {
             // Keep track of going back navigation within component

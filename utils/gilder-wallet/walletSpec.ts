@@ -1,3 +1,5 @@
+//  https://github.com/solana-labs/wallet-adapter/blob/master/packages/wallets/phantom/src/adapter.ts
+
 import type {
   EventEmitter,
   SendTransactionOptions,
@@ -121,7 +123,7 @@ export class PhantomWalletAdapter extends BaseMessageSignerWalletAdapter {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const wallet = window.phantom?.solana || window.solana!;
 
-      if (!wallet.isConnected) {
+      if (!wallet?.isConnected) {
         try {
           await wallet.connect();
         } catch (error: any) {
