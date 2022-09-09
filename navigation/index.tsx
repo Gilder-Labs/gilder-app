@@ -41,6 +41,7 @@ import DiscoverScreen from "../screens/DiscoverScreen";
 import DiscoverDetailsScreen from "../screens/DiscoverDetailsScreen";
 import InfoModalScreen from "../screens/InfoModalScreen";
 import OnboardingScreen from "../screens/OnboardingScreen";
+import WebViewScreen from "../screens/WebViewScreen";
 
 import { chatApiKey } from "../constants/Chat";
 import { StreamChat } from "stream-chat";
@@ -238,6 +239,7 @@ function DrawerScreen() {
           },
         })}
       />
+      <Drawer.Screen name="WebViewScreen" component={WebViewScreen} />
     </Drawer.Navigator>
   );
 }
