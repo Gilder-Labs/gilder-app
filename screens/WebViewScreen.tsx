@@ -10,7 +10,6 @@ import { faArrowLeft } from "@fortawesome/pro-solid-svg-icons/faArrowLeft";
 import { faArrowRight } from "@fortawesome/pro-solid-svg-icons/faArrowRight";
 import { faRotateRight } from "@fortawesome/pro-solid-svg-icons/faRotateRight";
 import { faGlobe } from "@fortawesome/pro-solid-svg-icons/faGlobe";
-import { PhantomWalletAdapter } from "../utils/gilder-wallet/walletSpec";
 import { Linking } from "react-native";
 
 import { useTheme } from "styled-components";
@@ -29,8 +28,6 @@ export default function WebViewScreen() {
     url: "",
   });
 
-  const walletAdapter = new PhantomWalletAdapter();
-
   function returnDataToWebview(message: any, data: any) {
     if (webviewRef && webviewRef.current) {
       webviewRef.current.postMessage(JSON.stringify({ message, data }));
@@ -44,10 +41,8 @@ export default function WebViewScreen() {
     switch (data?.message) {
       case "connect": {
         console.log("Trying to connect");
-        const connectResult = await walletAdapter.connect();
-        console.log("connect result", connectResult);
         returnDataToWebview("connect", {
-          PublicKey: new PublicKey(
+          publicKey: new PublicKey(
             "EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i"
           ),
         });
@@ -63,34 +58,12 @@ export default function WebViewScreen() {
     }
   };
 
-  const runFirst = `
+  const publicKey = "EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i";
 
-      class Phantom {
-        async connect() {
-          window.ReactNativeWebView.postMessage(
-            JSON.stringify({
-              message: 'connect',
-              payload: {
-                info: {
-                  title: document.title, 
-                  host: window.location.host
-                }
-              }
-            }),
-          );
-          let connectData = await this.communicate('connect');
-          return connectData;
-        }
-        isConnected: false;
-        isPhantom: true;
-      };
-
-      window.phantom.solana = Phantom;
-      true; // note: this is required, or you'll sometimes get silent failures
-    `;
+  // Inject our version of a wallet that mimics what phantom expects,
+  // This way we can "connect" to phantom with any public key, IE dao treasuries
 
   const phantomTest = `
-
     const communicate = async (messageName) => {
       return new Promise(function (resolve, reject) {
         function eventListener(event) {
@@ -108,9 +81,14 @@ export default function WebViewScreen() {
       });
     }
 
+    let myPublicKey = "EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i"
+
     window.phantom = {
       solana: {
         isPhantom: true,
+        isConnected: false,
+        publicKey: { toBytes: () => { return Uint8Array.from(myPublicKey.split('').map(letter => letter.charCodeAt(0))) } },
+        signTransaction: async () => {},
         connect: async () => {
           window.ReactNativeWebView.postMessage(
             JSON.stringify({
@@ -123,8 +101,8 @@ export default function WebViewScreen() {
               }
             }),
           );
+        
         },
-        signTransaction: async () => {},
       }
     };
     alert("phantom injected");
