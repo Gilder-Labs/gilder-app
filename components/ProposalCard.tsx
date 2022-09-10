@@ -18,6 +18,7 @@ interface ProposalCardProps {
   mintDecimals: number;
   voteThresholdPercentage: number;
   creatorWalletId: string;
+  hideVotes?: boolean;
 }
 
 const proposalStatusKey = {
@@ -39,6 +40,7 @@ export const ProposalCard = ({
   mintDecimals,
   voteThresholdPercentage,
   creatorWalletId,
+  hideVotes = false,
 }: ProposalCardProps) => {
   const {
     status,
@@ -143,7 +145,7 @@ export const ProposalCard = ({
     : "";
 
   return (
-    <Container onLongPress={onClick} activeOpacity={0.5}>
+    <Container onPress={onClick} activeOpacity={0.5}>
       <TextContainer>
         <ProposalTitle>{name}</ProposalTitle>
         <Badge
@@ -178,13 +180,6 @@ export const ProposalCard = ({
             </StatusText>
           )}
         </SubtextContainer>
-        <IconButton onPress={onClick} activeOpacity={0.5}>
-          <FontAwesomeIcon
-            icon={faAngleDoubleRight}
-            size={18}
-            color={theme.gray[400]}
-          />
-        </IconButton>
       </ProposalSubData>
       {creatorWalletId && (
         <CreatorRow>
@@ -196,43 +191,44 @@ export const ProposalCard = ({
         </CreatorRow>
       )}
 
-      {isVoting && (
-        <Votes>
-          <VoteCountRow>
-            <VoteColumn>
-              <ApproveText>Yes</ApproveText>
-              <VoteText>
-                {getVoteFormatted(getYesVoteCount)} ({yesPercentage}%)
-              </VoteText>
-            </VoteColumn>
-            <VoteColumn>
-              <ApproveText style={{ textAlign: "right" }}>No</ApproveText>
-              <VoteText>
-                {getVoteFormatted(getNoVoteCount)} ({noPercentage}%)
-              </VoteText>
-            </VoteColumn>
-          </VoteCountRow>
-          <VoteContainer>
-            <VoteYes percent={yesPercentage} />
-            <VoteNo percent={noPercentage} />
-          </VoteContainer>
+      {isVoting ||
+        (!hideVotes && (
+          <Votes>
+            <VoteCountRow>
+              <VoteColumn>
+                <ApproveText>Yes</ApproveText>
+                <VoteText>
+                  {getVoteFormatted(getYesVoteCount)} ({yesPercentage}%)
+                </VoteText>
+              </VoteColumn>
+              <VoteColumn>
+                <ApproveText style={{ textAlign: "right" }}>No</ApproveText>
+                <VoteText>
+                  {getVoteFormatted(getNoVoteCount)} ({noPercentage}%)
+                </VoteText>
+              </VoteColumn>
+            </VoteCountRow>
+            <VoteContainer>
+              <VoteYes percent={yesPercentage} />
+              <VoteNo percent={noPercentage} />
+            </VoteContainer>
 
-          {/* Quorum row */}
-          <VoteCountRow>
-            <VoteColumn>
-              <ApproveText>Minimum Participation</ApproveText>
-              <VoteText>
-                {quorumData.hasMetQuorum
-                  ? "Required votes met"
-                  : `${quorumData.votesNeeded} votes still needed`}
-              </VoteText>
-            </VoteColumn>
-          </VoteCountRow>
-          <QuorumContainer>
-            <VoteQuorum percent={quorumData.totalVotesNeededPercentage} />
-          </QuorumContainer>
-        </Votes>
-      )}
+            {/* Quorum row */}
+            <VoteCountRow>
+              <VoteColumn>
+                <ApproveText>Minimum Participation</ApproveText>
+                <VoteText>
+                  {quorumData.hasMetQuorum
+                    ? "Required votes met"
+                    : `${quorumData.votesNeeded} votes still needed`}
+                </VoteText>
+              </VoteColumn>
+            </VoteCountRow>
+            <QuorumContainer>
+              <VoteQuorum percent={quorumData.totalVotesNeededPercentage} />
+            </QuorumContainer>
+          </Votes>
+        ))}
     </Container>
   );
 };

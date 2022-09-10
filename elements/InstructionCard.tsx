@@ -36,8 +36,8 @@ export const InstructionCard = ({ instruction }: InstructionCardProps) => {
   const [sectionOpen, setSectionOpen] = useState(false);
 
   const { account } = instruction;
-  const instructionDetails = account.instructions[0];
-  const typeOfInstruction = instructionDetails.data[0];
+  const instructionDetails = account?.instructions?.[0];
+  const typeOfInstruction = instructionDetails?.data[0];
   const programId = instructionDetails?.programId.toBase58();
   const instructionInfo = InstructionMapping?.[programId]?.[typeOfInstruction];
 

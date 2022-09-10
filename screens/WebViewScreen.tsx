@@ -88,6 +88,8 @@ export default function WebViewScreen() {
         isPhantom: true,
         isConnected: false,
         publicKey: { toBytes: () => { return Uint8Array.from(myPublicKey.split('').map(letter => letter.charCodeAt(0))) } },
+        on: (event, callback) => {},
+        off: (event, callback) => {},
         signTransaction: async () => {},
         connect: async () => {
           window.ReactNativeWebView.postMessage(
@@ -101,13 +103,17 @@ export default function WebViewScreen() {
               }
             }),
           );
-        
         },
       }
     };
-    alert("phantom injected");
     true;
-  `;
+    `;
+  // alert("phantom injected");
+
+  // This can inject javascript into page programatticaly
+  // setTimeout(() => {
+  //   this.webref.injectJavaScript(run);
+  // }, 3000);
 
   return (
     <Container>

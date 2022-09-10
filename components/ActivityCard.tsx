@@ -138,7 +138,7 @@ export const ActivityCard = ({ activity }: ActivityCardProps) => {
   };
 
   return (
-    <Container onLongPress={handleActivityClick} activeOpacity={0.5}>
+    <Container onPress={handleActivityClick} activeOpacity={0.5}>
       {renderActivityIcon()}
       <TextContainer>
         <TitleContainer>
@@ -152,13 +152,6 @@ export const ActivityCard = ({ activity }: ActivityCardProps) => {
         {errorLog ? <ErrorText>{errorLog}.</ErrorText> : null}
         <ActivityDate>{transactionDate}</ActivityDate>
       </TextContainer>
-      <IconButton onPress={handleActivityClick} activeOpacity={0.5}>
-        <FontAwesomeIcon
-          icon={faAngleDoubleRight}
-          size={18}
-          color={theme.gray[400]}
-        />
-      </IconButton>
     </Container>
   );
 };

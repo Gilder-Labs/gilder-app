@@ -131,8 +131,6 @@ export default function ProposalScreen({
       councilMintDecimals,
     } = selectedRealm;
     const { governingTokenMint } = item;
-    // TODO handle council tokens
-    // const councilToken = tokenMap?.[councilMint];
 
     return (
       <ProposalCard

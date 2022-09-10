@@ -125,9 +125,6 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
       const response = await fetch(`https://api.github.com/gists/${gistId}`);
       const data = await response.json();
       const gist = Object.values(data?.files)[0];
-      console.log("data", data);
-      console.log("next url file name", gist);
-      console.log("github gist data", gist?.content);
       setGithubGist(gist?.content);
     };
 

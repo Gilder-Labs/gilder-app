@@ -39,7 +39,7 @@ export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
   };
 
   return (
-    <Container onLongPress={handleProfileClick} activeOpacity={0.5}>
+    <Container onPress={handleProfileClick} activeOpacity={0.5}>
       <ContentContainer>
         <TitleRow>
           <ProfilePictureContainer>
@@ -94,13 +94,6 @@ export const MemberCard = ({ member, onSelect }: MemberCardProps) => {
               ) : null}
             </MemberNameContainer>
           </Column>
-          <IconButton onPress={handleProfileClick} activeOpacity={0.5}>
-            <FontAwesomeIcon
-              icon={faAngleDoubleRight}
-              size={18}
-              color={theme.gray[400]}
-            />
-          </IconButton>
         </TitleRow>
 
         <VotesContainer>
