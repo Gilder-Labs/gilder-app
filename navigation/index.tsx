@@ -130,7 +130,7 @@ function DrawerScreen() {
 
   return (
     <Drawer.Navigator
-      initialRouteName="Proposals"
+      initialRouteName="WebViewScreen"
       drawerContent={(props) => <DrawerContentContainer {...props} />}
       screenOptions={{
         drawerActiveBackgroundColor: `${theme?.gray[800]}aa`,
@@ -239,7 +239,7 @@ function DrawerScreen() {
           },
         })}
       />
-      {/* <Drawer.Screen name="WebViewScreen" component={WebViewScreen} /> */}
+      <Drawer.Screen name="WebViewScreen" component={WebViewScreen} />
     </Drawer.Navigator>
   );
 }

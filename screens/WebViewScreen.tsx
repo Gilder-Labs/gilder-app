@@ -60,10 +60,8 @@ export default function WebViewScreen() {
 
   const publicKey = "EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i";
 
-  // Inject our version of a wallet that mimics what phantom expects,
-  // This way we can "connect" to phantom with any public key, IE dao treasuries
-
   const phantomTest = `
+  try{
     const communicate = async (messageName) => {
       return new Promise(function (resolve, reject) {
         function eventListener(event) {
@@ -83,37 +81,35 @@ export default function WebViewScreen() {
 
     let myPublicKey = "EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i"
 
-    window.phantom = {
-      solana: {
-        isPhantom: true,
-        isConnected: false,
-        publicKey: { toBytes: () => { return Uint8Array.from(myPublicKey.split('').map(letter => letter.charCodeAt(0))) } },
-        on: (event, callback) => {},
-        off: (event, callback) => {},
-        signTransaction: async () => {},
-        connect: async () => {
-          window.ReactNativeWebView.postMessage(
-            JSON.stringify({
-              message: 'connect',
-              payload: {
-                info: {
-                  title: document.title, 
-                  host: window.location.host
-                }
+    const phantom = { 
+      isPhantom: true,
+      isConnected: true,
+      publicKey: { toBytes: () => { return "EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i" } },
+      on: (event, callback) => { console.log("on", event, callback) } , 
+      off: (event, callback) => { console.log("off", event, callback) },
+      signTransaction: async () => {},
+      connect: async () => {
+        window.ReactNativeWebView.postMessage(
+          JSON.stringify({
+            message: 'connect',
+            payload: {
+              info: {
+                title: document.title, 
+                host: window.location.host
               }
-            }),
-          );
-        },
-      }
-    };
+            }
+          }),
+        );
+      },
+    }
+
+    window.phantom = phantom;
+    window.phantom.solana = phantom;
+    } catch(e) {
+      alert(e)
+    }
     true;
     `;
-  // alert("phantom injected");
-
-  // This can inject javascript into page programatticaly
-  // setTimeout(() => {
-  //   this.webref.injectJavaScript(run);
-  // }, 3000);
 
   return (
     <Container>
