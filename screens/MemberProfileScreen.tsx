@@ -85,6 +85,16 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
     );
   };
 
+  const getUserFilteredProposals = () => {
+    let filteredProposals = proposals.filter((proposal) => {
+      return (
+        tokenRecordToWalletMap[proposal.tokenOwnerRecord] === member.walletId
+      );
+    });
+
+    return filteredProposals;
+  };
+
   const handleProposalSelect = (proposal: Proposal) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 
@@ -320,8 +330,9 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
           horizontal={true}
           style={{ marginBottom: 16 }}
           contentContainerStyle={{
-            backgroundColor: theme.gray[1000],
+            backgroundColor: theme.gray[900],
             paddingTop: 12,
+            marginLeft: -8,
             borderRadius: 8,
           }}
         />
@@ -347,9 +358,8 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
             horizontal={true}
             style={{ marginBottom: 16 }}
             contentContainerStyle={{
-              backgroundColor: theme.gray[1000],
+              backgroundColor: theme.gray[900],
               paddingTop: 12,
-              paddingLeft: 8,
               borderRadius: 8,
             }}
             ListEmptyComponent={
@@ -371,21 +381,22 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
           <ActivityIndicator />
         ) : (
           <FlatList
-            data={proposals}
+            data={getUserFilteredProposals()}
             renderItem={renderProposal}
             keyExtractor={(item) => item.proposalId}
             scrollIndicatorInsets={{ right: 1 }}
             initialNumToRender={10}
             horizontal={true}
-            style={{ marginBottom: 16 }}
+            style={{ marginBottom: 100 }}
             contentContainerStyle={{
-              backgroundColor: theme.gray[1000],
+              backgroundColor: theme.gray[900],
               paddingTop: 12,
-              paddingLeft: 8,
               borderRadius: 8,
             }}
             ListEmptyComponent={
-              <Typography text="Looks like this user hasn't created any proposals yet." />
+              <EmptyTextContainer>
+                <Typography text="Looks like this user hasn't created any proposals yet." />
+              </EmptyTextContainer>
             }
           />
         )}
@@ -469,4 +480,9 @@ const Column = styled.View`
 const PropsalCardContainer = styled.View`
   margin-right: ${(props) => props.theme.spacing[3]};
   height: 100%;
+`;
+
+const EmptyTextContainer = styled.View`
+  width: 200px;
+  min-height: 140px;
 `;

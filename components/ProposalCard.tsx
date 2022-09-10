@@ -236,6 +236,7 @@ export const ProposalCard = ({
 const Container = styled.TouchableOpacity`
   /* height: 80px; */
   width: 100%;
+  min-width: 300px;
   margin-bottom: ${(props: any) => props.theme.spacing[3]};
   border-radius: 8px;
   background: ${(props: any) => props.theme.gray[800]};
