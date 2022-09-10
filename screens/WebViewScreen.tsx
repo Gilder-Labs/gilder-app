@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components/native";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { fetchRealmActivity } from "../store/activitySlice";
@@ -79,12 +79,10 @@ export default function WebViewScreen() {
       });
     }
 
-    let myPublicKey = "EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i"
-
     const phantom = { 
       isPhantom: true,
       isConnected: true,
-      publicKey: { toBytes: () => { return "EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i" } },
+      publicKey: { toBytes: () => { return "${publicKey}" } },
       on: (event, callback) => { console.log("on", event, callback) } , 
       off: (event, callback) => { console.log("off", event, callback) },
       signTransaction: async () => {},
@@ -102,9 +100,9 @@ export default function WebViewScreen() {
         );
       },
     }
-
     window.phantom = phantom;
     window.phantom.solana = phantom;
+    document = "something";
     } catch(e) {
       alert(e)
     }
@@ -115,10 +113,25 @@ export default function WebViewScreen() {
     <Container>
       <SafeAreaView style={styles.container}>
         <WebView
+          // can connect
           source={{ uri: "https://trade.mango.markets" }}
+          // source={{ uri: "https://friktion.fi/" }}
+          // source={{ uri: "https://dialect.to" }}
+
+          // does not work for some reason
+
+          // source={{ uri: "https://orca.so" }}
+          // source={{
+          //   uri: "https://app.dispatch.forum/forum/2gPb8UPw5n5gpUpnRD4h9nG254dY5JdVxmkYJxsZPbDr",
+          // }}
+          // source={{ uri: "https://app.realms.today" }}
+          // source={{ uri: "https://solend.fi/dashboard" }}
           javaScriptEnabled={true}
           ref={webviewRef}
           onMessage={commHandler}
+          injectedJavaScriptBeforeContentLoadedForMainFrameOnly={false}
+          injectedJavaScriptForMainFrameOnly={false}
+          // injectedJavaScriptBeforeContentLoaded={phantomTest}
           injectedJavaScript={phantomTest}
           pullToRefreshEnabled={true}
           onNavigationStateChange={(navState) => {
