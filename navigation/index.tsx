@@ -239,7 +239,7 @@ function DrawerScreen() {
           },
         })}
       />
-      <Drawer.Screen name="WebViewScreen" component={WebViewScreen} />
+      {/* <Drawer.Screen name="WebViewScreen" component={WebViewScreen} /> */}
     </Drawer.Navigator>
   );
 }
