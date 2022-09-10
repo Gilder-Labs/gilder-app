@@ -56,6 +56,8 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
   const { proposalsMap, proposalInstructions } = useAppSelector(
     (state) => state.proposals
   );
+  const [githubGist, setGithubGist] = useState<string>("");
+
   const { proposalId } = route?.params;
 
   useEffect(() => {
@@ -115,6 +117,25 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
     councilMintSupply,
     councilMintDecimals,
   } = selectedRealm;
+
+  useEffect(() => {
+    const fetchGithubGist = async () => {
+      const gistId = description?.split("gist.github.com/")[1]?.split("/")[1];
+
+      const response = await fetch(`https://api.github.com/gists/${gistId}`);
+      const data = await response.json();
+      const gist = Object.values(data?.files)[0];
+      console.log("data", data);
+      console.log("next url file name", gist);
+      console.log("github gist data", gist?.content);
+      setGithubGist(gist?.content);
+    };
+
+    if (description?.includes("https://gist.github.com/")) {
+      console.log("fetching description");
+      fetchGithubGist();
+    }
+  }, [description]);
 
   const voteThresholdPercentage =
     governingTokenMint === communityMint
@@ -379,7 +400,13 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
               marginBottom="1"
             />
             <Typography
-              text={description ? description : "No description added."}
+              text={
+                githubGist
+                  ? githubGist
+                  : description
+                  ? description
+                  : "No description added."
+              }
               size="body"
               shade={"300"}
               marginLeft={"3"}
