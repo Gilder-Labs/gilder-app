@@ -107,6 +107,8 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
     governingTokenMint,
   } = proposal;
 
+  const { ownVotesMap } = useAppSelector((state) => state.members);
+
   const governance = governancesMap?.[proposal?.governanceId];
 
   const {
@@ -258,6 +260,12 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
   const isVoting = status === "Voting";
   const isMember = membersMap[publicKey];
 
+  const ownVote = ownVotesMap?.[proposalId]
+    ? ownVotesMap?.[proposalId]?.voteWeightYes
+      ? " - Yes"
+      : " - No"
+    : "";
+
   return (
     <ScreenContainer>
       <FlatList
@@ -280,7 +288,11 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
             <TextContainer>
               <ProposalTitle>{name}</ProposalTitle>
               <Badge
-                title={isVoting && !timeLeft.isTimeLeft ? "Finalizing" : status}
+                title={
+                  isVoting && !timeLeft.isTimeLeft
+                    ? `Finalizing${ownVote}`
+                    : `${status}${ownVote}`
+                }
                 type={proposalStatusKey[status]}
               />
             </TextContainer>
