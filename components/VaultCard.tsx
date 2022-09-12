@@ -13,6 +13,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faChevronRight } from "@fortawesome/pro-regular-svg-icons/faChevronRight";
 import { faChevronDown } from "@fortawesome/pro-regular-svg-icons/faChevronDown";
 import { useQuery, gql } from "@apollo/client";
+import * as Haptics from "expo-haptics";
+import { useNavigation } from "@react-navigation/native";
 
 const GET_WALLET_NFTS = gql`
   query nfts($owners: [PublicKey!]) {
@@ -48,6 +50,7 @@ export const VaultCard = ({
   const { loading, error, data } = useQuery(GET_WALLET_NFTS, {
     variables: { owners: [vaultId] },
   });
+  const navigation = useNavigation();
 
   const [nftSectionOpen, setNftSectionOpen] = useState(true);
   const [tokenSectionOpen, setTokenSectionOpen] = useState(true);
@@ -74,10 +77,22 @@ export const VaultCard = ({
     return <></>;
   }
 
+  const handleVaultOpenBrowser = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+
+    //@ts-ignore
+    navigation.push("WebViewScreen", {
+      walletId: vaultId,
+    });
+  };
+
   return (
     <Container>
       <TitleContainer>
         <PublicKeyTextCopy publicKey={vaultId} fontSize={14} shade="500" />
+        <TempButton onPress={handleVaultOpenBrowser}>
+          <Typography text="Open Browser" />
+        </TempButton>
         <VaultValue>{numeral(totalValue).format("$0,0")}</VaultValue>
       </TitleContainer>
 
@@ -189,4 +204,9 @@ const SectionHeaderContainer = styled.View`
   justify-content: space-between;
   border-bottom-color: ${(props) => props.theme.gray[700]};
   border-bottom-width: 1px;
+`;
+
+const TempButton = styled.TouchableOpacity`
+  padding: ${(props: any) => props.theme.spacing[2]};
+  background: ${(props: any) => props.theme.gray[900]};
 `;

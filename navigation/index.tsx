@@ -239,7 +239,6 @@ function DrawerScreen() {
           },
         })}
       />
-      <Drawer.Screen name="WebViewScreen" component={WebViewScreen} />
     </Drawer.Navigator>
   );
 }
@@ -430,6 +429,7 @@ export default function Navigation({}: {}) {
                 },
               })}
             />
+            <Stack.Screen name="WebViewScreen" component={WebViewScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </Chat>

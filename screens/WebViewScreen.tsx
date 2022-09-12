@@ -15,7 +15,7 @@ import { Linking } from "react-native";
 import { useTheme } from "styled-components";
 import { SafeAreaView, StyleSheet } from "react-native";
 
-export default function WebViewScreen() {
+export default function WebViewScreen({ route }: any) {
   const webviewRef = useRef<WebView>();
   const theme = useTheme();
   const [navState, setNavState] = useState({
@@ -27,6 +27,8 @@ export default function WebViewScreen() {
     title: "",
     url: "",
   });
+
+  const { walletId } = route?.params;
 
   function returnDataToWebview(message: any, data: any) {
     if (webviewRef && webviewRef.current) {
@@ -58,7 +60,9 @@ export default function WebViewScreen() {
     }
   };
 
-  const publicKey = "EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i";
+  const gilderTreasuryWallet = "BprvFKeDRoJLPUjyd8s1SVBNCmHGzsyXFWzy9y7u2yac";
+  // myw allet
+  // const publicKey = "EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i";
 
   const phantomTest = `
   try{
@@ -82,7 +86,7 @@ export default function WebViewScreen() {
     const phantom = { 
       isPhantom: true,
       isConnected: true,
-      publicKey: { toBytes: () => { return "${publicKey}" } },
+      publicKey: { toBytes: () => { return "${walletId}" } },
       on: (event, callback) => { console.log("on", event, callback) } , 
       off: (event, callback) => { console.log("off", event, callback) },
       signTransaction: async () => {},
@@ -117,7 +121,10 @@ export default function WebViewScreen() {
           source={{ uri: "https://trade.mango.markets" }}
           // source={{ uri: "https://friktion.fi/" }}
           // source={{ uri: "https://dialect.to" }}
-
+          // source={{ uri: "https://solanart.io/" }}
+          // source={{
+          //   uri: "https://app.castle.finance/vaults/3tBqjyYtf9Utb1NNsx4o7AV1qtzHoxsMXgkmat3rZ3y6",
+          // }}
           // does not work for some reason
 
           // source={{ uri: "https://orca.so" }}
@@ -128,6 +135,14 @@ export default function WebViewScreen() {
           // source={{ uri: "https://solend.fi/dashboard" }}
           javaScriptEnabled={true}
           ref={webviewRef}
+          // handle cors
+          originWhitelist={["*"]}
+          mixedContentMode="always"
+          domStorageEnabled={true}
+          allowFileAccess={true}
+          allowUniversalAccessFromFileURLs={true}
+          // end handle cors
+
           onMessage={commHandler}
           injectedJavaScriptBeforeContentLoadedForMainFrameOnly={false}
           injectedJavaScriptForMainFrameOnly={false}
