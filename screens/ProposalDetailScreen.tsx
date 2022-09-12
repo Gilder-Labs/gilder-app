@@ -522,6 +522,7 @@ const TextContainer = styled.View`
   padding-bottom: ${(props: any) => props.theme.spacing[1]};
   flex-direction: row;
   justify-content: space-between;
+  align-items: flex-start;
   /* flex: 1; */
   width: 100%;
   /* margin-bottom: ${(props: any) => props.theme.spacing[2]}; */

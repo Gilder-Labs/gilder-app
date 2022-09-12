@@ -41,7 +41,6 @@ export const InstructionCard = ({ instruction }: InstructionCardProps) => {
   const programId = instructionDetails?.programId.toBase58();
   const instructionInfo = InstructionMapping?.[programId]?.[typeOfInstruction];
 
-  console.log("instruction info", instructionInfo);
   return (
     <Container>
       <ExpandableSection
