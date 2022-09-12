@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { useAppSelector } from "../hooks/redux";
-import { AnimatedImage, Image } from "react-native-ui-lib";
+import { Image, AnimatedImage } from "react-native-ui-lib";
 import { LinearGradient } from "expo-linear-gradient";
 import { getColorType } from "../utils";
 import { useTheme } from "styled-components";
@@ -14,7 +14,7 @@ interface RealmIconProps {
 export const RealmIcon = ({ realmId, size = 48 }: RealmIconProps) => {
   const { realmsData } = useAppSelector((state) => state.realms);
   const color = getColorType(realmId);
-  const color2 = getColorType(realmId.charAt(realmId.length - 1));
+  const color2 = getColorType(realmId?.charAt(realmId?.length - 1));
   const theme = useTheme();
 
   // tries to handle all the edge cases in governance-ui realms image list
@@ -69,7 +69,7 @@ export const RealmIcon = ({ realmId, size = 48 }: RealmIconProps) => {
       <LinearGradient
         // Background Linear Gradient
         // @ts-ignore
-        colors={[`${theme[color][600]}`, `${theme[color2][900]}`]}
+        colors={[`${theme?.[color]?.[600]}`, `${theme?.[color2]?.[900]}`]}
         style={{ height: size - 10, width: size - 10 }}
         start={{ x: 0.1, y: 0.2 }}
       />

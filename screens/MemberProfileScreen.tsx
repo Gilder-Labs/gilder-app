@@ -43,6 +43,7 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
     memberVotes,
     membersMap,
     tokenRecordToWalletMap,
+    isLoadingMemberDaos,
   } = useAppSelector((state) => state.members);
   const theme = useTheme();
   const navigation = useNavigation();
@@ -321,21 +322,33 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
           bold={true}
           marginBottom={"1"}
         />
-        <FlatList
-          data={memberDAOs}
-          renderItem={renderDAO}
-          keyExtractor={(item) => item}
-          scrollIndicatorInsets={{ right: 1 }}
-          initialNumToRender={10}
-          horizontal={true}
-          style={{ marginBottom: 16 }}
-          contentContainerStyle={{
-            backgroundColor: theme.gray[900],
-            paddingTop: 12,
-            marginLeft: -8,
-            borderRadius: 8,
-          }}
-        />
+        {isLoadingMemberDaos ? (
+          <ActivityIndicator />
+        ) : (
+          <FlatList
+            data={memberDAOs}
+            renderItem={renderDAO}
+            keyExtractor={(item) => item}
+            scrollIndicatorInsets={{ right: 1 }}
+            initialNumToRender={10}
+            horizontal={true}
+            style={{ marginBottom: 16 }}
+            contentContainerStyle={{
+              backgroundColor: theme.gray[900],
+              paddingTop: 12,
+              marginLeft: -8,
+              borderRadius: 8,
+            }}
+            ListEmptyComponent={
+              <EmptyTextContainer>
+                <Typography
+                  marginLeft="2"
+                  text="Looks like this user isn't in any DAOs currently."
+                />
+              </EmptyTextContainer>
+            }
+          />
+        )}
       </DAOColumn>
 
       <InfoColumn>
@@ -363,7 +376,9 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
               borderRadius: 8,
             }}
             ListEmptyComponent={
-              <Typography text="Looks like this user hasn't voted on anything yet." />
+              <EmptyTextContainer>
+                <Typography text="Looks like this user hasn't voted on anything yet." />
+              </EmptyTextContainer>
             }
           />
         )}
@@ -483,6 +498,6 @@ const PropsalCardContainer = styled.View`
 `;
 
 const EmptyTextContainer = styled.View`
-  width: 200px;
-  min-height: 140px;
+  max-width: 300px;
+  min-height: 80px;
 `;
