@@ -56,9 +56,14 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
   const { proposalsMap, proposalInstructions } = useAppSelector(
     (state) => state.proposals
   );
+  const { ownVotesMap, isLoadingVotes } = useAppSelector(
+    (state) => state.members
+  );
+
   const [githubGist, setGithubGist] = useState<string>("");
 
   const { proposalId } = route?.params;
+  const proposal = proposalsMap?.[proposalId];
 
   useEffect(() => {
     if (proposalId && proposalsMap?.[proposalId]) {
@@ -82,44 +87,6 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
     }
   }, [proposalId, proposalsMap, selectedRealm]);
 
-  if (
-    !proposalId ||
-    !selectedRealm ||
-    isLoadingRealms ||
-    isLoadingVaults ||
-    isLoadingMembers ||
-    !proposalsMap ||
-    !proposalsMap?.[proposalId]
-  ) {
-    return <Loading />;
-  }
-
-  const proposal = proposalsMap[proposalId];
-  const {
-    status,
-    name,
-    getStateTimestamp,
-    getYesVoteCount,
-    getNoVoteCount,
-    isPreVotingState,
-    votingAt,
-    description,
-    governingTokenMint,
-  } = proposal;
-
-  const { ownVotesMap } = useAppSelector((state) => state.members);
-
-  const governance = governancesMap?.[proposal?.governanceId];
-
-  const {
-    communityMint,
-    communityMintSupply,
-    communityMintDecimals,
-    councilMint,
-    councilMintSupply,
-    councilMintDecimals,
-  } = selectedRealm;
-
   useEffect(() => {
     const fetchGithubGist = async () => {
       const gistId = description?.split("gist.github.com/")[1]?.split("/")[1];
@@ -134,7 +101,43 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
       console.log("fetching description");
       fetchGithubGist();
     }
-  }, [description]);
+  }, [proposal?.description]);
+
+  if (
+    !proposalId ||
+    !selectedRealm ||
+    isLoadingRealms ||
+    isLoadingVaults ||
+    isLoadingMembers ||
+    !proposalsMap ||
+    isLoadingVotes ||
+    !proposalsMap?.[proposalId]
+  ) {
+    return <Loading />;
+  }
+
+  const {
+    status,
+    name,
+    getStateTimestamp,
+    getYesVoteCount,
+    getNoVoteCount,
+    isPreVotingState,
+    votingAt,
+    description,
+    governingTokenMint,
+  } = proposal;
+
+  const governance = governancesMap?.[proposal?.governanceId];
+
+  const {
+    communityMint,
+    communityMintSupply,
+    communityMintDecimals,
+    councilMint,
+    councilMintSupply,
+    councilMintDecimals,
+  } = selectedRealm;
 
   const voteThresholdPercentage =
     governingTokenMint === communityMint
