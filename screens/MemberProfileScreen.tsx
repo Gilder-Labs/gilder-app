@@ -155,6 +155,8 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
   const renderDAO = ({ item }: any) => {
     if (realmsMap[item]) {
       return <RealmCard realm={realmsMap[item]} navigateOnClick={true} />;
+    } else {
+      return <EmptyView />;
     }
   };
 

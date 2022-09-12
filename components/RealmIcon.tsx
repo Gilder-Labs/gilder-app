@@ -41,7 +41,7 @@ export const RealmIcon = ({ realmId, size = 48 }: RealmIconProps) => {
     if (isSvgImage && isFullFilePath) {
       // if is svg + has a full url to svg
       return (
-        <AnimatedImage
+        <Image
           style={{
             width: size - 8,
             height: size - 8,
@@ -74,7 +74,7 @@ export const RealmIcon = ({ realmId, size = 48 }: RealmIconProps) => {
         start={{ x: 0.1, y: 0.2 }}
       />
     ) : (
-      <AnimatedImage
+      <Image
         style={{
           width: size - 8,
           height: size - 8,
