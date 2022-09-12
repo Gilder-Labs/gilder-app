@@ -137,6 +137,7 @@ export default function ProposalScreen({
         proposal={item}
         onClick={() => handleProposalSelect(item)}
         governance={proposalGovernance}
+        hideVotes={false}
         mintSupply={
           governingTokenMint === communityMint
             ? communityMintSupply
