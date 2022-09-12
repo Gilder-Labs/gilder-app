@@ -198,9 +198,9 @@ export const fetchVaults = createAsyncThunk(
           votingProposalCount: governance.account.votingProposalCount,
           // percentage of total tokens that need to vote for there to be quorum
           communityVoteThresholdPercentage:
-            governance.account.config.communityVoteThreshold,
+            governance.account.config.communityVoteThreshold.value,
           councilVoteThresholdPercentage:
-            governance?.account?.config?.councilVetoVoteThreshold,
+            governance?.account?.config?.councilVetoVoteThreshold.value,
 
           accountType: governance.account.accountType,
           isAccountGovernance: governance.account.isAccountGovernance(),

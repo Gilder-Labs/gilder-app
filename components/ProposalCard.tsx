@@ -191,44 +191,43 @@ export const ProposalCard = ({
         </CreatorRow>
       )}
 
-      {isVoting ||
-        (!hideVotes && (
-          <Votes>
-            <VoteCountRow>
-              <VoteColumn>
-                <ApproveText>Yes</ApproveText>
-                <VoteText>
-                  {getVoteFormatted(getYesVoteCount)} ({yesPercentage}%)
-                </VoteText>
-              </VoteColumn>
-              <VoteColumn>
-                <ApproveText style={{ textAlign: "right" }}>No</ApproveText>
-                <VoteText>
-                  {getVoteFormatted(getNoVoteCount)} ({noPercentage}%)
-                </VoteText>
-              </VoteColumn>
-            </VoteCountRow>
-            <VoteContainer>
-              <VoteYes percent={yesPercentage} />
-              <VoteNo percent={noPercentage} />
-            </VoteContainer>
+      {isVoting && !hideVotes && (
+        <Votes>
+          <VoteCountRow>
+            <VoteColumn>
+              <ApproveText>Yes</ApproveText>
+              <VoteText>
+                {getVoteFormatted(getYesVoteCount)} ({yesPercentage}%)
+              </VoteText>
+            </VoteColumn>
+            <VoteColumn>
+              <ApproveText style={{ textAlign: "right" }}>No</ApproveText>
+              <VoteText>
+                {getVoteFormatted(getNoVoteCount)} ({noPercentage}%)
+              </VoteText>
+            </VoteColumn>
+          </VoteCountRow>
+          <VoteContainer>
+            <VoteYes percent={yesPercentage} />
+            <VoteNo percent={noPercentage} />
+          </VoteContainer>
 
-            {/* Quorum row */}
-            <VoteCountRow>
-              <VoteColumn>
-                <ApproveText>Minimum Participation</ApproveText>
-                <VoteText>
-                  {quorumData.hasMetQuorum
-                    ? "Required votes met"
-                    : `${quorumData.votesNeeded} votes still needed`}
-                </VoteText>
-              </VoteColumn>
-            </VoteCountRow>
-            <QuorumContainer>
-              <VoteQuorum percent={quorumData.totalVotesNeededPercentage} />
-            </QuorumContainer>
-          </Votes>
-        ))}
+          {/* Quorum row */}
+          <VoteCountRow>
+            <VoteColumn>
+              <ApproveText>Minimum Participation</ApproveText>
+              <VoteText>
+                {quorumData.hasMetQuorum
+                  ? "Required votes met"
+                  : `${quorumData.votesNeeded} votes still needed`}
+              </VoteText>
+            </VoteColumn>
+          </VoteCountRow>
+          <QuorumContainer>
+            <VoteQuorum percent={quorumData.totalVotesNeededPercentage} />
+          </QuorumContainer>
+        </Votes>
+      )}
     </Container>
   );
 };
