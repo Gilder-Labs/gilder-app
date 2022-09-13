@@ -176,6 +176,8 @@ export const fetchVaults = createAsyncThunk(
         let data = {
           governanceId: governanceId,
           governedAccount: governance.account.governedAccount.toBase58(),
+          proposalCount: governance.account.proposalCount,
+          activeProposals: governance.account.votingProposalCount,
           minCommunityTokensToCreateProposal: governance?.account?.config
             ?.minCommunityTokensToCreateProposal
             ? formatVoteWeight(

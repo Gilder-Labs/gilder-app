@@ -3,6 +3,8 @@ import styled from "styled-components/native";
 import { TokenList } from "./TokenList";
 import { NftList } from "./NftList";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
+import { createProposalAttempt } from "../store/proposalActionsSlice";
+
 import { Typography } from "./Typography";
 import numeral from "numeral";
 import { PublicKeyTextCopy } from "./PublicKeyTextCopy";
@@ -51,7 +53,7 @@ export const VaultCard = ({
     variables: { owners: [vaultId] },
   });
   const navigation = useNavigation();
-
+  const dispatch = useAppDispatch();
   const [nftSectionOpen, setNftSectionOpen] = useState(true);
   const [tokenSectionOpen, setTokenSectionOpen] = useState(true);
   const theme = useTheme();
@@ -86,12 +88,19 @@ export const VaultCard = ({
     });
   };
 
+  const tryCreateProposal = () => {
+    dispatch(createProposalAttempt(""));
+  };
+
   return (
     <Container>
       <TitleContainer>
         <PublicKeyTextCopy publicKey={vaultId} fontSize={14} shade="500" />
         <TempButton onPress={handleVaultOpenBrowser}>
           <Typography text="Open Browser" />
+        </TempButton>
+        <TempButton onPress={tryCreateProposal}>
+          <Typography text="Create Proposal" />
         </TempButton>
         <VaultValue>{numeral(totalValue).format("$0,0")}</VaultValue>
       </TitleContainer>

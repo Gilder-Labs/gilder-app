@@ -429,7 +429,13 @@ export default function Navigation({}: {}) {
                 },
               })}
             />
-            <Stack.Screen name="WebViewScreen" component={WebViewScreen} />
+            <Stack.Screen
+              name="WebViewScreen"
+              component={WebViewScreen}
+              options={({ route }) => ({
+                title: "Proposal Browser",
+              })}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </Chat>

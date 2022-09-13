@@ -106,6 +106,9 @@ export default function WebViewScreen({ route }: any) {
     }
     window.phantom = phantom;
     window.phantom.solana = phantom;
+    window.solana = phantom;
+
+
     document = "something";
     } catch(e) {
       alert(e)
@@ -118,16 +121,15 @@ export default function WebViewScreen({ route }: any) {
       <SafeAreaView style={styles.container}>
         <WebView
           // can connect
-          source={{ uri: "https://trade.mango.markets" }}
+          // source={{ uri: "https://trade.mango.markets" }}
           // source={{ uri: "https://friktion.fi/" }}
           // source={{ uri: "https://dialect.to" }}
           // source={{ uri: "https://solanart.io/" }}
           // source={{
           //   uri: "https://app.castle.finance/vaults/3tBqjyYtf9Utb1NNsx4o7AV1qtzHoxsMXgkmat3rZ3y6",
           // }}
-          // does not work for some reason
 
-          // source={{ uri: "https://orca.so" }}
+          source={{ uri: "https://orca.so" }}
           // source={{
           //   uri: "https://app.dispatch.forum/forum/2gPb8UPw5n5gpUpnRD4h9nG254dY5JdVxmkYJxsZPbDr",
           // }}
@@ -139,7 +141,7 @@ export default function WebViewScreen({ route }: any) {
           originWhitelist={["*"]}
           mixedContentMode="always"
           domStorageEnabled={true}
-          allowFileAccess={true}
+          // allowFileAccess={true}
           allowUniversalAccessFromFileURLs={true}
           // end handle cors
 

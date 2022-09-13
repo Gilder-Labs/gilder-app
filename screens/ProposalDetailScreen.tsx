@@ -439,7 +439,7 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
               <>{renderInstructions()}</>
             ) : (
               <Typography
-                text="0 instructions in this proposal"
+                text="This proposal does not have any instructions."
                 size="body"
                 shade={"300"}
                 marginLeft={"3"}
