@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components/native";
 import numeral from "numeral";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { AnimatedImage, Image } from "react-native-ui-lib";
+import { Image } from "react-native-ui-lib";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTheme } from "styled-components";
 import { getColorType } from "../utils";
@@ -37,7 +37,7 @@ export const TokenCard = ({
     <CoinCard key={token.mint + token.owner}>
       <CoinImageContainer>
         {token?.logoURI ? (
-          <AnimatedImage
+          <Image
             style={{
               width: 40,
               height: 40,
