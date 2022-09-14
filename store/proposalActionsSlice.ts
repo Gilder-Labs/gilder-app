@@ -29,7 +29,7 @@ let connection = new Connection(RPC_CONNECTION, "confirmed");
 
 export const createProposalAttempt = createAsyncThunk(
   "proposalActions/createProposal",
-  async ({}: any, { getState }) => {
+  async ({ vault }: any, { getState }) => {
     try {
       const { realms, wallet, members } = getState() as RootState;
       const { selectedRealm } = realms;
@@ -37,7 +37,7 @@ export const createProposalAttempt = createAsyncThunk(
       const { publicKey } = wallet;
 
       // todo change to user choice
-      const isCommunityVote = true;
+      const isCommunityVote = false;
       const selectedDelegate = "EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i";
       const proposalData = {
         name: "test proposal",
@@ -52,6 +52,7 @@ export const createProposalAttempt = createAsyncThunk(
         membersMap,
         selectedDelegate,
         isCommunityVote,
+        vault,
       });
 
       const privateKey = await SecureStore.getItemAsync("privateKey");
@@ -59,6 +60,7 @@ export const createProposalAttempt = createAsyncThunk(
         throw Error();
       }
       const walletKeypair = Keypair.fromSecretKey(bs58.decode(privateKey));
+
       transaction.sign(walletKeypair);
       const response = await sendAndConfirmTransaction(
         connection,

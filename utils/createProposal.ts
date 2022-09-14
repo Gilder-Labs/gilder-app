@@ -7,13 +7,14 @@ import {
   Transaction,
   TransactionInstruction,
   sendAndConfirmTransaction,
+  SystemProgram,
 } from "@solana/web3.js";
 import { SPL_PUBLIC_KEY, RPC_CONNECTION } from "../constants/Solana";
 
 import {
   getGovernanceProgramVersion,
   getInstructionDataFromBase64,
-  Governance,
+  createInstructionData,
   ProgramAccount,
   TokenOwnerRecord,
   VoteType,
@@ -22,6 +23,7 @@ import {
   withAddSignatory,
   withInsertTransaction,
   withSignOffProposal,
+  InstructionData,
 } from "@solana/spl-governance";
 
 //https://github.com/marinade-finance/solana-js-utils/blob/72a191101a5d6ddd8e011f403095e542c603a906/packages/solana-cli-utils/middleware/multisig/SplGovernanceMiddleware.ts
@@ -35,6 +37,7 @@ export const createNewProposalTransaction = async ({
   membersMap,
   selectedDelegate,
   isCommunityVote,
+  vault,
 }: {
   selectedRealm: Realm;
   walletAddress: string;
@@ -46,22 +49,25 @@ export const createNewProposalTransaction = async ({
   membersMap: any;
   selectedDelegate: string;
   isCommunityVote: boolean;
+  vault: any;
 }) => {
   const walletPublicKey = new PublicKey(walletAddress);
   const instructions: TransactionInstruction[] = [];
-  const governanceAuthority = walletPublicKey;
-  const signatory = walletPublicKey;
+  const insertInstructions: TransactionInstruction[] = [];
+
   const payer = walletPublicKey;
-  let tokenOwnerRecord;
+  let member;
 
   const prerequisiteInstructions: TransactionInstruction[] = [];
   const prerequisiteInstructionsSigners: Keypair[] = [];
 
   if (membersMap[walletAddress] && !selectedDelegate) {
-    tokenOwnerRecord = membersMap[walletAddress];
+    member = membersMap[walletAddress];
   } else {
-    tokenOwnerRecord = membersMap[selectedDelegate];
+    member = membersMap[selectedDelegate];
   }
+
+  const signatory = new PublicKey(member.walletId);
 
   const programVersion = await getGovernanceProgramVersion(
     connection,
@@ -73,27 +79,42 @@ export const createNewProposalTransaction = async ({
   const options = ["Approve"];
   const useDenyOption = true;
   const tokenOwnerPublicKey = isCommunityVote
-    ? new PublicKey(tokenOwnerRecord?.communityPublicKey)
-    : new PublicKey(tokenOwnerRecord?.councilPublicKey);
+    ? new PublicKey(member?.communityPublicKey)
+    : new PublicKey(member?.councilPublicKey);
 
   const governingTokenMint = isCommunityVote
     ? new PublicKey(selectedRealm?.communityMint)
     : new PublicKey(selectedRealm?.councilMint);
 
-  const proposalIndex = 38; // TODO: get this, 38 for community,  64 for council
-  console.log("token owner record", tokenOwnerRecord);
+  const programId = new PublicKey(selectedRealm!.governanceId);
+  const governanceAuthority = new PublicKey(member.walletId);
+  const realmPublicKey = new PublicKey(selectedRealm!.pubKey);
+  const proposalIndex = 41; // proposalIndex - todo? maybe the actual number in the proposal, change to governance.proposalCount
+  const governancePublicKey = new PublicKey(
+    "ETNjJwHiQBLTtT1QoDEDyj4n3XNmccVMGLejAQpHwydP"
+  );
+
+  console.log("propogramId", selectedRealm!.governanceId);
+  console.log("governance", vault?.governanceId);
+  console.log("realm pubkey", selectedRealm.pubKey);
+  console.log("token owner record", tokenOwnerPublicKey.toBase58());
+  console.log("governing token mint", governingTokenMint.toBase58());
+  console.log("governance authority", member.walletId);
+  console.log("member selected", member);
+
   const proposalAddress = await withCreateProposal(
     instructions,
-    new PublicKey(selectedRealm!.governanceId), // programId
+    programId, // programId
     programVersion,
-    new PublicKey(selectedRealm!.pubKey),
-    new PublicKey("Fv7N9yvSHyrt53EfPMoMLZCfxGjhd1opC5PGE4ddz7E"), // TODO: change this to dao wallet governance id - pubkey of the governance (wallet) that we are wanting to create a proposal for
-    tokenOwnerPublicKey,
+    realmPublicKey, // realmid
+    governancePublicKey, // TODO; this is either the governance for the community or the council
+    tokenOwnerPublicKey, // token owner record of member making proposal
     proposalData.name,
-    proposalData.description, // TODO description of proposal
-    governingTokenMint, // TODO
-    governanceAuthority,
-    38, // proposalIndex - todo? maybe the actual number in the proposal, change to governance.proposalCount
+    proposalData.description,
+    governingTokenMint,
+    // governanceAuthority, // governance authority / wallet making proposal
+    walletPublicKey,
+    proposalIndex,
     voteType,
     options,
     useDenyOption,
@@ -101,36 +122,9 @@ export const createNewProposalTransaction = async ({
     undefined // TODO: plugin
   );
 
-  const proposalTransaction = await withInsertTransaction(
-    instructions,
-    new PublicKey(selectedRealm!.governanceId),
-    programVersion,
-    new PublicKey(selectedRealm!.pubKey),
-    proposalAddress,
-    tokenOwnerPublicKey,
-    payer,
-    0,
-    0,
-    0,
-    [], // instruction data
-    payer
-  );
-
-  withSignOffProposal(
-    instructions,
-    new PublicKey(selectedRealm!.governanceId),
-    programVersion,
-    new PublicKey(selectedRealm!.pubKey),
-    new PublicKey("Fv7N9yvSHyrt53EfPMoMLZCfxGjhd1opC5PGE4ddz7E"), // TODO: change this to dao wallet governance id - pubkey of the governance (wallet) that we are wanting to create a proposal for
-    proposalAddress,
-    payer,
-    undefined,
-    tokenOwnerPublicKey
-  );
-
   // await withAddSignatory(
   //   instructions,
-  //   new PublicKey(selectedRealm!.governanceId), // programId
+  //   programId,
   //   programVersion,
   //   proposalAddress,
   //   tokenOwnerPublicKey,
@@ -139,22 +133,22 @@ export const createNewProposalTransaction = async ({
   //   payer
   // );
 
-  // const signatoryRecordAddress = await getSignatoryRecordAddress(
-  //   new PublicKey(selectedRealm!.governanceId), // programId
+  // withSignOffProposal(
+  //   instructions,
+  //   programId,
+  //   programVersion,
+  //   realmPublicKey,
+  //   governancePublicKey,
   //   proposalAddress,
-  //   signatory
+  //   signatory,
+  //   tokenOwnerPublicKey,
+  //   undefined
   // );
-
-  // const insertInstructions: TransactionInstruction[] = []
 
   const recentBlock = await connection.getLatestBlockhash();
   const transaction = new Transaction({ feePayer: walletPublicKey });
   transaction.recentBlockhash = recentBlock.blockhash;
   transaction.add(...instructions);
 
-  console.log(
-    "proposal address, got to execute transaction?",
-    proposalAddress.toBase58()
-  );
   return transaction;
 };

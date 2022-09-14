@@ -6,6 +6,7 @@ import {
   getNativeTreasuryAddress,
 } from "@solana/spl-governance";
 import axios from "axios";
+import { gql, request } from "graphql-request";
 
 import {
   SPL_PUBLIC_KEY,
@@ -15,6 +16,7 @@ import {
 } from "../constants/Solana";
 import { getTokensInfo, formatVoteWeight } from "../utils";
 import { RootState } from "./index";
+import { createProposalAttempt } from "./proposalActionsSlice";
 
 export interface TreasuryState {
   isLoadingVaults: boolean;
@@ -42,11 +44,31 @@ const initialState: TreasuryState = {
   // nftCollectionData: null,
 };
 
-let connection = new Connection(RPC_CONNECTION, "recent");
+let connection = new Connection(RPC_CONNECTION, "confirmed");
 
 const TokensInfo = getTokensInfo();
 
-console.log("rpc connection", connection);
+// const governance_query = gql`
+//   query governances($addresses: [PublicKey!], $realms: [PublicKey!]) {
+//     governances(addresses: $addresses, realms: $realms) {
+//       address
+//       governedAccount
+//       proposalsCount
+//       votingProposalCount
+//     }
+//   }
+// `;
+
+// console.log("trying to call governances?");
+// const testGovernance = await request(
+//   "https://graph.holaplex.com/v1",
+//   governance_query,
+//   {
+//     realms: ["GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw"],
+//     addresses: ["6jydyMWSqV2bFHjCHydEQxa9XfXQWDwjVqAdjBEA1BXx"],
+//   }
+// );
+// console.log("test governances", testGovernance);
 
 export const fetchVaults = createAsyncThunk(
   "treasury/fetchVaults",
@@ -75,6 +97,7 @@ export const fetchVaults = createAsyncThunk(
           vaultId: governance.account?.governedAccount.toBase58(), // vault/token account where tokens are held
           isGovernanceVault: true,
           tokens: [],
+          governanceId: governance.pubkey.toBase58(),
         };
       });
 
@@ -94,12 +117,11 @@ export const fetchVaults = createAsyncThunk(
           vaultId: index.toString(), // vault/token account where tokens are held
           isGovernanceVault: false,
           tokens: [],
+          governanceId: rawGovernances[index].pubkey.toBase58(),
         });
       });
 
       const governancesMap = {};
-
-      // formatVoteWeight(tokenAmt, decimals);
 
       const governancesParsed = rawGovernances.map((governance, index) => {
         let governanceId = governance.pubkey.toBase58();
@@ -235,6 +257,7 @@ export const fetchVaultPrices = createAsyncThunk(
           vaultId: vaults[index].vaultId,
           isGovernanceVault: vaults[index].isGovernanceVault,
           tokens: tokens,
+          governanceId: vaults[index].governanceId,
         };
       });
 

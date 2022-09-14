@@ -64,7 +64,7 @@ export const VaultCard = ({
   tokens,
   isGovernanceVault,
 }: VaultCardProps) => {
-  const { tokenPriceData } = useAppSelector((state) => state.treasury);
+  const { tokenPriceData, vaults } = useAppSelector((state) => state.treasury);
   const { loading, error, data } = useQuery(GET_WALLET_NFTS, {
     variables: { owners: [vaultId] },
   });
@@ -113,19 +113,26 @@ export const VaultCard = ({
   };
 
   const tryCreateProposal = () => {
-    dispatch(createProposalAttempt(""));
+    const vault = vaults.find((vault) => vault.pubKey === vaultId);
+
+    dispatch(createProposalAttempt({ vault }));
   };
 
   return (
     <Container>
       <TitleContainer>
-        <PublicKeyTextCopy publicKey={vaultId} fontSize={14} shade="500" />
+        <PublicKeyTextCopy
+          publicKey={vaultId}
+          size="body"
+          shade="400"
+          hideIcon={true}
+        />
         {/* <TempButton onPress={handleVaultOpenBrowser}>
           <Typography text="Open Browser" />
         </TempButton> */}
-        {/* <TempButton onPress={tryCreateProposal}>
-          <Typography text="Create Proposal" />
-        </TempButton> */}
+        <CreateProposalButton onPress={tryCreateProposal}>
+          <Typography text="Create Proposal" marginBottom="0" size="subtitle" />
+        </CreateProposalButton>
         <VaultValue>{numeral(totalValue).format("$0,0")}</VaultValue>
       </TitleContainer>
 
@@ -239,7 +246,11 @@ const SectionHeaderContainer = styled.View`
   border-bottom-width: 1px;
 `;
 
-const TempButton = styled.TouchableOpacity`
+const CreateProposalButton = styled.TouchableOpacity`
   padding: ${(props: any) => props.theme.spacing[2]};
+  padding-left: ${(props: any) => props.theme.spacing[3]};
+  padding-right: ${(props: any) => props.theme.spacing[3]};
+
   background: ${(props: any) => props.theme.gray[900]};
+  border-radius: 8px;
 `;
