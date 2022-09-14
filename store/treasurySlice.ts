@@ -44,7 +44,7 @@ const initialState: TreasuryState = {
   // nftCollectionData: null,
 };
 
-let connection = new Connection(RPC_CONNECTION, "confirmed");
+let connection = new Connection(INDEX_RPC_CONNECTION, "confirmed");
 
 const TokensInfo = getTokensInfo();
 

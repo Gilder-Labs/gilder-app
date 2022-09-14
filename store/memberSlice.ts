@@ -58,7 +58,7 @@ const initialState: realmState = {
 };
 
 let connection = new Connection(RPC_CONNECTION, "confirmed");
-const indexConnection = new Connection(INDEX_RPC_CONNECTION, "recent");
+const indexConnection = new Connection(RPC_CONNECTION, "recent");
 const heliusApiKey = Constants?.manifest?.extra?.heliusApiKey;
 
 // TODO: map tokenRecord -> walletid

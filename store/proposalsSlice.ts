@@ -42,7 +42,7 @@ const initialState: ProposalsState = {
 };
 
 let connection = new Connection(RPC_CONNECTION, "confirmed");
-const indexConnection = new Connection(INDEX_RPC_CONNECTION, "recent");
+const indexConnection = new Connection(RPC_CONNECTION, "recent");
 
 export const fetchRealmProposals = createAsyncThunk(
   "realms/fetchRealmProposals",
