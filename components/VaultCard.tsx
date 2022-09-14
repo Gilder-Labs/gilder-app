@@ -37,6 +37,22 @@ const GET_WALLET_NFTS = gql`
   }
 `;
 
+// const GET_REALMS = gql`
+//   query realms($addresses: [PublicKey!], $communityMints: [PublicKey!]) {
+//     realms(addresses: $addresses, communityMints: $communityMints) {
+//       address
+//       communityMint
+//       votingProposalCount
+//       authority
+//       name
+//       realmConfig {
+//         realmAddress
+//         councilMint
+//       }
+//     }
+//   }
+// `;
+
 interface VaultCardProps {
   vaultId: string;
   tokens: Array<any>;
@@ -52,6 +68,14 @@ export const VaultCard = ({
   const { loading, error, data } = useQuery(GET_WALLET_NFTS, {
     variables: { owners: [vaultId] },
   });
+
+  // const { data: realmsData } = useQuery(GET_REALMS, {
+  //   variables: {
+  //     addresses: ["6jydyMWSqV2bFHjCHydEQxa9XfXQWDwjVqAdjBEA1BXx"],
+  //     communityMints: ["EjAZ95WZM9Z4o1asCD3d7Pxo3YUcTkyVbR8xC3pKAHX1"],
+  //   },
+  // });
+
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
   const [nftSectionOpen, setNftSectionOpen] = useState(true);
@@ -60,7 +84,7 @@ export const VaultCard = ({
 
   const getVaultTotalValue = () => {
     let totalValue = 0;
-    tokens.forEach((token) => {
+    tokens?.forEach((token) => {
       const coinGeckoId = token?.extensions?.coingeckoId;
       totalValue +=
         tokenPriceData[coinGeckoId]?.current_price *
@@ -96,12 +120,12 @@ export const VaultCard = ({
     <Container>
       <TitleContainer>
         <PublicKeyTextCopy publicKey={vaultId} fontSize={14} shade="500" />
-        <TempButton onPress={handleVaultOpenBrowser}>
+        {/* <TempButton onPress={handleVaultOpenBrowser}>
           <Typography text="Open Browser" />
-        </TempButton>
-        <TempButton onPress={tryCreateProposal}>
+        </TempButton> */}
+        {/* <TempButton onPress={tryCreateProposal}>
           <Typography text="Create Proposal" />
-        </TempButton>
+        </TempButton> */}
         <VaultValue>{numeral(totalValue).format("$0,0")}</VaultValue>
       </TitleContainer>
 
