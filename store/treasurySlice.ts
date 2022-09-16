@@ -51,6 +51,7 @@ export const fetchVaults = createAsyncThunk(
     // get state
     const { realms } = getState() as RootState;
     const { selectedRealm } = realms;
+    console.log("selectedRealm", selectedRealm);
 
     try {
       const rawGovernances = await getAllGovernances(
@@ -95,7 +96,7 @@ export const fetchVaults = createAsyncThunk(
 
       const vaultSolBalancesPromise = Promise.all(
         vaultsInfo.map((vault) =>
-          indexConnection.getBalance(new PublicKey(vault.pubKey))
+          connection.getBalance(new PublicKey(vault?.pubKey))
         )
       );
 
