@@ -6,7 +6,7 @@ import {
   SPL_PUBLIC_KEY,
   REALM_GOVERNANCE_PKEY,
   RPC_CONNECTION,
-  INDEX_RPC_CONNECTION,
+  HEAVY_RPC_CONNECTION,
 } from "../constants/Solana";
 import { cleanRealmData, getTokensInfo, extractLogInfo } from "../utils";
 import { RootState } from ".";

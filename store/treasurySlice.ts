@@ -11,7 +11,7 @@ import {
   SPL_PUBLIC_KEY,
   REALM_GOVERNANCE_PKEY,
   RPC_CONNECTION,
-  INDEX_RPC_CONNECTION,
+  HEAVY_RPC_CONNECTION,
 } from "../constants/Solana";
 import { getTokensInfo, formatVoteWeight } from "../utils";
 import { RootState } from "./index";
@@ -40,7 +40,7 @@ const initialState: TreasuryState = {
   // nftCollectionData: null,
 };
 
-let connection = new Connection(RPC_CONNECTION, "confirmed");
+let connection = new Connection(HEAVY_RPC_CONNECTION, "confirmed");
 
 const TokensInfo = getTokensInfo();
 
@@ -169,6 +169,7 @@ export const fetchVaults = createAsyncThunk(
 
       // formatVoteWeight(tokenAmt, decimals);
 
+      console.log("rawGovernances", rawGovernances);
       const governancesParsed = rawGovernances.map((governance, index) => {
         let governanceId = governance.pubkey.toBase58();
         activeProposals += governance.account.votingProposalCount;

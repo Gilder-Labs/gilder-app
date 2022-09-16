@@ -52,7 +52,7 @@ export default {
     extra: {
       // Add your extra configs here
       rpcNetwork: process.env.MAINNET_RPC || "https://ssc-dao.genesysgo.net/",
-      indexRPC: process.env.INDEX_RPC || "https://ssc-dao.genesysgo.net/",
+      heavyRPC: process.env.HEAVY_RPC || "https://ssc-dao.genesysgo.net/",
       streamApiKey: process.env.STREAM_API_KEY,
       heliusApiKey: process.env.HELIUS_API_KEY,
       eas: {
