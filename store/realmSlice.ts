@@ -48,7 +48,7 @@ const initialState: realmState = {
 
 // getMultipleAccounts - gets account info of a bunch of accounts in 1 api request
 
-const connection = new Connection(RPC_CONNECTION, "confirmed");
+const connection = new Connection(HEAVY_RPC_CONNECTION, "confirmed");
 
 export const fetchRealms = createAsyncThunk("realms/fetchRealms", async () => {
   try {

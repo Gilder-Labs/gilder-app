@@ -44,7 +44,7 @@ export const TokenList = ({
       keyExtractor={(item, index) => `${index}-${item.owner} `}
       // columnWrapperStyle={{ marginBottom: 8 }}
       scrollIndicatorInsets={{}}
-      initialNumToRender={50}
+      initialNumToRender={10}
       style={{
         paddingLeft: addSpacing ? 16 : 0,
         paddingRight: addSpacing ? 16 : 0,
