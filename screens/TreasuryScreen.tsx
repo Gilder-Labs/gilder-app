@@ -6,29 +6,17 @@ import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import styled from "styled-components/native";
 import { VaultCard, Loading } from "../components";
 import numeral from "numeral";
-import { fetchVaultPrices } from "../store/treasurySlice";
 
 export default function TreasuryScreen({
   navigation,
 }: RootTabScreenProps<"Treasury">) {
-  const {
-    tokenPriceData,
-    vaults,
-    isLoadingVaults,
-    isLoadingVaultPrices,
-    governances,
-  } = useAppSelector((state) => state.treasury);
+  const { tokenPriceData, vaults, isLoadingVaults, governances } =
+    useAppSelector((state) => state.treasury);
   const { isLoadingSelectedRealm, selectedRealm } = useAppSelector(
     (state) => state.realms
   );
   const [treasuryValue, setTreasuryValue] = useState("0");
   const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    if (vaults.length) {
-      dispatch(fetchVaultPrices(""));
-    }
-  }, [governances]);
 
   const getTreasuryTotalValue = () => {
     let totalValue = 0;
@@ -89,7 +77,7 @@ export default function TreasuryScreen({
 
   return (
     <Container>
-      {isLoadingVaults || isLoadingSelectedRealm || isLoadingVaultPrices ? (
+      {isLoadingVaults || isLoadingSelectedRealm ? (
         <Loading />
       ) : (
         <FlatList

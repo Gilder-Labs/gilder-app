@@ -6,7 +6,6 @@ import {
   getNativeTreasuryAddress,
 } from "@solana/spl-governance";
 import axios from "axios";
-import { gql, request } from "graphql-request";
 
 import {
   SPL_PUBLIC_KEY,
@@ -16,11 +15,9 @@ import {
 } from "../constants/Solana";
 import { getTokensInfo, formatVoteWeight } from "../utils";
 import { RootState } from "./index";
-import { createProposalAttempt } from "./proposalActionsSlice";
 
 export interface TreasuryState {
   isLoadingVaults: boolean;
-  isLoadingVaultPrices: boolean;
   tokenPriceData: any;
   vaults: Array<any>;
   governances: Array<any>;
@@ -33,7 +30,6 @@ export interface TreasuryState {
 
 const initialState: TreasuryState = {
   isLoadingVaults: false,
-  isLoadingVaultPrices: false,
   vaults: [],
   tokenPriceData: null,
   governances: [],
@@ -44,34 +40,13 @@ const initialState: TreasuryState = {
   // nftCollectionData: null,
 };
 
-let connection = new Connection(INDEX_RPC_CONNECTION, "confirmed");
+let connection = new Connection(RPC_CONNECTION, "confirmed");
+const indexConnection = new Connection(INDEX_RPC_CONNECTION, "recent");
 
 const TokensInfo = getTokensInfo();
 
-// const governance_query = gql`
-//   query governances($addresses: [PublicKey!], $realms: [PublicKey!]) {
-//     governances(addresses: $addresses, realms: $realms) {
-//       address
-//       governedAccount
-//       proposalsCount
-//       votingProposalCount
-//     }
-//   }
-// `;
-
-// console.log("trying to call governances?");
-// const testGovernance = await request(
-//   "https://graph.holaplex.com/v1",
-//   governance_query,
-//   {
-//     realms: ["GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw"],
-//     addresses: ["6jydyMWSqV2bFHjCHydEQxa9XfXQWDwjVqAdjBEA1BXx"],
-//   }
-// );
-// console.log("test governances", testGovernance);
-
 export const fetchVaults = createAsyncThunk(
-  "treasury/fetchVaults",
+  "realms/fetchVaults",
   async (realm: any, { getState }) => {
     // get state
     const { realms } = getState() as RootState;
@@ -79,10 +54,11 @@ export const fetchVaults = createAsyncThunk(
 
     try {
       const rawGovernances = await getAllGovernances(
-        connection,
+        indexConnection,
         new PublicKey(realm.governanceId),
         new PublicKey(realm.pubKey)
       );
+      const tokenMap = {};
       let activeProposals = 0;
 
       const rawFilteredVaults = rawGovernances.filter(
@@ -96,8 +72,6 @@ export const fetchVaults = createAsyncThunk(
           pubKey: governance.pubkey.toBase58(), // program that controls vault/token account
           vaultId: governance.account?.governedAccount.toBase58(), // vault/token account where tokens are held
           isGovernanceVault: true,
-          tokens: [],
-          governanceId: governance.pubkey.toBase58(),
         };
       });
 
@@ -116,87 +90,17 @@ export const fetchVaults = createAsyncThunk(
           pubKey: rawAddress.toBase58(), // program that controls vault/token account
           vaultId: index.toString(), // vault/token account where tokens are held
           isGovernanceVault: false,
-          tokens: [],
-          governanceId: rawGovernances[index].pubkey.toBase58(),
         });
       });
 
-      const governancesMap = {};
-
-      const governancesParsed = rawGovernances.map((governance, index) => {
-        let governanceId = governance.pubkey.toBase58();
-        activeProposals += governance.account.votingProposalCount;
-        let data = {
-          governanceId: governanceId,
-          governedAccount: governance.account.governedAccount.toBase58(),
-          proposalCount: governance.account.proposalCount,
-          activeProposals: governance.account.votingProposalCount,
-          minCommunityTokensToCreateProposal: governance?.account?.config
-            ?.minCommunityTokensToCreateProposal
-            ? formatVoteWeight(
-                governance.account.config.minCommunityTokensToCreateProposal.toString(),
-                selectedRealm.communityMintDecimals
-              )
-            : undefined,
-          minInstructionHoldUpTime:
-            governance.account.config.minInstructionHoldUpTime,
-          maxVotingTime: governance.account.config.maxVotingTime,
-          minCouncilTokensToCreateProposal: governance?.account?.config
-            ?.minCouncilTokensToCreateProposal
-            ? formatVoteWeight(
-                governance.account.config.minCouncilTokensToCreateProposal.toString(),
-                selectedRealm.communityMintDecimals
-              )
-            : undefined,
-
-          totalProposalCount: governance.account.proposalCount,
-          votingProposalCount: governance.account.votingProposalCount,
-          // percentage of total tokens that need to vote for there to be quorum
-          communityVoteThresholdPercentage:
-            governance.account.config.communityVoteThreshold.value,
-          councilVoteThresholdPercentage:
-            governance?.account?.config?.councilVetoVoteThreshold.value,
-
-          accountType: governance.account.accountType,
-          isAccountGovernance: governance.account.isAccountGovernance(),
-          isMintGovernance: governance.account.isMintGovernance(),
-          isProgramGovernance: governance.account.isProgramGovernance(),
-          isTokenGovernance: governance.account.isTokenGovernance(),
-        };
-        // @ts-ignore
-        governancesMap[governanceId] = data;
-        return data;
-      });
-
-      return {
-        vaults: vaultsInfo,
-        governances: governancesParsed,
-        governancesMap: governancesMap,
-        activeProposals: activeProposals,
-      };
-    } catch (error) {
-      console.log("error", error);
-    }
-  }
-);
-
-export const fetchVaultPrices = createAsyncThunk(
-  "treasury/fetchVaultPrices",
-  async (_: any, { getState }) => {
-    // get state
-    const { treasury } = getState() as RootState;
-    const { vaults } = treasury;
-
-    try {
-      const tokenMap = {};
       const vaultSolBalancesPromise = Promise.all(
-        vaults.map((vault) =>
-          connection.getBalance(new PublicKey(vault.pubKey))
+        vaultsInfo.map((vault) =>
+          indexConnection.getBalance(new PublicKey(vault.pubKey))
         )
       );
 
       const vaultsWithTokensPromise = Promise.all(
-        vaults.map((vault) =>
+        vaultsInfo.map((vault) =>
           connection.getParsedTokenAccountsByOwner(
             new PublicKey(vault.pubKey),
             {
@@ -208,6 +112,8 @@ export const fetchVaultPrices = createAsyncThunk(
 
       const vaultSolBalances = await vaultSolBalancesPromise;
       const vaultsWithTokensRaw = await vaultsWithTokensPromise;
+      // const collectionMap = {};
+
       const tokensData = await TokensInfo;
       const coinGeckoUrl = "https://api.coingecko.com/api/v3/coins/markets";
       let tokenIds = new Set();
@@ -253,15 +159,59 @@ export const fetchVaultPrices = createAsyncThunk(
         tokens.push(solTokenData);
 
         return {
-          pubKey: vaults[index].pubKey, // WALLET ID
-          vaultId: vaults[index].vaultId,
-          isGovernanceVault: vaults[index].isGovernanceVault,
+          pubKey: vaultsInfo[index].pubKey, // WALLET ID
+          vaultId: vaultsInfo[index].vaultId,
+          isGovernanceVault: vaultsInfo[index].isGovernanceVault,
           tokens: tokens,
-          governanceId: vaults[index].governanceId,
         };
       });
 
-      tokenIds.add("solana");
+      const governancesMap = {};
+
+      // formatVoteWeight(tokenAmt, decimals);
+
+      const governancesParsed = rawGovernances.map((governance, index) => {
+        let governanceId = governance.pubkey.toBase58();
+        activeProposals += governance.account.votingProposalCount;
+        let data = {
+          governanceId: governanceId,
+          governedAccount: governance.account.governedAccount.toBase58(),
+          minCommunityTokensToCreateProposal: governance?.account?.config
+            ?.minCommunityTokensToCreateProposal
+            ? formatVoteWeight(
+                governance.account.config.minCommunityTokensToCreateProposal.toString(),
+                selectedRealm.communityMintDecimals
+              )
+            : undefined,
+          minInstructionHoldUpTime:
+            governance.account.config.minInstructionHoldUpTime,
+          maxVotingTime: governance.account.config.maxVotingTime,
+          voteTipping: governance.account.config.voteTipping,
+          proposalCoolOffTime: governance.account.config.proposalCoolOffTime,
+          minCouncilTokensToCreateProposal: governance?.account?.config
+            ?.minCouncilTokensToCreateProposal
+            ? formatVoteWeight(
+                governance.account.config.minCouncilTokensToCreateProposal.toString(),
+                selectedRealm.communityMintDecimals
+              )
+            : undefined,
+
+          totalProposalCount: governance.account.proposalCount,
+          votingProposalCount: governance.account.votingProposalCount,
+          // percentage of total tokens that need to vote for there to be quorum
+          voteThresholdPercentage:
+            governance.account.config.voteThresholdPercentage.value.toString(),
+          accountType: governance.account.accountType,
+          isAccountGovernance: governance.account.isAccountGovernance(),
+          isMintGovernance: governance.account.isMintGovernance(),
+          isProgramGovernance: governance.account.isProgramGovernance(),
+          isTokenGovernance: governance.account.isTokenGovernance(),
+        };
+        // @ts-ignore
+        governancesMap[governanceId] = data;
+        return data;
+      });
+
       const tokenIdsString = Array.from(tokenIds).join();
       const tokenPriceResponse = await axios.get(coinGeckoUrl, {
         params: {
@@ -273,10 +223,15 @@ export const fetchVaultPrices = createAsyncThunk(
       return {
         vaults: vaultsParsed,
         tokenPriceData: tokenPriceResponse?.data,
+        governances: governancesParsed,
+        governancesMap: governancesMap,
         tokenMap: tokenMap,
+        activeProposals: activeProposals,
+        // nftCollectionData: collectionMap,
       };
     } catch (error) {
       console.log("error", error);
+      console.log("Error with args:", realm);
     }
   }
 );
@@ -294,19 +249,6 @@ export const treasurySlice = createSlice({
         state.isLoadingVaults = false;
       })
       .addCase(fetchVaults.fulfilled, (state, action: any) => {
-        state.vaults = action.payload?.vaults;
-        state.isLoadingVaults = false;
-        state.governances = action.payload?.governances;
-        state.governancesMap = action.payload?.governancesMap;
-        state.activeProposals = action.payload?.activeProposals;
-      })
-      .addCase(fetchVaultPrices.pending, (state) => {
-        state.isLoadingVaultPrices = true;
-      })
-      .addCase(fetchVaultPrices.rejected, (state) => {
-        state.isLoadingVaultPrices = false;
-      })
-      .addCase(fetchVaultPrices.fulfilled, (state, action: any) => {
         let tokenPriceObject = {};
         // @ts-ignore
         if (action?.payload?.tokenPriceData) {
@@ -315,10 +257,16 @@ export const treasurySlice = createSlice({
             tokenPriceObject[token.id] = token;
           });
         }
+
+        state.vaultsNfts = action.payload?.vaultsNfts;
         state.vaults = action.payload?.vaults;
-        state.isLoadingVaultPrices = false;
+        state.isLoadingVaults = false;
         state.tokenPriceData = tokenPriceObject;
+        state.governances = action.payload?.governances;
+        state.governancesMap = action.payload?.governancesMap;
         state.tokenMap = action.payload?.tokenMap;
+        state.activeProposals = action.payload?.activeProposals;
+        // state.nftCollectionData = action.payload.nftCollectionData;
       });
   },
 });
