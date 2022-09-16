@@ -214,7 +214,9 @@ export const fetchVaults = createAsyncThunk(
         return data;
       });
 
+      tokenIds.add("solana");
       const tokenIdsString = Array.from(tokenIds).join();
+
       const tokenPriceResponse = await axios.get(coinGeckoUrl, {
         params: {
           ids: tokenIdsString,
