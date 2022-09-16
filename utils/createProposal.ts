@@ -22,6 +22,7 @@ import {
   withSignOffProposal,
   InstructionData,
   pubkeyFilter,
+  createInstructionData,
   Governance,
 } from "@solana/spl-governance";
 
@@ -55,6 +56,8 @@ export const createNewProposalTransaction = async ({
   const insertInstructions: TransactionInstruction[] = [];
 
   const payer = walletPublicKey;
+  const signatory = walletPublicKey;
+
   let member;
 
   const prerequisiteInstructions: TransactionInstruction[] = [];
@@ -66,7 +69,7 @@ export const createNewProposalTransaction = async ({
     member = membersMap[selectedDelegate];
   }
 
-  const signatory = new PublicKey(member.walletId);
+  // const signatory = new PublicKey(member.walletId);
 
   const programVersion = await getGovernanceProgramVersion(
     connection,
@@ -120,6 +123,34 @@ export const createNewProposalTransaction = async ({
     undefined // TODO: plugin
   );
 
+  // temp instructions to
+  const data = createInstructionData(
+    SystemProgram.transfer({
+      fromPubkey: new PublicKey(vault?.pubKey),
+      toPubkey: new PublicKey("EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i"),
+      lamports: 100,
+    })
+  );
+
+  // inserts instructions into proposal
+  // if we havbe instruction data, insert it into proposal transaction
+  if (data) {
+    await withInsertTransaction(
+      instructions,
+      programId,
+      programVersion,
+      governancePublicKey,
+      proposalAddress,
+      tokenOwnerPublicKey,
+      payer,
+      0,
+      0,
+      0,
+      [data],
+      payer
+    );
+  }
+
   // adding signatory + sign off makes proposal go to voting state
   await withAddSignatory(
     instructions,
@@ -153,7 +184,7 @@ export const createNewProposalTransaction = async ({
   const combinedInstructions = [
     // ...prerequisiteInstructions,
     ...instructions,
-    // ...insertInstructions,
+    ...insertInstructions,
   ];
   const recentBlock = await connection.getLatestBlockhash();
   const transaction = new Transaction({ feePayer: walletPublicKey });
