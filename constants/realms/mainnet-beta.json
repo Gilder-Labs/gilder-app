@@ -21,6 +21,17 @@
     "sortRank": 3
   },
   {
+    "symbol": "PSY",
+    "displayName": "Psy Finance",
+    "programId": "GovHgfDPyQ1GwazJTDY2avSVY8GGcpmCapmmCsymRaGe",
+    "realmId": "FiG6YoqWnVzUmxFNukcRVXZC51HvLr6mts8nxcm7ScR8",
+    "website": "https://psyoptions.io",
+    "keywords": "PsyOptions, PsyFi, PsyFinance, REALM, Governance, Serum, SRM, DEX, DEFI, Decentralized Finance, Decentralised Finance, Crypto, ERC20, Ethereum, Decentralize, Solana, SOL, SPL, Cross-Chain, Trading, Fastest, Fast, SerumBTC, SerumUSD, Tokens, Options, Vaults",
+    "twitter": "@PsyOptions",
+    "ogImage": "https://user-images.githubusercontent.com/32071703/149460918-3694084f-2a37-4c95-93d3-b5aaf078d444.png",
+    "sortRank": 3
+  },
+  {
     "symbol": "MangoLiquidityDAO",
     "displayName": "Mango Liquidity Council",
     "programId": "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw",
@@ -142,16 +153,6 @@
     "website": "https://www.chimpions.co/",
     "twitter": "@TheChimpions",
     "ogImage": "/realms/Chiao/img/chiao.png"
-  },
-  {
-    "symbol": "PSY",
-    "displayName": "Psy Finance",
-    "programId": "GovHgfDPyQ1GwazJTDY2avSVY8GGcpmCapmmCsymRaGe",
-    "realmId": "FiG6YoqWnVzUmxFNukcRVXZC51HvLr6mts8nxcm7ScR8",
-    "website": "https://psyoptions.io",
-    "keywords": "PsyOptions, PsyFi, PsyFinance, REALM, Governance, Serum, SRM, DEX, DEFI, Decentralized Finance, Decentralised Finance, Crypto, ERC20, Ethereum, Decentralize, Solana, SOL, SPL, Cross-Chain, Trading, Fastest, Fast, SerumBTC, SerumUSD, Tokens, Options, Vaults",
-    "twitter": "@PsyOptions",
-    "ogImage": "https://user-images.githubusercontent.com/32071703/149460918-3694084f-2a37-4c95-93d3-b5aaf078d444.png"
   },
   {
     "symbol": "SOCEAN",
@@ -440,7 +441,7 @@
     "website": "https://bonfida.org",
     "keywords": "Bonfida, REALM, Governance, Serum, SRM, Serum DEX, DEFI, Decentralized Finance, Decentralised Finance, Crypto, ERC20, Ethereum, Decentralize, Solana, SOL, SPL, Cross-Chain, Trading, Fastest, Fast, SerumBTC, SerumUSD, SRM Tokens, SPL Tokens",
     "twitter": "@bonfida",
-    "ogImage": "https://pbs.twimg.com/profile_images/1546403916140761089/cHHwcTe-_400x400.png"
+    "ogImage": "https://bonfida.org/static/media/fida.b16d451b.svg"
   },
   {
     "symbol": "N&F",
@@ -498,7 +499,7 @@
     "realmId": "EPB9JbK5NiHoHkrRmpo9v4oJ2bKSVjfA731jeBModC1e",
     "website": "https://meta-collective.digital",
     "twitter": "@_metaCOLLECTIVE",
-    "ogImage": "https://governance.meta-collective.digital/realms/META/img/logo.png"
+    "ogImage": "https://www.meta-collective.digital/assets/home/header-logo.png"
   },
   {
     "symbol": "UXP",
@@ -809,6 +810,15 @@
     "ogImage": "/realms/MasoorDAO/MasoorDAO.PNG"
   },
   {
+    "symbol": "AGXT",
+    "displayName": "Agrichainx Tribe Dao",
+    "programId": "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw",
+    "realmId": "BXBwS8Q7YRc7iHcGcmU1fSVPk9go3TwoB256YfjDBrwc",
+    "website": "https://tribe.agrichainx.com/",
+    "twitter": "@agrichainx2022",
+    "ogImage": "/realms/AgrichainxTribeDao/AgrichainxTribeDao.jpeg"
+  },
+  {
     "symbol": "ADAO",
     "displayName": "Astra DAO",
     "programId": "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw",
@@ -862,6 +872,16 @@
     "website": "https://flipsidecrypto.xyz/",
     "twitter": "@flipsidecrypto",
     "ogImage": "/realms/FSLOGO/FLIPSIDE-LOGO-WHITE.png"
+  },
+  {
+    "symbol": "Dean's List",
+    "displayName": "Dean's List",
+    "programId": "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw",
+    "realmId": "9mS8GuMx2MkZGMSwa2k87HNLTFZ1ssa9mJ1RkGFKcGyQ",
+    "bannerImage": "/realms/Dean's List Grape/deans list logo.png",
+    "website": "https://deans-list.strataprotocol.com/",
+    "twitter": "@GrapeDeanslist",
+    "ogImage": "/realms/Dean's List Grape/deans list logo.png"
   },
   {
     "symbol": "GrapeCCSubDAO",
@@ -929,13 +949,48 @@
     "ogImage": "/realms/Cygnus/cygnus-logo.jpg"
   },
   {
+    "symbol": "BAC",
+    "displayName": "Bulls Army Club DAO",
+    "programId": "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw",
+    "realmId": "7gyTpxaZS8W1oPXFD9vYkZntKNDst4A3LWD25CPJLTRr",
+    "ogImage": "/realms/bacDao/logo_bulls.png",
+    "website": "https://bullsarmyclub.com/"
+  },
+  {
     "symbol": "EPCT",
     "displayName": "Epics",
     "programId": "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw",
     "realmId": "DCdCsuUjg6MnULfEmBUmvg1heggnLrKSFdp5uTRSKuwR",
-    "bannerImage": "/realms/Epics/Epics-logo.jpg",
     "website": "https://epics.dev/",
     "twitter": "@EpicsDAO",
-    "ogImage": "/realms/Epics/Epics-logo.jpg"
+    "ogImage": "/realms/Epics/Epics-logo.svg"
+  },
+  {
+    "symbol": "OPANZ",
+    "displayName": "OPANZ",
+    "programId": "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw",
+    "realmId": "Gp34fkwEyMhyK1Bjhr4iCdf4CdieUULvDqSrKxyRDu5e",
+    "bannerImage": "/realms/OPANZ/OPANZ_Banner.png",
+    "ogImage": "/realms/OPANZ/OPANZ_Logo.png",
+    "website": "https://auturoa.nz/",
+    "twitter": "@OPANZ999"
+  },
+  {
+    "symbol": "MEAN",
+    "displayName": "MEAN DAO",
+    "programId": "MGovW65tDhMMcpEmsegpsdgvzb6zUwGsNjhXFxRAnjd",
+    "realmId": "5o6gEoeJBpuXT1H1ijFTq3KcSGx7ayabdG2hji7cB3FG",
+    "website": "https://www.meanfi.com",
+    "twitter": "@meanfinance",
+    "ogImage": "/realms/MEAN/logo.svg"
+  },
+  {
+    "symbol": "ANTLERDAO",
+    "displayName": "AntlerDAO",
+    "programId": "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw",
+    "realmId": "DLxgBgdwUzpvoJH4bhJmLonFymSejKUiMBGAQE6XwopU",
+    "website": "https://www.majesticdeers.com",
+    "twitter": "@MajesticDeers",
+    "ogImage": "https://raw.githubusercontent.com/MajesticDeers/governance-ui/main/public/realms/AntlerDAO/Logo.jpg"
   }
 ]

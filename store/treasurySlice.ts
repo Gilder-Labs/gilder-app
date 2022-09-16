@@ -169,7 +169,6 @@ export const fetchVaults = createAsyncThunk(
 
       // formatVoteWeight(tokenAmt, decimals);
 
-      console.log("rawGovernances", rawGovernances);
       const governancesParsed = rawGovernances.map((governance, index) => {
         let governanceId = governance.pubkey.toBase58();
         activeProposals += governance.account.votingProposalCount;
