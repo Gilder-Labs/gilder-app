@@ -42,7 +42,6 @@ const initialState: ProposalsState = {
 };
 
 let connection = new Connection(RPC_CONNECTION, "confirmed");
-const indexConnection = new Connection(RPC_CONNECTION, "recent");
 
 export const fetchRealmProposals = createAsyncThunk(
   "realms/fetchRealmProposals",
@@ -52,7 +51,7 @@ export const fetchRealmProposals = createAsyncThunk(
 
     try {
       rawProposals = await getAllProposals(
-        indexConnection,
+        connection,
         governanceId,
         new PublicKey(realm.pubKey)
       );
@@ -117,12 +116,12 @@ export const fetchProposalVotes = createAsyncThunk(
       const { selectedRealm } = realms;
 
       rawVotes = await getGovernanceChatMessages(
-        indexConnection,
+        connection,
         GOVERNANCE_CHAT_PROGRAM_ID,
         new PublicKey(proposalId)
       );
       rawVotes = await getVoteRecords({
-        connection: indexConnection,
+        connection: connection,
         programId: new PublicKey(selectedRealm?.governanceId),
         proposalPk: new PublicKey(proposalId),
       });
@@ -179,7 +178,7 @@ export const fetchProposalChat = createAsyncThunk(
 
     try {
       rawChatMesssages = await getGovernanceChatMessages(
-        indexConnection,
+        connection,
         GOVERNANCE_CHAT_PROGRAM_ID,
         new PublicKey(proposalId)
       );

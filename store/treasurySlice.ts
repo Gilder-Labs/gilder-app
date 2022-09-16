@@ -41,7 +41,6 @@ const initialState: TreasuryState = {
 };
 
 let connection = new Connection(RPC_CONNECTION, "confirmed");
-const indexConnection = new Connection(INDEX_RPC_CONNECTION, "recent");
 
 const TokensInfo = getTokensInfo();
 
@@ -51,11 +50,10 @@ export const fetchVaults = createAsyncThunk(
     // get state
     const { realms } = getState() as RootState;
     const { selectedRealm } = realms;
-    console.log("selectedRealm", selectedRealm);
 
     try {
       const rawGovernances = await getAllGovernances(
-        indexConnection,
+        connection,
         new PublicKey(realm.governanceId),
         new PublicKey(realm.pubKey)
       );

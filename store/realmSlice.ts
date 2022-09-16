@@ -49,13 +49,12 @@ const initialState: realmState = {
 // getMultipleAccounts - gets account info of a bunch of accounts in 1 api request
 
 const connection = new Connection(RPC_CONNECTION, "confirmed");
-const indexConnection = new Connection(INDEX_RPC_CONNECTION, "recent");
 
 export const fetchRealms = createAsyncThunk("realms/fetchRealms", async () => {
   try {
     let realms;
     let realmsMap = {};
-    const realmsRaw = await getRealms(indexConnection, REALM_GOVERNANCE_PKEY);
+    const realmsRaw = await getRealms(connection, REALM_GOVERNANCE_PKEY);
 
     // get realms with unique program id
     let realmDataKeys = Object.keys(cleanedRealmData);
@@ -114,19 +113,19 @@ export const fetchRealm = createAsyncThunk(
   "realms/fetchRealm",
   async (realmId: string) => {
     try {
-      const rawRealm = await getRealm(indexConnection, new PublicKey(realmId));
+      const rawRealm = await getRealm(connection, new PublicKey(realmId));
       let communityMintData = null;
       let communityMintPromise;
       let councilMintData = null;
       let councilMintPromise;
 
       if (rawRealm.account.communityMint) {
-        communityMintPromise = indexConnection.getParsedAccountInfo(
+        communityMintPromise = connection.getParsedAccountInfo(
           new PublicKey(rawRealm.account.communityMint)
         );
       }
       if (rawRealm.account.config.councilMint) {
-        councilMintPromise = indexConnection.getParsedAccountInfo(
+        councilMintPromise = connection.getParsedAccountInfo(
           new PublicKey(rawRealm.account.config.councilMint)
         );
       }
