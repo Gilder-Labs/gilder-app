@@ -101,16 +101,6 @@ export const createNewProposalTransaction = async ({
   const proposalIndex = governanceInfo[0].account.proposalCount; // proposalIndex - todo? maybe the actual number in the proposal, change to governance.proposalCount
   const governancePublicKey = governanceInfo[0].pubkey;
 
-  console.log("governance info", governanceInfo[0]);
-
-  console.log("propogramId", selectedRealm!.governanceId);
-  console.log("governance", vault?.governanceId);
-  console.log("realm pubkey", selectedRealm.pubKey);
-  console.log("token owner record", tokenOwnerPublicKey.toBase58());
-  console.log("governing token mint", governingTokenMint.toBase58());
-  console.log("governance authority", member.walletId);
-  console.log("member selected", member);
-
   const proposalAddress = await withCreateProposal(
     instructions,
     programId, // programId
@@ -122,7 +112,6 @@ export const createNewProposalTransaction = async ({
     proposalData.description,
     governingTokenMint,
     governanceAuthority, // wallet making proposal
-
     proposalIndex,
     voteType,
     options,
@@ -132,40 +121,44 @@ export const createNewProposalTransaction = async ({
   );
 
   // adding signatory + sign off makes proposal go to voting state
-  // await withAddSignatory(
-  //   instructions,
-  //   programId,
-  //   programVersion,
-  //   proposalAddress,
-  //   tokenOwnerPublicKey,
-  //   governanceAuthority,
-  //   signatory,
-  //   payer
-  // );
+  await withAddSignatory(
+    instructions,
+    programId,
+    programVersion,
+    proposalAddress,
+    tokenOwnerPublicKey,
+    governanceAuthority,
+    signatory,
+    payer
+  );
 
-  // const signatoryRecordAddress = await getSignatoryRecordAddress(
-  //   programId,
-  //   proposalAddress,
-  //   signatory
-  // );
+  const signatoryRecordAddress = await getSignatoryRecordAddress(
+    programId,
+    proposalAddress,
+    signatory
+  );
 
-  // withSignOffProposal(
-  //   insertInstructions,
-  //   programId,
-  //   programVersion,
-  //   realmPublicKey,
-  //   governancePublicKey,
-  //   proposalAddress,
-  //   signatory,
-  //   signatoryRecordAddress,
-  //   undefined
-  // );
+  withSignOffProposal(
+    insertInstructions,
+    programId,
+    programVersion,
+    realmPublicKey,
+    governancePublicKey,
+    proposalAddress,
+    signatory,
+    signatoryRecordAddress,
+    undefined
+  );
 
+  const combinedInstructions = [
+    // ...prerequisiteInstructions,
+    ...instructions,
+    // ...insertInstructions,
+  ];
   const recentBlock = await connection.getLatestBlockhash();
   const transaction = new Transaction({ feePayer: walletPublicKey });
   transaction.recentBlockhash = recentBlock.blockhash;
-  transaction.add(...instructions);
-  // transaction.add(...insertInstructions);
+  transaction.add(...combinedInstructions);
 
   return transaction;
 };
