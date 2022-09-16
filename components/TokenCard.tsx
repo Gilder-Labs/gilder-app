@@ -2,10 +2,11 @@ import React from "react";
 import styled from "styled-components/native";
 import numeral from "numeral";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { AnimatedImage, Image } from "react-native-ui-lib";
+import { Image } from "react-native-ui-lib";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTheme } from "styled-components";
 import { getColorType } from "../utils";
+import { Typography } from ".";
 
 interface TokenCardProps {
   token: any;
@@ -37,7 +38,7 @@ export const TokenCard = ({
     <CoinCard key={token.mint + token.owner}>
       <CoinImageContainer>
         {token?.logoURI ? (
-          <AnimatedImage
+          <Image
             style={{
               width: 40,
               height: 40,
@@ -60,12 +61,19 @@ export const TokenCard = ({
       </CoinImageContainer>
       <CoinTextContainer>
         <CoinTitleContainer>
-          <CoinTitle>
-            {token.name ||
+          <Typography
+            text={
+              token.name ||
               `Unknown Token (${token.mint.slice(0, 3)}...${token.mint.slice(
                 -3
-              )})`}
-          </CoinTitle>
+              )})`
+            }
+            shade="200"
+            marginBottom="0"
+            maxLength={18}
+            bold={true}
+          />
+
           <CoinSubtitle>
             {numeral(token.tokenAmount.uiAmount).format("0.00a")} {token.symbol}
           </CoinSubtitle>

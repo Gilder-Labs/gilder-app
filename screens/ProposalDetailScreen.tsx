@@ -56,7 +56,14 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
   const { proposalsMap, proposalInstructions } = useAppSelector(
     (state) => state.proposals
   );
+  const { ownVotesMap, isLoadingVotes } = useAppSelector(
+    (state) => state.members
+  );
+
+  const [githubGist, setGithubGist] = useState<string>("");
+
   const { proposalId } = route?.params;
+  const proposal = proposalsMap?.[proposalId];
 
   useEffect(() => {
     if (proposalId && proposalsMap?.[proposalId]) {
@@ -80,6 +87,22 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
     }
   }, [proposalId, proposalsMap, selectedRealm]);
 
+  useEffect(() => {
+    const fetchGithubGist = async () => {
+      const gistId = description?.split("gist.github.com/")[1]?.split("/")[1];
+
+      const response = await fetch(`https://api.github.com/gists/${gistId}`);
+      const data = await response.json();
+      const gist = Object.values(data?.files)[0];
+      setGithubGist(gist?.content);
+    };
+
+    if (description?.includes("https://gist.github.com/")) {
+      console.log("fetching description");
+      fetchGithubGist();
+    }
+  }, [proposal?.description]);
+
   if (
     !proposalId ||
     !selectedRealm ||
@@ -87,12 +110,12 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
     isLoadingVaults ||
     isLoadingMembers ||
     !proposalsMap ||
+    isLoadingVotes ||
     !proposalsMap?.[proposalId]
   ) {
     return <Loading />;
   }
 
-  const proposal = proposalsMap[proposalId];
   const {
     status,
     name,
@@ -107,8 +130,6 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
 
   const governance = governancesMap?.[proposal?.governanceId];
 
-  const voteThresholdPercentage = governance?.voteThresholdPercentage || 0;
-
   const {
     communityMint,
     communityMintSupply,
@@ -117,6 +138,11 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
     councilMintSupply,
     councilMintDecimals,
   } = selectedRealm;
+
+  const voteThresholdPercentage =
+    governingTokenMint === communityMint
+      ? governance?.communityVoteThresholdPercentage
+      : governance?.councilVoteThresholdPercentage;
 
   const mintSupply =
     governingTokenMint === communityMint
@@ -237,6 +263,12 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
   const isVoting = status === "Voting";
   const isMember = membersMap[publicKey];
 
+  const ownVote = ownVotesMap?.[proposalId]
+    ? ownVotesMap?.[proposalId]?.voteWeightYes
+      ? " - Yes"
+      : " - No"
+    : "";
+
   return (
     <ScreenContainer>
       <FlatList
@@ -259,7 +291,11 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
             <TextContainer>
               <ProposalTitle>{name}</ProposalTitle>
               <Badge
-                title={isVoting && !timeLeft.isTimeLeft ? "Finalizing" : status}
+                title={
+                  isVoting && !timeLeft.isTimeLeft
+                    ? `Finalizing${ownVote}`
+                    : `${status}${ownVote}`
+                }
                 type={proposalStatusKey[status]}
               />
             </TextContainer>
@@ -376,7 +412,13 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
               marginBottom="1"
             />
             <Typography
-              text={description ? description : "No description added."}
+              text={
+                githubGist
+                  ? githubGist
+                  : description
+                  ? description
+                  : "No description added."
+              }
               size="body"
               shade={"300"}
               marginLeft={"3"}
@@ -397,7 +439,7 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
               <>{renderInstructions()}</>
             ) : (
               <Typography
-                text="0 instructions in this proposal"
+                text="This proposal does not have any instructions."
                 size="body"
                 shade={"300"}
                 marginLeft={"3"}
@@ -483,6 +525,7 @@ const TextContainer = styled.View`
   padding-bottom: ${(props: any) => props.theme.spacing[1]};
   flex-direction: row;
   justify-content: space-between;
+  align-items: flex-start;
   /* flex: 1; */
   width: 100%;
   /* margin-bottom: ${(props: any) => props.theme.spacing[2]}; */

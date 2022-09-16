@@ -120,7 +120,8 @@ export default function ProposalScreen({
       return <EmptyView />;
     }
 
-    const { voteThresholdPercentage } = proposalGovernance;
+    const { communityVoteThresholdPercentage, councilVoteThresholdPercentage } =
+      proposalGovernance;
     const {
       communityMint,
       communityMintSupply,
@@ -130,14 +131,13 @@ export default function ProposalScreen({
       councilMintDecimals,
     } = selectedRealm;
     const { governingTokenMint } = item;
-    // TODO handle council tokens
-    // const councilToken = tokenMap?.[councilMint];
 
     return (
       <ProposalCard
         proposal={item}
         onClick={() => handleProposalSelect(item)}
         governance={proposalGovernance}
+        hideVotes={false}
         mintSupply={
           governingTokenMint === communityMint
             ? communityMintSupply
@@ -148,7 +148,11 @@ export default function ProposalScreen({
             ? communityMintDecimals
             : councilMintDecimals
         }
-        voteThresholdPercentage={voteThresholdPercentage}
+        voteThresholdPercentage={
+          governingTokenMint === communityMint
+            ? communityVoteThresholdPercentage
+            : councilVoteThresholdPercentage
+        }
         creatorWalletId={tokenRecordToWalletMap[item.tokenOwnerRecord]}
       />
     );

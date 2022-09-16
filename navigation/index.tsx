@@ -41,6 +41,7 @@ import DiscoverScreen from "../screens/DiscoverScreen";
 import DiscoverDetailsScreen from "../screens/DiscoverDetailsScreen";
 import InfoModalScreen from "../screens/InfoModalScreen";
 import OnboardingScreen from "../screens/OnboardingScreen";
+import WebViewScreen from "../screens/WebViewScreen";
 
 import { chatApiKey } from "../constants/Chat";
 import { StreamChat } from "stream-chat";
@@ -129,7 +130,7 @@ function DrawerScreen() {
 
   return (
     <Drawer.Navigator
-      initialRouteName="Proposals"
+      initialRouteName="WebViewScreen"
       drawerContent={(props) => <DrawerContentContainer {...props} />}
       screenOptions={{
         drawerActiveBackgroundColor: `${theme?.gray[800]}aa`,
@@ -228,7 +229,7 @@ function DrawerScreen() {
           ),
         }}
       />
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name="ChannelScreen"
         component={ChannelScreen}
         options={({ route }) => ({
@@ -237,7 +238,7 @@ function DrawerScreen() {
             display: "none",
           },
         })}
-      />
+      /> */}
     </Drawer.Navigator>
   );
 }
@@ -321,116 +322,123 @@ export default function Navigation({}: {}) {
         centerMessage={true}
       />
       <WalletTransactionModal />
-      <Chat client={chatClient}>
-        <NavigationContainer
-          linking={LinkingConfiguration}
-          theme={NavigationTheme}
+      {/* <Chat client={chatClient}> */}
+      <NavigationContainer
+        linking={LinkingConfiguration}
+        theme={NavigationTheme}
+      >
+        <Stack.Navigator
+          screenOptions={{
+            fullScreenGestureEnabled: true,
+            headerTintColor: "#f4f4f5", //Set Header text color
+          }}
+          initialRouteName={hasCompletedOnboarding ? "Root" : "Onboarding"}
         >
-          <Stack.Navigator
-            screenOptions={{
-              fullScreenGestureEnabled: true,
-              headerTintColor: "#f4f4f5", //Set Header text color
-            }}
-            initialRouteName={hasCompletedOnboarding ? "Root" : "Onboarding"}
-          >
-            <Stack.Screen
-              name="Onboarding"
-              component={OnboardingScreen}
-              options={{ headerShown: false, headerTransparent: true }}
-            />
-            <Stack.Screen
-              name="Root"
-              component={DrawerScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="MemberDetails"
-              component={MemberProfileScreen}
-              // options={{ headerShown: false }}
-              options={({ route }) => ({
-                title: "Profile",
-              })}
-            />
-            <Stack.Screen
-              name="RealmSettings"
-              component={RealmSettingsScreen}
-              options={({ route }) => ({
-                title: "Realm Settings", // update to realm name
-              })}
-            />
-            <Stack.Screen
-              name="ProposalDetail"
-              component={ProposalDetailScreen}
-              options={({ route }) => ({
-                title: "Proposal Details",
-              })}
-            />
-            <Stack.Screen
-              name="ThreadScreen"
-              component={ThreadScreen}
-              options={({ route }) => ({
-                title: "Thread",
-              })}
-            />
-            <Stack.Screen
-              name="Discover"
-              component={DiscoverScreen}
-              options={({ route, navigation }) => ({
-                title: "Discover",
-                headerRight: () => {
-                  return (
-                    <InfoButton onPress={() => navigation.push("InfoScreen")}>
-                      <FontAwesomeIcon
-                        icon={faInfoCircle}
-                        size={16}
-                        color={theme?.gray[300]}
-                      />
-                    </InfoButton>
-                  );
-                },
-              })}
-            />
-            <Stack.Screen
-              name="DiscoverDetails"
-              component={DiscoverDetailsScreen}
-              options={({ route }) => ({
-                title: "",
-                headerBackTitle: "Back",
-                presentation: "modal",
-                headerTransparent: true,
-              })}
-            />
-            <Stack.Screen
-              name="WalletModal"
-              component={WalletModal}
-              options={({ route }) => ({
-                title: "",
-                presentation: "modal",
-                headerTransparent: true,
-                headerShown: false,
-              })}
-            />
-            <Stack.Screen
-              name="InfoScreen"
-              component={InfoModalScreen}
-              options={({ route }) => ({
-                title: "",
-                presentation: "modal",
-                headerTransparent: true,
-                headerShown: false,
-                contentStyle: {
-                  height: "50%",
-                  maxHeight: "50%",
-                  marginTop: "100%",
-                  backgroundColor: "red",
-                  borderTopEndRadius: 16,
-                  borderTopLeftRadius: 16,
-                },
-              })}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </Chat>
+          <Stack.Screen
+            name="Onboarding"
+            component={OnboardingScreen}
+            options={{ headerShown: false, headerTransparent: true }}
+          />
+          <Stack.Screen
+            name="Root"
+            component={DrawerScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="MemberDetails"
+            component={MemberProfileScreen}
+            // options={{ headerShown: false }}
+            options={({ route }) => ({
+              title: "Profile",
+            })}
+          />
+          <Stack.Screen
+            name="RealmSettings"
+            component={RealmSettingsScreen}
+            options={({ route }) => ({
+              title: "Realm Settings", // update to realm name
+            })}
+          />
+          <Stack.Screen
+            name="ProposalDetail"
+            component={ProposalDetailScreen}
+            options={({ route }) => ({
+              title: "Proposal Details",
+            })}
+          />
+          <Stack.Screen
+            name="ThreadScreen"
+            component={ThreadScreen}
+            options={({ route }) => ({
+              title: "Thread",
+            })}
+          />
+          <Stack.Screen
+            name="Discover"
+            component={DiscoverScreen}
+            options={({ route, navigation }) => ({
+              title: "Discover",
+              headerRight: () => {
+                return (
+                  <InfoButton onPress={() => navigation.push("InfoScreen")}>
+                    <FontAwesomeIcon
+                      icon={faInfoCircle}
+                      size={16}
+                      color={theme?.gray[300]}
+                    />
+                  </InfoButton>
+                );
+              },
+            })}
+          />
+          <Stack.Screen
+            name="DiscoverDetails"
+            component={DiscoverDetailsScreen}
+            options={({ route }) => ({
+              title: "",
+              headerBackTitle: "Back",
+              presentation: "modal",
+              headerTransparent: true,
+            })}
+          />
+          <Stack.Screen
+            name="WalletModal"
+            component={WalletModal}
+            options={({ route }) => ({
+              title: "",
+              presentation: "modal",
+              headerTransparent: true,
+              headerShown: false,
+            })}
+          />
+          <Stack.Screen
+            name="InfoScreen"
+            component={InfoModalScreen}
+            options={({ route }) => ({
+              title: "",
+              presentation: "modal",
+              headerTransparent: true,
+              headerShown: false,
+              contentStyle: {
+                height: "50%",
+                maxHeight: "50%",
+                marginTop: "100%",
+                backgroundColor: "red",
+                borderTopEndRadius: 16,
+                borderTopLeftRadius: 16,
+              },
+            })}
+          />
+          <Stack.Screen
+            name="WebViewScreen"
+            component={WebViewScreen}
+            options={({ route }) => ({
+              title: "Proposal Browser",
+            })}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+      {/* </Chat> */}
     </RootContainer>
   );
 }

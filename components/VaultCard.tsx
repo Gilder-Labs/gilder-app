@@ -3,6 +3,8 @@ import styled from "styled-components/native";
 import { TokenList } from "./TokenList";
 import { NftList } from "./NftList";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
+import { createProposalAttempt } from "../store/proposalActionsSlice";
+
 import { Typography } from "./Typography";
 import numeral from "numeral";
 import { PublicKeyTextCopy } from "./PublicKeyTextCopy";
@@ -13,6 +15,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faChevronRight } from "@fortawesome/pro-regular-svg-icons/faChevronRight";
 import { faChevronDown } from "@fortawesome/pro-regular-svg-icons/faChevronDown";
 import { useQuery, gql } from "@apollo/client";
+import * as Haptics from "expo-haptics";
+import { useNavigation } from "@react-navigation/native";
 
 const GET_WALLET_NFTS = gql`
   query nfts($owners: [PublicKey!]) {
@@ -33,6 +37,22 @@ const GET_WALLET_NFTS = gql`
   }
 `;
 
+// const GET_REALMS = gql`
+//   query realms($addresses: [PublicKey!], $communityMints: [PublicKey!]) {
+//     realms(addresses: $addresses, communityMints: $communityMints) {
+//       address
+//       communityMint
+//       votingProposalCount
+//       authority
+//       name
+//       realmConfig {
+//         realmAddress
+//         councilMint
+//       }
+//     }
+//   }
+// `;
+
 interface VaultCardProps {
   vaultId: string;
   tokens: Array<any>;
@@ -44,18 +64,27 @@ export const VaultCard = ({
   tokens,
   isGovernanceVault,
 }: VaultCardProps) => {
-  const { tokenPriceData } = useAppSelector((state) => state.treasury);
+  const { tokenPriceData, vaults } = useAppSelector((state) => state.treasury);
   const { loading, error, data } = useQuery(GET_WALLET_NFTS, {
     variables: { owners: [vaultId] },
   });
 
+  // const { data: realmsData } = useQuery(GET_REALMS, {
+  //   variables: {
+  //     addresses: ["6jydyMWSqV2bFHjCHydEQxa9XfXQWDwjVqAdjBEA1BXx"],
+  //     communityMints: ["EjAZ95WZM9Z4o1asCD3d7Pxo3YUcTkyVbR8xC3pKAHX1"],
+  //   },
+  // });
+
+  const navigation = useNavigation();
+  const dispatch = useAppDispatch();
   const [nftSectionOpen, setNftSectionOpen] = useState(true);
   const [tokenSectionOpen, setTokenSectionOpen] = useState(true);
   const theme = useTheme();
 
   const getVaultTotalValue = () => {
     let totalValue = 0;
-    tokens.forEach((token) => {
+    tokens?.forEach((token) => {
       const coinGeckoId = token?.extensions?.coingeckoId;
       totalValue +=
         tokenPriceData[coinGeckoId]?.current_price *
@@ -74,10 +103,36 @@ export const VaultCard = ({
     return <></>;
   }
 
+  const handleVaultOpenBrowser = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+
+    //@ts-ignore
+    navigation.push("WebViewScreen", {
+      walletId: vaultId,
+    });
+  };
+
+  const tryCreateProposal = () => {
+    const vault = vaults.find((vault) => vault.pubKey === vaultId);
+
+    dispatch(createProposalAttempt({ vault }));
+  };
+
   return (
     <Container>
       <TitleContainer>
-        <PublicKeyTextCopy publicKey={vaultId} fontSize={14} shade="500" />
+        <PublicKeyTextCopy
+          publicKey={vaultId}
+          size="body"
+          shade="400"
+          hideIcon={true}
+        />
+        {/* <TempButton onPress={handleVaultOpenBrowser}>
+          <Typography text="Open Browser" />
+        </TempButton> */}
+        {/* <CreateProposalButton onPress={tryCreateProposal}>
+          <Typography text="Create Proposal" marginBottom="0" size="subtitle" />
+        </CreateProposalButton> */}
         <VaultValue>{numeral(totalValue).format("$0,0")}</VaultValue>
       </TitleContainer>
 
@@ -189,4 +244,13 @@ const SectionHeaderContainer = styled.View`
   justify-content: space-between;
   border-bottom-color: ${(props) => props.theme.gray[700]};
   border-bottom-width: 1px;
+`;
+
+const CreateProposalButton = styled.TouchableOpacity`
+  padding: ${(props: any) => props.theme.spacing[2]};
+  padding-left: ${(props: any) => props.theme.spacing[3]};
+  padding-right: ${(props: any) => props.theme.spacing[3]};
+
+  background: ${(props: any) => props.theme.gray[900]};
+  border-radius: 8px;
 `;

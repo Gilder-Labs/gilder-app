@@ -58,7 +58,6 @@ const initialState: realmState = {
 };
 
 let connection = new Connection(RPC_CONNECTION, "confirmed");
-const indexConnection = new Connection(INDEX_RPC_CONNECTION, "recent");
 const heliusApiKey = Constants?.manifest?.extra?.heliusApiKey;
 
 // TODO: map tokenRecord -> walletid
@@ -71,7 +70,7 @@ export const fetchRealmMembers = createAsyncThunk(
       let rawTokenOwnerRecords;
 
       rawTokenOwnerRecords = await getAllTokenOwnerRecords(
-        indexConnection,
+        connection,
         new PublicKey(realm.governanceId),
         new PublicKey(realm.pubKey)
       );
@@ -214,7 +213,7 @@ export const fetchMemberChat = createAsyncThunk(
 
     try {
       rawChatMesssages = await getGovernanceChatMessagesByVoter(
-        indexConnection,
+        connection,
         GOVERNANCE_CHAT_PROGRAM_ID,
         new PublicKey(member.walletId)
       );
@@ -251,7 +250,7 @@ export const fetchMemberVotes = createAsyncThunk(
 
     try {
       rawVoteRecords = await getVoteRecordsByVoter(
-        indexConnection,
+        connection,
         new PublicKey(realm.governanceId), // change this based on the dao program id
         new PublicKey(member.walletId)
       );
@@ -286,7 +285,7 @@ export const fetchOwnVotes = createAsyncThunk(
 
     try {
       rawVoteRecords = await getVoteRecordsByVoter(
-        indexConnection,
+        connection,
         new PublicKey(realm.governanceId), // change this based on the dao program id
         new PublicKey(walletId)
       );

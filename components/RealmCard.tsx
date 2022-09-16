@@ -34,8 +34,8 @@ export const RealmCard = ({
   const { pushToken } = useAppSelector((state) => state.notifications);
   const navigation = useNavigation();
 
-  const realmInfo = realmsData[realm.pubKey];
-  const isSelected = realmWatchlist.includes(realm.realmId);
+  const realmInfo = realmsData[realm?.pubKey];
+  const isSelected = realmWatchlist.includes(realm?.realmId);
 
   const handleRealmClick = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -84,10 +84,12 @@ export const RealmCard = ({
         end={{ x: 1, y: 1 }}
       >
         <IconContainer>
-          <RealmIcon realmId={realm.realmId} />
+          <RealmIcon realmId={realm?.realmId} />
         </IconContainer>
         <Typography
-          text={realmInfo?.displayName || realm?.displayName || realm.name}
+          text={
+            realmInfo?.displayName || realm?.displayName || realm?.name || ""
+          }
           size="body"
           shade="100"
           textAlign="center"

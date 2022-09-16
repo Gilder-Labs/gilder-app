@@ -9,6 +9,7 @@ import memberReducer from "./memberSlice";
 import notificationReducer from "./notificationSlice";
 import utilityReducer from "./utilitySlice";
 import chatReducer from "./chatSlice";
+import proposalActionsReducer from "./proposalActionsSlice";
 
 const rootReducer = combineReducers({
   realms: realmReducer,
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
   notifications: notificationReducer,
   utility: utilityReducer,
   chat: chatReducer,
+  proposalActions: proposalActionsReducer,
 });
 
 // const persistedReducer = persistReducer(persistConfig, rootReducer);

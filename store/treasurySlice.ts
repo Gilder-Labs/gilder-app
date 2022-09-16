@@ -41,7 +41,6 @@ const initialState: TreasuryState = {
 };
 
 let connection = new Connection(RPC_CONNECTION, "confirmed");
-const indexConnection = new Connection(INDEX_RPC_CONNECTION, "recent");
 
 const TokensInfo = getTokensInfo();
 
@@ -54,7 +53,7 @@ export const fetchVaults = createAsyncThunk(
 
     try {
       const rawGovernances = await getAllGovernances(
-        indexConnection,
+        connection,
         new PublicKey(realm.governanceId),
         new PublicKey(realm.pubKey)
       );
@@ -95,7 +94,7 @@ export const fetchVaults = createAsyncThunk(
 
       const vaultSolBalancesPromise = Promise.all(
         vaultsInfo.map((vault) =>
-          indexConnection.getBalance(new PublicKey(vault.pubKey))
+          connection.getBalance(new PublicKey(vault?.pubKey))
         )
       );
 
@@ -176,6 +175,8 @@ export const fetchVaults = createAsyncThunk(
         let data = {
           governanceId: governanceId,
           governedAccount: governance.account.governedAccount.toBase58(),
+          proposalCount: governance.account.proposalCount,
+          activeProposals: governance.account.votingProposalCount,
           minCommunityTokensToCreateProposal: governance?.account?.config
             ?.minCommunityTokensToCreateProposal
             ? formatVoteWeight(
@@ -186,8 +187,6 @@ export const fetchVaults = createAsyncThunk(
           minInstructionHoldUpTime:
             governance.account.config.minInstructionHoldUpTime,
           maxVotingTime: governance.account.config.maxVotingTime,
-          voteTipping: governance.account.config.voteTipping,
-          proposalCoolOffTime: governance.account.config.proposalCoolOffTime,
           minCouncilTokensToCreateProposal: governance?.account?.config
             ?.minCouncilTokensToCreateProposal
             ? formatVoteWeight(
@@ -199,8 +198,11 @@ export const fetchVaults = createAsyncThunk(
           totalProposalCount: governance.account.proposalCount,
           votingProposalCount: governance.account.votingProposalCount,
           // percentage of total tokens that need to vote for there to be quorum
-          voteThresholdPercentage:
-            governance.account.config.voteThresholdPercentage.value.toString(),
+          communityVoteThresholdPercentage:
+            governance.account.config.communityVoteThreshold.value,
+          councilVoteThresholdPercentage:
+            governance?.account?.config?.councilVetoVoteThreshold.value,
+
           accountType: governance.account.accountType,
           isAccountGovernance: governance.account.isAccountGovernance(),
           isMintGovernance: governance.account.isMintGovernance(),
@@ -212,7 +214,9 @@ export const fetchVaults = createAsyncThunk(
         return data;
       });
 
+      tokenIds.add("solana");
       const tokenIdsString = Array.from(tokenIds).join();
+
       const tokenPriceResponse = await axios.get(coinGeckoUrl, {
         params: {
           ids: tokenIdsString,

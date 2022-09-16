@@ -13,6 +13,7 @@ import {
   PublicKeyTextCopy,
   RealmCard,
   RealmIcon,
+  ProposalCard,
 } from "../components";
 import { useCardinalIdentity } from "../hooks/useCardinaldentity";
 import { Typography } from "../components";
@@ -22,6 +23,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import { ActivityIndicator } from "react-native";
 import { formatVoteWeight } from "../utils";
 import numeral from "numeral";
+import * as Haptics from "expo-haptics";
+import { useNavigation } from "@react-navigation/native";
 
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faCheckToSlot } from "@fortawesome/pro-solid-svg-icons/faCheckToSlot";
@@ -34,12 +37,25 @@ interface MemberProfileProps {
 
 export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
   const dispatch = useAppDispatch();
-  const { isLoadingVotes, memberDAOs, memberVotes, membersMap } =
-    useAppSelector((state) => state.members);
+  const {
+    isLoadingVotes,
+    memberDAOs,
+    memberVotes,
+    membersMap,
+    tokenRecordToWalletMap,
+    isLoadingMemberDaos,
+  } = useAppSelector((state) => state.members);
   const theme = useTheme();
+  const navigation = useNavigation();
+
+  const { governancesMap, isLoadingVaults } = useAppSelector(
+    (state) => state.treasury
+  );
 
   const { selectedRealm, realmsMap } = useAppSelector((state) => state.realms);
-  const { proposalsMap } = useAppSelector((state) => state.proposals);
+  const { proposalsMap, proposals, isLoadingProposals } = useAppSelector(
+    (state) => state.proposals
+  );
   const { walletId } = route?.params;
   const member = membersMap?.[walletId];
   const { twitterURL, twitterHandle, twitterDescription } = useCardinalIdentity(
@@ -70,8 +86,78 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
     );
   };
 
+  const getUserFilteredProposals = () => {
+    let filteredProposals = proposals.filter((proposal) => {
+      return (
+        tokenRecordToWalletMap[proposal.tokenOwnerRecord] === member.walletId
+      );
+    });
+
+    return filteredProposals;
+  };
+
+  const handleProposalSelect = (proposal: Proposal) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+
+    //@ts-ignore
+    navigation.push("ProposalDetail", {
+      proposalId: proposal.proposalId,
+    });
+  };
+
+  const renderProposal = ({ item }: any) => {
+    const proposalGovernance = governancesMap?.[item?.governanceId];
+
+    if (!proposalGovernance) {
+      return <EmptyView />;
+    }
+
+    const { communityVoteThresholdPercentage, councilVoteThresholdPercentage } =
+      proposalGovernance;
+    const {
+      communityMint,
+      communityMintSupply,
+      communityMintDecimals,
+      councilMint,
+      councilMintSupply,
+      councilMintDecimals,
+    } = selectedRealm;
+    const { governingTokenMint } = item;
+
+    return (
+      <PropsalCardContainer>
+        <ProposalCard
+          proposal={item}
+          onClick={() => handleProposalSelect(item)}
+          governance={proposalGovernance}
+          hideVotes={true}
+          mintSupply={
+            governingTokenMint === communityMint
+              ? communityMintSupply
+              : councilMintSupply
+          }
+          mintDecimals={
+            governingTokenMint === communityMint
+              ? communityMintDecimals
+              : councilMintDecimals
+          }
+          voteThresholdPercentage={
+            governingTokenMint === communityMint
+              ? communityVoteThresholdPercentage
+              : councilVoteThresholdPercentage
+          }
+          creatorWalletId={tokenRecordToWalletMap[item.tokenOwnerRecord]}
+        />
+      </PropsalCardContainer>
+    );
+  };
+
   const renderDAO = ({ item }: any) => {
-    return <RealmCard realm={realmsMap[item]} navigateOnClick={true} />;
+    if (realmsMap[item]) {
+      return <RealmCard realm={realmsMap[item]} navigateOnClick={true} />;
+    } else {
+      return <EmptyView />;
+    }
   };
 
   return (
@@ -238,20 +324,33 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
           bold={true}
           marginBottom={"1"}
         />
-        <FlatList
-          data={memberDAOs}
-          renderItem={renderDAO}
-          keyExtractor={(item) => item}
-          scrollIndicatorInsets={{ right: 1 }}
-          initialNumToRender={10}
-          horizontal={true}
-          style={{ marginBottom: 16 }}
-          contentContainerStyle={{
-            backgroundColor: theme.gray[1000],
-            paddingTop: 12,
-            borderRadius: 8,
-          }}
-        />
+        {isLoadingMemberDaos ? (
+          <ActivityIndicator />
+        ) : (
+          <FlatList
+            data={memberDAOs}
+            renderItem={renderDAO}
+            keyExtractor={(item) => item}
+            scrollIndicatorInsets={{ right: 1 }}
+            initialNumToRender={10}
+            horizontal={true}
+            style={{ marginBottom: 16 }}
+            contentContainerStyle={{
+              backgroundColor: theme.gray[900],
+              paddingTop: 12,
+              marginLeft: -8,
+              borderRadius: 8,
+            }}
+            ListEmptyComponent={
+              <EmptyTextContainer>
+                <Typography
+                  marginLeft="2"
+                  text="Looks like this user isn't in any DAOs currently."
+                />
+              </EmptyTextContainer>
+            }
+          />
+        )}
       </DAOColumn>
 
       <InfoColumn>
@@ -274,13 +373,47 @@ export const MemberProfileScreen = ({ route }: MemberProfileProps) => {
             horizontal={true}
             style={{ marginBottom: 16 }}
             contentContainerStyle={{
-              backgroundColor: theme.gray[1000],
+              backgroundColor: theme.gray[900],
               paddingTop: 12,
-              paddingLeft: 8,
               borderRadius: 8,
             }}
             ListEmptyComponent={
-              <Typography text="Looks like this user hasn't voted on anything yet." />
+              <EmptyTextContainer>
+                <Typography text="Looks like this user hasn't voted on anything yet." />
+              </EmptyTextContainer>
+            }
+          />
+        )}
+      </InfoColumn>
+
+      <InfoColumn>
+        <Typography
+          text={"Proposals Created"}
+          shade="400"
+          size="subtitle"
+          bold={true}
+          marginBottom={"1"}
+        />
+        {isLoadingProposals || isLoadingVaults ? (
+          <ActivityIndicator />
+        ) : (
+          <FlatList
+            data={getUserFilteredProposals()}
+            renderItem={renderProposal}
+            keyExtractor={(item) => item.proposalId}
+            scrollIndicatorInsets={{ right: 1 }}
+            initialNumToRender={10}
+            horizontal={true}
+            style={{ marginBottom: 100 }}
+            contentContainerStyle={{
+              backgroundColor: theme.gray[900],
+              paddingTop: 12,
+              borderRadius: 8,
+            }}
+            ListEmptyComponent={
+              <EmptyTextContainer>
+                <Typography text="Looks like this user hasn't created any proposals yet." />
+              </EmptyTextContainer>
             }
           />
         )}
@@ -359,4 +492,14 @@ const Column = styled.View`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+`;
+
+const PropsalCardContainer = styled.View`
+  margin-right: ${(props) => props.theme.spacing[3]};
+  height: 100%;
+`;
+
+const EmptyTextContainer = styled.View`
+  max-width: 300px;
+  min-height: 80px;
 `;

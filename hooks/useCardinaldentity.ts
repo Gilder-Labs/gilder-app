@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { tryGetName } from "@cardinal/namespaces";
 import { PublicKey, Connection } from "@solana/web3.js";
-import { INDEX_RPC_CONNECTION } from "../constants/Solana";
+import { RPC_CONNECTION } from "../constants/Solana";
 import axios from "axios";
 
-const indexConnection = new Connection(INDEX_RPC_CONNECTION, "recent");
+const connection = new Connection(RPC_CONNECTION, "recent");
 
 // add caching
 
@@ -27,7 +27,7 @@ export const useCardinalIdentity = (walletId: string) => {
         twitterHandle: "",
         twitterDescription: "",
       };
-      const cardinalData = await tryGetName(indexConnection, walletKey);
+      const cardinalData = await tryGetName(connection, walletKey);
 
       const handle = cardinalData?.[0];
       cache[walletId] = {

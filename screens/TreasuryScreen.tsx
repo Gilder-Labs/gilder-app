@@ -10,17 +10,19 @@ import numeral from "numeral";
 export default function TreasuryScreen({
   navigation,
 }: RootTabScreenProps<"Treasury">) {
-  const { tokenPriceData, vaults, isLoadingVaults } = useAppSelector(
-    (state) => state.treasury
+  const { tokenPriceData, vaults, isLoadingVaults, governances } =
+    useAppSelector((state) => state.treasury);
+  const { isLoadingSelectedRealm, selectedRealm } = useAppSelector(
+    (state) => state.realms
   );
-  const { isLoadingSelectedRealm } = useAppSelector((state) => state.realms);
   const [treasuryValue, setTreasuryValue] = useState("0");
+  const dispatch = useAppDispatch();
 
   const getTreasuryTotalValue = () => {
     let totalValue = 0;
 
     vaults?.forEach((vault) => {
-      vault.tokens.forEach((token: any) => {
+      vault?.tokens?.forEach((token: any) => {
         const coinGeckoId = token?.extensions?.coingeckoId;
         totalValue +=
           tokenPriceData[coinGeckoId]?.current_price *
@@ -35,7 +37,7 @@ export default function TreasuryScreen({
 
     vaults?.forEach((vault) => {
       let vaultValue = 0;
-      vault.tokens.forEach((token: any) => {
+      vault?.tokens?.forEach((token: any) => {
         const coinGeckoId = token?.extensions?.coingeckoId;
         vaultValue +=
           tokenPriceData[coinGeckoId]?.current_price *

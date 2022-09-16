@@ -18,6 +18,7 @@ interface ProposalCardProps {
   mintDecimals: number;
   voteThresholdPercentage: number;
   creatorWalletId: string;
+  hideVotes?: boolean;
 }
 
 const proposalStatusKey = {
@@ -39,6 +40,7 @@ export const ProposalCard = ({
   mintDecimals,
   voteThresholdPercentage,
   creatorWalletId,
+  hideVotes = false,
 }: ProposalCardProps) => {
   const {
     status,
@@ -143,7 +145,7 @@ export const ProposalCard = ({
     : "";
 
   return (
-    <Container onLongPress={onClick} activeOpacity={0.5}>
+    <Container onPress={onClick} activeOpacity={0.5}>
       <TextContainer>
         <ProposalTitle>{name}</ProposalTitle>
         <Badge
@@ -178,13 +180,6 @@ export const ProposalCard = ({
             </StatusText>
           )}
         </SubtextContainer>
-        <IconButton onPress={onClick} activeOpacity={0.5}>
-          <FontAwesomeIcon
-            icon={faAngleDoubleRight}
-            size={18}
-            color={theme.gray[400]}
-          />
-        </IconButton>
       </ProposalSubData>
       {creatorWalletId && (
         <CreatorRow>
@@ -196,7 +191,7 @@ export const ProposalCard = ({
         </CreatorRow>
       )}
 
-      {isVoting && (
+      {isVoting && !hideVotes && (
         <Votes>
           <VoteCountRow>
             <VoteColumn>
@@ -240,6 +235,7 @@ export const ProposalCard = ({
 const Container = styled.TouchableOpacity`
   /* height: 80px; */
   width: 100%;
+  min-width: 300px;
   margin-bottom: ${(props: any) => props.theme.spacing[3]};
   border-radius: 8px;
   background: ${(props: any) => props.theme.gray[800]};
