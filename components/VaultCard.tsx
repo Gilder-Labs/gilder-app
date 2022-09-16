@@ -130,9 +130,9 @@ export const VaultCard = ({
         {/* <TempButton onPress={handleVaultOpenBrowser}>
           <Typography text="Open Browser" />
         </TempButton> */}
-        <CreateProposalButton onPress={tryCreateProposal}>
+        {/* <CreateProposalButton onPress={tryCreateProposal}>
           <Typography text="Create Proposal" marginBottom="0" size="subtitle" />
-        </CreateProposalButton>
+        </CreateProposalButton> */}
         <VaultValue>{numeral(totalValue).format("$0,0")}</VaultValue>
       </TitleContainer>
 
