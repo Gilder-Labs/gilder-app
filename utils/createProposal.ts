@@ -13,10 +13,7 @@ import { SPL_PUBLIC_KEY, RPC_CONNECTION } from "../constants/Solana";
 
 import {
   getGovernanceProgramVersion,
-  getInstructionDataFromBase64,
-  createInstructionData,
-  ProgramAccount,
-  TokenOwnerRecord,
+  getGovernanceAccounts,
   VoteType,
   withCreateProposal,
   getSignatoryRecordAddress,
@@ -24,11 +21,13 @@ import {
   withInsertTransaction,
   withSignOffProposal,
   InstructionData,
+  pubkeyFilter,
+  Governance,
 } from "@solana/spl-governance";
 
 //https://github.com/marinade-finance/solana-js-utils/blob/72a191101a5d6ddd8e011f403095e542c603a906/packages/solana-cli-utils/middleware/multisig/SplGovernanceMiddleware.ts
 
-let connection = new Connection(RPC_CONNECTION, "confirmed");
+let connection = new Connection(RPC_CONNECTION, "recent");
 
 export const createNewProposalTransaction = async ({
   selectedRealm,
@@ -74,7 +73,6 @@ export const createNewProposalTransaction = async ({
     new PublicKey(selectedRealm?.governanceId)
   );
 
-  // V2 Approve/Deny configuration
   const voteType = VoteType.SINGLE_CHOICE;
   const options = ["Approve"];
   const useDenyOption = true;
@@ -87,12 +85,23 @@ export const createNewProposalTransaction = async ({
     : new PublicKey(selectedRealm?.councilMint);
 
   const programId = new PublicKey(selectedRealm!.governanceId);
-  const governanceAuthority = new PublicKey(member.walletId);
+  const governanceAuthority = walletPublicKey; // maybe walletPublicKey?
   const realmPublicKey = new PublicKey(selectedRealm!.pubKey);
-  const proposalIndex = 41; // proposalIndex - todo? maybe the actual number in the proposal, change to governance.proposalCount
-  const governancePublicKey = new PublicKey(
-    "ETNjJwHiQBLTtT1QoDEDyj4n3XNmccVMGLejAQpHwydP"
+
+  const walletOfMember = new PublicKey(member.walletId);
+
+  // get most recent version of governance account
+  const governanceInfo = await getGovernanceAccounts(
+    connection,
+    programId,
+    Governance,
+    [pubkeyFilter(33, governingTokenMint)!]
   );
+
+  const proposalIndex = governanceInfo[0].account.proposalCount; // proposalIndex - todo? maybe the actual number in the proposal, change to governance.proposalCount
+  const governancePublicKey = governanceInfo[0].pubkey;
+
+  console.log("governance info", governanceInfo[0]);
 
   console.log("propogramId", selectedRealm!.governanceId);
   console.log("governance", vault?.governanceId);
@@ -112,8 +121,8 @@ export const createNewProposalTransaction = async ({
     proposalData.name,
     proposalData.description,
     governingTokenMint,
-    // governanceAuthority, // governance authority / wallet making proposal
-    walletPublicKey,
+    governanceAuthority, // wallet making proposal
+
     proposalIndex,
     voteType,
     options,
@@ -122,6 +131,7 @@ export const createNewProposalTransaction = async ({
     undefined // TODO: plugin
   );
 
+  // adding signatory + sign off makes proposal go to voting state
   // await withAddSignatory(
   //   instructions,
   //   programId,
@@ -133,15 +143,21 @@ export const createNewProposalTransaction = async ({
   //   payer
   // );
 
+  // const signatoryRecordAddress = await getSignatoryRecordAddress(
+  //   programId,
+  //   proposalAddress,
+  //   signatory
+  // );
+
   // withSignOffProposal(
-  //   instructions,
+  //   insertInstructions,
   //   programId,
   //   programVersion,
   //   realmPublicKey,
   //   governancePublicKey,
   //   proposalAddress,
   //   signatory,
-  //   tokenOwnerPublicKey,
+  //   signatoryRecordAddress,
   //   undefined
   // );
 
@@ -149,6 +165,7 @@ export const createNewProposalTransaction = async ({
   const transaction = new Transaction({ feePayer: walletPublicKey });
   transaction.recentBlockhash = recentBlock.blockhash;
   transaction.add(...instructions);
+  // transaction.add(...insertInstructions);
 
   return transaction;
 };
