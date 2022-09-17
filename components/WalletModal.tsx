@@ -30,7 +30,7 @@ import { Incubator } from "react-native-ui-lib";
 const { Toast } = Incubator;
 import { useQuery, gql } from "@apollo/client";
 import { usePhantom } from "../hooks/usePhantom";
-import { useChatClient } from "../hooks/useChatClient";
+// import { useChatClient } from "../hooks/useChatClient";
 
 interface RealmSelectModalProps {}
 
@@ -71,7 +71,7 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
   const { loading, error, data } = useQuery(GET_WALLET_NFTS, {
     variables: { owners: [publicKey] },
   });
-  const { disconnectClient } = useChatClient();
+  // const { disconnectClient } = useChatClient();
   const { isShowingToast } = useAppSelector((state) => state.utility);
   const { twitterURL, twitterHandle } = useCardinalIdentity(publicKey);
 
@@ -82,7 +82,7 @@ export const WalletModal = ({}: RealmSelectModalProps) => {
     }
     dispatch(disconnectWallet());
     navigation.navigate("Proposals");
-    await disconnectClient();
+    // await disconnectClient();
 
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
   };

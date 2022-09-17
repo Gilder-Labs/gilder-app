@@ -42,6 +42,7 @@ import DiscoverDetailsScreen from "../screens/DiscoverDetailsScreen";
 import InfoModalScreen from "../screens/InfoModalScreen";
 import OnboardingScreen from "../screens/OnboardingScreen";
 import WebViewScreen from "../screens/WebViewScreen";
+import CreateProposalScreen from "../screens/CreateProposalScreen";
 
 import { chatApiKey } from "../constants/Chat";
 import { StreamChat } from "stream-chat";
@@ -434,6 +435,13 @@ export default function Navigation({}: {}) {
             component={WebViewScreen}
             options={({ route }) => ({
               title: "Proposal Browser",
+            })}
+          />
+          <Stack.Screen
+            name="CreateProposalScreen"
+            component={CreateProposalScreen}
+            options={({ route }) => ({
+              title: "Create Proposal",
             })}
           />
         </Stack.Navigator>

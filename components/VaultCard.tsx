@@ -103,20 +103,20 @@ export const VaultCard = ({
     return <></>;
   }
 
-  const handleVaultOpenBrowser = () => {
+  const handleCreateProposal = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 
     //@ts-ignore
-    navigation.push("WebViewScreen", {
+    navigation.push("CreateProposalScreen", {
       walletId: vaultId,
     });
   };
 
-  const tryCreateProposal = () => {
-    const vault = vaults.find((vault) => vault.pubKey === vaultId);
+  // const tryCreateProposal = () => {
+  //   const vault = vaults.find((vault) => vault.pubKey === vaultId);
 
-    dispatch(createProposalAttempt({ vault }));
-  };
+  //   dispatch(createProposalAttempt({ vault }));
+  // };
 
   return (
     <Container>
@@ -127,12 +127,10 @@ export const VaultCard = ({
           shade="400"
           hideIcon={true}
         />
-        {/* <TempButton onPress={handleVaultOpenBrowser}>
-          <Typography text="Open Browser" />
-        </TempButton> */}
-        {/* <CreateProposalButton onPress={tryCreateProposal}>
+
+        <CreateProposalButton onPress={handleCreateProposal}>
           <Typography text="Create Proposal" marginBottom="0" size="subtitle" />
-        </CreateProposalButton> */}
+        </CreateProposalButton>
         <VaultValue>{numeral(totalValue).format("$0,0")}</VaultValue>
       </TitleContainer>
 

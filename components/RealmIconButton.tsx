@@ -4,7 +4,6 @@ import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { fetchRealm, selectRealm } from "../store/realmSlice";
 import { RealmIcon } from "./RealmIcon";
 import * as Haptics from "expo-haptics";
-import { useChatClient } from "../hooks/useChatClient";
 
 interface RealmIconButtonProps {
   realmId: string;

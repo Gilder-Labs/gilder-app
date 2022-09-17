@@ -48,6 +48,33 @@ export default function WebViewScreen({ route }: any) {
             "EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i"
           ),
         });
+        break;
+      }
+      case "signTransaction": {
+        // Payload should be the transaction
+        console.log("SIGN TRANSACTION: parsed.payload", data);
+        // promptUserForTX({
+        //   host: parsed.payload.info.host,
+        //   title: parsed.payload.info.title,
+        //   action: 'signTransaction',
+        //   onSuccess: async () => {
+        //     const signedTxData = await SolspaceWallet.signTransactionWeb(
+        //       parsed.payload.transaction,
+        //     );
+        //     returnDataToWebview('signTransaction', signedTxData);
+        //   },
+        // });
+        break;
+      }
+      case "signAllTransactions": {
+        // Payload should be the transaction
+        console.log("SIGN ALL TRANSACTIONS: parsed.payload", data);
+
+        break;
+      }
+      case "signMessage": {
+        // Payload should be the transaction
+        console.log("SIGN MESSAGE:", data);
 
         break;
       }
@@ -59,10 +86,6 @@ export default function WebViewScreen({ route }: any) {
       Linking.openURL(navState.url);
     }
   };
-
-  const gilderTreasuryWallet = "BprvFKeDRoJLPUjyd8s1SVBNCmHGzsyXFWzy9y7u2yac";
-  // myw allet
-  // const publicKey = "EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i";
 
   const phantomTest = `
   try{
@@ -83,27 +106,82 @@ export default function WebViewScreen({ route }: any) {
       });
     }
 
-    const phantom = { 
+    const phantom = {
       isPhantom: true,
       isConnected: true,
-      publicKey: { toBytes: () => { return "${walletId}" } },
-      on: (event, callback) => { console.log("on", event, callback) } , 
-      off: (event, callback) => { console.log("off", event, callback) },
-      signTransaction: async () => {},
+      publicKey: {
+        toBytes: () => {
+          return "${walletId}";
+        },
+      },
+      on: (event, callback) => {
+        console.log("on", event, callback);
+      },
+      off: (event, callback) => {
+        console.log("off", event, callback);
+      },
+      signTransaction: async (transaction) => {
+        console.log("signTransaction", transaction);
+        window.ReactNativeWebView.postMessage(
+          JSON.stringify({
+            message: "signTransaction",
+            payload: {
+              transaction,
+              info: {
+                title: document.title,
+                host: window.location.host,
+              },
+            },
+          })
+        );
+        return communicate("signTransaction");
+      },
+      signAllTransactions: async (transaction) => {
+        console.log("signAllTransactions", transaction);
+        window.ReactNativeWebView.postMessage(
+          JSON.stringify({
+            message: "signAllTransactions",
+            payload: {
+              transaction,
+              info: {
+                title: document.title,
+                host: window.location.host,
+              },
+            },
+          })
+        );
+        return communicate("signAllTransactions");
+      },
+      signMessage: async (message) => {
+        console.log("signMessage", message);
+        window.ReactNativeWebView.postMessage(
+          JSON.stringify({
+            message: "signMessage",
+            payload: {
+              messageToSign: message,
+              info: {
+                title: document.title,
+                host: window.location.host,
+              },
+            },
+          })
+        );
+        return communicate("signAllTransactions");
+      },
       connect: async () => {
         window.ReactNativeWebView.postMessage(
           JSON.stringify({
-            message: 'connect',
+            message: "connect",
             payload: {
               info: {
-                title: document.title, 
-                host: window.location.host
-              }
-            }
-          }),
+                title: document.title,
+                host: window.location.host,
+              },
+            },
+          })
         );
       },
-    }
+    };
     window.phantom = phantom;
     window.phantom.solana = phantom;
     window.solana = phantom;
@@ -116,20 +194,21 @@ export default function WebViewScreen({ route }: any) {
     true;
     `;
 
+  console.log("wallet id", walletId);
+
   return (
     <Container>
       <SafeAreaView style={styles.container}>
         <WebView
-          // can connect
           // source={{ uri: "https://trade.mango.markets" }}
           // source={{ uri: "https://friktion.fi/" }}
-          // source={{ uri: "https://dialect.to" }}
+          source={{ uri: "https://dialect.to" }}
           // source={{ uri: "https://solanart.io/" }}
           // source={{
           //   uri: "https://app.castle.finance/vaults/3tBqjyYtf9Utb1NNsx4o7AV1qtzHoxsMXgkmat3rZ3y6",
           // }}
-
-          source={{ uri: "https://orca.so" }}
+          // source={{ uri: "https://orca.so" }}
+          // source={{ uri: "https://jup.ag" }}
           // source={{
           //   uri: "https://app.dispatch.forum/forum/2gPb8UPw5n5gpUpnRD4h9nG254dY5JdVxmkYJxsZPbDr",
           // }}
