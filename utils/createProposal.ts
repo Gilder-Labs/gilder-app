@@ -19,12 +19,15 @@ import {
   getSignatoryRecordAddress,
   withAddSignatory,
   withInsertTransaction,
+  serializeInstructionToBase64,
+  getInstructionDataFromBase64,
   withSignOffProposal,
   InstructionData,
   pubkeyFilter,
   createInstructionData,
   Governance,
 } from "@solana/spl-governance";
+import bs58 from "bs58";
 
 //https://github.com/marinade-finance/solana-js-utils/blob/72a191101a5d6ddd8e011f403095e542c603a906/packages/solana-cli-utils/middleware/multisig/SplGovernanceMiddleware.ts
 
@@ -38,6 +41,7 @@ export const createNewProposalTransaction = async ({
   selectedDelegate,
   isCommunityVote,
   vault,
+  transactionInstructions,
 }: {
   selectedRealm: Realm;
   walletAddress: string;
@@ -50,6 +54,7 @@ export const createNewProposalTransaction = async ({
   selectedDelegate: string;
   isCommunityVote: boolean;
   vault: any;
+  transactionInstructions?: any;
 }) => {
   const walletPublicKey = new PublicKey(walletAddress);
   const instructions: TransactionInstruction[] = [];
@@ -124,7 +129,7 @@ export const createNewProposalTransaction = async ({
   );
 
   // temp instructions to
-  const data = createInstructionData(
+  const exampleData = await createInstructionData(
     SystemProgram.transfer({
       fromPubkey: new PublicKey(vault?.pubKey),
       toPubkey: new PublicKey("EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i"),
@@ -132,26 +137,8 @@ export const createNewProposalTransaction = async ({
     })
   );
 
-  // inserts instructions into proposal
-  // if we havbe instruction data, insert it into proposal transaction
-  if (data) {
-    await withInsertTransaction(
-      instructions,
-      programId,
-      programVersion,
-      governancePublicKey,
-      proposalAddress,
-      tokenOwnerPublicKey,
-      payer,
-      0,
-      0,
-      0,
-      [data],
-      payer
-    );
-  }
+  console.log("example instruction", exampleData);
 
-  // adding signatory + sign off makes proposal go to voting state
   await withAddSignatory(
     instructions,
     programId,
@@ -163,13 +150,77 @@ export const createNewProposalTransaction = async ({
     payer
   );
 
+  // inserts instructions into proposal
+  // if we havbe instruction data, insert it into proposal transaction
+  let index = 1;
+  if (transactionInstructions) {
+    const newInstructions = transactionInstructions[0].instructions;
+    console.log("ADDING INSTRUCTIONS", newInstructions);
+    for await (const instruct of newInstructions) {
+      let keys = instruct.keys.map((key) => {
+        return {
+          pubkey: new PublicKey(key.pubkey),
+          isSigner: key.isSigner,
+          isWritable: key.isWritable,
+        };
+      });
+
+      const test = new TransactionInstruction({
+        keys: keys,
+        programId: new PublicKey(instruct.programId),
+        data: Buffer.from(instruct.data),
+      });
+      console.log("test", test);
+
+      const base64instruction = serializeInstructionToBase64(test);
+      console.log("base 64 instruction", base64instruction);
+      let data = getInstructionDataFromBase64(base64instruction);
+      console.log("instruction from 64", data);
+
+      await withInsertTransaction(
+        insertInstructions,
+        programId,
+        programVersion,
+        governancePublicKey,
+        proposalAddress,
+        tokenOwnerPublicKey,
+        payer,
+        index,
+        0,
+        0,
+        [data],
+        payer
+      );
+      index++;
+    }
+
+    console.log("PAST ADDING NEW INSTRUCTIONS");
+
+    // await withInsertTransaction(
+    //   instructions,
+    //   programId,
+    //   programVersion,
+    //   governancePublicKey,
+    //   proposalAddress,
+    //   tokenOwnerPublicKey,
+    //   payer,
+    //   0,
+    //   0,
+    //   0,
+    //   [],
+    //   payer
+    // );
+  }
+
+  // adding signatory + sign off makes proposal go to voting state
+
   const signatoryRecordAddress = await getSignatoryRecordAddress(
     programId,
     proposalAddress,
     signatory
   );
 
-  withSignOffProposal(
+  await withSignOffProposal(
     insertInstructions,
     programId,
     programVersion,

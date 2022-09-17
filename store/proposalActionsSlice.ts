@@ -29,7 +29,7 @@ let connection = new Connection(RPC_CONNECTION, "confirmed");
 
 export const createProposalAttempt = createAsyncThunk(
   "proposalActions/createProposal",
-  async ({ vault }: any, { getState }) => {
+  async ({ vault, transactionInstructions }: any, { getState }) => {
     try {
       const { realms, wallet, members } = getState() as RootState;
       const { selectedRealm } = realms;
@@ -40,7 +40,7 @@ export const createProposalAttempt = createAsyncThunk(
       const isCommunityVote = false;
       const selectedDelegate = "EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i";
       const proposalData = {
-        name: "test transaction",
+        name: "test new transaction",
         description: "test description",
         instrinctions: [],
       };
@@ -53,6 +53,7 @@ export const createProposalAttempt = createAsyncThunk(
         selectedDelegate,
         isCommunityVote,
         vault,
+        transactionInstructions,
       });
 
       const privateKey = await SecureStore.getItemAsync("privateKey");
@@ -68,7 +69,7 @@ export const createProposalAttempt = createAsyncThunk(
         [walletKeypair]
       );
 
-      console.log("trying to create proposal");
+      console.log("Successfully created proposal!!!", response);
       return {};
     } catch (error) {
       console.log("transaction error", error);

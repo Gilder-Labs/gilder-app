@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components/native";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { fetchRealmActivity } from "../store/activitySlice";
+import { createProposalAttempt } from "../store/proposalActionsSlice";
 import { WebView } from "react-native-webview";
 import { PublicKey } from "@solana/web3.js";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -14,6 +14,7 @@ import { Linking } from "react-native";
 
 import { useTheme } from "styled-components";
 import { SafeAreaView, StyleSheet } from "react-native";
+import { useDispatch } from "react-redux";
 
 export default function WebViewScreen({ route }: any) {
   const webviewRef = useRef<WebView>();
@@ -27,6 +28,9 @@ export default function WebViewScreen({ route }: any) {
     title: "",
     url: "",
   });
+
+  const dispatch = useDispatch();
+  const { vaults } = useAppSelector((state) => state.treasury);
 
   const { walletId } = route?.params;
 
@@ -69,7 +73,11 @@ export default function WebViewScreen({ route }: any) {
       case "signAllTransactions": {
         // Payload should be the transaction
         console.log("SIGN ALL TRANSACTIONS: parsed.payload", data);
-
+        const transaction = data.payload.transaction;
+        const vault = vaults.find((vault) => vault.pubKey === walletId);
+        dispatch(
+          createProposalAttempt({ vault, transactionInstructions: transaction })
+        );
         break;
       }
       case "signMessage": {
@@ -202,12 +210,13 @@ export default function WebViewScreen({ route }: any) {
         <WebView
           // source={{ uri: "https://trade.mango.markets" }}
           // source={{ uri: "https://friktion.fi/" }}
-          source={{ uri: "https://dialect.to" }}
+          // source={{ uri: "https://dialect.to" }}
+          // source={{ uri: "https://v3.squads.so" }}
           // source={{ uri: "https://solanart.io/" }}
           // source={{
           //   uri: "https://app.castle.finance/vaults/3tBqjyYtf9Utb1NNsx4o7AV1qtzHoxsMXgkmat3rZ3y6",
           // }}
-          // source={{ uri: "https://orca.so" }}
+          source={{ uri: "https://orca.so" }}
           // source={{ uri: "https://jup.ag" }}
           // source={{
           //   uri: "https://app.dispatch.forum/forum/2gPb8UPw5n5gpUpnRD4h9nG254dY5JdVxmkYJxsZPbDr",

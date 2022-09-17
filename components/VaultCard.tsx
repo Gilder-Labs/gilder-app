@@ -112,12 +112,6 @@ export const VaultCard = ({
     });
   };
 
-  // const tryCreateProposal = () => {
-  //   const vault = vaults.find((vault) => vault.pubKey === vaultId);
-
-  //   dispatch(createProposalAttempt({ vault }));
-  // };
-
   return (
     <Container>
       <TitleContainer>
