@@ -31,19 +31,23 @@ export const createProposalAttempt = createAsyncThunk(
   "proposalActions/createProposal",
   async ({ vault, transactionInstructions }: any, { getState }) => {
     try {
-      const { realms, wallet, members } = getState() as RootState;
+      const { realms, wallet, members, treasury } = getState() as RootState;
       const { selectedRealm } = realms;
       const { membersMap } = members;
       const { publicKey } = wallet;
+
+      const { governancesMap } = treasury;
 
       // todo change to user choice
       const isCommunityVote = false;
       const selectedDelegate = "EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i";
       const proposalData = {
-        name: "test new transaction",
+        name: "test transfer sol",
         description: "test description",
         instrinctions: [],
       };
+
+      console.log("vault", vault);
 
       const transaction = await createNewProposalTransaction({
         selectedRealm,
@@ -53,6 +57,7 @@ export const createProposalAttempt = createAsyncThunk(
         selectedDelegate,
         isCommunityVote,
         vault,
+        governance: governancesMap[vault.governanceId],
         transactionInstructions,
       });
 

@@ -29,7 +29,7 @@ import {
 } from "@solana/spl-governance";
 import bs58 from "bs58";
 
-//https://github.com/marinade-finance/solana-js-utils/blob/72a191101a5d6ddd8e011f403095e542c603a906/packages/solana-cli-utils/middleware/multisig/SplGovernanceMiddleware.ts
+// https://github.com/marinade-finance/solana-js-utils/blob/72a191101a5d6ddd8e011f403095e542c603a906/packages/solana-cli-utils/middleware/multisig/SplGovernanceMiddleware.ts
 
 let connection = new Connection(HEAVY_RPC_CONNECTION, "recent");
 
@@ -41,6 +41,7 @@ export const createNewProposalTransaction = async ({
   selectedDelegate,
   isCommunityVote,
   vault,
+  governance,
   transactionInstructions,
 }: {
   selectedRealm: Realm;
@@ -54,6 +55,7 @@ export const createNewProposalTransaction = async ({
   selectedDelegate: string;
   isCommunityVote: boolean;
   vault: any;
+  governance: any;
   transactionInstructions?: any;
 }) => {
   const walletPublicKey = new PublicKey(walletAddress);
@@ -65,6 +67,8 @@ export const createNewProposalTransaction = async ({
 
   let member;
 
+  // TODO... for each transaction, make array of signers
+  const signers: TransactionInstruction[] = [];
   const prerequisiteInstructions: TransactionInstruction[] = [];
   const prerequisiteInstructionsSigners: Keypair[] = [];
 
@@ -98,16 +102,10 @@ export const createNewProposalTransaction = async ({
 
   const walletOfMember = new PublicKey(member.walletId);
 
-  // get most recent version of governance account
-  const governanceInfo = await getGovernanceAccounts(
-    connection,
-    programId,
-    Governance,
-    [pubkeyFilter(33, governingTokenMint)!]
-  );
-
-  const proposalIndex = governanceInfo[0].account.proposalCount; // proposalIndex - todo? maybe the actual number in the proposal, change to governance.proposalCount
-  const governancePublicKey = governanceInfo[0].pubkey;
+  // TODO: fix governance ID - should be either "Fv7N9yvSHyrt53EfPMoMLZCfxGjhd1opC5PGE4ddz7E" or
+  // when governance di = 2KkWYpJR1TCrfNXgP4JiuSGewAvurG6f6Maz3VLYHzUH it doesn't work
+  const proposalIndex = governance.proposalCount; // proposalIndex - todo? maybe the actual number in the proposal, change to governance.proposalCount
+  const governancePublicKey = new PublicKey(governance.governanceId);
 
   const proposalAddress = await withCreateProposal(
     instructions,
@@ -133,7 +131,7 @@ export const createNewProposalTransaction = async ({
     SystemProgram.transfer({
       fromPubkey: new PublicKey(vault?.pubKey),
       toPubkey: new PublicKey("EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i"),
-      lamports: 100,
+      lamports: 0.1 * LAMPORTS_PER_SOL,
     })
   );
 
@@ -153,64 +151,65 @@ export const createNewProposalTransaction = async ({
   // inserts instructions into proposal
   // if we havbe instruction data, insert it into proposal transaction
   let index = 0;
-  if (transactionInstructions) {
-    const newInstructions = transactionInstructions[0].instructions;
-    console.log("ADDING INSTRUCTIONS", newInstructions);
-    for await (const instruct of newInstructions) {
-      let keys = instruct.keys.map((key) => {
-        return {
-          pubkey: new PublicKey(key.pubkey),
-          isSigner: key.isSigner,
-          isWritable: key.isWritable,
-        };
-      });
+  // if (transactionInstructions) {
+  //   const newInstructions = transactionInstructions[0].instructions;
 
-      const test = new TransactionInstruction({
-        keys: keys,
-        programId: new PublicKey(instruct.programId),
-        data: Buffer.from(instruct.data),
-      });
-      console.log("test", test);
+  //   // const tempTestInstructions = newInstructions.slice(0, 1);
 
-      const base64instruction = serializeInstructionToBase64(test);
-      console.log("base 64 instruction", base64instruction);
-      let data = getInstructionDataFromBase64(base64instruction);
-      console.log("instruction from 64", data);
+  //   console.log("ADDING INSTRUCTIONS", newInstructions);
+  //   for await (const instruct of newInstructions) {
+  //     let keys = instruct.keys.map((key) => {
+  //       return {
+  //         pubkey: new PublicKey(key.pubkey),
+  //         isSigner: key.isSigner,
+  //         isWritable: key.isWritable,
+  //       };
+  //     });
 
-      await withInsertTransaction(
-        insertInstructions,
-        programId,
-        programVersion,
-        governancePublicKey,
-        proposalAddress,
-        tokenOwnerPublicKey,
-        payer,
-        index,
-        0,
-        0,
-        [data],
-        payer
-      );
-      index++;
-    }
+  //     const test = new TransactionInstruction({
+  //       keys: keys,
+  //       programId: new PublicKey(instruct.programId),
+  //       data: Buffer.from(instruct.data),
+  //     });
+  //     console.log("test", test);
 
-    console.log("PAST ADDING NEW INSTRUCTIONS");
+  //     const base64instruction = serializeInstructionToBase64(test);
+  //     console.log("base 64 instruction", base64instruction);
+  //     let data = getInstructionDataFromBase64(base64instruction);
+  //     console.log("instruction from 64", data);
 
-    // await withInsertTransaction(
-    //   instructions,
-    //   programId,
-    //   programVersion,
-    //   governancePublicKey,
-    //   proposalAddress,
-    //   tokenOwnerPublicKey,
-    //   payer,
-    //   0,
-    //   0,
-    //   0,
-    //   [],
-    //   payer
-    // );
-  }
+  //     await withInsertTransaction(
+  //       insertInstructions,
+  //       programId,
+  //       programVersion,
+  //       governancePublicKey,
+  //       proposalAddress,
+  //       tokenOwnerPublicKey,
+  //       payer,
+  //       index,
+  //       0,
+  //       0,
+  //       [data],
+  //       payer
+  //     );
+  //     index++;
+  //   }
+  // }
+
+  await withInsertTransaction(
+    insertInstructions,
+    programId,
+    programVersion,
+    governancePublicKey,
+    proposalAddress,
+    tokenOwnerPublicKey,
+    payer,
+    index,
+    0,
+    0,
+    [exampleData],
+    payer
+  );
 
   // adding signatory + sign off makes proposal go to voting state
 
@@ -240,7 +239,9 @@ export const createNewProposalTransaction = async ({
     ...insertInstructions,
   ];
   const recentBlock = await connection.getLatestBlockhash();
-  const transaction = new Transaction({ feePayer: walletPublicKey });
+  const transaction = new Transaction();
+
+  // const transaction = new Transaction({ feePayer: walletPublicKey });
   transaction.recentBlockhash = recentBlock.blockhash;
   transaction.add(...combinedInstructions);
   console.log("getting through the whole of create proposal");

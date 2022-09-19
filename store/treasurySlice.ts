@@ -162,6 +162,7 @@ export const fetchVaults = createAsyncThunk(
           vaultId: vaultsInfo[index].vaultId,
           isGovernanceVault: vaultsInfo[index].isGovernanceVault,
           tokens: tokens,
+          governanceId: rawGovernances[index].pubkey.toBase58(),
         };
       });
 
