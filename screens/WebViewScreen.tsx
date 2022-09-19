@@ -70,6 +70,30 @@ export default function WebViewScreen({ route }: any) {
         // });
         break;
       }
+      case "signAndSendTransaction": {
+        // Payload should be the transaction
+        console.log("SIGN and SEND transaction: parsed", data);
+        const transaction = data.payload.transaction;
+        const vault = vaults.find((vault) => vault.pubKey === walletId);
+        dispatch(
+          createProposalAttempt({
+            vault,
+            transactionInstructions: [transaction],
+          })
+        );
+        // promptUserForTX({
+        //   host: parsed.payload.info.host,
+        //   title: parsed.payload.info.title,
+        //   action: 'signTransaction',
+        //   onSuccess: async () => {
+        //     const signedTxData = await SolspaceWallet.signTransactionWeb(
+        //       parsed.payload.transaction,
+        //     );
+        //     returnDataToWebview('signTransaction', signedTxData);
+        //   },
+        // });
+        break;
+      }
       case "signAllTransactions": {
         // Payload should be the transaction
         console.log("SIGN ALL TRANSACTIONS: parsed.payload", data);
@@ -160,6 +184,23 @@ export default function WebViewScreen({ route }: any) {
         );
         return communicate("signAllTransactions");
       },
+      signAndSendTransaction: async (transaction, options) => {
+        console.log("signAndSendTransaction", transaction);
+        window.ReactNativeWebView.postMessage(
+          JSON.stringify({
+            message: "signAndSendTransaction",
+            payload: {
+              transaction,
+              options,
+              info: {
+                title: document.title,
+                host: window.location.host,
+              },
+            },
+          })
+        );
+        return communicate("signAndSendTransaction");
+      },
       signMessage: async (message) => {
         console.log("signMessage", message);
         window.ReactNativeWebView.postMessage(
@@ -216,13 +257,13 @@ export default function WebViewScreen({ route }: any) {
           // source={{
           //   uri: "https://app.castle.finance/vaults/3tBqjyYtf9Utb1NNsx4o7AV1qtzHoxsMXgkmat3rZ3y6",
           // }}
-          source={{ uri: "https://orca.so" }}
+          // source={{ uri: "https://orca.so" }}
           // source={{ uri: "https://jup.ag" }}
           // source={{
           //   uri: "https://app.dispatch.forum/forum/2gPb8UPw5n5gpUpnRD4h9nG254dY5JdVxmkYJxsZPbDr",
           // }}
           // source={{ uri: "https://app.realms.today" }}
-          // source={{ uri: "https://solend.fi/dashboard" }}
+          source={{ uri: "https://marinade.finance/app/staking/" }}
           javaScriptEnabled={true}
           ref={webviewRef}
           // handle cors

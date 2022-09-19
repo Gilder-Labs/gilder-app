@@ -9,7 +9,7 @@ import {
   sendAndConfirmTransaction,
   SystemProgram,
 } from "@solana/web3.js";
-import { SPL_PUBLIC_KEY, RPC_CONNECTION } from "../constants/Solana";
+import { SPL_PUBLIC_KEY, HEAVY_RPC_CONNECTION } from "../constants/Solana";
 
 import {
   getGovernanceProgramVersion,
@@ -31,7 +31,7 @@ import bs58 from "bs58";
 
 //https://github.com/marinade-finance/solana-js-utils/blob/72a191101a5d6ddd8e011f403095e542c603a906/packages/solana-cli-utils/middleware/multisig/SplGovernanceMiddleware.ts
 
-let connection = new Connection(RPC_CONNECTION, "recent");
+let connection = new Connection(HEAVY_RPC_CONNECTION, "recent");
 
 export const createNewProposalTransaction = async ({
   selectedRealm,
@@ -152,7 +152,7 @@ export const createNewProposalTransaction = async ({
 
   // inserts instructions into proposal
   // if we havbe instruction data, insert it into proposal transaction
-  let index = 1;
+  let index = 0;
   if (transactionInstructions) {
     const newInstructions = transactionInstructions[0].instructions;
     console.log("ADDING INSTRUCTIONS", newInstructions);
@@ -232,6 +232,8 @@ export const createNewProposalTransaction = async ({
     undefined
   );
 
+  console.log("getting past with sign off");
+
   const combinedInstructions = [
     // ...prerequisiteInstructions,
     ...instructions,
@@ -241,6 +243,7 @@ export const createNewProposalTransaction = async ({
   const transaction = new Transaction({ feePayer: walletPublicKey });
   transaction.recentBlockhash = recentBlock.blockhash;
   transaction.add(...combinedInstructions);
+  console.log("getting through the whole of create proposal");
 
   return transaction;
 };
