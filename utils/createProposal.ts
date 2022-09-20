@@ -217,17 +217,17 @@ export const createNewProposalTransaction = async ({
     signatory
   );
 
-  // await withSignOffProposal(
-  //   signOffInstruction,
-  //   programId,
-  //   programVersion,
-  //   realmPublicKey,
-  //   governancePublicKey,
-  //   proposalAddress,
-  //   signatory,
-  //   signatoryRecordAddress,
-  //   undefined
-  // );
+  await withSignOffProposal(
+    signOffInstruction,
+    programId,
+    programVersion,
+    realmPublicKey,
+    governancePublicKey,
+    proposalAddress,
+    signatory,
+    signatoryRecordAddress,
+    undefined
+  );
 
   // const createProposalInstructions = [
   //   // ...prerequisiteInstructions,
@@ -247,30 +247,24 @@ export const createNewProposalTransaction = async ({
 
   // create proposal transaction
   let transactions = [];
-  const recentBlock = await connection.getLatestBlockhash();
   let proposalTransaction = new Transaction({
     feePayer: walletPublicKey,
-    recentBlockhash: recentBlock.blockhash,
   });
   proposalTransaction.add(...instructions);
   transactions.push(proposalTransaction);
 
   // dapp instructions
-  const dappBlock = await connection.getLatestBlockhash();
   let dappTransaction = new Transaction({
     feePayer: walletPublicKey,
-    recentBlockhash: dappBlock.blockhash,
   });
   dappTransaction.add(...insertInstructions);
   transactions.push(dappTransaction);
 
-  // const signoffBlock = await connection.getLatestBlockhash();
-  // let signOffTransaction = new Transaction({
-  //   feePayer: walletPublicKey,
-  //   recentBlockhash: signoffBlock.blockhash,
-  // });
-  // signOffTransaction.add(...signOffInstruction);
-  // transactions.push(signOffTransaction);
+  let signOffTransaction = new Transaction({
+    feePayer: walletPublicKey,
+  });
+  signOffTransaction.add(...signOffInstruction);
+  transactions.push(signOffTransaction);
 
   console.log("getting through the whole of create proposal");
 
