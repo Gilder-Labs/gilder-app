@@ -152,9 +152,6 @@ export const createNewProposalTransaction = async ({
   if (transactionInstructions) {
     const newInstructions = transactionInstructions[0].instructions;
 
-    // const tempTestInstructions = newInstructions.slice(0, 1);
-
-    console.log("transactionInstructions", transactionInstructions);
     // map data back to public keys, web bridge converts to strings
     for await (const instruct of newInstructions) {
       let keys = instruct.keys.map((key) => {
@@ -247,6 +244,7 @@ export const createNewProposalTransaction = async ({
 
   // create proposal transaction
   let transactions = [];
+
   let proposalTransaction = new Transaction({
     feePayer: walletPublicKey,
   });
@@ -254,19 +252,19 @@ export const createNewProposalTransaction = async ({
   transactions.push(proposalTransaction);
 
   // dapp instructions
-  let dappTransaction = new Transaction({
-    feePayer: walletPublicKey,
+  insertInstructions.forEach((ix) => {
+    let dappTransaction = new Transaction({
+      feePayer: walletPublicKey,
+    });
+    dappTransaction.add(ix);
+    transactions.push(dappTransaction);
   });
-  dappTransaction.add(...insertInstructions);
-  transactions.push(dappTransaction);
 
   let signOffTransaction = new Transaction({
     feePayer: walletPublicKey,
   });
   signOffTransaction.add(...signOffInstruction);
   transactions.push(signOffTransaction);
-
-  console.log("getting through the whole of create proposal");
 
   // return transaction;
   return transactions;
