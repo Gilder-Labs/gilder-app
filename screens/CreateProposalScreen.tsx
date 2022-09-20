@@ -14,7 +14,6 @@ import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "styled-components";
 
 export default function CreateProposalScreen({ route }: any) {
-  const webviewRef = useRef<WebView>();
   const navigation = useNavigation();
   const { walletId } = route?.params;
 
@@ -24,11 +23,11 @@ export default function CreateProposalScreen({ route }: any) {
 
   return (
     <Container>
-      <ProposalCreationButtonOuter>
+      <WebViewButtonOuter>
         <ProposalCreationButton onPress={() => handleOpenBrowser()}>
           <Typography text={"Wallet Browser"} />
         </ProposalCreationButton>
-      </ProposalCreationButtonOuter>
+      </WebViewButtonOuter>
       <ProposalCreationButtonOuter>
         <ProposalCreationButton>
           <Typography text={"Swap Tokens"} />
@@ -36,7 +35,7 @@ export default function CreateProposalScreen({ route }: any) {
       </ProposalCreationButtonOuter>
       <ProposalCreationButtonOuter>
         <ProposalCreationButton>
-          <Typography text={"More coming soon..."} />
+          <Typography text={"Swap Tokens"} />
         </ProposalCreationButton>
       </ProposalCreationButtonOuter>
     </Container>
@@ -58,6 +57,14 @@ const ProposalCreationButton = styled.TouchableOpacity`
   background: ${(props: any) => props.theme.gray[800]};
   justify-content: center;
   align-items: center;
+`;
+
+const WebViewButtonOuter = styled.TouchableOpacity`
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: ${(props) => props.theme.spacing[2]};
 `;
 
 const ProposalCreationButtonOuter = styled.View`

@@ -42,14 +42,14 @@ export const createProposalAttempt = createAsyncThunk(
       const isCommunityVote = false;
       const selectedDelegate = "EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i";
       const proposalData = {
-        name: "test transfer sol",
+        name: "test proposal",
         description: "test description",
         instrinctions: [],
       };
 
       console.log("vault", vault);
 
-      const transaction = await createNewProposalTransaction({
+      const transactions = await createNewProposalTransaction({
         selectedRealm,
         walletAddress: publicKey,
         proposalData,
@@ -66,15 +66,28 @@ export const createProposalAttempt = createAsyncThunk(
         throw Error();
       }
       const walletKeypair = Keypair.fromSecretKey(bs58.decode(privateKey));
+      const recentBlock = await connection.getLatestBlockhash();
+      // transaction.recentBlockhash = recentBlock.blockhash;
 
-      transaction.sign(walletKeypair);
-      const response = await sendAndConfirmTransaction(
-        connection,
-        transaction,
-        [walletKeypair]
-      );
+      // transaction.sign(walletKeypair);
+      // const response = await sendAndConfirmTransaction(
+      //   connection,
+      //   transaction,
+      //   [walletKeypair]
+      // );
 
-      console.log("Successfully created proposal!!!", response);
+      let index = 0;
+      for (const tx of transactions) {
+        tx.sign(walletKeypair);
+        console.log("tx", tx);
+        const response = await sendAndConfirmTransaction(connection, tx, [
+          walletKeypair,
+        ]);
+        console.log("index", index);
+        index++;
+      }
+
+      console.log("Successfully created proposal!!!");
       return {};
     } catch (error) {
       console.log("transaction error", error);
