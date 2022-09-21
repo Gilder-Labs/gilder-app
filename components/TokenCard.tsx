@@ -87,7 +87,7 @@ export const TokenCard = ({
               ).format("$0.00a")}
             </CoinPriceText>
           )}
-          {coinGeckoId && tokenPriceData && (
+          {/* {coinGeckoId && tokenPriceData && (
             <CoinPercentText
               isNegative={
                 tokenPriceData[coinGeckoId]?.price_change_percentage_24h < 0
@@ -98,7 +98,7 @@ export const TokenCard = ({
               ).format("0.00")}
               %
             </CoinPercentText>
-          )}
+          )} */}
         </CoinPriceContainer>
       </CoinTextContainer>
     </CoinCard>

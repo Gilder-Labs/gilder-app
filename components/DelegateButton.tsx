@@ -166,10 +166,9 @@ const IconContainer = styled.View<{ color: string }>`
 
 const Row = styled.View`
   flex-direction: row;
-  justify-content: center;
   align-items: center;
+  height: 24px;
   justify-content: center;
-  flex: 1;
 `;
 
 const SelectedContainer = styled.View`

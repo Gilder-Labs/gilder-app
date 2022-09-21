@@ -42,7 +42,7 @@ export const createProposalAttempt = createAsyncThunk(
       const isCommunityVote = false;
       const selectedDelegate = "EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i";
       const proposalData = {
-        name: "test proposal",
+        name: "test mnde proposal",
         description: "test description",
         instrinctions: [],
       };
