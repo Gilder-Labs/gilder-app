@@ -158,11 +158,11 @@ export const fetchVaults = createAsyncThunk(
         tokens.push(solTokenData);
 
         return {
-          pubKey: vaultsInfo[index].pubKey, // WALLET ID
-          vaultId: vaultsInfo[index].vaultId,
-          isGovernanceVault: vaultsInfo[index].isGovernanceVault,
+          pubKey: vaultsInfo?.[index]?.pubKey, // WALLET ID
+          vaultId: vaultsInfo?.[index]?.vaultId,
+          isGovernanceVault: vaultsInfo?.[index]?.isGovernanceVault,
           tokens: tokens,
-          governanceId: rawGovernances[index].pubkey.toBase58(),
+          governanceId: rawGovernances?.[index]?.pubkey?.toBase58(),
         };
       });
 

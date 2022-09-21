@@ -122,9 +122,9 @@ export const VaultCard = ({
           hideIcon={true}
         />
 
-        <CreateProposalButton onPress={handleCreateProposal}>
+        {/* <CreateProposalButton onPress={handleCreateProposal}>
           <Typography text="Create Proposal" marginBottom="0" size="subtitle" />
-        </CreateProposalButton>
+        </CreateProposalButton> */}
         <VaultValue>{numeral(totalValue).format("$0,0")}</VaultValue>
       </TitleContainer>
 

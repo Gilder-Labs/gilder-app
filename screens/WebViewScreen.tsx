@@ -48,15 +48,21 @@ export default function WebViewScreen({ route }: any) {
       case "connect": {
         console.log("Trying to connect");
         returnDataToWebview("connect", {
-          publicKey: new PublicKey(
-            "EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i"
-          ),
+          publicKey: new PublicKey(walletId),
         });
         break;
       }
       case "signTransaction": {
         // Payload should be the transaction
         console.log("SIGN TRANSACTION: parsed.payload", data);
+        const transaction = data.payload.transaction;
+        const vault = vaults.find((vault) => vault.pubKey === walletId);
+        dispatch(
+          createProposalAttempt({
+            vault,
+            transactionInstructions: [transaction],
+          })
+        );
         // promptUserForTX({
         //   host: parsed.payload.info.host,
         //   title: parsed.payload.info.title,
@@ -243,27 +249,40 @@ export default function WebViewScreen({ route }: any) {
     true;
     `;
 
-  console.log("wallet id", walletId);
-
   return (
     <Container>
       <SafeAreaView style={styles.container}>
         <WebView
-          // source={{ uri: "https://trade.mango.markets" }}
+          // working dapps so far
+
+          source={{ uri: "https://marinade.finance/app/staking/" }}
+          // source={{ uri: "https://solend.fi/dashboard" }}
           // source={{ uri: "https://friktion.fi/" }}
-          // source={{ uri: "https://dialect.to" }}
+
+          // apps that the tranasction errors out
+
+          // source={{ uri: "https://hyperspace.xyz/collection/bdlc_genesis" }}
+          // source={{ uri: "https://orca.so" }}
+          // source={{ uri: "https://jup.ag" }}
+
+          // apps that are in testing
+          // source={{ uri: "https://app.streamflow.finance/dashboard" }}
+          // source={{ uri: "https://app.meanfi.com/" }}
+
+          // apps that I can't connect with wallet or other misc issue
+          // source={{ uri: "https://rent.cardinal.so/miniroyale" }}
+          // source={{ uri: "https://www.tensor.trade/" }}
+          // source={{ uri: "https://rent.cardinal.so/miniroyale" }}
+          // source={{ uri: "https://trade.mango.markets" }}
           // source={{ uri: "https://v3.squads.so" }}
-          // source={{ uri: "https://solanart.io/" }}
           // source={{
           //   uri: "https://app.castle.finance/vaults/3tBqjyYtf9Utb1NNsx4o7AV1qtzHoxsMXgkmat3rZ3y6",
           // }}
-          // source={{ uri: "https://orca.so" }}
-          // source={{ uri: "https://jup.ag" }}
           // source={{
-          //   uri: "https://app.dispatch.forum/forum/2gPb8UPw5n5gpUpnRD4h9nG254dY5JdVxmkYJxsZPbDr",
+          //   uri: "https://app.dispatch.forum/",
           // }}
+
           // source={{ uri: "https://app.realms.today" }}
-          source={{ uri: "https://marinade.finance/app/staking/" }}
           javaScriptEnabled={true}
           ref={webviewRef}
           // handle cors
