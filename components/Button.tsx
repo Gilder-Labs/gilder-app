@@ -91,7 +91,7 @@ export const Button = ({
         style={{
           height: "100%",
           padding: 8,
-          borderRadius: "4px",
+          borderRadius: 4,
           flex: 1,
           alignItems: "center",
           justifyContent: "center",

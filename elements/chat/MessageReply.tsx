@@ -24,7 +24,7 @@ export const Messagereply = () => {
           style={{
             width: 24,
             height: 24,
-            borderRadius: "100px",
+            borderRadius: 100,
             marginRight: 4,
             backgroundColor: theme.gray[800],
           }}
