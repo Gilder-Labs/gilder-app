@@ -441,6 +441,7 @@ const ProfilePictureContainer = styled.View`
 
 const ProfileHeaderRow = styled.View`
   flex-direction: row;
+  flex: 1;
   margin-bottom: ${(props) => props.theme.spacing[3]};
 `;
 
