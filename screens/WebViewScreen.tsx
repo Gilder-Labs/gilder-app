@@ -11,6 +11,7 @@ import { faArrowRight } from "@fortawesome/pro-solid-svg-icons/faArrowRight";
 import { faRotateRight } from "@fortawesome/pro-solid-svg-icons/faRotateRight";
 import { faGlobe } from "@fortawesome/pro-solid-svg-icons/faGlobe";
 import { Linking } from "react-native";
+import { Loading } from "../components";
 
 import { useTheme } from "styled-components";
 import { SafeAreaView, StyleSheet } from "react-native";
@@ -32,7 +33,7 @@ export default function WebViewScreen({ route }: any) {
   const dispatch = useDispatch();
   const { vaults } = useAppSelector((state) => state.treasury);
 
-  const { walletId } = route?.params;
+  const { walletId, url } = route?.params;
 
   function returnDataToWebview(message: any, data: any) {
     if (webviewRef && webviewRef.current) {
@@ -254,8 +255,8 @@ export default function WebViewScreen({ route }: any) {
       <SafeAreaView style={styles.container}>
         <WebView
           // working dapps so far
-
-          source={{ uri: "https://marinade.finance/app/staking/" }}
+          source={{ uri: url }}
+          // source={{ uri: "https://marinade.finance/app/staking/" }}
           // source={{ uri: "https://solend.fi/dashboard" }}
           // source={{ uri: "https://friktion.fi/" }}
 
@@ -303,6 +304,12 @@ export default function WebViewScreen({ route }: any) {
             // Keep track of going back navigation within component
             setNavState(navState);
           }}
+          startInLoadingState={true}
+          renderLoading={() => (
+            <LoadingContainer>
+              <Loading />
+            </LoadingContainer>
+          )}
         />
         <WebViewActionContainer>
           <IconButton
@@ -366,3 +373,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#131313",
   },
 });
+
+const LoadingContainer = styled.View`
+  height: 100%;
+`;
