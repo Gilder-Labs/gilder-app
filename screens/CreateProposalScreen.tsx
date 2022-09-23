@@ -8,12 +8,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faXmark } from "@fortawesome/pro-solid-svg-icons/faXmark";
 import { faArrowLeft } from "@fortawesome/pro-solid-svg-icons/faArrowLeft";
 import { faMoneyBillTransfer } from "@fortawesome/pro-regular-svg-icons/faMoneyBillTransfer";
+import { faWallet } from "@fortawesome/pro-regular-svg-icons/faWallet";
 
 import { faArrowRight } from "@fortawesome/pro-solid-svg-icons/faArrowRight";
 import { faMagnifyingGlass } from "@fortawesome/pro-regular-svg-icons/faMagnifyingGlass";
 import { PublicKeyTextCopy, Typography } from "../components";
 import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "styled-components";
+
+import { parseURL } from "@solana/pay";
 
 export default function CreateProposalScreen({ route }: any) {
   const navigation = useNavigation();
@@ -28,6 +31,11 @@ export default function CreateProposalScreen({ route }: any) {
     });
   };
 
+  // const testUrl =
+  //   "solana:mvines9iiHiQTysrwkJjGf2gb9Ex9jXJX8ns3qwf2kN?amount=0.01&reference=82ZJ7nbGpixjeDCmEhUcmwXYfvurzAgGdtSMuHnUgyny&label=Michael&message=Thanks%20for%20all%20the%20fish&memo=OrderId5678";
+  // const data = parseURL(url);
+  // console.log("data");
+
   return (
     <Container>
       <SpacedRow>
@@ -38,13 +46,21 @@ export default function CreateProposalScreen({ route }: any) {
           marginLeft="2"
           marginRight="2"
         />
-        <PublicKeyTextCopy
-          noPadding={true}
-          publicKey={walletId}
-          hideIcon={true}
-          backgroundShade="900"
-          shade="500"
-        />
+        <Row>
+          <FontAwesomeIcon
+            icon={faWallet}
+            size={14}
+            color={theme.gray[500]}
+            style={{ marginRight: 4 }}
+          />
+          <PublicKeyTextCopy
+            noPadding={true}
+            publicKey={walletId}
+            hideIcon={true}
+            backgroundShade="900"
+            shade="500"
+          />
+        </Row>
       </SpacedRow>
       <SearchRow>
         <SearchBarContainer>
@@ -112,6 +128,46 @@ export default function CreateProposalScreen({ route }: any) {
             />
           </ProposalCreationButton>
         </ProposalCreationButtonOuter>
+        {/* <ProposalCreationButtonOuter>
+          <ProposalCreationButton
+            onPress={() =>
+              handleOpenBrowser("https://www.socean.fi/en/app/stake/")
+            }
+          >
+            <DappIcon
+              source={{
+                uri: "https://d1fdloi71mui9q.cloudfront.net/ADnGfPXUQqe5Rl2VgEVw_94Ahn7yRcgXP0P44",
+              }}
+            />
+            <Typography
+              text={"Socean"}
+              marginBottom="0"
+              size="subtitle"
+              shade="100"
+            />
+          </ProposalCreationButton>
+        </ProposalCreationButtonOuter> */}
+        {/* <ProposalCreationButtonOuter>
+          <ProposalCreationButton
+            onPress={() =>
+              handleOpenBrowser(
+                "https://app.castle.finance/vaults/3tBqjyYtf9Utb1NNsx4o7AV1qtzHoxsMXgkmat3rZ3y6"
+              )
+            }
+          >
+            <DappIcon
+              source={{
+                uri: "https://app.castle.finance/static/media/lockup.3c5a7bf0.svg",
+              }}
+            />
+            <Typography
+              text={"Castle Finance"}
+              marginBottom="0"
+              size="subtitle"
+              shade="100"
+            />
+          </ProposalCreationButton>
+        </ProposalCreationButtonOuter> */}
       </Row>
 
       <Typography
@@ -133,7 +189,7 @@ export default function CreateProposalScreen({ route }: any) {
               }}
             />
             <Typography
-              text={"Solend"}
+              text={"Mango Markets"}
               marginBottom="0"
               size="subtitle"
               shade="100"
@@ -158,6 +214,7 @@ export default function CreateProposalScreen({ route }: any) {
             />
           </ProposalCreationButton>
         </ProposalCreationButtonOuter>
+
         <ProposalCreationButtonOuter>
           <ProposalCreationButton
             onPress={() => handleOpenBrowser("https://solend.fi/dashboard")}
@@ -190,13 +247,29 @@ export default function CreateProposalScreen({ route }: any) {
             <ProposalIconContainer>
               <FontAwesomeIcon
                 icon={faMoneyBillTransfer}
-                size={24}
-                color={theme.gray[300]}
+                size={18}
+                color={theme.primary[400]}
               />
             </ProposalIconContainer>
 
             <Typography
               text={"Send"}
+              marginBottom="0"
+              size="subtitle"
+              shade="100"
+            />
+          </ProposalCreationButton>
+        </ProposalCreationButtonOuter>
+        <ProposalCreationButtonOuter>
+          <ProposalCreationButton>
+            <DappIcon
+              source={{
+                uri: "https://pbs.twimg.com/profile_images/1472933274209107976/6u-LQfjG_400x400.jpg",
+              }}
+            />
+
+            <Typography
+              text={"Solana Pay"}
               marginBottom="0"
               size="subtitle"
               shade="100"
@@ -254,7 +327,8 @@ const ProposalCreationButtonOuter = styled.View`
 
 const Row = styled.View`
   flex-direction: row;
-  /* flex-wrap: wrap; */
+  flex-wrap: wrap;
+  align-items: center;
 `;
 
 const SearchBar = styled.TextInput`
@@ -302,6 +376,7 @@ const ProposalIconContainer = styled.View`
   justify-content: center;
   background: ${(props) => props.theme.gray[1000]};
   margin-bottom: ${(props) => props.theme.spacing[1]};
+  background-color: ${(props) => props.theme.primary[600]}22;
 `;
 
 const SearchRow = styled.View`
@@ -324,4 +399,5 @@ const SearchButton = styled.TouchableOpacity<{ disabled?: boolean }>`
 const SpacedRow = styled.View`
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
 `;

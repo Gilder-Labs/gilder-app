@@ -29,8 +29,6 @@ import {
 } from "@solana/spl-governance";
 import bs58 from "bs58";
 
-// https://github.com/marinade-finance/solana-js-utils/blob/72a191101a5d6ddd8e011f403095e542c603a906/packages/solana-cli-utils/middleware/multisig/SplGovernanceMiddleware.ts
-
 let connection = new Connection(HEAVY_RPC_CONNECTION, "recent");
 
 export const createNewProposalTransaction = async ({
@@ -101,9 +99,7 @@ export const createNewProposalTransaction = async ({
 
   const walletOfMember = new PublicKey(member.walletId);
 
-  // TODO: fix governance ID - should be either "Fv7N9yvSHyrt53EfPMoMLZCfxGjhd1opC5PGE4ddz7E" or
-  // when governance di = 2KkWYpJR1TCrfNXgP4JiuSGewAvurG6f6Maz3VLYHzUH it doesn't work
-  const proposalIndex = governance.proposalCount; // proposalIndex - todo? maybe the actual number in the proposal, change to governance.proposalCount
+  const proposalIndex = governance.proposalCount; // this needs to correct or governance will fail
   const governancePublicKey = new PublicKey(governance.governanceId);
 
   const proposalAddress = await withCreateProposal(
@@ -111,7 +107,7 @@ export const createNewProposalTransaction = async ({
     programId, // programId
     programVersion,
     realmPublicKey, // realmid
-    governancePublicKey, // TODO; this is either the governance for the community or the council
+    governancePublicKey, // governance of community/council tokens determine vote
     tokenOwnerPublicKey, // token owner record of member making proposal
     proposalData.name,
     proposalData.description,
@@ -162,16 +158,16 @@ export const createNewProposalTransaction = async ({
         };
       });
 
-      const test = new TransactionInstruction({
+      const tx = new TransactionInstruction({
         keys: keys,
         programId: new PublicKey(instruct.programId),
         data: Buffer.from(instruct.data),
       });
 
-      const base64instruction = serializeInstructionToBase64(test);
+      const base64instruction = serializeInstructionToBase64(tx);
       let data = getInstructionDataFromBase64(base64instruction);
 
-      console.log("data", test);
+      console.log("data", tx);
 
       await withInsertTransaction(
         insertInstructions,

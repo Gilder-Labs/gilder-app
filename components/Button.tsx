@@ -91,7 +91,7 @@ export const Button = ({
         style={{
           height: "100%",
           padding: 8,
-          borderRadius: 4,
+          borderRadius: 8,
           flex: 1,
           alignItems: "center",
           justifyContent: "center",
@@ -132,7 +132,7 @@ const ButtonContainer = styled.TouchableOpacity<{
   flex: 1;
   align-items: center;
   justify-content: center;
-  border-radius: 4px;
+  border-radius: 8px;
   margin-right: ${(props) => (props.marginRight ? props.theme.spacing[3] : 0)};
 
   background: ${(props) => props.theme[props.color][props.shade]};

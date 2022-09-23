@@ -47,8 +47,6 @@ export const createProposalAttempt = createAsyncThunk(
         instrinctions: [],
       };
 
-      console.log("vault", vault);
-
       const transactions = await createNewProposalTransaction({
         selectedRealm,
         walletAddress: publicKey,
@@ -78,9 +76,6 @@ export const createProposalAttempt = createAsyncThunk(
 
       let index = 0;
       for (const tx of transactions) {
-        setTimeout(() => {
-          console.log("Delayed for 1 second.");
-        }, 1000);
         const recentBlock = await connection.getLatestBlockhash();
         tx.recentBlockhash = recentBlock.blockhash;
         tx.sign(walletKeypair);
@@ -92,6 +87,9 @@ export const createProposalAttempt = createAsyncThunk(
         ]);
         console.log("index", index);
         index++;
+        setTimeout(() => {
+          console.log("Delayed for 1 second.");
+        }, 2000);
       }
 
       console.log("Successfully created proposal!!!");
