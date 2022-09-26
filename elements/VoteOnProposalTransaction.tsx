@@ -185,7 +185,7 @@ export const VoteOnProposalTransaction = ({}: VoteOnProposalTransaction) => {
                 />
               )}
 
-              {delegatesToVoteWith.map((delegate: Member) => (
+              {delegatesToVoteWith?.map((delegate: Member) => (
                 <DelegateButton
                   isSelected={selectedDelegate === delegate?.walletId}
                   onPress={() => handleSelectDelegate(delegate.walletId)}

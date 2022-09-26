@@ -43,6 +43,7 @@ import InfoModalScreen from "../screens/InfoModalScreen";
 import OnboardingScreen from "../screens/OnboardingScreen";
 import WebViewScreen from "../screens/WebViewScreen";
 import CreateProposalScreen from "../screens/CreateProposalScreen";
+import ProposalVotesScreen from "../screens/ProposalVotesScreen";
 
 import { chatApiKey } from "../constants/Chat";
 import { StreamChat } from "stream-chat";
@@ -442,6 +443,13 @@ export default function Navigation({}: {}) {
             component={CreateProposalScreen}
             options={({ route }) => ({
               title: "Create Proposal",
+            })}
+          />
+          <Stack.Screen
+            name="ProposalVotesScreen"
+            component={ProposalVotesScreen}
+            options={({ route }) => ({
+              title: "Votes",
             })}
           />
         </Stack.Navigator>

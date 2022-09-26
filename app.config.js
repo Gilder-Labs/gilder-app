@@ -10,6 +10,7 @@ export default {
     scheme: "gilder",
     userInterfaceStyle: "automatic",
     plugins: ["sentry-expo"],
+    jsEngine: "hermes",
     splash: {
       image: "./assets/images/GilderSplash.png",
       resizeMode: "contain",

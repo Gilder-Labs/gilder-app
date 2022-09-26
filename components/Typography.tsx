@@ -35,6 +35,7 @@ interface TypographyProps {
   selectable?: boolean;
   hasTextShadow?: boolean;
   hasLinks?: boolean;
+  isUnderlined?: boolean;
 }
 
 const sizeMapping = {
@@ -62,6 +63,7 @@ export const Typography = ({
   marginTop = "0",
   hasTextShadow = false,
   hasLinks = false,
+  isUnderlined = false,
 }: TypographyProps) => {
   const theme = useTheme();
 
@@ -92,6 +94,7 @@ export const Typography = ({
             marginLeft={marginLeft}
             hasTextShadow={hasTextShadow}
             marginTop={marginTop}
+            isUnderlined={isUnderlined}
           >
             {text ? formattedText() : ""}
           </Text>
@@ -109,6 +112,7 @@ export const Typography = ({
           marginLeft={marginLeft}
           hasTextShadow={hasTextShadow}
           marginTop={marginTop}
+          isUnderlined={isUnderlined}
         >
           {text ? formattedText() : ""}
         </Text>
@@ -135,6 +139,7 @@ const Text = styled.Text<{
     | "error"
     | "warning";
   hasTextShadow: boolean;
+  isUnderlined: boolean;
 }>`
   flex-direction: row;
   font-size: ${(props) => sizeMapping[props.size]}px;
@@ -146,6 +151,8 @@ const Text = styled.Text<{
   margin-right: ${(props) => props.theme.spacing[props.marginRight]};
   margin-left: ${(props) => props.theme.spacing[props.marginLeft]};
   text-align: ${(props) => props.textAlign};
+  text-decoration-line: ${(props) =>
+    props.isUnderlined ? "underline" : "none"};
   text-shadow: ${(props) =>
     props.hasTextShadow
       ? "0px 1px 4px rgba(0, 0, 0, 0.5);"
