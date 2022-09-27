@@ -42,9 +42,8 @@ export const createProposalAttempt = createAsyncThunk(
       const isCommunityVote = false;
       const selectedDelegate = "EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i";
       const proposalData = {
-        name: "test proposal",
-        description: "test description",
-        instrinctions: [],
+        name: "Test proposal",
+        description: "demo staking",
       };
 
       const transactions = await createNewProposalTransaction({

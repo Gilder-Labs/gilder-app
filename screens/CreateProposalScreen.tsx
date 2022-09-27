@@ -12,7 +12,7 @@ import { faWallet } from "@fortawesome/pro-regular-svg-icons/faWallet";
 
 import { faArrowRight } from "@fortawesome/pro-solid-svg-icons/faArrowRight";
 import { faMagnifyingGlass } from "@fortawesome/pro-regular-svg-icons/faMagnifyingGlass";
-import { PublicKeyTextCopy, Typography } from "../components";
+import { PublicKeyTextCopy, Typography, Badge } from "../components";
 import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "styled-components";
 
@@ -39,13 +39,17 @@ export default function CreateProposalScreen({ route }: any) {
   return (
     <Container>
       <SpacedRow>
-        <Typography
-          text="Browser"
-          size="h3"
-          bold={true}
-          marginLeft="2"
-          marginRight="2"
-        />
+        <Row>
+          <Typography
+            text="Browser"
+            size="h3"
+            bold={true}
+            marginLeft="2"
+            marginRight="2"
+            marginBottom="2"
+          />
+          <Badge title="Coming soon" type="gray" />
+        </Row>
         <Row>
           <FontAwesomeIcon
             icon={faWallet}
@@ -73,6 +77,7 @@ export default function CreateProposalScreen({ route }: any) {
             autoCapitalize={"none"}
             autoCorrect={false}
             value={url}
+            disabled={true}
           />
           <IconContainer disabled={!url} onPress={() => setUrl("")}>
             {url ? (
@@ -99,14 +104,23 @@ export default function CreateProposalScreen({ route }: any) {
         </SearchButton>
       </SearchRow>
 
-      <Typography
-        text="Staking"
-        size="body"
-        bold={true}
-        marginLeft="2"
-        shade="400"
-        marginBottom="0"
-      />
+      <Column>
+        <Typography
+          text="Staking"
+          size="body"
+          bold={true}
+          marginLeft="2"
+          shade="400"
+          marginTop="2"
+          margin-marginBottom="0"
+        />
+        <Typography
+          text="Help keep Solana decentralized and earn 5-7% APY on your SOL by staking."
+          size="subtitle"
+          shade="500"
+          marginLeft="2"
+        />
+      </Column>
       <Row>
         <ProposalCreationButtonOuter>
           <ProposalCreationButton
@@ -128,6 +142,24 @@ export default function CreateProposalScreen({ route }: any) {
             />
           </ProposalCreationButton>
         </ProposalCreationButtonOuter>
+        {/* <ProposalCreationButtonOuter>
+          <ProposalCreationButton
+            onPress={() => handleOpenBrowser("https://stakewiz.com/")}
+          >
+            <DappIcon
+              source={{
+                uri: "https://pbs.twimg.com/profile_images/1473378918090653701/3vopFvxZ_400x400.png",
+              }}
+            />
+
+            <Typography
+              text={"Stakewiz"}
+              marginBottom="0"
+              size="subtitle"
+              shade="100"
+            />
+          </ProposalCreationButton>
+        </ProposalCreationButtonOuter> */}
         {/* <ProposalCreationButtonOuter>
           <ProposalCreationButton
             onPress={() =>
@@ -170,18 +202,31 @@ export default function CreateProposalScreen({ route }: any) {
         </ProposalCreationButtonOuter> */}
       </Row>
 
-      <Typography
-        text="Defi"
-        size="body"
-        bold={true}
-        marginLeft="2"
-        shade="400"
-        marginBottom="0"
-      />
+      <Column>
+        <Row>
+          <Typography
+            text="Defi"
+            size="body"
+            bold={true}
+            marginLeft="2"
+            shade="400"
+            marginRight="2"
+            marginTop="2"
+          />
+          <Badge title="Coming soon" type="gray" />
+        </Row>
+        <Typography
+          text="Invest or actively trade with your treasury on Solana defi protocols."
+          size="subtitle"
+          shade="500"
+          marginLeft="2"
+        />
+      </Column>
       <Row>
         <ProposalCreationButtonOuter>
           <ProposalCreationButton
             onPress={() => handleOpenBrowser("https://trade.mango.markets/")}
+            disabled={true}
           >
             <DappIcon
               source={{
@@ -199,6 +244,7 @@ export default function CreateProposalScreen({ route }: any) {
         <ProposalCreationButtonOuter>
           <ProposalCreationButton
             onPress={() => handleOpenBrowser("https://friktion.fi/volts")}
+            disabled={true}
           >
             <DappIcon
               source={{
@@ -218,6 +264,7 @@ export default function CreateProposalScreen({ route }: any) {
         <ProposalCreationButtonOuter>
           <ProposalCreationButton
             onPress={() => handleOpenBrowser("https://solend.fi/dashboard")}
+            disabled={true}
           >
             <DappIcon
               source={{
@@ -234,13 +281,22 @@ export default function CreateProposalScreen({ route }: any) {
         </ProposalCreationButtonOuter>
       </Row>
 
-      <Typography
-        text="Token Transfer"
-        size="h3"
-        bold={true}
-        marginLeft="2"
-        marginBottom="0"
-      />
+      <Column>
+        <Typography
+          text="Token Transfer"
+          size="h3"
+          bold={true}
+          marginLeft="2"
+          marginTop="2"
+          marginBottom="0"
+        />
+        <Typography
+          text="Make payments or transfer tokens to members or other individuals."
+          size="subtitle"
+          shade="500"
+          marginLeft="2"
+        />
+      </Column>
       <Row>
         <ProposalCreationButtonOuter>
           <ProposalCreationButton>
@@ -248,7 +304,7 @@ export default function CreateProposalScreen({ route }: any) {
               <FontAwesomeIcon
                 icon={faMoneyBillTransfer}
                 size={18}
-                color={theme.primary[400]}
+                color={theme.secondary[500]}
               />
             </ProposalIconContainer>
 
@@ -301,18 +357,19 @@ export default function CreateProposalScreen({ route }: any) {
   );
 }
 
-const Container = styled.View`
+const Container = styled.ScrollView`
   background-color: ${(props) => props.theme.gray[900]};
   flex: 1;
   flex-direction: column;
   padding: ${(props) => props.theme.spacing[2]};
 `;
 
-const ProposalCreationButton = styled.TouchableOpacity`
+const ProposalCreationButton = styled.TouchableOpacity<{ disabled?: boolean }>`
   /* height: 80px; */
   border-radius: 10px;
   /* width: 80px; */
-  background: ${(props: any) => props.theme.gray[800]};
+  background: ${(props) =>
+    props.disabled ? props.theme.gray[1000] : props.theme.gray[800]};
   justify-content: center;
   align-items: center;
   padding: ${(props) => props.theme.spacing[3]};
@@ -331,15 +388,18 @@ const Row = styled.View`
   align-items: center;
 `;
 
-const SearchBar = styled.TextInput`
+const SearchBar = styled.TextInput<{ disabled?: boolean }>`
   padding-left: ${(props) => props.theme.spacing[3]};
   padding-right: ${(props) => props.theme.spacing[3]};
   height: 40px;
   font-size: 14px;
   flex: 1;
-  background-color: ${(props) => props.theme.gray[800]}44;
+  background: ${(props) =>
+    props.disabled ? props.theme.gray[1000] : props.theme.gray[800]}44;
   border-radius: 8px;
-  border: 1px solid ${(props) => props.theme.gray[600]};
+  border: 1px solid
+    ${(props) =>
+      props.disabled ? props.theme.gray[800] : props.theme.gray[600]};
   color: ${(props) => props.theme.gray[100]};
 `;
 const SearchBarContainer = styled.View`
@@ -376,7 +436,7 @@ const ProposalIconContainer = styled.View`
   justify-content: center;
   background: ${(props) => props.theme.gray[1000]};
   margin-bottom: ${(props) => props.theme.spacing[1]};
-  background-color: ${(props) => props.theme.primary[600]}22;
+  background-color: ${(props) => props.theme.secondary[600]}22;
 `;
 
 const SearchRow = styled.View`
@@ -387,7 +447,7 @@ const SearchRow = styled.View`
 
 const SearchButton = styled.TouchableOpacity<{ disabled?: boolean }>`
   background: ${(props) =>
-    props.disabled ? props.theme.gray[800] : props.theme.secondary[700]};
+    props.disabled ? props.theme.gray[1000] : props.theme.secondary[700]};
   padding: ${(props) => props.theme.spacing[3]};
   padding-left: ${(props) => props.theme.spacing[4]};
   padding-right: ${(props) => props.theme.spacing[4]};
@@ -401,3 +461,5 @@ const SpacedRow = styled.View`
   justify-content: space-between;
   align-items: center;
 `;
+
+const Column = styled.View``;
