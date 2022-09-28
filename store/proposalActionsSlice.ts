@@ -29,7 +29,17 @@ let connection = new Connection(RPC_CONNECTION, "confirmed");
 
 export const createProposalAttempt = createAsyncThunk(
   "proposalActions/createProposal",
-  async ({ vault, transactionInstructions }: any, { getState }) => {
+  async (
+    {
+      vault,
+      transactionInstructions,
+      proposalTitle,
+      proposalDescription,
+      isCommunityVote,
+      selectedDelegate,
+    }: any,
+    { getState }
+  ) => {
     try {
       const { realms, wallet, members, treasury } = getState() as RootState;
       const { selectedRealm } = realms;
@@ -38,12 +48,9 @@ export const createProposalAttempt = createAsyncThunk(
 
       const { governancesMap } = treasury;
 
-      // todo change to user choice
-      const isCommunityVote = false;
-      const selectedDelegate = "EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i";
       const proposalData = {
-        name: "Test proposal",
-        description: "demo staking",
+        name: proposalTitle,
+        description: proposalDescription,
       };
 
       const transactions = await createNewProposalTransaction({

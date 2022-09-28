@@ -85,6 +85,7 @@ export const createNewProposalTransaction = async ({
   const voteType = VoteType.SINGLE_CHOICE;
   const options = ["Approve"];
   const useDenyOption = true;
+  // const tokenOwnerPublicKey = new PublicKey(member?.publicKey);
   const tokenOwnerPublicKey = isCommunityVote
     ? new PublicKey(member?.communityPublicKey)
     : new PublicKey(member?.councilPublicKey);

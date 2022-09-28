@@ -60,10 +60,15 @@ export const CreateProposalTransactionModal = ({
 
   const handleProposalCreation = () => {
     const vault = vaults.find((vault) => vault.pubKey === walletId);
+
     dispatch(
       createProposalAttempt({
         vault,
         transactionInstructions: transactionInstructions,
+        proposalTitle: title,
+        proposalDescription: description,
+        isCommunityVote,
+        selectedDelegate,
       })
     );
   };
@@ -167,7 +172,7 @@ export const CreateProposalTransactionModal = ({
             </SpacedRow>
             <SpacedRow>
               <Typography text={"Realm:"} shade="500" />
-              <Typography text={selectedRealm.name} shade="300" />
+              <Typography text={selectedRealm?.name} shade="300" />
             </SpacedRow>
 
             <SpacedRow>
@@ -245,7 +250,9 @@ export const CreateProposalTransactionModal = ({
               />
               <Button
                 isLoading={isLoading}
-                disabled={isLoading}
+                disabled={
+                  isLoading || !publicKey || !selectedDelegate || !title
+                }
                 title="Create Proposal"
                 onPress={handleProposalCreation}
                 shade="800"
