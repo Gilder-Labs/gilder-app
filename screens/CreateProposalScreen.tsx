@@ -291,7 +291,7 @@ export default function CreateProposalScreen({ route }: any) {
           marginBottom="0"
         />
         <Typography
-          text="Make payments or transfer tokens to members or other individuals."
+          text="Make payments or send tokens directly from your treasury."
           size="subtitle"
           shade="500"
           marginLeft="2"
@@ -373,6 +373,7 @@ const ProposalCreationButton = styled.TouchableOpacity<{ disabled?: boolean }>`
   justify-content: center;
   align-items: center;
   padding: ${(props) => props.theme.spacing[3]};
+  min-width: 80px;
 `;
 
 const ProposalCreationButtonOuter = styled.View`

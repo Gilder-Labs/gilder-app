@@ -435,14 +435,14 @@ export default function Navigation({}: {}) {
             name="WebViewScreen"
             component={WebViewScreen}
             options={({ route }) => ({
-              title: "Proposal Browser",
+              title: "Browser",
             })}
           />
           <Stack.Screen
             name="CreateProposalScreen"
             component={CreateProposalScreen}
             options={({ route }) => ({
-              title: "Create Proposal",
+              title: "Proposal Builder",
             })}
           />
           <Stack.Screen
