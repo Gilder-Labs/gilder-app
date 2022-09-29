@@ -25,8 +25,6 @@ export const fetchNotificationSettings = createAsyncThunk(
         }
       );
 
-      console.log(JSON.stringify(response.data, undefined, 4));
-
       const notificationArray = response.data;
       let notificationMap = {};
 
