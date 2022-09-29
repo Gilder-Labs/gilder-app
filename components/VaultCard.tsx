@@ -122,13 +122,13 @@ export const VaultCard = ({
             shade="400"
             hideIcon={true}
           />
-          <CreateProposalButton onPress={handleCreateProposal}>
+          {/* <CreateProposalButton onPress={handleCreateProposal}>
             <Typography
               text="Create Proposal"
               marginBottom="0"
               size="subtitle"
             />
-          </CreateProposalButton>
+          </CreateProposalButton> */}
         </Row>
 
         <Typography

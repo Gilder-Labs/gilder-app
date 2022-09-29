@@ -78,6 +78,7 @@ export default function CreateProposalScreen({ route }: any) {
             autoCorrect={false}
             value={url}
             disabled={true}
+            editable={false}
           />
           <IconContainer disabled={!url} onPress={() => setUrl("")}>
             {url ? (
@@ -160,7 +161,7 @@ export default function CreateProposalScreen({ route }: any) {
             />
           </ProposalCreationButton>
         </ProposalCreationButtonOuter> */}
-        {/* <ProposalCreationButtonOuter>
+        <ProposalCreationButtonOuter>
           <ProposalCreationButton
             onPress={() =>
               handleOpenBrowser("https://www.socean.fi/en/app/stake/")
@@ -178,7 +179,7 @@ export default function CreateProposalScreen({ route }: any) {
               shade="100"
             />
           </ProposalCreationButton>
-        </ProposalCreationButtonOuter> */}
+        </ProposalCreationButtonOuter>
         {/* <ProposalCreationButtonOuter>
           <ProposalCreationButton
             onPress={() =>
@@ -282,14 +283,18 @@ export default function CreateProposalScreen({ route }: any) {
       </Row>
 
       <Column>
-        <Typography
-          text="Token Transfer"
-          size="h3"
-          bold={true}
-          marginLeft="2"
-          marginTop="2"
-          marginBottom="0"
-        />
+        <Row>
+          <Typography
+            text="Token Transfer"
+            size="h3"
+            bold={true}
+            marginLeft="2"
+            marginTop="2"
+            marginBottom="0"
+            marginRight="2"
+          />
+          <Badge title="Coming soon" type="gray" />
+        </Row>
         <Typography
           text="Make payments or send tokens directly from your treasury."
           size="subtitle"
@@ -299,7 +304,7 @@ export default function CreateProposalScreen({ route }: any) {
       </Column>
       <Row>
         <ProposalCreationButtonOuter>
-          <ProposalCreationButton>
+          <ProposalCreationButton disabled={true}>
             <ProposalIconContainer>
               <FontAwesomeIcon
                 icon={faMoneyBillTransfer}
@@ -317,7 +322,7 @@ export default function CreateProposalScreen({ route }: any) {
           </ProposalCreationButton>
         </ProposalCreationButtonOuter>
         <ProposalCreationButtonOuter>
-          <ProposalCreationButton>
+          <ProposalCreationButton disabled={true}>
             <DappIcon
               source={{
                 uri: "https://pbs.twimg.com/profile_images/1472933274209107976/6u-LQfjG_400x400.jpg",
