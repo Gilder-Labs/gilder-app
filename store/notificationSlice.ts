@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { NOTIFICATION_API_URL } from "../constants/Notifications";
 
 export interface NotificationState {
   isLoadingNotifications: boolean;
@@ -13,28 +14,28 @@ const initialState: NotificationState = {
   pushToken: "",
 };
 
-// API url: 54.157.218.96:3000
-
-const API_URL = "https://gilderapi.ctrlrlabs.com";
-
 export const fetchNotificationSettings = createAsyncThunk(
   "notifications/fetchNotificationSettings",
   async ({ pushToken }: any) => {
     try {
       const response = await axios.post(
-        `${API_URL}/notifyMe/listSubscriptions`,
+        `${NOTIFICATION_API_URL}/api/v1/notifications/listSubscriptions`,
         {
           mobileToken: pushToken,
         }
       );
 
+      console.log(JSON.stringify(response.data, undefined, 4));
+
       const notificationArray = response.data;
       let notificationMap = {};
 
-      notificationArray.map((notification: { realm: string; type: string }) => {
-        // @ts-ignore
-        notificationMap[notification.realm] = notification;
-      });
+      notificationArray.map(
+        (notification: { realmPk: string; type: string }) => {
+          // @ts-ignore
+          notificationMap[notification.realmPk] = notification;
+        }
+      );
 
       return {
         notificationArray: notificationArray,
@@ -50,14 +51,18 @@ export const subscribeToNotifications = createAsyncThunk(
   "notifications/subscribeToSettings",
   async ({ pushToken, realmId, isSubscribing }: any) => {
     try {
-      const response = await axios.post(`${API_URL}/notifyMe`, {
-        type: "newProposals",
-        mobileToken: pushToken,
-        realm: realmId,
-        unsubscribe: !isSubscribing,
-      });
+      const path = isSubscribing ? "subscribe" : "unsubscribe";
 
-      console.log("SUBSCRIBE response", response);
+      const response = await axios.post(
+        `${NOTIFICATION_API_URL}/api/v1/notifications/${path}`,
+        {
+          type: "newProposals",
+          mobileToken: pushToken,
+          realmPk: realmId,
+        }
+      );
+
+      console.log("SUBSCRIBE response", response.status);
 
       return {};
     } catch (error) {
