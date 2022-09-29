@@ -234,7 +234,9 @@ export const ProposalDetailScreen = ({
         : Number(getYesVoteCount.slice(0, -mintDecimals));
 
     const totalVotes =
-      Number(mintSupplyFormatted) * (voteThresholdPercentage * 0.01);
+      Number(mintSupplyFormatted) *
+      (voteThresholdPercentage * 0.01) *
+      (Number(selectedRealm?.fmtSupplyFraction) / 100);
 
     const totalVotesNeeded = Math.ceil(totalVotes - yesVoteFormatted);
     let totalVotesNeededPercentage = (yesVoteFormatted / totalVotes) * 100;

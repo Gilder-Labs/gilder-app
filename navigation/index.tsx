@@ -442,7 +442,7 @@ export default function Navigation({}: {}) {
             name="CreateProposalScreen"
             component={CreateProposalScreen}
             options={({ route }) => ({
-              title: "Proposal Builder",
+              title: "Builder",
             })}
           />
           <Stack.Screen

@@ -19,10 +19,14 @@ import { RPC_CONNECTION } from "../constants/Solana";
 
 export interface ProposalActionsState {
   isLoading: boolean;
+  transactionProgress: number;
+  error: boolean;
 }
 
 const initialState: ProposalActionsState = {
   isLoading: false,
+  transactionProgress: 0,
+  error: false,
 };
 
 let connection = new Connection(RPC_CONNECTION, "confirmed");
@@ -38,7 +42,7 @@ export const createProposalAttempt = createAsyncThunk(
       isCommunityVote,
       selectedDelegate,
     }: any,
-    { getState }
+    { getState, dispatch }
   ) => {
     try {
       const { realms, wallet, members, treasury } = getState() as RootState;
@@ -109,17 +113,24 @@ export const createProposalAttempt = createAsyncThunk(
 export const proposalActionsSlice = createSlice({
   name: "proposalActions",
   initialState,
-  reducers: {},
+  reducers: {
+    clearError: (state) => {
+      state.error = false;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(createProposalAttempt.pending, (state, action) => {
         state.isLoading = true;
+        state.error = false;
       })
       .addCase(createProposalAttempt.rejected, (state) => {
         state.isLoading = false;
+        state.error = true;
       })
       .addCase(createProposalAttempt.fulfilled, (state, action: any) => {
         state.isLoading = false;
+        state.error = false;
       });
   },
 });
