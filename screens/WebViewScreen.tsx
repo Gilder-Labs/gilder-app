@@ -147,8 +147,8 @@ export default function WebViewScreen({ route }: any) {
     const walletAdapter = {
       isGlow: true,
       isPhantom: true,
+      isConnected: false,
 
-      isConnected: true,
       publicKey: {
         toBytes: () => {
           return "${walletId}";
@@ -231,6 +231,12 @@ export default function WebViewScreen({ route }: any) {
       },
       connect: async () => {
         console.log('trying to connect');
+        window.phantom.solana.isConnected = true;
+        window.solana.isConnected = true;
+        window.glowSolana.solana.isConnected = true;
+        window.phantom.isConnected = true;
+        window.glowSolana.isConnected = true;
+
         window.ReactNativeWebView.postMessage(
           JSON.stringify({
             message: "connect",
@@ -243,8 +249,16 @@ export default function WebViewScreen({ route }: any) {
           })
         );
       },
+     
       disconnect: async () => {
         console.log('trying to disconnect');
+
+        window.solana.isConnected = false;
+        window.phantom.solana.isConnected = false;
+        window.glowSolana.solana.isConnected = false;
+        window.phantom.isConnected = false;
+        window.glowSolana.isConnected = false;
+
         window.ReactNativeWebView.postMessage(
           JSON.stringify({
             message: "disconnect",
@@ -262,7 +276,7 @@ export default function WebViewScreen({ route }: any) {
     window.phantom.solana = walletAdapter;
     window.solana = walletAdapter;
     window.glowSolana = walletAdapter;
-
+    window.glowSolana.solana = walletAdapter;
 
     } catch(e) {
       alert(e)
@@ -281,17 +295,14 @@ export default function WebViewScreen({ route }: any) {
           // source={{ uri: "https://marinade.finance/app/staking/" }}
           // source={{ uri: "https://solend.fi/dashboard" }}
           // source={{ uri: "https://friktion.fi/" }}
-
           // apps that the tranasction errors out
 
           // source={{ uri: "https://hyperspace.xyz/collection/bdlc_genesis" }}
           // source={{ uri: "https://orca.so" }}
           // source={{ uri: "https://jup.ag" }}
-
           // apps that are in testing
           // source={{ uri: "https://app.streamflow.finance/dashboard" }}
           // source={{ uri: "https://app.meanfi.com/" }}
-
           // apps that I can't connect with wallet or other misc issue
           // source={{ uri: "https://rent.cardinal.so/miniroyale" }}
           // source={{ uri: "https://www.tensor.trade/" }}

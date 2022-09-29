@@ -98,8 +98,8 @@ export const createProposalAttempt = createAsyncThunk(
         console.log("index", index);
         index++;
         setTimeout(() => {
-          console.log("Delayed for 1 second.");
-        }, 2000);
+          console.log("Delayed for .5 second.");
+        }, 500);
       }
 
       console.log("Successfully created proposal!!!");

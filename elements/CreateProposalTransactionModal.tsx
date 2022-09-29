@@ -303,7 +303,9 @@ const ActionRow = styled.View`
   /* background: green; */
 `;
 
-const RegularView = styled.View``;
+const RegularView = styled.View`
+  flex: 1;
+`;
 
 const Column = styled.View`
   flex-direction: column;

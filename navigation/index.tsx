@@ -267,17 +267,27 @@ export default function Navigation({}: {}) {
       selectedRealm?.pubKey === selectedRealmId &&
       (selectedRealm?.communityMint || selectedRealm?.councilMint)
     ) {
-      dispatch(fetchVaults(selectedRealm));
-      dispatch(
+      const vaultsPromise = dispatch(fetchVaults(selectedRealm));
+      const activityPromise = dispatch(
         fetchRealmActivity({
           realm: selectedRealm,
           fetchAfterSignature: undefined,
         })
       );
-      dispatch(
+      const proposalsPromise = dispatch(
         fetchRealmProposals({ realm: selectedRealm, isRefreshing: false })
       );
-      dispatch(fetchRealmMembers({ realm: selectedRealm }));
+      const membersPromise = dispatch(
+        fetchRealmMembers({ realm: selectedRealm })
+      );
+
+      return () => {
+        // `createAsyncThunk` attaches an `abort()` method to the promise
+        vaultsPromise.abort();
+        activityPromise.abort();
+        proposalsPromise.abort();
+        membersPromise.abort();
+      };
     }
   }, [selectedRealm?.pubKey, selectedRealm?.communityMint, isFetchingStorage]);
 

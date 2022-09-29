@@ -31,11 +31,6 @@ export default function CreateProposalScreen({ route }: any) {
     });
   };
 
-  // const testUrl =
-  //   "solana:mvines9iiHiQTysrwkJjGf2gb9Ex9jXJX8ns3qwf2kN?amount=0.01&reference=82ZJ7nbGpixjeDCmEhUcmwXYfvurzAgGdtSMuHnUgyny&label=Michael&message=Thanks%20for%20all%20the%20fish&memo=OrderId5678";
-  // const data = parseURL(url);
-  // console.log("data");
-
   return (
     <Container>
       <SpacedRow>
@@ -77,8 +72,8 @@ export default function CreateProposalScreen({ route }: any) {
             autoCapitalize={"none"}
             autoCorrect={false}
             value={url}
-            disabled={true}
-            editable={false}
+            // disabled={true}
+            // editable={false}
           />
           <IconContainer disabled={!url} onPress={() => setUrl("")}>
             {url ? (
@@ -146,6 +141,7 @@ export default function CreateProposalScreen({ route }: any) {
         {/* <ProposalCreationButtonOuter>
           <ProposalCreationButton
             onPress={() => handleOpenBrowser("https://stakewiz.com/")}
+            // disabled={true}
           >
             <DappIcon
               source={{
@@ -161,11 +157,12 @@ export default function CreateProposalScreen({ route }: any) {
             />
           </ProposalCreationButton>
         </ProposalCreationButtonOuter> */}
-        <ProposalCreationButtonOuter>
+        {/* <ProposalCreationButtonOuter>
           <ProposalCreationButton
             onPress={() =>
               handleOpenBrowser("https://www.socean.fi/en/app/stake/")
             }
+            disabled={true}
           >
             <DappIcon
               source={{
@@ -179,7 +176,7 @@ export default function CreateProposalScreen({ route }: any) {
               shade="100"
             />
           </ProposalCreationButton>
-        </ProposalCreationButtonOuter>
+        </ProposalCreationButtonOuter> */}
         {/* <ProposalCreationButtonOuter>
           <ProposalCreationButton
             onPress={() =>
@@ -293,7 +290,7 @@ export default function CreateProposalScreen({ route }: any) {
             marginBottom="0"
             marginRight="2"
           />
-          <Badge title="Coming soon" type="gray" />
+          {/* <Badge title="Coming soon" type="gray" /> */}
         </Row>
         <Typography
           text="Make payments or send tokens directly from your treasury."
@@ -304,7 +301,7 @@ export default function CreateProposalScreen({ route }: any) {
       </Column>
       <Row>
         <ProposalCreationButtonOuter>
-          <ProposalCreationButton disabled={true}>
+          <ProposalCreationButton>
             <ProposalIconContainer>
               <FontAwesomeIcon
                 icon={faMoneyBillTransfer}
@@ -322,7 +319,7 @@ export default function CreateProposalScreen({ route }: any) {
           </ProposalCreationButton>
         </ProposalCreationButtonOuter>
         <ProposalCreationButtonOuter>
-          <ProposalCreationButton disabled={true}>
+          <ProposalCreationButton>
             <DappIcon
               source={{
                 uri: "https://pbs.twimg.com/profile_images/1472933274209107976/6u-LQfjG_400x400.jpg",
