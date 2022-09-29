@@ -67,27 +67,22 @@
       ]
     },
     {
-      "symbol": "",
-      "displayName": "Bears Reloaded",
-      "realmId": "8x3bs2CUu7FZCw9zoTz29eBNwKjfJiCHjWz4T53NWLbJ",
-      "website": "https://www.reloaded.wtf/",
-      "twitter": "BearsReloaded",
-      "discord": "https://discord.gg/solsanctuary",
-      "ogImage": "https://pbs.twimg.com/profile_images/1572745590727147521/1hLElFJj_400x400.jpg",
-      "description": "The first-ever rug on Solana, de-rugged, community-owned, DAO run, & upgraded with all-new art. From rugs-to-riches, our story is unmatched. Each Reloaded Bear comes with a corresponding original SolBear NFT attached to it.",
-      "howToJoin": "If you own an original SolBear, head to https://bears.solsanctuary.io to remint it! Alternatively, you can buy a floor bear on http://Grape.Art! Once you have a Reloaded Bear join our Discord and Grape Verify!",
+      "symbol": "$MPLX",
+      "displayName": "Metaplex",
+      "realmId": "DA5G7QQbFioZ6K33wQcH8fVdgFcnaDjLD7DLQkapZg5X",
+      "website": "https://www.metaplex.com/",
+      "twitter": "MetaplexFndn",
+      "discord": "https://discord.com/invite/metaplex",
+      "ogImage": "https://app.realms.today/realms/metaplex/img/black-circle.png",
+      "description": "Metaplex makes it easy to build your project in minutes and grow your community in the world’s largest NFT ecosystem.",
+      "howToJoin": "Purchase $MPLX from an exchange or go to https://claim.metaplex.com/unavailable to claim your free $MPLX if you are elligible.",
       "features": "",
 
-      "nftMarketPlace": "https://grape.art/collection/bearsreloaded",
+      "nftMarketPlace": "",
       "tags": ["NFT", "DAO"],
-      "color1": "#421779",
-      "color2": "#6F0397",
-      "screenshots": [
-        "https://pbs.twimg.com/media/FVqgrX4XEAAGg9M?format=jpg&name=small",
-        "https://pbs.twimg.com/media/FVaysq6VUAAlatF?format=jpg&name=small",
-        "https://pbs.twimg.com/media/FVGkW2ZUcAAHrvC?format=jpg&name=small",
-        "https://pbs.twimg.com/media/FU7qJrRUsAA99Or?format=png&name=small"
-      ]
+      "color1": "#444444",
+      "color2": "#111111",
+      "screenshots": []
     }
   ],
   "tooling": [
