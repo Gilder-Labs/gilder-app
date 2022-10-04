@@ -54,10 +54,19 @@ export const createCastVoteTransaction = async (
 
   const payer = walletPubkey;
   const instructions: TransactionInstruction[] = [];
-  const programVersion = await getGovernanceProgramVersion(
-    connection,
-    new PublicKey(selectedRealm!.governanceId)
-  );
+  let programVersion;
+
+  // for whatever reason, metaplex dao fails this and needs to be harcoded
+  if (
+    selectedRealm.realmId === "DA5G7QQbFioZ6K33wQcH8fVdgFcnaDjLD7DLQkapZg5X"
+  ) {
+    programVersion = 2;
+  } else {
+    programVersion = await getGovernanceProgramVersion(
+      connection,
+      new PublicKey(selectedRealm!.governanceId)
+    );
+  }
 
   // PLUGIN STUFF
   // let votePlugin;
