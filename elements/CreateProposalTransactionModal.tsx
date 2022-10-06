@@ -7,6 +7,7 @@ import * as Haptics from "expo-haptics";
 import { useNavigation } from "@react-navigation/native";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { Button, DelegateButton } from "../components";
+import { fetchRealmProposals } from "../store/proposalsSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
 import { faCopy } from "@fortawesome/pro-solid-svg-icons/faCopy";
@@ -21,6 +22,7 @@ import CustomBackdrop from "../components/FadeBackdropModal";
 import { createProposalAttempt } from "../store/proposalActionsSlice";
 
 import { Typography, PublicKeyTextCopy } from "../components";
+import { fetchVaults } from "../store/treasurySlice";
 
 interface CreateProposalTransactionModalProps {
   bottomSheetModalRef: any;
@@ -29,7 +31,9 @@ interface CreateProposalTransactionModalProps {
   navState: {
     title: string;
     url: string;
+    label?: string;
   };
+  isTokenTransfer: boolean;
 }
 
 export const CreateProposalTransactionModal = ({
@@ -37,6 +41,7 @@ export const CreateProposalTransactionModal = ({
   transactionInstructions,
   walletId,
   navState,
+  isTokenTransfer = false,
 }: CreateProposalTransactionModalProps) => {
   const theme = useTheme();
   const navigation = useNavigation();
@@ -58,10 +63,10 @@ export const CreateProposalTransactionModal = ({
     bottomSheetModalRef.current?.close();
   };
 
-  const handleProposalCreation = () => {
+  const handleProposalCreation = async () => {
     const vault = vaults.find((vault) => vault.pubKey === walletId);
 
-    dispatch(
+    await dispatch(
       createProposalAttempt({
         vault,
         transactionInstructions: transactionInstructions,
@@ -71,6 +76,10 @@ export const CreateProposalTransactionModal = ({
         selectedDelegate,
       })
     );
+    console.log("done creating proposal");
+
+    dispatch(fetchRealmProposals({ realm: selectedRealm, isRefreshing: true }));
+    dispatch(fetchVaults(selectedRealm));
   };
 
   const myUrl = navState?.url ? new URL(navState?.url) : "";
@@ -120,11 +129,19 @@ export const CreateProposalTransactionModal = ({
         <ContentContainer>
           <BottomSheetScrollView>
             <Row>
-              <SiteImage
-                source={{
-                  uri: myUrl ? `https://${myUrl.host}/favicon.ico` : "",
-                }}
-              />
+              {isTokenTransfer ? (
+                <SiteImage
+                  source={{
+                    uri: "https://s2.coinmarketcap.com/static/img/coins/64x64/5426.png",
+                  }}
+                />
+              ) : (
+                <SiteImage
+                  source={{
+                    uri: myUrl ? `https://${myUrl.host}/favicon.ico` : "",
+                  }}
+                />
+              )}
               <RegularView>
                 <Typography
                   text={navState.title}
@@ -132,11 +149,19 @@ export const CreateProposalTransactionModal = ({
                   bold={true}
                   marginBottom="0"
                 />
-                <Typography
-                  text={myUrl ? myUrl.host : ""}
-                  shade="500"
-                  marginBottom="4"
-                />
+                {isTokenTransfer ? (
+                  <Typography
+                    text={navState?.label || "Token Transfer"}
+                    shade="500"
+                    marginBottom="4"
+                  />
+                ) : (
+                  <Typography
+                    text={myUrl ? myUrl.host : ""}
+                    shade="500"
+                    marginBottom="4"
+                  />
+                )}
               </RegularView>
             </Row>
 
@@ -158,9 +183,7 @@ export const CreateProposalTransactionModal = ({
                 numberOfLines={4}
                 value={description}
                 onChangeText={(text: string) => setDescription(text)}
-                onBlur={() => {
-                  console.log("trying to blur");
-                }}
+                onBlur={() => {}}
               />
             </SpacedRow>
 
@@ -221,6 +244,7 @@ export const CreateProposalTransactionModal = ({
                     delegate={membersMap?.[publicKey]}
                     isCommunityVote={isCommunityVote}
                     key={publicKey}
+                    isProposalFlow={true}
                   />
                 )}
 
@@ -232,6 +256,7 @@ export const CreateProposalTransactionModal = ({
                     delegate={delegate}
                     isCommunityVote={isCommunityVote}
                     key={delegate.publicKey}
+                    isProposalFlow={true}
                   />
                 ))}
                 <EmptyView />

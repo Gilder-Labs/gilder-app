@@ -31,6 +31,10 @@ export default function CreateProposalScreen({ route }: any) {
     });
   };
 
+  const handleSolanaPay = () => {
+    navigation.navigate("SolanaPayScanScreen", { walletId });
+  };
+
   return (
     <Container>
       <SpacedRow>
@@ -72,8 +76,8 @@ export default function CreateProposalScreen({ route }: any) {
             autoCapitalize={"none"}
             autoCorrect={false}
             value={url}
-            // disabled={true}
-            // editable={false}
+            disabled={true}
+            editable={false}
           />
           <IconContainer disabled={!url} onPress={() => setUrl("")}>
             {url ? (
@@ -319,7 +323,7 @@ export default function CreateProposalScreen({ route }: any) {
           </ProposalCreationButton>
         </ProposalCreationButtonOuter>
         <ProposalCreationButtonOuter>
-          <ProposalCreationButton>
+          <ProposalCreationButton onPress={handleSolanaPay}>
             <DappIcon
               source={{
                 uri: "https://pbs.twimg.com/profile_images/1472933274209107976/6u-LQfjG_400x400.jpg",

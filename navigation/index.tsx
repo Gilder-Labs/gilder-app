@@ -44,6 +44,7 @@ import OnboardingScreen from "../screens/OnboardingScreen";
 import WebViewScreen from "../screens/WebViewScreen";
 import CreateProposalScreen from "../screens/CreateProposalScreen";
 import ProposalVotesScreen from "../screens/ProposalVotesScreen";
+import SolanaPayScanScreen from "../screens/SolanaPayScanScreen";
 
 import { chatApiKey } from "../constants/Chat";
 import { StreamChat } from "stream-chat";
@@ -460,6 +461,13 @@ export default function Navigation({}: {}) {
             component={ProposalVotesScreen}
             options={({ route }) => ({
               title: "Votes",
+            })}
+          />
+          <Stack.Screen
+            name="SolanaPayScanScreen"
+            component={SolanaPayScanScreen}
+            options={({ route }) => ({
+              title: "Solana Pay",
             })}
           />
         </Stack.Navigator>

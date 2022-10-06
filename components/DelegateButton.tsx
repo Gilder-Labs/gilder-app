@@ -22,6 +22,7 @@ interface ButtonProps {
   memberPublicKey: string;
   delegate: Member;
   isCommunityVote: boolean;
+  isProposalFlow: boolean;
 }
 
 // const GET_CYBERCONNECT_IDENTITY = gql`
@@ -43,6 +44,7 @@ export const DelegateButton = ({
   memberPublicKey,
   delegate,
   isCommunityVote,
+  isProposalFlow = false,
 }: ButtonProps) => {
   const theme = useTheme();
   // const { loading, error, data } = useQuery(GET_CYBERCONNECT_IDENTITY, {
@@ -79,7 +81,7 @@ export const DelegateButton = ({
     <DelegateButtonContainer
       isSelected={isSelected}
       onPress={onPress}
-      disabled={!!delegatesVote}
+      disabled={!!delegatesVote && !isProposalFlow}
     >
       <IconContainer>
         <LinearGradient
@@ -112,7 +114,7 @@ export const DelegateButton = ({
       />
 
       <Row>
-        {delegatesVote && isYesVote && (
+        {delegatesVote && isYesVote && !isProposalFlow && (
           <FontAwesomeIcon
             size={16}
             icon={faCircleCheck}
@@ -120,7 +122,7 @@ export const DelegateButton = ({
             style={{ marginRight: 4 }}
           />
         )}
-        {delegatesVote && !isYesVote && (
+        {delegatesVote && !isYesVote && !isProposalFlow && (
           <FontAwesomeIcon
             size={16}
             icon={faCircleXmark}

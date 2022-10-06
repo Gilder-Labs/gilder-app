@@ -29,7 +29,7 @@ const initialState: ProposalActionsState = {
   error: false,
 };
 
-let connection = new Connection(RPC_CONNECTION, "confirmed");
+let connection = new Connection(RPC_CONNECTION, "recent");
 
 export const createProposalAttempt = createAsyncThunk(
   "proposalActions/createProposal",
