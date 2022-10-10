@@ -22,7 +22,7 @@ interface ButtonProps {
   memberPublicKey: string;
   delegate: Member;
   isCommunityVote: boolean;
-  isProposalFlow: boolean;
+  isProposalFlow?: boolean;
 }
 
 // const GET_CYBERCONNECT_IDENTITY = gql`

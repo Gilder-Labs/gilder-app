@@ -74,6 +74,7 @@ export const CreateProposalTransactionModal = ({
         proposalDescription: description,
         isCommunityVote,
         selectedDelegate,
+        isTokenTransfer,
       })
     );
     console.log("done creating proposal");
@@ -114,7 +115,7 @@ export const CreateProposalTransactionModal = ({
         index={2}
         snapPoints={snapPoints}
         handleStyle={{
-          backgroundColor: theme.gray[800],
+          backgroundColor: theme.gray[900],
           borderTopRightRadius: 8,
           borderTopLeftRadius: 8,
         }}
@@ -122,7 +123,7 @@ export const CreateProposalTransactionModal = ({
           backgroundColor: theme.gray[500],
         }}
         backgroundStyle={{
-          backgroundColor: theme.gray[800],
+          backgroundColor: theme.gray[900],
         }}
         backdropComponent={CustomBackdrop}
       >
@@ -191,7 +192,11 @@ export const CreateProposalTransactionModal = ({
 
             <SpacedRow>
               <Typography text={"DAO wallet:"} shade="500" />
-              <PublicKeyTextCopy publicKey={walletId} noPadding={true} />
+              <PublicKeyTextCopy
+                publicKey={walletId}
+                noPadding={true}
+                backgroundShade="900"
+              />
             </SpacedRow>
             <SpacedRow>
               <Typography text={"Realm:"} shade="500" />
@@ -294,7 +299,7 @@ export const CreateProposalTransactionModal = ({
 const ContentContainer = styled.View`
   flex: 1;
   height: 100%;
-  background: ${(props: any) => props.theme.gray[800]};
+  background: ${(props: any) => props.theme.gray[900]};
   min-height: 200px;
   /* padding-left: ${(props: any) => props.theme.spacing[2]};
   padding-right: ${(props: any) => props.theme.spacing[2]}; */
@@ -356,7 +361,7 @@ const DelegateScrollView = styled.ScrollView`
   padding-right: ${(props: any) => props.theme.spacing[4]};
 
   border-radius: 8px;
-  background: ${(props) => props.theme.gray[700]};
+  background: ${(props) => props.theme.gray[800]};
 `;
 
 const EmptyView = styled.View`
@@ -370,7 +375,7 @@ const TextInput = styled.TextInput`
   /* padding-right: ${(props) => props.theme.spacing[3]}; */
   min-height: 40px;
   font-size: 24px;
-  background-color: ${(props) => props.theme.gray[800]}44;
+  background-color: ${(props) => props.theme.gray[900]}44;
   color: ${(props) => props.theme.gray[100]};
   flex: 1;
 

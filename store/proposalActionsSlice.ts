@@ -41,6 +41,7 @@ export const createProposalAttempt = createAsyncThunk(
       proposalDescription,
       isCommunityVote,
       selectedDelegate,
+      isTokenTransfer,
     }: any,
     { getState, dispatch }
   ) => {
@@ -67,6 +68,7 @@ export const createProposalAttempt = createAsyncThunk(
         vault,
         governance: governancesMap[vault.governanceId],
         transactionInstructions,
+        isTokenTransfer,
       });
 
       const privateKey = await SecureStore.getItemAsync("privateKey");
@@ -85,6 +87,7 @@ export const createProposalAttempt = createAsyncThunk(
       // );
 
       let index = 0;
+      console.log("able to create proposal", transactions);
       for (const tx of transactions) {
         const recentBlock = await connection.getLatestBlockhash();
         tx.recentBlockhash = recentBlock.blockhash;

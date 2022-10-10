@@ -41,6 +41,7 @@ export const createNewProposalTransaction = async ({
   vault,
   governance,
   transactionInstructions,
+  isTokenTransfer,
 }: {
   selectedRealm: Realm;
   walletAddress: string;
@@ -55,6 +56,7 @@ export const createNewProposalTransaction = async ({
   vault: any;
   governance: any;
   transactionInstructions?: any;
+  isTokenTransfer?: boolean;
 }) => {
   const walletPublicKey = new PublicKey(walletAddress);
   const instructions: TransactionInstruction[] = [];
@@ -146,7 +148,23 @@ export const createNewProposalTransaction = async ({
 
   // if we have instruction data, insert it into proposal transaction
   let index = 0;
-  if (transactionInstructions) {
+
+  if (isTokenTransfer) {
+    await withInsertTransaction(
+      insertInstructions,
+      programId,
+      programVersion,
+      governancePublicKey,
+      proposalAddress,
+      tokenOwnerPublicKey,
+      payer,
+      index,
+      0,
+      0,
+      transactionInstructions,
+      payer
+    );
+  } else if (transactionInstructions) {
     const newInstructions = transactionInstructions[0].instructions;
 
     // map data back to public keys, web bridge converts to strings
