@@ -20,7 +20,7 @@ import { parseURL } from "@solana/pay";
 
 export default function CreateProposalScreen({ route }: any) {
   const navigation = useNavigation();
-  const { walletId } = route?.params;
+  const { walletId, tokens, nfts } = route?.params;
   const [url, setUrl] = useState("");
   const theme = useTheme();
 
@@ -33,6 +33,10 @@ export default function CreateProposalScreen({ route }: any) {
 
   const handleSolanaPay = () => {
     navigation.navigate("SolanaPayScanScreen", { walletId });
+  };
+
+  const handleTokenTransfer = () => {
+    navigation.navigate("TokenTransferScreen", { walletId, tokens, nfts });
   };
 
   return (
@@ -68,7 +72,7 @@ export default function CreateProposalScreen({ route }: any) {
       <SearchRow>
         <SearchBarContainer>
           <SearchBar
-            placeholder="Explore solana sites as wallet"
+            placeholder="Explore solana dapps as wallet"
             onChangeText={(text: string) => setUrl(text)}
             placeholderTextColor={theme.gray[400]}
             selectionColor={theme.gray[200]}
@@ -305,7 +309,7 @@ export default function CreateProposalScreen({ route }: any) {
       </Column>
       <Row>
         <ProposalCreationButtonOuter>
-          <ProposalCreationButton>
+          <ProposalCreationButton onPress={handleTokenTransfer}>
             <ProposalIconContainer>
               <FontAwesomeIcon
                 icon={faMoneyBillTransfer}
@@ -322,7 +326,7 @@ export default function CreateProposalScreen({ route }: any) {
             />
           </ProposalCreationButton>
         </ProposalCreationButtonOuter>
-        <ProposalCreationButtonOuter>
+        {/* <ProposalCreationButtonOuter>
           <ProposalCreationButton onPress={handleSolanaPay}>
             <DappIcon
               source={{
@@ -337,7 +341,7 @@ export default function CreateProposalScreen({ route }: any) {
               shade="100"
             />
           </ProposalCreationButton>
-        </ProposalCreationButtonOuter>
+        </ProposalCreationButtonOuter> */}
       </Row>
 
       {/* <Typography

@@ -12,6 +12,9 @@ interface TokenCardProps {
   isScrollable?: boolean;
   hideLowNumberTokens?: boolean;
   addSpacing?: boolean;
+  selectedToken?: any;
+  onTokenSelect?: any;
+  canSelect?: boolean;
 }
 
 export const TokenList = ({
@@ -22,6 +25,9 @@ export const TokenList = ({
   isScrollable = false,
   hideLowNumberTokens = false,
   addSpacing = false,
+  selectedToken = null,
+  onTokenSelect = () => {},
+  canSelect = false,
 }: TokenCardProps) => {
   const renderToken = ({ item }) => {
     return (
@@ -34,6 +40,27 @@ export const TokenList = ({
       />
     );
   };
+
+  if (canSelect) {
+    return (
+      <TokenSelectScrollView>
+        {tokens.map((token) => {
+          return (
+            <TokenCard
+              token={token}
+              key={`${token.address}-${token.owner}`}
+              tokenPriceData={tokenPriceData}
+              hideUnknownTokens={hideUnknownTokens}
+              hideLowNumberTokens={hideLowNumberTokens}
+              onTokenPress={onTokenSelect}
+              canSelect={canSelect}
+              selectedToken={selectedToken}
+            />
+          );
+        })}
+      </TokenSelectScrollView>
+    );
+  }
 
   return (
     <FlatList
@@ -56,4 +83,17 @@ export const TokenList = ({
 
 const Container = styled.View`
   flex: 1;
+`;
+
+const TokenSelectScrollView = styled.ScrollView`
+  width: 100%;
+  padding-bottom: ${(props: any) => props.theme.spacing[3]};
+  padding-top: ${(props: any) => props.theme.spacing[2]};
+  padding-left: ${(props: any) => props.theme.spacing[2]};
+  margin-bottom: ${(props: any) => props.theme.spacing[2]};
+  padding-right: ${(props: any) => props.theme.spacing[2]};
+
+  border-radius: 8px;
+  background: ${(props) => props.theme.gray[800]};
+  max-height: 400px;
 `;

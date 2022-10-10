@@ -109,6 +109,8 @@ export const VaultCard = ({
     //@ts-ignore
     navigation.push("CreateProposalScreen", {
       walletId: vaultId,
+      tokens: filteredTokens,
+      nfts: nfts,
     });
   };
 

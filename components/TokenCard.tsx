@@ -13,6 +13,9 @@ interface TokenCardProps {
   tokenPriceData: any;
   hideUnknownTokens: boolean;
   hideLowNumberTokens: boolean;
+  onTokenPress?: any;
+  canSelect?: boolean;
+  selectedToken?: any;
 }
 
 export const TokenCard = ({
@@ -20,6 +23,9 @@ export const TokenCard = ({
   tokenPriceData,
   hideUnknownTokens,
   hideLowNumberTokens = false,
+  canSelect = false,
+  selectedToken = null,
+  onTokenPress = () => {},
 }: TokenCardProps) => {
   const coinGeckoId = token?.extensions?.coingeckoId;
   const theme = useTheme();
@@ -35,7 +41,12 @@ export const TokenCard = ({
   const color2 = getColorType(token.owner);
 
   return (
-    <CoinCard key={token.mint + token.owner}>
+    <CoinCard
+      key={token.mint + token.owner}
+      onPress={() => onTokenPress(token, tokenPriceData)}
+      disabled={!canSelect}
+      isSelected={selectedToken?.mint === token.mint}
+    >
       <CoinImageContainer>
         {token?.logoURI ? (
           <Image
@@ -120,10 +131,11 @@ const CoinIcon = styled.Image`
   height: 40px;
   overflow: hidden;
 `;
-const CoinCard = styled.View`
+const CoinCard = styled.TouchableOpacity<{ isSelected: boolean }>`
   height: 64px;
   min-height: 64px;
-  background: ${(props: any) => props.theme.gray[900]};
+  background: ${(props: any) =>
+    props?.isSelected ? props.theme.gray[700] : props.theme.gray[900]};
   margin-top: 8px;
   padding: 8px;
   border-radius: 4px;
@@ -145,7 +157,9 @@ const CoinImageContainer = styled.View`
 `;
 
 const CoinTitleContainer = styled.View``;
-const CoinPriceContainer = styled.View``;
+const CoinPriceContainer = styled.View`
+  padding-top: ${(props: any) => props.theme.spacing[1]};
+`;
 
 const CoinPriceText = styled.Text`
   text-align: right;

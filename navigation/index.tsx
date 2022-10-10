@@ -57,6 +57,7 @@ import { faUserGroup } from "@fortawesome/pro-solid-svg-icons/faUserGroup";
 import { faTreasureChest } from "@fortawesome/pro-solid-svg-icons/faTreasureChest";
 import { faListUl } from "@fortawesome/pro-regular-svg-icons/faListUl";
 import { faInfoCircle } from "@fortawesome/pro-regular-svg-icons/faInfoCircle";
+import TokenTransferScreen from "../screens/TokenTransferScreen";
 
 const chatClient = StreamChat.getInstance(chatApiKey);
 
@@ -468,6 +469,13 @@ export default function Navigation({}: {}) {
             component={SolanaPayScanScreen}
             options={({ route }) => ({
               title: "Solana Pay",
+            })}
+          />
+          <Stack.Screen
+            name="TokenTransferScreen"
+            component={TokenTransferScreen}
+            options={({ route }) => ({
+              title: "Token Transfer",
             })}
           />
         </Stack.Navigator>
