@@ -51,6 +51,7 @@ export default {
     },
     extra: {
       // Add your extra configs here
+      useLocalNotificationApi: process.env.USE_LOCAL_NOTIFICATION_API || false,
       rpcNetwork: process.env.MAINNET_RPC || "https://ssc-dao.genesysgo.net/",
       indexRPC: process.env.INDEX_RPC || "https://ssc-dao.genesysgo.net/",
       streamApiKey: process.env.STREAM_API_KEY,
