@@ -1,4 +1,5 @@
 import numeral from "numeral";
+import { PublicKey } from "@solana/web3.js";
 
 export * from "./cleanData";
 export * from "./member";
@@ -40,4 +41,12 @@ export const getFilteredTokens = (nfts: Array<any>, tokens: Array<Token>) => {
   filteredTokens = tokens.filter((token) => !nftsMintMap[token.mint]);
 
   return filteredTokens;
+};
+
+export const tryParseKey = (key: string): PublicKey | null => {
+  try {
+    return new PublicKey(key);
+  } catch (error) {
+    return null;
+  }
 };

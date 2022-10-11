@@ -17,6 +17,7 @@ import {
 import { RPC_CONNECTION } from "../constants/Solana";
 import splToken from "@solana/spl-token";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
+import { tryParseKey } from "../utils";
 
 let connection = new Connection(RPC_CONNECTION, "recent");
 
@@ -29,25 +30,53 @@ export default function TokenTransferScreen({ route }: any) {
   const [token, setToken] = useState<any>(null);
   const [amount, setAmount] = useState<any>(0);
   const [amountUsd, setAmountUsd] = useState<any>(0);
-  const [recipient, setRecipient] = useState<any>("");
+  const [recipient, setRecipient] = useState<any>(
+    "EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i"
+  );
   const { tokenPriceData, vaults } = useAppSelector((state) => state.treasury);
   const [isEditing, setIsEditing] = useState<"token" | "usd">("token");
+  const [tokenError, setTokenError] = useState<any>(false);
+  const [recipientError, setRecipientError] = useState<any>(false);
 
   const [transactionInstructions, setTransactionInstructions] = useState<
     Array<any>
   >([]);
 
   const handleTokenTransfer = async () => {
-    let instruction = await createInstructionData(
-      SystemProgram.transfer({
-        fromPubkey: new PublicKey(walletId),
-        toPubkey: new PublicKey("EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i"),
-        lamports: Number(amount) * LAMPORTS_PER_SOL,
-      })
-    );
+    let instruction = [];
+
+    if (token.mint === "sol") {
+      console.log("making a sol transaction of amount:", parseFloat(amount));
+      let solInstruction = await createInstructionData(
+        SystemProgram.transfer({
+          fromPubkey: new PublicKey(walletId),
+          toPubkey: new PublicKey(recipient),
+          lamports: parseFloat(amount) * LAMPORTS_PER_SOL,
+        })
+      );
+      instruction.push(solInstruction);
+    } else {
+      // const toTokenAccount = await splToken?.getOrCreateAssociatedTokenAccount(
+      //   connection,
+      //   signTransaction,
+      //   token.mint,
+      //   publicKey,
+      //   splToken.TOKEN_PROGRAM_ID
+      // );
+      // console.log("token account", toTokenAccount);
+      // let splInstruction =  await splToken.Token.createTransferInstruction(
+      //     splToken.TOKEN_PROGRAM_ID,
+      //     new PublicKey(token.owner),
+      //     solanaPayInfo?.recipient, // reciver token account
+      //     new PublicKey(walletId),
+      //     [],
+      //     solanaPayInfo?.amount
+      //   )
+      // instruction.push(splInstruction);
+    }
 
     // put it in this format, so our create proposal handles it same way as browser
-    setTransactionInstructions([instruction]);
+    setTransactionInstructions([...instruction]);
 
     console.log("instruction", instruction);
     // const instruction = solanaPayInfo?.splToken
@@ -70,31 +99,43 @@ export default function TokenTransferScreen({ route }: any) {
   };
 
   const handleSetTokenAmount = (value: string) => {
-    const parsedValue = Number(value);
+    const parsedValue = parseFloat(value);
     setAmount(value);
     if (isEditing === "token" && token && parsedValue > 0) {
       const coinGeckoId = token?.extensions?.coingeckoId;
       const priceData = tokenPriceData[coinGeckoId];
       console.log("priceData", priceData);
       setAmountUsd(
-        String((Number(value) * priceData.current_price).toFixed(2))
+        String((parseFloat(value) * priceData.current_price).toFixed(2))
       );
     } else {
       setAmountUsd("0");
     }
+
+    if (token.tokenAmount.uiAmount < parseFloat(value)) {
+      setTokenError(true);
+    } else {
+      setTokenError(false);
+    }
   };
 
   const handleSetUsdAmount = (value: string) => {
-    const parsedValue = Number(value);
+    const parsedValue = parseFloat(value);
     setAmountUsd(value);
     if (isEditing === "usd" && token && parsedValue > 0) {
-      console.log("handling used?");
       const coinGeckoId = token?.extensions?.coingeckoId;
       const priceData = tokenPriceData[coinGeckoId];
-      console.log("priceData", priceData);
-      setAmount(String((Number(value) / priceData.current_price).toFixed(2)));
+      setAmount(
+        String((parseFloat(value) / priceData.current_price).toFixed(2))
+      );
     } else {
       setAmount("0");
+    }
+
+    if (token.tokenAmount.uiAmount < parseFloat(value)) {
+      setTokenError(true);
+    } else {
+      setTokenError(false);
     }
   };
 
@@ -104,15 +145,23 @@ export default function TokenTransferScreen({ route }: any) {
     setAmount("");
     const coinGeckoId = token?.extensions?.coingeckoId;
     const priceData = tokenPriceData[coinGeckoId];
-    console.log("token price data", priceData);
     setToken(token);
+  };
+
+  const handleRecipientChange = (value: string) => {
+    setRecipient(value);
+    if (tryParseKey(value)) {
+      setRecipientError(false);
+    } else {
+      setRecipientError(true);
+    }
   };
 
   return (
     <Container>
       <ScrollContainer>
         <Column>
-          <Typography text="Select Token" size="h4" bold={true} />
+          <Typography text="Select Token" size="h4" bold={true} shade="400" />
           <TokenList
             tokens={tokens}
             tokenPriceData={tokenPriceData}
@@ -125,7 +174,7 @@ export default function TokenTransferScreen({ route }: any) {
           />
         </Column>
         <Column>
-          <Typography text="Amount" size="h4" bold={true} />
+          <Typography text="Amount" size="h4" bold={true} shade="400" />
           <SpacedRow>
             <RowInput>
               <TextInput
@@ -136,6 +185,7 @@ export default function TokenTransferScreen({ route }: any) {
                 value={amount}
                 type="number"
                 disabled={!token}
+                editable={!!token}
                 keyboardType="numeric"
               />
               <Typography
@@ -159,20 +209,39 @@ export default function TokenTransferScreen({ route }: any) {
                 value={amountUsd}
                 type="number"
                 disabled={!token}
+                editable={!!token}
                 keyboardType="numeric"
               />
               <Typography text={"USD"} bold={true} marginLeft="1" />
             </RowInput>
           </SpacedRow>
+          {tokenError && (
+            <Typography
+              text="Not enough tokens to send"
+              size="subtitle"
+              shade="500"
+              color="error"
+            />
+          )}
         </Column>
         <Column>
-          <Typography text="Recipient" size="h4" bold={true} />
+          <Typography text="Recipient" size="h4" bold={true} shade="400" />
           <SpacedRow>
             <TextInput
               placeholder="Wallet address"
               placeholderTextColor={theme.gray[700]}
+              value={recipient}
+              onChangeText={(value: string) => handleRecipientChange(value)}
             />
           </SpacedRow>
+          {recipientError && (
+            <Typography
+              text="Invalid wallet address"
+              size="subtitle"
+              shade="500"
+              color="error"
+            />
+          )}
         </Column>
         <ActionContainer>
           <Button
@@ -180,6 +249,14 @@ export default function TokenTransferScreen({ route }: any) {
             onPress={handleTokenTransfer}
             shade="800"
             color="secondary"
+            disabled={
+              !token ||
+              !amount ||
+              !amountUsd ||
+              recipientError ||
+              !recipient ||
+              tokenError
+            }
           />
         </ActionContainer>
       </ScrollContainer>
@@ -215,7 +292,6 @@ const RowInput = styled.View`
   flex-direction: row;
   flex-wrap: wrap;
   align-items: flex-end;
-  margin-bottom: ${(props: any) => props.theme.spacing[4]};
 `;
 
 const SpacedRow = styled.View`
@@ -224,6 +300,7 @@ const SpacedRow = styled.View`
   align-items: center;
   margin-left: -${(props) => props.theme.spacing[1]};
   margin-right: -${(props) => props.theme.spacing[1]};
+  margin-bottom: ${(props) => props.theme.spacing[2]};
 `;
 
 const Column = styled.View``;
@@ -241,6 +318,18 @@ const TextInput = styled.TextInput`
   /* padding-right: ${(props) => props.theme.spacing[3]}; */
   min-height: 40px;
   font-size: 28px;
+  background-color: ${(props) => props.theme.gray[1000]};
+  color: ${(props) => props.theme.gray[100]};
+  border-radius: 8px;
+  margin-left: ${(props) => props.theme.spacing[1]};
+  margin-right: ${(props) => props.theme.spacing[1]};
+`;
+
+const WalletIdTextInput = styled.TextInput`
+  /* padding-left: ${(props) => props.theme.spacing[3]}; */
+  /* padding-right: ${(props) => props.theme.spacing[3]}; */
+  min-height: 40px;
+  font-size: 18px;
   background-color: ${(props) => props.theme.gray[1000]};
   color: ${(props) => props.theme.gray[100]};
   border-radius: 8px;
