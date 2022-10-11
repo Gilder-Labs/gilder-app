@@ -15,7 +15,12 @@ import {
   LAMPORTS_PER_SOL,
 } from "@solana/web3.js";
 import { RPC_CONNECTION } from "../constants/Solana";
-import splToken from "@solana/spl-token";
+import {
+  getAssociatedTokenAddress,
+  createAssociatedTokenAccountInstruction,
+  createTransferCheckedInstruction,
+} from "@solana/spl-token";
+
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { tryParseKey } from "../utils";
 
@@ -43,7 +48,7 @@ export default function TokenTransferScreen({ route }: any) {
   >([]);
 
   const handleTokenTransfer = async () => {
-    let instruction = [];
+    let instructions = [];
 
     if (token.mint === "sol") {
       console.log("making a sol transaction of amount:", parseFloat(amount));
@@ -54,47 +59,55 @@ export default function TokenTransferScreen({ route }: any) {
           lamports: parseFloat(amount) * LAMPORTS_PER_SOL,
         })
       );
-      instruction.push(solInstruction);
+      instructions.push(solInstruction);
     } else {
-      // const toTokenAccount = await splToken?.getOrCreateAssociatedTokenAccount(
-      //   connection,
-      //   signTransaction,
-      //   token.mint,
-      //   publicKey,
-      //   splToken.TOKEN_PROGRAM_ID
-      // );
-      // console.log("token account", toTokenAccount);
-      // let splInstruction =  await splToken.Token.createTransferInstruction(
-      //     splToken.TOKEN_PROGRAM_ID,
-      //     new PublicKey(token.owner),
-      //     solanaPayInfo?.recipient, // reciver token account
-      //     new PublicKey(walletId),
-      //     [],
-      //     solanaPayInfo?.amount
-      //   )
-      // instruction.push(splInstruction);
+      console.log("mint:", token.mint);
+      console.log("recipient:", recipient);
+      // Token  token account of token we are sending for recipient
+      const senderTokenAddress = await getAssociatedTokenAddress(
+        new PublicKey(token.mint),
+        new PublicKey(walletId),
+        true
+      );
+
+      const recipientTokenAddress = await getAssociatedTokenAddress(
+        new PublicKey(token.mint),
+        new PublicKey(recipient)
+      );
+
+      const recipientTokenInfo = await connection.getAccountInfo(
+        recipientTokenAddress
+      );
+      console.log("token address", recipientTokenAddress);
+      console.log("recipientTokenInfo", recipientTokenInfo);
+
+      !recipientTokenInfo &&
+        instructions.push(
+          createAssociatedTokenAccountInstruction(
+            new PublicKey(walletId),
+            recipientTokenAddress,
+            new PublicKey(recipient),
+            new PublicKey(token.mint)
+          )
+        );
+
+      const instruction = await createInstructionData(
+        createTransferCheckedInstruction(
+          senderTokenAddress,
+          new PublicKey(token.mint),
+          recipientTokenAddress,
+          new PublicKey(walletId),
+          100, //  1 usdc = 1000000
+          token.decimals
+        )
+      );
+      instructions.push(instruction);
     }
 
     // put it in this format, so our create proposal handles it same way as browser
-    setTransactionInstructions([...instruction]);
+    console.log("Instructions:", instructions);
+    setTransactionInstructions(instructions);
 
-    console.log("instruction", instruction);
-    // const instruction = solanaPayInfo?.splToken
-    //   ? await splToken.Token.createTransferInstruction(
-    //       splToken.TOKEN_PROGRAM_ID,
-    //       fromTokenAccount.address,
-    //       solanaPayInfo?.recipient,
-    //       new PublicKey(walletId),
-    //       [],
-    //       solanaPayInfo?.amount
-    //     )
-    //   : await createInstructionData(
-    //       SystemProgram.transfer({
-    //         fromPubkey: new PublicKey(walletId),
-    //         toPubkey: solanaPayInfo?.recipient,
-    //         lamports: solanaPayInfo?.amount * LAMPORTS_PER_SOL,
-    //       })
-    //     );
     bottomSheetModalRef?.current?.present();
   };
 
@@ -199,7 +212,7 @@ export default function TokenTransferScreen({ route }: any) {
                 text={"$"}
                 bold={true}
                 size="h4"
-                shade={amountUsd ? "100" : "700"}
+                shade={amountUsd ? "500" : "700"}
               />
               <TextInput
                 placeholder="0.00"

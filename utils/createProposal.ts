@@ -206,21 +206,6 @@ export const createNewProposalTransaction = async ({
     }
   }
 
-  // await withInsertTransaction(
-  //   insertInstructions,
-  //   programId,
-  //   programVersion,
-  //   governancePublicKey,
-  //   proposalAddress,
-  //   tokenOwnerPublicKey,
-  //   payer,
-  //   index,
-  //   0,
-  //   0,
-  //   [exampleData],
-  //   payer
-  // );
-
   // adding signatory + sign off makes proposal go to voting state
 
   const signatoryRecordAddress = await getSignatoryRecordAddress(
