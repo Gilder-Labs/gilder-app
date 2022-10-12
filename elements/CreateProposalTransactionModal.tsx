@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useState } from "react";
+import React, { useRef, useMemo, useState, useEffect } from "react";
 import styled from "styled-components/native";
 import { View } from "react-native";
 import { useTheme } from "styled-components";
@@ -8,11 +8,10 @@ import { useNavigation } from "@react-navigation/native";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { Button, DelegateButton } from "../components";
 import { fetchRealmProposals } from "../store/proposalsSlice";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
-import { faCopy } from "@fortawesome/pro-solid-svg-icons/faCopy";
-import { faComments } from "@fortawesome/pro-solid-svg-icons/faComments";
-import { faFaceSmilePlus } from "@fortawesome/pro-solid-svg-icons/faFaceSmilePlus";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faCheck } from "@fortawesome/pro-solid-svg-icons/faCheck";
+import { faXmark } from "@fortawesome/pro-solid-svg-icons/faXmark";
 import {
   BottomSheetModal,
   BottomSheetModalProvider,
@@ -53,14 +52,19 @@ export const CreateProposalTransactionModal = ({
   const dispatch = useAppDispatch();
   const { vaults } = useAppSelector((state) => state.treasury);
   const { selectedRealm } = useAppSelector((state) => state.realms);
-  const { isLoading } = useAppSelector((state) => state.proposalActions);
+  const { isLoading, error } = useAppSelector((state) => state.proposalActions);
   const { delegateMap, membersMap } = useAppSelector((state) => state.members);
   const [selectedDelegate, setSelectedDelegate] = useState("");
   const [description, setDescription] = useState("");
   const [title, setTitle] = useState("");
   const [voteType, setVoteType] = useState("community");
+  const [proposalState, setProposalState] = useState<
+    "pending" | "creating" | "resolved"
+  >("pending");
 
   const isCommunityVote = voteType === "community"; // else its council
+
+  useEffect(() => {}, [proposalState]);
 
   const closeModal = () => {
     bottomSheetModalRef.current?.close();
@@ -81,8 +85,8 @@ export const CreateProposalTransactionModal = ({
         prereqInstructions,
       })
     );
-    console.log("done creating proposal");
 
+    setProposalState("resolved");
     dispatch(fetchRealmProposals({ realm: selectedRealm, isRefreshing: true }));
     dispatch(fetchVaults(selectedRealm));
   };
@@ -112,6 +116,11 @@ export const CreateProposalTransactionModal = ({
 
   const delegatesToVoteWith = getDelegateMembers();
 
+  const handleViewProposals = () => {
+    closeModal();
+    navigation.navigate("Proposals");
+  };
+
   return (
     <BottomSheetModalProvider>
       <BottomSheetModal
@@ -133,166 +142,233 @@ export const CreateProposalTransactionModal = ({
       >
         <ContentContainer>
           <BottomSheetScrollView>
-            <Row>
-              {isTokenTransfer ? (
-                <SiteImage
-                  source={{
-                    uri: "https://s2.coinmarketcap.com/static/img/coins/64x64/5426.png",
-                  }}
-                />
-              ) : (
-                <SiteImage
-                  source={{
-                    uri: myUrl ? `https://${myUrl.host}/favicon.ico` : "",
-                  }}
-                />
-              )}
-              <RegularView>
+            {proposalState === "pending" || proposalState === "creating" ? (
+              <>
+                <Row>
+                  {isTokenTransfer ? (
+                    <SiteImage
+                      source={{
+                        uri: "https://s2.coinmarketcap.com/static/img/coins/64x64/5426.png",
+                      }}
+                    />
+                  ) : (
+                    <SiteImage
+                      source={{
+                        uri: myUrl ? `https://${myUrl.host}/favicon.ico` : "",
+                      }}
+                    />
+                  )}
+                  <RegularView>
+                    <Typography
+                      text={navState.title}
+                      size="h4"
+                      bold={true}
+                      marginBottom="0"
+                    />
+                    {isTokenTransfer ? (
+                      <Typography
+                        text={navState?.label || "Token Transfer"}
+                        shade="500"
+                        marginBottom="4"
+                      />
+                    ) : (
+                      <Typography
+                        text={myUrl ? myUrl.host : ""}
+                        shade="500"
+                        marginBottom="4"
+                      />
+                    )}
+                  </RegularView>
+                </Row>
+
+                <Column>
+                  {/* <Typography text={"Proposal name"} shade="500" /> */}
+                  <TextInput
+                    placeholder="Proposal name*"
+                    placeholderTextColor={theme.gray[400]}
+                    value={title}
+                    onChangeText={(text: string) => setTitle(text)}
+                  />
+                </Column>
+
+                <SpacedRow>
+                  <DescriptionTextInput
+                    placeholder="Proposal description"
+                    placeholderTextColor={theme.gray[400]}
+                    multiline={true}
+                    numberOfLines={4}
+                    value={description}
+                    onChangeText={(text: string) => setDescription(text)}
+                    onBlur={() => {}}
+                  />
+                </SpacedRow>
+
+                <Divider />
+
+                <SpacedRow>
+                  <Typography text={"DAO wallet:"} shade="500" />
+                  <PublicKeyTextCopy
+                    publicKey={walletId}
+                    noPadding={true}
+                    backgroundShade="900"
+                  />
+                </SpacedRow>
+                <SpacedRow>
+                  <Typography text={"Realm:"} shade="500" />
+                  <Typography text={selectedRealm?.name} shade="300" />
+                </SpacedRow>
+
+                <SpacedRow>
+                  <Typography text={"Vote Type:"} shade="500" />
+                  <BadgeRow>
+                    <VoteTypeBadge
+                      onPress={() => handleVoteTypeChange("community")}
+                      isSelected={isCommunityVote}
+                    >
+                      <Typography
+                        text={"Community"}
+                        shade={isCommunityVote ? "400" : "400"}
+                        color={isCommunityVote ? "secondary" : "gray"}
+                        marginBottom="0"
+                      />
+                    </VoteTypeBadge>
+                    <VoteTypeBadge
+                      onPress={() => handleVoteTypeChange("council")}
+                      isSelected={!isCommunityVote}
+                    >
+                      <Typography
+                        text={"Council"}
+                        shade={!isCommunityVote ? "400" : "400"}
+                        color={!isCommunityVote ? "secondary" : "gray"}
+                        marginBottom="0"
+                      />
+                    </VoteTypeBadge>
+                  </BadgeRow>
+                </SpacedRow>
+
+                <Column>
+                  <Typography
+                    text={"Create proposal as:"}
+                    shade="500"
+                    marginBottom="4"
+                  />
+                  <DelegateScrollView
+                    horizontal={true}
+                    contentContainerStyle={{ justifyContent: "center" }}
+                  >
+                    {membersMap?.[publicKey] && (
+                      <DelegateButton
+                        isSelected={selectedDelegate === publicKey}
+                        onPress={() => handleSelectDelegate(publicKey)}
+                        memberPublicKey={publicKey}
+                        delegate={membersMap?.[publicKey]}
+                        isCommunityVote={isCommunityVote}
+                        key={publicKey}
+                        isProposalFlow={true}
+                      />
+                    )}
+
+                    {delegatesToVoteWith?.map((delegate: Member) => (
+                      <DelegateButton
+                        isSelected={selectedDelegate === delegate?.walletId}
+                        onPress={() => handleSelectDelegate(delegate.walletId)}
+                        memberPublicKey={delegate.walletId}
+                        delegate={delegate}
+                        isCommunityVote={isCommunityVote}
+                        key={delegate.publicKey}
+                        isProposalFlow={true}
+                      />
+                    ))}
+                    <EmptyView />
+                  </DelegateScrollView>
+                </Column>
+
+                <ActionRow>
+                  <Button
+                    // isLoading={isSendingTransaction}
+                    // disabled={isSendingTransaction || !publicKey || !selectedDelegate}
+                    title="Cancel"
+                    onPress={closeModal}
+                    shade="700"
+                    color="gray"
+                    marginRight={true}
+                  />
+                  <Button
+                    isLoading={isLoading}
+                    disabled={
+                      isLoading || !publicKey || !selectedDelegate || !title
+                    }
+                    title="Create Proposal"
+                    onPress={handleProposalCreation}
+                    shade="800"
+                    color="secondary"
+                  />
+                </ActionRow>
+              </>
+            ) : proposalState === "resolved" && !error ? (
+              <StatusContainer>
                 <Typography
-                  text={navState.title}
-                  size="h4"
+                  text={"Proposal Created Successfully!"}
+                  shade="200"
+                  textAlign="center"
                   bold={true}
-                  marginBottom="0"
+                  size="h3"
                 />
-                {isTokenTransfer ? (
-                  <Typography
-                    text={navState?.label || "Token Transfer"}
-                    shade="500"
-                    marginBottom="4"
+                <Typography
+                  text={"View and vote now in proposals"}
+                  shade="400"
+                />
+                <IconContainer isSuccessful={true}>
+                  <FontAwesomeIcon
+                    icon={faCheck}
+                    size={32}
+                    color={theme.success[400]}
                   />
-                ) : (
-                  <Typography
-                    text={myUrl ? myUrl.host : ""}
-                    shade="500"
-                    marginBottom="4"
+                </IconContainer>
+
+                <ButtonContainer>
+                  <Button
+                    title="Go to Proposals"
+                    onPress={handleViewProposals}
+                    shade="800"
+                    color="gray"
                   />
-                )}
-              </RegularView>
-            </Row>
-
-            <Column>
-              {/* <Typography text={"Proposal name"} shade="500" /> */}
-              <TextInput
-                placeholder="Proposal name*"
-                placeholderTextColor={theme.gray[400]}
-                value={title}
-                onChangeText={(text: string) => setTitle(text)}
-              />
-            </Column>
-
-            <SpacedRow>
-              <DescriptionTextInput
-                placeholder="Proposal description"
-                placeholderTextColor={theme.gray[400]}
-                multiline={true}
-                numberOfLines={4}
-                value={description}
-                onChangeText={(text: string) => setDescription(text)}
-                onBlur={() => {}}
-              />
-            </SpacedRow>
-
-            <Divider />
-
-            <SpacedRow>
-              <Typography text={"DAO wallet:"} shade="500" />
-              <PublicKeyTextCopy
-                publicKey={walletId}
-                noPadding={true}
-                backgroundShade="900"
-              />
-            </SpacedRow>
-            <SpacedRow>
-              <Typography text={"Realm:"} shade="500" />
-              <Typography text={selectedRealm?.name} shade="300" />
-            </SpacedRow>
-
-            <SpacedRow>
-              <Typography text={"Vote Type:"} shade="500" />
-              <BadgeRow>
-                <VoteTypeBadge
-                  onPress={() => handleVoteTypeChange("community")}
-                  isSelected={isCommunityVote}
-                >
-                  <Typography
-                    text={"Community"}
-                    shade={isCommunityVote ? "400" : "400"}
-                    color={isCommunityVote ? "secondary" : "gray"}
-                    marginBottom="0"
+                </ButtonContainer>
+              </StatusContainer>
+            ) : (
+              <StatusContainer>
+                <Typography
+                  text={"Error Creating Proposal"}
+                  shade="200"
+                  textAlign="center"
+                  bold={true}
+                  size="h3"
+                />
+                <Typography
+                  text={
+                    "Something may have gone wrong during proposal creation. Check proposals or try again"
+                  }
+                  textAlign="center"
+                  shade="400"
+                />
+                <IconContainer isSuccessful={false}>
+                  <FontAwesomeIcon
+                    icon={faXmark}
+                    size={32}
+                    color={theme.error[400]}
                   />
-                </VoteTypeBadge>
-                <VoteTypeBadge
-                  onPress={() => handleVoteTypeChange("council")}
-                  isSelected={!isCommunityVote}
-                >
-                  <Typography
-                    text={"Council"}
-                    shade={!isCommunityVote ? "400" : "400"}
-                    color={!isCommunityVote ? "secondary" : "gray"}
-                    marginBottom="0"
-                  />
-                </VoteTypeBadge>
-              </BadgeRow>
-            </SpacedRow>
+                </IconContainer>
 
-            <Column>
-              <Typography
-                text={"Create proposal as:"}
-                shade="500"
-                marginBottom="4"
-              />
-              <DelegateScrollView
-                horizontal={true}
-                contentContainerStyle={{ justifyContent: "center" }}
-              >
-                {membersMap?.[publicKey] && (
-                  <DelegateButton
-                    isSelected={selectedDelegate === publicKey}
-                    onPress={() => handleSelectDelegate(publicKey)}
-                    memberPublicKey={publicKey}
-                    delegate={membersMap?.[publicKey]}
-                    isCommunityVote={isCommunityVote}
-                    key={publicKey}
-                    isProposalFlow={true}
+                <ButtonContainer>
+                  <Button
+                    title="View Proposals"
+                    onPress={handleViewProposals}
+                    shade="800"
+                    color="gray"
                   />
-                )}
-
-                {delegatesToVoteWith?.map((delegate: Member) => (
-                  <DelegateButton
-                    isSelected={selectedDelegate === delegate?.walletId}
-                    onPress={() => handleSelectDelegate(delegate.walletId)}
-                    memberPublicKey={delegate.walletId}
-                    delegate={delegate}
-                    isCommunityVote={isCommunityVote}
-                    key={delegate.publicKey}
-                    isProposalFlow={true}
-                  />
-                ))}
-                <EmptyView />
-              </DelegateScrollView>
-            </Column>
-
-            <ActionRow>
-              <Button
-                // isLoading={isSendingTransaction}
-                // disabled={isSendingTransaction || !publicKey || !selectedDelegate}
-                title="Cancel"
-                onPress={closeModal}
-                shade="700"
-                color="gray"
-                marginRight={true}
-              />
-              <Button
-                isLoading={isLoading}
-                disabled={
-                  isLoading || !publicKey || !selectedDelegate || !title
-                }
-                title="Create Proposal"
-                onPress={handleProposalCreation}
-                shade="800"
-                color="secondary"
-              />
-            </ActionRow>
+                </ButtonContainer>
+              </StatusContainer>
+            )}
           </BottomSheetScrollView>
         </ContentContainer>
       </BottomSheetModal>
@@ -425,4 +501,32 @@ const BadgeRow = styled.View`
   flex-direction: row;
   margin-bottom: ${(props: any) => props.theme.spacing[2]};
   margin-right: -${(props: any) => props.theme.spacing[2]};
+`;
+
+const StatusContainer = styled.View`
+  justify-content: cemter;
+  align-items: center;
+  margin-top: 100px;
+  padding-left: 24px;
+  padding-right: 24px;
+`;
+
+const IconContainer = styled.View<{ isSuccessful: boolean }>`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  width: 64px;
+  max-width: 64px;
+  height: 64px;
+  max-height: 64px;
+  border-radius: 100px;
+  margin-top: ${(props: any) => props.theme.spacing[4]};
+  margin-bottom: ${(props: any) => props.theme.spacing[5]};
+
+  background: ${(props: any) =>
+    props.isSuccessful ? props.theme.success[400] : props.theme.error[400]}44;
+`;
+
+const ButtonContainer = styled.View`
+  width: 200px;
 `;
