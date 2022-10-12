@@ -19,6 +19,7 @@ import {
   getAssociatedTokenAddress,
   createAssociatedTokenAccountInstruction,
   createTransferCheckedInstruction,
+  createTransferInstruction,
 } from "@solana/spl-token";
 
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
@@ -39,6 +40,8 @@ export default function TokenTransferScreen({ route }: any) {
     "EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i"
   );
   const { tokenPriceData, vaults } = useAppSelector((state) => state.treasury);
+  const { publicKey } = useAppSelector((state) => state.wallet);
+
   const [isEditing, setIsEditing] = useState<"token" | "usd">("token");
   const [tokenError, setTokenError] = useState<any>(false);
   const [recipientError, setRecipientError] = useState<any>(false);
@@ -47,8 +50,11 @@ export default function TokenTransferScreen({ route }: any) {
     Array<any>
   >([]);
 
+  const [prereqInstructions, setPrereqInstructions] = useState<Array<any>>([]);
+
   const handleTokenTransfer = async () => {
     let instructions = [];
+    let prereqInstructions = [];
 
     if (token.mint === "sol") {
       console.log("making a sol transaction of amount:", parseFloat(amount));
@@ -81,24 +87,35 @@ export default function TokenTransferScreen({ route }: any) {
       console.log("token address", recipientTokenAddress);
       console.log("recipientTokenInfo", recipientTokenInfo);
 
-      !recipientTokenInfo &&
-        instructions.push(
+      if (!recipientTokenInfo) {
+        let newAtaInstruction = await createInstructionData(
           createAssociatedTokenAccountInstruction(
-            new PublicKey(walletId),
+            new PublicKey(publicKey), // create the ata of the reciever from wallet making transaction
             recipientTokenAddress,
             new PublicKey(recipient),
             new PublicKey(token.mint)
           )
         );
+        prereqInstructions.push(newAtaInstruction);
+      }
 
       const instruction = await createInstructionData(
-        createTransferCheckedInstruction(
+        // createTransferCheckedInstruction(
+        //   senderTokenAddress,
+        //   new PublicKey(token.mint),
+        //   recipientTokenAddress,
+        //   new PublicKey(walletId),
+        //   amount * token.decimals, //  1 usdc = 1000000
+        //   token.decimals
+        // )
+
+        createTransferInstruction(
           senderTokenAddress,
-          new PublicKey(token.mint),
           recipientTokenAddress,
           new PublicKey(walletId),
-          100, //  1 usdc = 1000000
-          token.decimals
+          parseFloat(amount) * Math.pow(10, token.decimals) //  1 usdc = 1000000
+          // new PublicKey(token.mint),
+          // token.decimals
         )
       );
       instructions.push(instruction);
@@ -107,6 +124,7 @@ export default function TokenTransferScreen({ route }: any) {
     // put it in this format, so our create proposal handles it same way as browser
     console.log("Instructions:", instructions);
     setTransactionInstructions(instructions);
+    setPrereqInstructions(prereqInstructions);
 
     bottomSheetModalRef?.current?.present();
   };
@@ -277,6 +295,7 @@ export default function TokenTransferScreen({ route }: any) {
         bottomSheetModalRef={bottomSheetModalRef}
         walletId={walletId}
         transactionInstructions={transactionInstructions}
+        prereqInstructions={prereqInstructions}
         navState={{
           title: "Send tokens",
           url: "",

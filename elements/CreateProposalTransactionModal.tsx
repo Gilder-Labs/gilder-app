@@ -28,6 +28,8 @@ interface CreateProposalTransactionModalProps {
   bottomSheetModalRef: any;
   walletId: string;
   transactionInstructions: Array<any>;
+  prereqInstructions?: Array<any>;
+
   navState: {
     title: string;
     url: string;
@@ -42,6 +44,7 @@ export const CreateProposalTransactionModal = ({
   walletId,
   navState,
   isTokenTransfer = false,
+  prereqInstructions,
 }: CreateProposalTransactionModalProps) => {
   const theme = useTheme();
   const navigation = useNavigation();
@@ -75,6 +78,7 @@ export const CreateProposalTransactionModal = ({
         isCommunityVote,
         selectedDelegate,
         isTokenTransfer,
+        prereqInstructions,
       })
     );
     console.log("done creating proposal");

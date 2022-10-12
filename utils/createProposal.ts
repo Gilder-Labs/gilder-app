@@ -42,6 +42,7 @@ export const createNewProposalTransaction = async ({
   governance,
   transactionInstructions,
   isTokenTransfer,
+  prerequisiteInstructions,
 }: {
   selectedRealm: Realm;
   walletAddress: string;
@@ -57,6 +58,7 @@ export const createNewProposalTransaction = async ({
   governance: any;
   transactionInstructions?: any;
   isTokenTransfer?: boolean;
+  prerequisiteInstructions?: any;
 }) => {
   const walletPublicKey = new PublicKey(walletAddress);
   const instructions: TransactionInstruction[] = [];
@@ -70,8 +72,6 @@ export const createNewProposalTransaction = async ({
 
   // TODO... for each transaction, make array of signers
   const signers: TransactionInstruction[] = [];
-  const prerequisiteInstructions: TransactionInstruction[] = [];
-  const prerequisiteInstructionsSigners: Keypair[] = [];
 
   if (membersMap[walletAddress] && !selectedDelegate) {
     member = membersMap[walletAddress];
@@ -124,17 +124,6 @@ export const createNewProposalTransaction = async ({
     undefined // TODO: plugin
   );
 
-  // temp instructions to
-  // const exampleData = await createInstructionData(
-  //   SystemProgram.transfer({
-  //     fromPubkey: new PublicKey(vault?.pubKey),
-  //     toPubkey: new PublicKey("EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i"),
-  //     lamports: 0.1 * LAMPORTS_PER_SOL,
-  //   })
-  // );
-
-  // console.log("example instruction", exampleData);
-
   await withAddSignatory(
     instructions,
     programId,
@@ -185,8 +174,6 @@ export const createNewProposalTransaction = async ({
 
       const base64instruction = serializeInstructionToBase64(tx);
       let data = getInstructionDataFromBase64(base64instruction);
-
-      console.log("data", tx);
 
       await withInsertTransaction(
         insertInstructions,
@@ -244,6 +231,12 @@ export const createNewProposalTransaction = async ({
 
   // create proposal transaction
   let transactions = [];
+  if (prerequisiteInstructions?.length > 0) {
+    const preqTransaction = new Transaction({ feePayer: walletPublicKey });
+    console.log("making preq transaction");
+    preqTransaction.add(...prerequisiteInstructions);
+    transactions.push(preqTransaction);
+  }
 
   let proposalTransaction = new Transaction({
     feePayer: walletPublicKey,
