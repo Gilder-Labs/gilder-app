@@ -10,6 +10,8 @@ import {
   PublicKey,
   SystemProgram,
   Transaction,
+  sendAndConfirmTransaction,
+  sendAndConfirmRawTransaction,
 } from "@solana/web3.js";
 import Constants, { AppOwnership } from "expo-constants";
 
@@ -47,6 +49,11 @@ const onSignMessageRedirectLink =
   Constants.appOwnership == AppOwnership.Guest
     ? Linking.createURL("onSignMessage", {})
     : Linking.createURL("onSignMessage", { scheme: scheme });
+const onSignAllTransactionsRedirectLink =
+  Constants.appOwnership == AppOwnership.Expo ||
+  Constants.appOwnership == AppOwnership.Guest
+    ? Linking.createURL("onSignAllTransactions", {})
+    : Linking.createURL("onSignAllTransactions", { scheme: scheme });
 
 const buildUrl = (path: string, params: URLSearchParams) =>
   `https://phantom.app/ul/v1/${path}?${params.toString()}`;
@@ -90,6 +97,7 @@ export const usePhantom = () => {
   const connection = new Connection(RPC_CONNECTION);
   const [dappKeyPair, setDappKeyPair] = useState(nacl.box.keyPair());
   const [signedMessage, setSignedMessage] = useState("");
+  const [isSendingTransactions, setIsSendingTransactions] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -172,6 +180,33 @@ export const usePhantom = () => {
       } else if (/onDisconnect/.test(url.href)) {
         dispatch(disconnectWallet());
         setSignedMessage("");
+      } else if (/onSignAllTransactions/.test(url.href)) {
+        const walletInfoJSON = await SecureStore.getItemAsync("phantomInfo");
+        const phantomInfo = walletInfoJSON ? JSON.parse(walletInfoJSON) : {};
+        const { sharedSecretDapp } = phantomInfo;
+        setIsSendingTransactions(true);
+        const signAllTransactionsData = decryptPayload(
+          params.get("data")!,
+          params.get("nonce")!,
+          Uint8Array.from(sharedSecretDapp)
+        );
+
+        const decodedTransactions = signAllTransactionsData.transactions.map(
+          (t: string) => Transaction.from(bs58.decode(t))
+        );
+        console.log("RESPONSE", decodedTransactions);
+
+        for (const tx of decodedTransactions) {
+          // temp work around to make sure stuff happens sequentially and doesn't throw program errors
+          console.log("tx", tx);
+          const response = await sendAndConfirmRawTransaction(
+            connection,
+            tx.serialize(),
+            { skipPreflight: false }
+          );
+        }
+        console.log("RESPONSE", decodedTransactions);
+        setIsSendingTransactions(false);
       } else if (/onSignMessage/.test(url.href)) {
         const walletInfoJSON = await SecureStore.getItemAsync("phantomInfo");
         const phantomInfo = walletInfoJSON ? JSON.parse(walletInfoJSON) : {};
@@ -210,6 +245,43 @@ export const usePhantom = () => {
     });
 
     const url = buildUrl("disconnect", params);
+    Linking.openURL(url);
+  };
+
+  // TODO: send our transacitons here
+  const signAllTransactions = async (transactions: Array<Transaction>) => {
+    const walletInfoJSON = await SecureStore.getItemAsync("phantomInfo");
+    const phantomInfo = walletInfoJSON ? JSON.parse(walletInfoJSON) : {};
+    const { session, sharedSecretDapp, dappKeyPair } = phantomInfo;
+
+    const serializedTransactions = transactions.map((t) =>
+      bs58.encode(
+        t.serialize({
+          requireAllSignatures: false,
+        })
+      )
+    );
+
+    const payload = {
+      session,
+      transactions: serializedTransactions,
+    };
+
+    const [nonce, encryptedPayload] = encryptPayload(
+      payload,
+      Uint8Array.from(sharedSecretDapp)
+    );
+
+    const params = new URLSearchParams({
+      dapp_encryption_public_key: bs58.encode(
+        Uint8Array.from(dappKeyPair?.publicKey)
+      ),
+      nonce: bs58.encode(nonce),
+      redirect_link: onSignAllTransactionsRedirectLink,
+      payload: bs58.encode(encryptedPayload),
+    });
+
+    const url = buildUrl("signAllTransactions", params);
     Linking.openURL(url);
   };
 
@@ -293,5 +365,7 @@ export const usePhantom = () => {
     signMessage,
     signAndSendTransaction,
     signedMessage,
+    signAllTransactions,
+    isSendingTransactions,
   };
 };

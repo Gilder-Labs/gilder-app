@@ -242,25 +242,34 @@ export const createNewProposalTransaction = async ({
   //   transactions.push(preqTransaction);
   // }
 
+  let recentBlock = await connection.getLatestBlockhash();
+
   let proposalTransaction = new Transaction({
     feePayer: walletPublicKey,
   });
   proposalTransaction.add(...instructions);
+  proposalTransaction.recentBlockhash = recentBlock.blockhash;
   transactions.push(proposalTransaction);
 
   // dapp instructions
+  recentBlock = await connection.getLatestBlockhash();
   insertInstructions.forEach((ix) => {
     let dappTransaction = new Transaction({
       feePayer: walletPublicKey,
     });
+
     dappTransaction.add(ix);
+    dappTransaction.recentBlockhash = recentBlock.blockhash;
+
     transactions.push(dappTransaction);
   });
 
   let signOffTransaction = new Transaction({
     feePayer: walletPublicKey,
   });
+  recentBlock = await connection.getLatestBlockhash();
   signOffTransaction.add(...signOffInstruction);
+  signOffTransaction.recentBlockhash = recentBlock.blockhash;
   transactions.push(signOffTransaction);
 
   return transactions;

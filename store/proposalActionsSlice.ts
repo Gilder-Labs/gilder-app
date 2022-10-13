@@ -89,8 +89,6 @@ export const createProposalAttempt = createAsyncThunk(
       let index = 0;
       console.log("able to create proposal", transactions);
       for (const tx of transactions) {
-        const recentBlock = await connection.getLatestBlockhash();
-        tx.recentBlockhash = recentBlock.blockhash;
         tx.sign(walletKeypair);
 
         // temp work around to make sure stuff happens sequentially and doesn't throw program errors

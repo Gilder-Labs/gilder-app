@@ -67,8 +67,7 @@ export default function TokenTransferScreen({ route }: any) {
       );
       instructions.push(solInstruction);
     } else {
-      console.log("mint:", token.mint);
-      console.log("recipient:", recipient);
+      console.log("making spl-token transfer");
       // Token  token account of token we are sending for recipient
       const senderTokenAddress = await getAssociatedTokenAddress(
         new PublicKey(token.mint),

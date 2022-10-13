@@ -19,6 +19,7 @@ import {
 } from "@gorhom/bottom-sheet";
 import CustomBackdrop from "../components/FadeBackdropModal";
 import { createProposalAttempt } from "../store/proposalActionsSlice";
+import { createNewProposalTransaction } from "../utils/createProposal";
 
 import { Typography, PublicKeyTextCopy } from "../components";
 import { fetchVaults } from "../store/treasurySlice";
@@ -51,8 +52,9 @@ CreateProposalTransactionModalProps) => {
   const { publicKey } = useAppSelector((state) => state.wallet);
   const snapPoints = useMemo(() => ["25", "50%", "75%", "90%"], []);
   const dispatch = useAppDispatch();
-  const { vaults } = useAppSelector((state) => state.treasury);
+  const { vaults, governancesMap } = useAppSelector((state) => state.treasury);
   const { selectedRealm } = useAppSelector((state) => state.realms);
+  const { walletType } = useAppSelector((state) => state.wallet);
   const { isLoading, error } = useAppSelector((state) => state.proposalActions);
   const { delegateMap, membersMap } = useAppSelector((state) => state.members);
   const [selectedDelegate, setSelectedDelegate] = useState("");
@@ -62,7 +64,8 @@ CreateProposalTransactionModalProps) => {
   const [proposalState, setProposalState] = useState<
     "pending" | "creating" | "resolved"
   >("pending");
-  const { signAndSendTransaction } = usePhantom();
+  const { signAllTransactions, isSendingTransactions } = usePhantom();
+  const [loadingPhantom, setLoadingPhantom] = useState(false);
 
   const isCommunityVote = voteType === "community"; // else its council
 
@@ -75,18 +78,41 @@ CreateProposalTransactionModalProps) => {
   const handleProposalCreation = async () => {
     const vault = vaults.find((vault) => vault.pubKey === walletId);
 
-    await dispatch(
-      createProposalAttempt({
-        vault,
-        transactionInstructions: transactionInstructions,
-        proposalTitle: title,
-        proposalDescription: description,
-        isCommunityVote,
+    if (walletType === "phantom") {
+      setLoadingPhantom(true);
+      const proposalData = {
+        name: title,
+        description: description,
+      };
+
+      const transactions = await createNewProposalTransaction({
+        selectedRealm,
+        walletAddress: publicKey,
+        proposalData,
+        membersMap,
         selectedDelegate,
+        isCommunityVote,
+        vault,
+        governance: governancesMap[vault.governanceId],
+        transactionInstructions,
         isTokenTransfer,
-        // prereqInstructions,
-      })
-    );
+      });
+      await signAllTransactions(transactions);
+      setLoadingPhantom(false);
+    } else {
+      await dispatch(
+        createProposalAttempt({
+          vault,
+          transactionInstructions: transactionInstructions,
+          proposalTitle: title,
+          proposalDescription: description,
+          isCommunityVote,
+          selectedDelegate,
+          isTokenTransfer,
+          // prereqInstructions,
+        })
+      );
+    }
 
     setProposalState("resolved");
     dispatch(fetchRealmProposals({ realm: selectedRealm, isRefreshing: true }));
@@ -311,7 +337,9 @@ CreateProposalTransactionModalProps) => {
                     marginRight={true}
                   />
                   <Button
-                    isLoading={isLoading}
+                    isLoading={
+                      isLoading || loadingPhantom || isSendingTransactions
+                    }
                     disabled={
                       isLoading || !publicKey || !selectedDelegate || !title
                     }
