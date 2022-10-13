@@ -197,12 +197,12 @@ export const usePhantom = () => {
         console.log("RESPONSE", decodedTransactions);
 
         for (const tx of decodedTransactions) {
-          // temp work around to make sure stuff happens sequentially and doesn't throw program errors
-          console.log("tx", tx);
-          const response = await sendAndConfirmRawTransaction(
-            connection,
+          // const latestBlockHash = await connection.getLatestBlockhash();
+          const signature = await connection.sendRawTransaction(
             tx.serialize(),
-            { skipPreflight: false }
+            {
+              skipPreflight: true,
+            }
           );
         }
         console.log("RESPONSE", decodedTransactions);
