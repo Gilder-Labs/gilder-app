@@ -36,9 +36,7 @@ export default function TokenTransferScreen({ route }: any) {
   const [token, setToken] = useState<any>(null);
   const [amount, setAmount] = useState<any>(0);
   const [amountUsd, setAmountUsd] = useState<any>(0);
-  const [recipient, setRecipient] = useState<any>(
-    "4warKVthQCTP1LmhKyJQHJGb1jvCUrzVnVhmA8pxE3Nt"
-  );
+  const [recipient, setRecipient] = useState<any>("");
   const { tokenPriceData, vaults } = useAppSelector((state) => state.treasury);
   const { publicKey } = useAppSelector((state) => state.wallet);
 
