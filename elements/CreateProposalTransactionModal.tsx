@@ -402,7 +402,7 @@ CreateProposalTransactionModalProps) => {
                 />
                 <Typography
                   text={
-                    "Please keep modal and app open while proposal is sending."
+                    "Please keep modal and app open while transactions are processing."
                   }
                   textAlign="center"
                   shade="400"
