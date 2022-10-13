@@ -6,7 +6,7 @@ import { useTheme } from "styled-components";
 import * as Haptics from "expo-haptics";
 import { useNavigation } from "@react-navigation/native";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { Button, DelegateButton } from "../components";
+import { Button, DelegateButton, Loading } from "../components";
 import { fetchRealmProposals } from "../store/proposalsSlice";
 
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -64,7 +64,7 @@ CreateProposalTransactionModalProps) => {
   const [proposalState, setProposalState] = useState<
     "pending" | "creating" | "resolved"
   >("pending");
-  const { signAllTransactions, isSendingTransactions } = usePhantom();
+  const { signAllTransactions, isSendingTransactions, progress } = usePhantom();
   const [loadingPhantom, setLoadingPhantom] = useState(false);
 
   const isCommunityVote = voteType === "community"; // else its council
@@ -77,6 +77,7 @@ CreateProposalTransactionModalProps) => {
 
   const handleProposalCreation = async () => {
     const vault = vaults.find((vault) => vault.pubKey === walletId);
+    setProposalState("creating");
 
     if (walletType === "phantom") {
       setLoadingPhantom(true);
@@ -115,8 +116,6 @@ CreateProposalTransactionModalProps) => {
     }
 
     setProposalState("resolved");
-    dispatch(fetchRealmProposals({ realm: selectedRealm, isRefreshing: true }));
-    dispatch(fetchVaults(selectedRealm));
   };
 
   // const handlePhantomProposalCreation = async () => {
@@ -161,6 +160,8 @@ CreateProposalTransactionModalProps) => {
 
   const handleViewProposals = () => {
     closeModal();
+    dispatch(fetchRealmProposals({ realm: selectedRealm, isRefreshing: true }));
+    dispatch(fetchVaults(selectedRealm));
     navigation.navigate("Proposals");
   };
 
@@ -185,7 +186,7 @@ CreateProposalTransactionModalProps) => {
       >
         <ContentContainer>
           <BottomSheetScrollView>
-            {proposalState === "pending" || proposalState === "creating" ? (
+            {proposalState === "pending" ? (
               <>
                 <Row>
                   {isTokenTransfer ? (
@@ -350,7 +351,9 @@ CreateProposalTransactionModalProps) => {
                   />
                 </ActionRow>
               </>
-            ) : proposalState === "resolved" && !error ? (
+            ) : proposalState === "resolved" &&
+              !isSendingTransactions &&
+              !error ? (
               <StatusContainer>
                 <Typography
                   text={"Proposal Created Successfully!"}
@@ -362,6 +365,7 @@ CreateProposalTransactionModalProps) => {
                 <Typography
                   text={"View and vote now in proposals"}
                   shade="400"
+                  textAlign="center"
                 />
                 <IconContainer isSuccessful={true}>
                   <FontAwesomeIcon
@@ -379,6 +383,32 @@ CreateProposalTransactionModalProps) => {
                     color="gray"
                   />
                 </ButtonContainer>
+              </StatusContainer>
+            ) : proposalState === "creating" ||
+              (isSendingTransactions && !error) ? (
+              <StatusContainer>
+                <Typography
+                  text={"Sending transactions"}
+                  shade="200"
+                  textAlign="center"
+                  bold={true}
+                  size="h3"
+                />
+                <Typography
+                  text={
+                    "Please keep modal and app open while proposal is sending."
+                  }
+                  textAlign="center"
+                  shade="400"
+                />
+                <Loading minHeight={true} />
+
+                <Typography
+                  // add 2 for creating proposal + signing off
+                  text={`Progress: ${progress} / ${
+                    transactionInstructions.length + 2
+                  }  `}
+                />
               </StatusContainer>
             ) : (
               <StatusContainer>

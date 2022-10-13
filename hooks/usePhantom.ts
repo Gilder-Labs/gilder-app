@@ -12,6 +12,7 @@ import {
   Transaction,
   sendAndConfirmTransaction,
   sendAndConfirmRawTransaction,
+  BlockheightBasedTransactionConfirmationStrategy,
 } from "@solana/web3.js";
 import Constants, { AppOwnership } from "expo-constants";
 
@@ -98,6 +99,7 @@ export const usePhantom = () => {
   const [dappKeyPair, setDappKeyPair] = useState(nacl.box.keyPair());
   const [signedMessage, setSignedMessage] = useState("");
   const [isSendingTransactions, setIsSendingTransactions] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     (async () => {
@@ -184,6 +186,7 @@ export const usePhantom = () => {
         const walletInfoJSON = await SecureStore.getItemAsync("phantomInfo");
         const phantomInfo = walletInfoJSON ? JSON.parse(walletInfoJSON) : {};
         const { sharedSecretDapp } = phantomInfo;
+        setProgress(0);
         setIsSendingTransactions(true);
         const signAllTransactionsData = decryptPayload(
           params.get("data")!,
@@ -194,18 +197,32 @@ export const usePhantom = () => {
         const decodedTransactions = signAllTransactionsData.transactions.map(
           (t: string) => Transaction.from(bs58.decode(t))
         );
-        console.log("RESPONSE", decodedTransactions);
 
         for (const tx of decodedTransactions) {
           // const latestBlockHash = await connection.getLatestBlockhash();
-          const signature = await connection.sendRawTransaction(
+          console.log("SENDING", tx);
+          const signature = await sendAndConfirmRawTransaction(
+            connection,
             tx.serialize(),
             {
               skipPreflight: true,
             }
           );
+          // const latestBlockHash = await connection.getLatestBlockhash();
+          // console.log("TRANSACTION SENT", signature);
+          // const confirmStrategy: BlockheightBasedTransactionConfirmationStrategy =
+          //   {
+          //     blockhash: latestBlockHash.blockhash,
+          //     lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
+          //     signature: signature,
+          //   };
+          // const result = await connection.confirmTransaction(confirmStrategy);
+          // console.log("CONFIRM RESULT", result);
+
+          setProgress(progress + 1);
         }
-        console.log("RESPONSE", decodedTransactions);
+
+        console.log("PROPOSAL CREATED IN PHANTOM");
         setIsSendingTransactions(false);
       } else if (/onSignMessage/.test(url.href)) {
         const walletInfoJSON = await SecureStore.getItemAsync("phantomInfo");
@@ -367,5 +384,6 @@ export const usePhantom = () => {
     signedMessage,
     signAllTransactions,
     isSendingTransactions,
+    progress,
   };
 };
