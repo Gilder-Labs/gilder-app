@@ -85,8 +85,6 @@ export default function TokenTransferScreen({ route }: any) {
       const recipientTokenInfo = await connection.getAccountInfo(
         recipientTokenAddress
       );
-      console.log("token address", recipientTokenAddress.toBase58());
-      console.log("recipientTokenInfo", recipientTokenInfo);
 
       if (!recipientTokenInfo) {
         let newAtaInstruction = await createInstructionData(

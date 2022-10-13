@@ -26,6 +26,7 @@ import {
   pubkeyFilter,
   createInstructionData,
   Governance,
+  getGovernance,
 } from "@solana/spl-governance";
 import bs58 from "bs58";
 
@@ -102,7 +103,7 @@ export const createNewProposalTransaction = async ({
 
   const walletOfMember = new PublicKey(member.walletId);
 
-  const proposalIndex = governance.proposalCount; // this needs to correct or governance will fail
+  const proposalIndex = governance.proposalCount; // this needs to correct or proposal will fail
   const governancePublicKey = new PublicKey(governance.governanceId);
 
   const proposalAddress = await withCreateProposal(
@@ -262,6 +263,5 @@ export const createNewProposalTransaction = async ({
   signOffTransaction.add(...signOffInstruction);
   transactions.push(signOffTransaction);
 
-  // return transaction;
   return transactions;
 };

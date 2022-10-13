@@ -31,7 +31,7 @@ export const ActivityCard = ({ activity }: ActivityCardProps) => {
   // super wonky way to get context till I figure out how to get more details
 
   const handleActivityClick = () => {
-    Linking.openURL(`https://solscan.io/tx/${signature}`);
+    Linking.openURL(`https:/solana.fm/tx/${signature}`);
   };
 
   const renderActivityIcon = () => {

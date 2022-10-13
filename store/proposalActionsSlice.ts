@@ -98,11 +98,10 @@ export const createProposalAttempt = createAsyncThunk(
         const response = await sendAndConfirmTransaction(connection, tx, [
           walletKeypair,
         ]);
-        console.log("index", index);
         index++;
-        setTimeout(() => {
-          console.log("Delayed for 1 second.");
-        }, 1000);
+        // setTimeout(() => {
+        //   console.log("Delayed for 1 second.");
+        // }, 1000);
       }
 
       console.log("Successfully created proposal!!!");
