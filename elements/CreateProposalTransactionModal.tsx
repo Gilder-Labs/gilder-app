@@ -167,7 +167,7 @@ CreateProposalTransactionModalProps) => {
   const handleViewProposals = () => {
     closeModal();
     dispatch(fetchRealmProposals({ realm: selectedRealm, isRefreshing: true }));
-    dispatch(fetchVaults(selectedRealm));
+    // dispatch(fetchVaults(selectedRealm));
     navigation.navigate("Proposals");
   };
 
