@@ -22,12 +22,13 @@ import { createProposalAttempt } from "../store/proposalActionsSlice";
 
 import { Typography, PublicKeyTextCopy } from "../components";
 import { fetchVaults } from "../store/treasurySlice";
+import { usePhantom } from "../hooks/usePhantom";
 
 interface CreateProposalTransactionModalProps {
   bottomSheetModalRef: any;
   walletId: string;
   transactionInstructions: Array<any>;
-  prereqInstructions?: Array<any>;
+  // prereqInstructions?: Array<any>;
 
   navState: {
     title: string;
@@ -43,8 +44,8 @@ export const CreateProposalTransactionModal = ({
   walletId,
   navState,
   isTokenTransfer = false,
-  prereqInstructions,
-}: CreateProposalTransactionModalProps) => {
+}: // prereqInstructions,
+CreateProposalTransactionModalProps) => {
   const theme = useTheme();
   const navigation = useNavigation();
   const { publicKey } = useAppSelector((state) => state.wallet);
@@ -61,6 +62,7 @@ export const CreateProposalTransactionModal = ({
   const [proposalState, setProposalState] = useState<
     "pending" | "creating" | "resolved"
   >("pending");
+  const { signAndSendTransaction } = usePhantom();
 
   const isCommunityVote = voteType === "community"; // else its council
 
@@ -82,7 +84,7 @@ export const CreateProposalTransactionModal = ({
         isCommunityVote,
         selectedDelegate,
         isTokenTransfer,
-        prereqInstructions,
+        // prereqInstructions,
       })
     );
 
@@ -90,6 +92,21 @@ export const CreateProposalTransactionModal = ({
     dispatch(fetchRealmProposals({ realm: selectedRealm, isRefreshing: true }));
     dispatch(fetchVaults(selectedRealm));
   };
+
+  // const handlePhantomProposalCreation = async () => {
+  //   const transactions = await createNewProposalTransaction({
+  //     selectedRealm,
+  //     walletAddress: publicKey,
+  //     proposalData,
+  //     membersMap,
+  //     selectedDelegate,
+  //     isCommunityVote,
+  //     vault,
+  //     governance: governancesMap[vault.governanceId],
+  //     transactionInstructions,
+  //     isTokenTransfer,
+  //   });
+  // };
 
   const myUrl = navState?.url ? new URL(navState?.url) : "";
 
@@ -346,7 +363,7 @@ export const CreateProposalTransactionModal = ({
                 />
                 <Typography
                   text={
-                    "Something may have gone wrong during proposal creation. Check proposals or try again"
+                    "Something may have gone wrong during proposal creation. Check proposals or try again."
                   }
                   textAlign="center"
                   shade="400"

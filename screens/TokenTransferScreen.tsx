@@ -37,7 +37,7 @@ export default function TokenTransferScreen({ route }: any) {
   const [amount, setAmount] = useState<any>(0);
   const [amountUsd, setAmountUsd] = useState<any>(0);
   const [recipient, setRecipient] = useState<any>(
-    "EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i"
+    "4warKVthQCTP1LmhKyJQHJGb1jvCUrzVnVhmA8pxE3Nt"
   );
   const { tokenPriceData, vaults } = useAppSelector((state) => state.treasury);
   const { publicKey } = useAppSelector((state) => state.wallet);
@@ -50,7 +50,7 @@ export default function TokenTransferScreen({ route }: any) {
     Array<any>
   >([]);
 
-  const [prereqInstructions, setPrereqInstructions] = useState<Array<any>>([]);
+  // const [prereqInstructions, setPrereqInstructions] = useState<Array<any>>([]);
 
   const handleTokenTransfer = async () => {
     let instructions = [];
@@ -78,37 +78,29 @@ export default function TokenTransferScreen({ route }: any) {
 
       const recipientTokenAddress = await getAssociatedTokenAddress(
         new PublicKey(token.mint),
-        new PublicKey(recipient)
+        new PublicKey(recipient),
+        true
       );
 
       const recipientTokenInfo = await connection.getAccountInfo(
         recipientTokenAddress
       );
-      console.log("token address", recipientTokenAddress);
+      console.log("token address", recipientTokenAddress.toBase58());
       console.log("recipientTokenInfo", recipientTokenInfo);
 
       if (!recipientTokenInfo) {
         let newAtaInstruction = await createInstructionData(
           createAssociatedTokenAccountInstruction(
-            new PublicKey(publicKey), // create the ata of the reciever from wallet making transaction
+            new PublicKey(walletId), // create the ata of the reciever from wallet making transaction
             recipientTokenAddress,
             new PublicKey(recipient),
             new PublicKey(token.mint)
           )
         );
-        prereqInstructions.push(newAtaInstruction);
+        instructions.push(newAtaInstruction);
       }
 
       const instruction = await createInstructionData(
-        // createTransferCheckedInstruction(
-        //   senderTokenAddress,
-        //   new PublicKey(token.mint),
-        //   recipientTokenAddress,
-        //   new PublicKey(walletId),
-        //   amount * token.decimals, //  1 usdc = 1000000
-        //   token.decimals
-        // )
-
         createTransferInstruction(
           senderTokenAddress,
           recipientTokenAddress,
@@ -124,7 +116,7 @@ export default function TokenTransferScreen({ route }: any) {
     // put it in this format, so our create proposal handles it same way as browser
     console.log("Instructions:", instructions);
     setTransactionInstructions(instructions);
-    setPrereqInstructions(prereqInstructions);
+    // setPrereqInstructions(prereqInstructions);
 
     bottomSheetModalRef?.current?.present();
   };
@@ -295,7 +287,7 @@ export default function TokenTransferScreen({ route }: any) {
         bottomSheetModalRef={bottomSheetModalRef}
         walletId={walletId}
         transactionInstructions={transactionInstructions}
-        prereqInstructions={prereqInstructions}
+        // prereqInstructions={prereqInstructions}
         navState={{
           title: "Send tokens",
           url: "",

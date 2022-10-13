@@ -101,14 +101,15 @@ export const createProposalAttempt = createAsyncThunk(
         console.log("index", index);
         index++;
         setTimeout(() => {
-          console.log("Delayed for .5 second.");
-        }, 500);
+          console.log("Delayed for 1 second.");
+        }, 1000);
       }
 
       console.log("Successfully created proposal!!!");
-      return {};
+      return { error: false };
     } catch (error) {
       console.log("transaction error", error);
+      return { error: true };
     }
   }
 );
@@ -127,13 +128,13 @@ export const proposalActionsSlice = createSlice({
         state.isLoading = true;
         state.error = false;
       })
-      .addCase(createProposalAttempt.rejected, (state) => {
+      .addCase(createProposalAttempt.rejected, (state, action: any) => {
         state.isLoading = false;
         state.error = true;
       })
       .addCase(createProposalAttempt.fulfilled, (state, action: any) => {
         state.isLoading = false;
-        state.error = false;
+        state.error = action.payload.error;
       });
   },
 });

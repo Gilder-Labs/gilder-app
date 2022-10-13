@@ -42,8 +42,8 @@ export const createNewProposalTransaction = async ({
   governance,
   transactionInstructions,
   isTokenTransfer,
-  prerequisiteInstructions,
-}: {
+}: // prerequisiteInstructions,
+{
   selectedRealm: Realm;
   walletAddress: string;
   proposalData: {
@@ -58,7 +58,7 @@ export const createNewProposalTransaction = async ({
   governance: any;
   transactionInstructions?: any;
   isTokenTransfer?: boolean;
-  prerequisiteInstructions?: any;
+  // prerequisiteInstructions?: any;
 }) => {
   const walletPublicKey = new PublicKey(walletAddress);
   const instructions: TransactionInstruction[] = [];
@@ -139,20 +139,23 @@ export const createNewProposalTransaction = async ({
   let index = 0;
 
   if (isTokenTransfer) {
-    await withInsertTransaction(
-      insertInstructions,
-      programId,
-      programVersion,
-      governancePublicKey,
-      proposalAddress,
-      tokenOwnerPublicKey,
-      payer,
-      index,
-      0,
-      0,
-      transactionInstructions,
-      payer
-    );
+    for await (const instruct of transactionInstructions) {
+      await withInsertTransaction(
+        insertInstructions,
+        programId,
+        programVersion,
+        governancePublicKey,
+        proposalAddress,
+        tokenOwnerPublicKey,
+        payer,
+        index,
+        0,
+        0,
+        [instruct],
+        payer
+      );
+      index++;
+    }
   } else if (transactionInstructions) {
     const newInstructions = transactionInstructions[0].instructions;
 
@@ -231,12 +234,12 @@ export const createNewProposalTransaction = async ({
 
   // create proposal transaction
   let transactions = [];
-  if (prerequisiteInstructions?.length > 0) {
-    const preqTransaction = new Transaction({ feePayer: walletPublicKey });
-    console.log("making preq transaction");
-    preqTransaction.add(...prerequisiteInstructions);
-    transactions.push(preqTransaction);
-  }
+  // if (prerequisiteInstructions?.length > 0) {
+  //   const preqTransaction = new Transaction({ feePayer: walletPublicKey });
+  //   console.log("making preq transaction");
+  //   preqTransaction.add(...prerequisiteInstructions);
+  //   transactions.push(preqTransaction);
+  // }
 
   let proposalTransaction = new Transaction({
     feePayer: walletPublicKey,
