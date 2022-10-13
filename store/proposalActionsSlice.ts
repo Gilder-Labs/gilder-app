@@ -96,7 +96,9 @@ export const createProposalAttempt = createAsyncThunk(
         const response = await sendAndConfirmTransaction(connection, tx, [
           walletKeypair,
         ]);
+        console.log("confirm response", response);
         index++;
+        dispatch(setProgress(index));
         // setTimeout(() => {
         //   console.log("Delayed for 1 second.");
         // }, 1000);
@@ -118,6 +120,9 @@ export const proposalActionsSlice = createSlice({
     clearError: (state) => {
       state.error = false;
     },
+    setProgress: (state, action) => {
+      state.transactionProgress = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -136,6 +141,6 @@ export const proposalActionsSlice = createSlice({
   },
 });
 
-export const {} = proposalActionsSlice.actions;
+export const { setProgress } = proposalActionsSlice.actions;
 
 export default proposalActionsSlice.reducer;

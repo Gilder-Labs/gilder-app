@@ -18,7 +18,10 @@ import {
   BottomSheetScrollView,
 } from "@gorhom/bottom-sheet";
 import CustomBackdrop from "../components/FadeBackdropModal";
-import { createProposalAttempt } from "../store/proposalActionsSlice";
+import {
+  createProposalAttempt,
+  setProgress,
+} from "../store/proposalActionsSlice";
 import { createNewProposalTransaction } from "../utils/createProposal";
 
 import { Typography, PublicKeyTextCopy } from "../components";
@@ -55,7 +58,9 @@ CreateProposalTransactionModalProps) => {
   const { vaults, governancesMap } = useAppSelector((state) => state.treasury);
   const { selectedRealm } = useAppSelector((state) => state.realms);
   const { walletType } = useAppSelector((state) => state.wallet);
-  const { isLoading, error } = useAppSelector((state) => state.proposalActions);
+  const { isLoading, error, transactionProgress } = useAppSelector(
+    (state) => state.proposalActions
+  );
   const { delegateMap, membersMap } = useAppSelector((state) => state.members);
   const [selectedDelegate, setSelectedDelegate] = useState("");
   const [description, setDescription] = useState("");
@@ -78,6 +83,7 @@ CreateProposalTransactionModalProps) => {
   const handleProposalCreation = async () => {
     const vault = vaults.find((vault) => vault.pubKey === walletId);
     setProposalState("creating");
+    setProgress(0);
 
     if (walletType === "phantom") {
       setLoadingPhantom(true);
@@ -405,9 +411,9 @@ CreateProposalTransactionModalProps) => {
 
                 <Typography
                   // add 2 for creating proposal + signing off
-                  text={`Progress: ${progress} / ${
-                    transactionInstructions.length + 2
-                  }  `}
+                  text={`Progress: ${
+                    walletType === "phantom" ? progress : transactionProgress
+                  } / ${transactionInstructions.length + 2}  `}
                 />
               </StatusContainer>
             ) : (
