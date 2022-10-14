@@ -51,7 +51,12 @@ export default function CreateProposalScreen({ route }: any) {
             marginRight="2"
             marginBottom="2"
           />
-          <Badge title="Coming soon" type="gray" />
+          <Typography
+            text="Coming Soon"
+            color="gray"
+            shade="500"
+            size="caption"
+          />
         </Row>
         <Row>
           <FontAwesomeIcon
@@ -80,8 +85,8 @@ export default function CreateProposalScreen({ route }: any) {
             autoCapitalize={"none"}
             autoCorrect={false}
             value={url}
-            disabled={true}
-            editable={false}
+            // disabled={true}
+            // editable={false}
           />
           <IconContainer disabled={!url} onPress={() => setUrl("")}>
             {url ? (
@@ -219,7 +224,12 @@ export default function CreateProposalScreen({ route }: any) {
             marginRight="2"
             marginTop="2"
           />
-          <Badge title="Coming soon" type="gray" />
+          <Typography
+            text="Coming Soon"
+            color="gray"
+            shade="500"
+            size="caption"
+          />
         </Row>
         <Typography
           text="Invest or actively trade with your treasury on Solana defi protocols."
@@ -326,7 +336,7 @@ export default function CreateProposalScreen({ route }: any) {
             />
           </ProposalCreationButton>
         </ProposalCreationButtonOuter>
-        {/* <ProposalCreationButtonOuter>
+        <ProposalCreationButtonOuter>
           <ProposalCreationButton onPress={handleSolanaPay}>
             <DappIcon
               source={{
@@ -341,7 +351,7 @@ export default function CreateProposalScreen({ route }: any) {
               shade="100"
             />
           </ProposalCreationButton>
-        </ProposalCreationButtonOuter> */}
+        </ProposalCreationButtonOuter>
       </Row>
 
       {/* <Typography

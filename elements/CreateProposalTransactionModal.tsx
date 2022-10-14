@@ -53,7 +53,7 @@ CreateProposalTransactionModalProps) => {
   const theme = useTheme();
   const navigation = useNavigation();
   const { publicKey } = useAppSelector((state) => state.wallet);
-  const snapPoints = useMemo(() => ["25", "50%", "75%", "90%"], []);
+  const snapPoints = useMemo(() => ["25", "50%", "95%"], []);
   const dispatch = useAppDispatch();
   const { vaults, governancesMap } = useAppSelector((state) => state.treasury);
   const { selectedRealm } = useAppSelector((state) => state.realms);
@@ -234,7 +234,7 @@ CreateProposalTransactionModalProps) => {
                 <Column>
                   {/* <Typography text={"Proposal name"} shade="500" /> */}
                   <TextInput
-                    placeholder="Proposal name*"
+                    placeholder="Proposal name"
                     placeholderTextColor={theme.gray[400]}
                     value={title}
                     onChangeText={(text: string) => setTitle(text)}
@@ -243,7 +243,7 @@ CreateProposalTransactionModalProps) => {
 
                 <SpacedRow>
                   <DescriptionTextInput
-                    placeholder="Proposal description"
+                    placeholder="Proposal description (optional)"
                     placeholderTextColor={theme.gray[400]}
                     multiline={true}
                     numberOfLines={4}
