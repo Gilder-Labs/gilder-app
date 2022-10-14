@@ -4,12 +4,13 @@ export default {
   expo: {
     name: "Gilder",
     slug: "gilder-app",
-    version: "1.0.49",
+    version: "1.0.54",
     orientation: "portrait",
     icon: "./assets/images/DarkIcon.png",
     scheme: "gilder",
     userInterfaceStyle: "automatic",
     plugins: ["sentry-expo"],
+    jsEngine: "hermes",
     splash: {
       image: "./assets/images/GilderSplash.png",
       resizeMode: "contain",
@@ -23,14 +24,14 @@ export default {
     ios: {
       supportsTablet: true,
       bundleIdentifier: "com.dawggydawg.gilderapp",
-      buildNumber: "18",
+      buildNumber: "23",
     },
     android: {
       adaptiveIcon: {
         foregroundImage: "./assets/images/DarkIconAndroid.png",
         backgroundColor: "#000000",
       },
-      versionCode: 18,
+      versionCode: 23,
       googleServicesFile: "./google-services.json",
       package: "com.dawggydawg.gilderapp",
     },
@@ -53,7 +54,7 @@ export default {
       // Add your extra configs here
       useLocalNotificationApi: process.env.USE_LOCAL_NOTIFICATION_API || false,
       rpcNetwork: process.env.MAINNET_RPC || "https://ssc-dao.genesysgo.net/",
-      indexRPC: process.env.INDEX_RPC || "https://ssc-dao.genesysgo.net/",
+      heavyRPC: process.env.HEAVY_RPC || "https://ssc-dao.genesysgo.net/",
       streamApiKey: process.env.STREAM_API_KEY,
       heliusApiKey: process.env.HELIUS_API_KEY,
       eas: {

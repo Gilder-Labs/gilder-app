@@ -38,7 +38,10 @@ const proposalStatusKey = {
   ExecutingWithErrors: "error",
 };
 
-export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
+export const ProposalDetailScreen = ({
+  route,
+  navigation,
+}: ProposalDetailScreen) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const { selectedRealm, isLoadingRealms } = useAppSelector(
@@ -218,6 +221,10 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
     );
   };
 
+  const handleViewAllVotes = () => {
+    navigation.navigate("ProposalVotesScreen");
+  };
+
   const getQuorum = () => {
     const mintSupplyFormatted =
       mintDecimals === 0 ? mintSupply : mintSupply.slice(0, -mintDecimals);
@@ -227,7 +234,9 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
         : Number(getYesVoteCount.slice(0, -mintDecimals));
 
     const totalVotes =
-      Number(mintSupplyFormatted) * (voteThresholdPercentage * 0.01);
+      Number(mintSupplyFormatted) *
+      (voteThresholdPercentage * 0.01) *
+      (Number(selectedRealm?.fmtSupplyFraction) / 100);
 
     const totalVotesNeeded = Math.ceil(totalVotes - yesVoteFormatted);
     let totalVotesNeededPercentage = (yesVoteFormatted / totalVotes) * 100;
@@ -373,14 +382,26 @@ export const ProposalDetailScreen = ({ route }: ProposalDetailScreen) => {
             {/* {isVoting && isMember && ( */}
 
             <>
-              <Typography
-                text="Voting"
-                bold={true}
-                size="h4"
-                shade={"200"}
-                marginLeft={"3"}
-                marginBottom={"1"}
-              />
+              <SpacedRow>
+                <Typography
+                  text="Voting"
+                  bold={true}
+                  size="h4"
+                  shade={"200"}
+                  marginLeft={"3"}
+                  marginBottom={"1"}
+                />
+
+                <ViewAllVotesButton onPress={handleViewAllVotes}>
+                  <Typography
+                    text="View all votes"
+                    size="body"
+                    shade={"400"}
+                    marginRight={"3"}
+                    marginBottom={"1"}
+                  />
+                </ViewAllVotesButton>
+              </SpacedRow>
               <VoteButtonContainer>
                 <Button
                   title="Vote No"
@@ -620,5 +641,15 @@ const CreatorRow = styled.View`
 
   margin-bottom: ${(props: any) => props.theme.spacing[2]};
   align-items: center;
+  flex-direction: row;
+`;
+
+const SpacedRow = styled.View`
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+`;
+
+const ViewAllVotesButton = styled.TouchableOpacity`
   flex-direction: row;
 `;

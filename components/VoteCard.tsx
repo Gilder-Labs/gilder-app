@@ -2,12 +2,12 @@ import React from "react";
 import styled from "styled-components/native";
 import { useTheme } from "styled-components";
 import { Badge, Typography, RealmIcon } from "../components";
-import numeral from "numeral";
 import { formatVoteWeight } from "../utils";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faCircleCheck } from "@fortawesome/pro-regular-svg-icons/faCircleCheck";
 import * as Haptics from "expo-haptics";
 import { useNavigation } from "@react-navigation/native";
+import { WalletIdentity } from "../components";
 
 import { faCircleXmark } from "@fortawesome/pro-regular-svg-icons/faCircleXmark";
 
@@ -16,6 +16,7 @@ interface VoteCardProps {
   proposal: Proposal;
   member: Member;
   realm: Realm;
+  isProposalView?: boolean;
 }
 // Vote weight
 // Direction vote is cast
@@ -33,7 +34,13 @@ const proposalStatusKey = {
   Defeated: "error",
 };
 
-export const VoteCard = ({ vote, proposal, member, realm }: VoteCardProps) => {
+export const VoteCard = ({
+  vote,
+  proposal,
+  member,
+  realm,
+  isProposalView = false,
+}: VoteCardProps) => {
   const theme = useTheme();
   const navigation = useNavigation();
 
@@ -68,6 +75,43 @@ export const VoteCard = ({ vote, proposal, member, realm }: VoteCardProps) => {
       proposalId: proposal.proposalId,
     });
   };
+
+  const voteWeight = getVoteWeight();
+
+  if (isProposalView) {
+    return (
+      <SimpleContainer>
+        <SpacedRow>
+          <WalletIdentity memberPublicKey={member.walletId} />
+          {!!voteWeight && (
+            <SimpleRow>
+              {vote.voteWeightYes ? (
+                <FontAwesomeIcon
+                  icon={faCircleCheck}
+                  size={16}
+                  color={theme.success[400]}
+                />
+              ) : (
+                <FontAwesomeIcon
+                  icon={faCircleXmark}
+                  size={16}
+                  color={theme.error[400]}
+                />
+              )}
+              <Typography
+                text={voteWeight}
+                size="subtitle"
+                shade="300"
+                bold={true}
+                marginBottom="0"
+                marginLeft="2"
+              />
+            </SimpleRow>
+          )}
+        </SpacedRow>
+      </SimpleContainer>
+    );
+  }
 
   return (
     <Container onPress={() => handleProposalSelect()}>
@@ -162,4 +206,33 @@ const EmptyView = styled.View``;
 
 const TitleContainer = styled.View`
   max-width: 140px;
+`;
+
+const SimpleContainer = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: ${(props) => props.theme.spacing[2]};
+  padding: ${(props) => props.theme.spacing[2]};
+  background-color: ${(props) => props.theme.gray[800]};
+  border-radius: 8px;
+`;
+
+const SpacedRow = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+`;
+
+const SimpleRow = styled.View`
+  flex-direction: row;
+  align-items: center;
+  background-color: ${(props) => props.theme.gray[900]};
+  background: ${(props: any) => props.theme.gray[900]};
+  padding: ${(props) => props.theme.spacing[2]};
+  padding-left: ${(props) => props.theme.spacing[3]};
+  padding-right: ${(props) => props.theme.spacing[3]};
+
+  border-radius: 16px;
 `;

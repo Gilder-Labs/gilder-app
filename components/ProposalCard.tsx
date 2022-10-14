@@ -19,6 +19,7 @@ interface ProposalCardProps {
   voteThresholdPercentage: number;
   creatorWalletId: string;
   hideVotes?: boolean;
+  fmtSupplyFraction: string;
 }
 
 const proposalStatusKey = {
@@ -41,6 +42,7 @@ export const ProposalCard = ({
   voteThresholdPercentage,
   creatorWalletId,
   hideVotes = false,
+  fmtSupplyFraction,
 }: ProposalCardProps) => {
   const {
     status,
@@ -112,17 +114,21 @@ export const ProposalCard = ({
         hasMetQuorum: false,
       };
 
-    const mintSupplyFormatted =
+    let mintSupplyFormatted =
       mintDecimals === 0 ? mintSupply : mintSupply.slice(0, -mintDecimals);
+
     const yesVoteFormatted =
       mintDecimals === 0
         ? getYesVoteCount
         : Number(getYesVoteCount.slice(0, -mintDecimals));
 
     const totalVotes =
-      Number(mintSupplyFormatted) * (voteThresholdPercentage * 0.01);
+      Number(mintSupplyFormatted) *
+      (voteThresholdPercentage * 0.01) *
+      (Number(fmtSupplyFraction) / 100);
 
     const totalVotesNeeded = Math.ceil(totalVotes - yesVoteFormatted);
+
     let totalVotesNeededPercentage = (yesVoteFormatted / totalVotes) * 100;
     totalVotesNeededPercentage =
       totalVotesNeededPercentage > 100 ? 100 : totalVotesNeededPercentage;

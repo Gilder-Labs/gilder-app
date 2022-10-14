@@ -129,6 +129,7 @@ export default function ProposalScreen({
       councilMint,
       councilMintSupply,
       councilMintDecimals,
+      fmtSupplyFraction,
     } = selectedRealm;
     const { governingTokenMint } = item;
 
@@ -138,6 +139,7 @@ export default function ProposalScreen({
         onClick={() => handleProposalSelect(item)}
         governance={proposalGovernance}
         hideVotes={false}
+        fmtSupplyFraction={fmtSupplyFraction}
         mintSupply={
           governingTokenMint === communityMint
             ? communityMintSupply

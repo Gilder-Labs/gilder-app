@@ -10,11 +10,7 @@ import {
 import Constants from "expo-constants";
 import axios from "axios";
 
-import {
-  REALM_GOVERNANCE_PKEY,
-  RPC_CONNECTION,
-  INDEX_RPC_CONNECTION,
-} from "../constants/Solana";
+import { REALM_GOVERNANCE_PKEY, RPC_CONNECTION } from "../constants/Solana";
 import { formatVoteWeight } from "../utils";
 
 interface genericObj {

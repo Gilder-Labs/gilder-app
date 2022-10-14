@@ -25,7 +25,7 @@ const CustomBackdrop = ({ animatedIndex, style }: BottomSheetBackdropProps) => {
     () => [
       style,
       {
-        backgroundColor: "#18181b66",
+        backgroundColor: "#000000cc",
       },
       containerAnimatedStyle,
     ],

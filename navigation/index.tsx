@@ -42,6 +42,9 @@ import DiscoverDetailsScreen from "../screens/DiscoverDetailsScreen";
 import InfoModalScreen from "../screens/InfoModalScreen";
 import OnboardingScreen from "../screens/OnboardingScreen";
 import WebViewScreen from "../screens/WebViewScreen";
+import CreateProposalScreen from "../screens/CreateProposalScreen";
+import ProposalVotesScreen from "../screens/ProposalVotesScreen";
+import SolanaPayScanScreen from "../screens/SolanaPayScanScreen";
 
 import { chatApiKey } from "../constants/Chat";
 import { StreamChat } from "stream-chat";
@@ -54,6 +57,7 @@ import { faUserGroup } from "@fortawesome/pro-solid-svg-icons/faUserGroup";
 import { faTreasureChest } from "@fortawesome/pro-solid-svg-icons/faTreasureChest";
 import { faListUl } from "@fortawesome/pro-regular-svg-icons/faListUl";
 import { faInfoCircle } from "@fortawesome/pro-regular-svg-icons/faInfoCircle";
+import TokenTransferScreen from "../screens/TokenTransferScreen";
 
 const chatClient = StreamChat.getInstance(chatApiKey);
 
@@ -265,17 +269,27 @@ export default function Navigation({}: {}) {
       selectedRealm?.pubKey === selectedRealmId &&
       (selectedRealm?.communityMint || selectedRealm?.councilMint)
     ) {
-      dispatch(fetchVaults(selectedRealm));
-      dispatch(
+      const vaultsPromise = dispatch(fetchVaults(selectedRealm));
+      const activityPromise = dispatch(
         fetchRealmActivity({
           realm: selectedRealm,
           fetchAfterSignature: undefined,
         })
       );
-      dispatch(
+      const proposalsPromise = dispatch(
         fetchRealmProposals({ realm: selectedRealm, isRefreshing: false })
       );
-      dispatch(fetchRealmMembers({ realm: selectedRealm }));
+      const membersPromise = dispatch(
+        fetchRealmMembers({ realm: selectedRealm })
+      );
+
+      return () => {
+        // `createAsyncThunk` attaches an `abort()` method to the promise
+        vaultsPromise.abort();
+        activityPromise.abort();
+        proposalsPromise.abort();
+        membersPromise.abort();
+      };
     }
   }, [selectedRealm?.pubKey, selectedRealm?.communityMint, isFetchingStorage]);
 
@@ -433,7 +447,35 @@ export default function Navigation({}: {}) {
             name="WebViewScreen"
             component={WebViewScreen}
             options={({ route }) => ({
-              title: "Proposal Browser",
+              title: "Browser",
+            })}
+          />
+          <Stack.Screen
+            name="CreateProposalScreen"
+            component={CreateProposalScreen}
+            options={({ route }) => ({
+              title: "Builder",
+            })}
+          />
+          <Stack.Screen
+            name="ProposalVotesScreen"
+            component={ProposalVotesScreen}
+            options={({ route }) => ({
+              title: "Votes",
+            })}
+          />
+          <Stack.Screen
+            name="SolanaPayScanScreen"
+            component={SolanaPayScanScreen}
+            options={({ route }) => ({
+              title: "Solana Pay",
+            })}
+          />
+          <Stack.Screen
+            name="TokenTransferScreen"
+            component={TokenTransferScreen}
+            options={({ route }) => ({
+              title: "Token Transfer",
             })}
           />
         </Stack.Navigator>

@@ -5,9 +5,10 @@ import LottieView from "lottie-react-native";
 
 interface LoadingProps {
   size?: number;
+  minHeight?: boolean;
 }
 
-export const Loading = ({ size = 120 }: LoadingProps) => {
+export const Loading = ({ size = 120, minHeight = false }: LoadingProps) => {
   const theme = useTheme();
   const animationRef = useRef<LottieView>(null);
 
@@ -16,7 +17,7 @@ export const Loading = ({ size = 120 }: LoadingProps) => {
   }, []);
 
   return (
-    <Container>
+    <Container minHeight={minHeight}>
       {/* <Loader size="large" color={theme.gray[400]} /> */}
       <LottieView
         source={require("../assets/lottie/CryptoLoader.json")}
@@ -29,11 +30,11 @@ export const Loading = ({ size = 120 }: LoadingProps) => {
   );
 };
 
-const Container = styled.View`
+const Container = styled.View<{ minHeight: boolean }>`
   flex: 1;
   justify-content: center;
   align-items: center;
-  height: 100%;
+  height: ${(props) => (props.minHeight ? "auto" : "100%")};
   background: ${(props) => props.theme.gray[900]};
 `;
 

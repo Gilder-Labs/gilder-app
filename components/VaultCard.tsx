@@ -103,37 +103,41 @@ export const VaultCard = ({
     return <></>;
   }
 
-  const handleVaultOpenBrowser = () => {
+  const handleCreateProposal = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 
     //@ts-ignore
-    navigation.push("WebViewScreen", {
+    navigation.push("CreateProposalScreen", {
       walletId: vaultId,
+      tokens: filteredTokens,
+      nfts: nfts,
     });
-  };
-
-  const tryCreateProposal = () => {
-    const vault = vaults.find((vault) => vault.pubKey === vaultId);
-
-    dispatch(createProposalAttempt({ vault }));
   };
 
   return (
     <Container>
       <TitleContainer>
-        <PublicKeyTextCopy
-          publicKey={vaultId}
-          size="body"
-          shade="400"
-          hideIcon={true}
+        <Row>
+          <PublicKeyTextCopy
+            publicKey={vaultId}
+            size="body"
+            shade="400"
+            hideIcon={true}
+          />
+          <CreateProposalButton onPress={handleCreateProposal}>
+            <Typography
+              text="Create Proposal"
+              marginBottom="0"
+              size="subtitle"
+            />
+          </CreateProposalButton>
+        </Row>
+
+        <Typography
+          size="h3"
+          bold={true}
+          text={numeral(totalValue).format("$0,0")}
         />
-        {/* <TempButton onPress={handleVaultOpenBrowser}>
-          <Typography text="Open Browser" />
-        </TempButton> */}
-        {/* <CreateProposalButton onPress={tryCreateProposal}>
-          <Typography text="Create Proposal" marginBottom="0" size="subtitle" />
-        </CreateProposalButton> */}
-        <VaultValue>{numeral(totalValue).format("$0,0")}</VaultValue>
       </TitleContainer>
 
       {tokens.length > 0 && (
@@ -234,7 +238,7 @@ const VaultValue = styled.Text`
 const TitleContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: ${(props: any) => props.theme.spacing[4]};
   margin-left: -${(props: any) => props.theme.spacing[2]}; // hidden padding of copy
 `;
@@ -250,7 +254,13 @@ const CreateProposalButton = styled.TouchableOpacity`
   padding: ${(props: any) => props.theme.spacing[2]};
   padding-left: ${(props: any) => props.theme.spacing[3]};
   padding-right: ${(props: any) => props.theme.spacing[3]};
-
+  flex-direction: row;
+  margin-top: ${(props: any) => props.theme.spacing[2]};
   background: ${(props: any) => props.theme.gray[900]};
   border-radius: 8px;
+  margin-left: ${(props: any) => props.theme.spacing[1]};
+`;
+
+const Row = styled.View`
+  align-items: flex-start;
 `;

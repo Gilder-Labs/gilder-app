@@ -9,7 +9,7 @@ import {
   sendAndConfirmTransaction,
   SystemProgram,
 } from "@solana/web3.js";
-import { SPL_PUBLIC_KEY, RPC_CONNECTION } from "../constants/Solana";
+import { SPL_PUBLIC_KEY, HEAVY_RPC_CONNECTION } from "../constants/Solana";
 
 import {
   getGovernanceProgramVersion,
@@ -19,15 +19,18 @@ import {
   getSignatoryRecordAddress,
   withAddSignatory,
   withInsertTransaction,
+  serializeInstructionToBase64,
+  getInstructionDataFromBase64,
   withSignOffProposal,
   InstructionData,
   pubkeyFilter,
+  createInstructionData,
   Governance,
+  getGovernance,
 } from "@solana/spl-governance";
+import bs58 from "bs58";
 
-//https://github.com/marinade-finance/solana-js-utils/blob/72a191101a5d6ddd8e011f403095e542c603a906/packages/solana-cli-utils/middleware/multisig/SplGovernanceMiddleware.ts
-
-let connection = new Connection(RPC_CONNECTION, "recent");
+let connection = new Connection(HEAVY_RPC_CONNECTION, "recent");
 
 export const createNewProposalTransaction = async ({
   selectedRealm,
@@ -37,7 +40,11 @@ export const createNewProposalTransaction = async ({
   selectedDelegate,
   isCommunityVote,
   vault,
-}: {
+  governance,
+  transactionInstructions,
+  isTokenTransfer,
+}: // prerequisiteInstructions,
+{
   selectedRealm: Realm;
   walletAddress: string;
   proposalData: {
@@ -49,24 +56,29 @@ export const createNewProposalTransaction = async ({
   selectedDelegate: string;
   isCommunityVote: boolean;
   vault: any;
+  governance: any;
+  transactionInstructions?: any;
+  isTokenTransfer?: boolean;
+  // prerequisiteInstructions?: any;
 }) => {
   const walletPublicKey = new PublicKey(walletAddress);
   const instructions: TransactionInstruction[] = [];
   const insertInstructions: TransactionInstruction[] = [];
+  const signOffInstruction: TransactionInstruction[] = [];
 
   const payer = walletPublicKey;
+  const signatory = walletPublicKey;
+
   let member;
 
-  const prerequisiteInstructions: TransactionInstruction[] = [];
-  const prerequisiteInstructionsSigners: Keypair[] = [];
+  // TODO... for each transaction, make array of signers
+  const signers: TransactionInstruction[] = [];
 
   if (membersMap[walletAddress] && !selectedDelegate) {
     member = membersMap[walletAddress];
   } else {
     member = membersMap[selectedDelegate];
   }
-
-  const signatory = new PublicKey(member.walletId);
 
   const programVersion = await getGovernanceProgramVersion(
     connection,
@@ -76,6 +88,7 @@ export const createNewProposalTransaction = async ({
   const voteType = VoteType.SINGLE_CHOICE;
   const options = ["Approve"];
   const useDenyOption = true;
+  // const tokenOwnerPublicKey = new PublicKey(member?.publicKey);
   const tokenOwnerPublicKey = isCommunityVote
     ? new PublicKey(member?.communityPublicKey)
     : new PublicKey(member?.councilPublicKey);
@@ -90,23 +103,15 @@ export const createNewProposalTransaction = async ({
 
   const walletOfMember = new PublicKey(member.walletId);
 
-  // get most recent version of governance account
-  const governanceInfo = await getGovernanceAccounts(
-    connection,
-    programId,
-    Governance,
-    [pubkeyFilter(33, governingTokenMint)!]
-  );
-
-  const proposalIndex = governanceInfo[0].account.proposalCount; // proposalIndex - todo? maybe the actual number in the proposal, change to governance.proposalCount
-  const governancePublicKey = governanceInfo[0].pubkey;
+  const proposalIndex = governance.proposalCount; // this needs to correct or proposal will fail
+  const governancePublicKey = new PublicKey(governance.governanceId);
 
   const proposalAddress = await withCreateProposal(
     instructions,
     programId, // programId
     programVersion,
     realmPublicKey, // realmid
-    governancePublicKey, // TODO; this is either the governance for the community or the council
+    governancePublicKey, // governance of community/council tokens determine vote
     tokenOwnerPublicKey, // token owner record of member making proposal
     proposalData.name,
     proposalData.description,
@@ -120,7 +125,6 @@ export const createNewProposalTransaction = async ({
     undefined // TODO: plugin
   );
 
-  // adding signatory + sign off makes proposal go to voting state
   await withAddSignatory(
     instructions,
     programId,
@@ -132,14 +136,77 @@ export const createNewProposalTransaction = async ({
     payer
   );
 
+  // if we have instruction data, insert it into proposal transaction
+  let index = 0;
+
+  if (isTokenTransfer) {
+    for await (const instruct of transactionInstructions) {
+      await withInsertTransaction(
+        insertInstructions,
+        programId,
+        programVersion,
+        governancePublicKey,
+        proposalAddress,
+        tokenOwnerPublicKey,
+        payer,
+        index,
+        0,
+        0,
+        [instruct],
+        payer
+      );
+      index++;
+    }
+  } else if (transactionInstructions) {
+    const newInstructions = transactionInstructions[0].instructions;
+
+    // map data back to public keys, web bridge converts to strings
+    for await (const instruct of newInstructions) {
+      let keys = instruct.keys.map((key) => {
+        return {
+          pubkey: new PublicKey(key.pubkey),
+          isSigner: key.isSigner,
+          isWritable: key.isWritable,
+        };
+      });
+
+      const tx = new TransactionInstruction({
+        keys: keys,
+        programId: new PublicKey(instruct.programId),
+        data: Buffer.from(instruct.data),
+      });
+
+      const base64instruction = serializeInstructionToBase64(tx);
+      let data = getInstructionDataFromBase64(base64instruction);
+
+      await withInsertTransaction(
+        insertInstructions,
+        programId,
+        programVersion,
+        governancePublicKey,
+        proposalAddress,
+        tokenOwnerPublicKey,
+        payer,
+        index,
+        0,
+        0,
+        [data],
+        payer
+      );
+      index++;
+    }
+  }
+
+  // adding signatory + sign off makes proposal go to voting state
+
   const signatoryRecordAddress = await getSignatoryRecordAddress(
     programId,
     proposalAddress,
     signatory
   );
 
-  withSignOffProposal(
-    insertInstructions,
+  await withSignOffProposal(
+    signOffInstruction,
     programId,
     programVersion,
     realmPublicKey,
@@ -150,15 +217,60 @@ export const createNewProposalTransaction = async ({
     undefined
   );
 
-  const combinedInstructions = [
-    // ...prerequisiteInstructions,
-    ...instructions,
-    // ...insertInstructions,
-  ];
-  const recentBlock = await connection.getLatestBlockhash();
-  const transaction = new Transaction({ feePayer: walletPublicKey });
-  transaction.recentBlockhash = recentBlock.blockhash;
-  transaction.add(...combinedInstructions);
+  // const createProposalInstructions = [
+  //   // ...prerequisiteInstructions,
+  //   ...instructions,
+  //   insertInstructions,
+  // ];
 
-  return transaction;
+  // const transaction = new Transaction({ feePayer: walletPublicKey });
+
+  // TODO:
+  // 1. Create a new transaction for each set of instructions
+  // 2. Return array of transactions
+  // 3. send and confirm each transaction?
+
+  // https://solana.stackexchange.com/questions/2862/what-is-the-best-way-to-handle-multiple-transactions-having-transaction-size-exc
+  // https://solana.stackexchange.com/questions/2376/how-to-handle-multiple-transaction-when-transaction-instruction-is-too-long
+
+  // create proposal transaction
+  let transactions = [];
+  // if (prerequisiteInstructions?.length > 0) {
+  //   const preqTransaction = new Transaction({ feePayer: walletPublicKey });
+  //   console.log("making preq transaction");
+  //   preqTransaction.add(...prerequisiteInstructions);
+  //   transactions.push(preqTransaction);
+  // }
+
+  let recentBlock = await connection.getLatestBlockhash();
+
+  let proposalTransaction = new Transaction({
+    feePayer: walletPublicKey,
+  });
+  proposalTransaction.add(...instructions);
+  proposalTransaction.recentBlockhash = recentBlock.blockhash;
+  transactions.push(proposalTransaction);
+
+  // dapp instructions
+  recentBlock = await connection.getLatestBlockhash();
+  insertInstructions.forEach((ix) => {
+    let dappTransaction = new Transaction({
+      feePayer: walletPublicKey,
+    });
+
+    dappTransaction.add(ix);
+    dappTransaction.recentBlockhash = recentBlock.blockhash;
+
+    transactions.push(dappTransaction);
+  });
+
+  let signOffTransaction = new Transaction({
+    feePayer: walletPublicKey,
+  });
+  recentBlock = await connection.getLatestBlockhash();
+  signOffTransaction.add(...signOffInstruction);
+  signOffTransaction.recentBlockhash = recentBlock.blockhash;
+  transactions.push(signOffTransaction);
+
+  return transactions;
 };

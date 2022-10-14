@@ -19,33 +19,46 @@ import { RPC_CONNECTION } from "../constants/Solana";
 
 export interface ProposalActionsState {
   isLoading: boolean;
+  transactionProgress: number;
+  error: boolean;
 }
 
 const initialState: ProposalActionsState = {
   isLoading: false,
+  transactionProgress: 0,
+  error: false,
 };
 
-let connection = new Connection(RPC_CONNECTION, "confirmed");
+let connection = new Connection(RPC_CONNECTION, "recent");
 
 export const createProposalAttempt = createAsyncThunk(
   "proposalActions/createProposal",
-  async ({ vault }: any, { getState }) => {
+  async (
+    {
+      vault,
+      transactionInstructions,
+      proposalTitle,
+      proposalDescription,
+      isCommunityVote,
+      selectedDelegate,
+      isTokenTransfer,
+    }: any,
+    { getState, dispatch }
+  ) => {
     try {
-      const { realms, wallet, members } = getState() as RootState;
+      const { realms, wallet, members, treasury } = getState() as RootState;
       const { selectedRealm } = realms;
       const { membersMap } = members;
       const { publicKey } = wallet;
 
-      // todo change to user choice
-      const isCommunityVote = false;
-      const selectedDelegate = "EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i";
+      const { governancesMap } = treasury;
+
       const proposalData = {
-        name: "test proposal",
-        description: "test description",
-        instrinctions: [],
+        name: proposalTitle,
+        description: proposalDescription,
       };
 
-      const transaction = await createNewProposalTransaction({
+      const transactions = await createNewProposalTransaction({
         selectedRealm,
         walletAddress: publicKey,
         proposalData,
@@ -53,6 +66,9 @@ export const createProposalAttempt = createAsyncThunk(
         selectedDelegate,
         isCommunityVote,
         vault,
+        governance: governancesMap[vault.governanceId],
+        transactionInstructions,
+        isTokenTransfer,
       });
 
       const privateKey = await SecureStore.getItemAsync("privateKey");
@@ -60,18 +76,39 @@ export const createProposalAttempt = createAsyncThunk(
         throw Error();
       }
       const walletKeypair = Keypair.fromSecretKey(bs58.decode(privateKey));
+      const recentBlock = await connection.getLatestBlockhash();
+      // transaction.recentBlockhash = recentBlock.blockhash;
 
-      transaction.sign(walletKeypair);
-      const response = await sendAndConfirmTransaction(
-        connection,
-        transaction,
-        [walletKeypair]
-      );
+      // transaction.sign(walletKeypair);
+      // const response = await sendAndConfirmTransaction(
+      //   connection,
+      //   transaction,
+      //   [walletKeypair]
+      // );
 
-      console.log("trying to create proposal");
-      return {};
+      let index = 0;
+      console.log("able to create proposal", transactions);
+      for (const tx of transactions) {
+        tx.sign(walletKeypair);
+
+        // temp work around to make sure stuff happens sequentially and doesn't throw program errors
+        console.log("tx", tx);
+        const response = await sendAndConfirmTransaction(connection, tx, [
+          walletKeypair,
+        ]);
+        console.log("confirm response", response);
+        index++;
+        dispatch(setProgress(index));
+        // setTimeout(() => {
+        //   console.log("Delayed for 1 second.");
+        // }, 1000);
+      }
+
+      console.log("Successfully created proposal!!!");
+      return { error: false };
     } catch (error) {
       console.log("transaction error", error);
+      return { error: true };
     }
   }
 );
@@ -79,21 +116,31 @@ export const createProposalAttempt = createAsyncThunk(
 export const proposalActionsSlice = createSlice({
   name: "proposalActions",
   initialState,
-  reducers: {},
+  reducers: {
+    clearError: (state) => {
+      state.error = false;
+    },
+    setProgress: (state, action) => {
+      state.transactionProgress = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(createProposalAttempt.pending, (state, action) => {
         state.isLoading = true;
+        state.error = false;
       })
-      .addCase(createProposalAttempt.rejected, (state) => {
+      .addCase(createProposalAttempt.rejected, (state, action: any) => {
         state.isLoading = false;
+        state.error = true;
       })
       .addCase(createProposalAttempt.fulfilled, (state, action: any) => {
         state.isLoading = false;
+        state.error = action.payload.error;
       });
   },
 });
 
-export const {} = proposalActionsSlice.actions;
+export const { setProgress } = proposalActionsSlice.actions;
 
 export default proposalActionsSlice.reducer;

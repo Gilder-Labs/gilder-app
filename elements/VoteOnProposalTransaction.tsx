@@ -185,7 +185,7 @@ export const VoteOnProposalTransaction = ({}: VoteOnProposalTransaction) => {
                 />
               )}
 
-              {delegatesToVoteWith.map((delegate: Member) => (
+              {delegatesToVoteWith?.map((delegate: Member) => (
                 <DelegateButton
                   isSelected={selectedDelegate === delegate?.walletId}
                   onPress={() => handleSelectDelegate(delegate.walletId)}
@@ -275,11 +275,8 @@ export const VoteOnProposalTransaction = ({}: VoteOnProposalTransaction) => {
               disabled={isSendingTransaction || !publicKey || !selectedDelegate}
               title="Approve"
               onPress={handleApprove}
-              shade="600"
+              shade="800"
               color="secondary"
-              shade2="800"
-              color2="secondary"
-              hasGradient={true}
             />
           </>
         )}

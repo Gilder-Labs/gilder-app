@@ -9,7 +9,7 @@ import {
   getGovernanceAccounts,
   pubkeyFilter,
 } from "@solana/spl-governance";
-import { RPC_CONNECTION, INDEX_RPC_CONNECTION } from "../constants/Solana";
+import { RPC_CONNECTION, HEAVY_RPC_CONNECTION } from "../constants/Solana";
 import { getVoteRecords } from "../utils/gov-ui-functions/getVoteRecords";
 import { RootState } from "./index";
 

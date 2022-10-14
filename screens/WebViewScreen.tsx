@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components/native";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { fetchRealmActivity } from "../store/activitySlice";
+import { createProposalAttempt } from "../store/proposalActionsSlice";
 import { WebView } from "react-native-webview";
 import { PublicKey } from "@solana/web3.js";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -11,9 +11,13 @@ import { faArrowRight } from "@fortawesome/pro-solid-svg-icons/faArrowRight";
 import { faRotateRight } from "@fortawesome/pro-solid-svg-icons/faRotateRight";
 import { faGlobe } from "@fortawesome/pro-solid-svg-icons/faGlobe";
 import { Linking } from "react-native";
+import { ActivityIndicator } from "react-native";
+import { BottomSheetModal } from "@gorhom/bottom-sheet";
 
 import { useTheme } from "styled-components";
 import { SafeAreaView, StyleSheet } from "react-native";
+import { useDispatch } from "react-redux";
+import { CreateProposalTransactionModal } from "../elements/CreateProposalTransactionModal";
 
 export default function WebViewScreen({ route }: any) {
   const webviewRef = useRef<WebView>();
@@ -27,8 +31,15 @@ export default function WebViewScreen({ route }: any) {
     title: "",
     url: "",
   });
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const [transactionInstructions, setTransactionInstructions] = useState<
+    Array<any>
+  >([]);
+  const [typeOfTransaction, setTypeOfTransaction] = useState("");
 
-  const { walletId } = route?.params;
+  const { vaults } = useAppSelector((state) => state.treasury);
+
+  const { walletId, url } = route?.params;
 
   function returnDataToWebview(message: any, data: any) {
     if (webviewRef && webviewRef.current) {
@@ -44,10 +55,64 @@ export default function WebViewScreen({ route }: any) {
       case "connect": {
         console.log("Trying to connect");
         returnDataToWebview("connect", {
-          publicKey: new PublicKey(
-            "EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i"
-          ),
+          publicKey: new PublicKey(walletId),
         });
+        break;
+      }
+      case "signTransaction": {
+        // Payload should be the transaction
+        console.log("SIGN TRANSACTION: parsed.payload", data);
+        const transaction = data.payload.transaction;
+        const vault = vaults.find((vault) => vault.pubKey === walletId);
+        setTypeOfTransaction("signTransaction");
+        setTransactionInstructions([transaction]);
+        // dispatch(
+        //   createProposalAttempt({
+        //     vault,
+        //     transactionInstructions: [transaction],
+        //   })
+        // );
+        bottomSheetModalRef?.current?.present();
+
+        break;
+      }
+      case "signAndSendTransaction": {
+        // Payload should be the transaction
+        console.log("SIGN and SEND transaction: parsed", data);
+        const transaction = data.payload.transaction;
+        const vault = vaults.find((vault) => vault.pubKey === walletId);
+        // dispatch(
+        //   createProposalAttempt({
+        //     vault,
+        //     transactionInstructions: [transaction],
+        //   })
+        // );
+        setTypeOfTransaction("signAndSendTransaction");
+        setTransactionInstructions([transaction]);
+        bottomSheetModalRef?.current?.present();
+
+        break;
+      }
+      case "signAllTransactions": {
+        // Payload should be the transaction
+        console.log("SIGN ALL TRANSACTIONS: parsed.payload", data);
+        const transactions = data.payload.transaction;
+        const vault = vaults.find((vault) => vault.pubKey === walletId);
+        // dispatch(
+        //   createProposalAttempt({ vault, transactionInstructions: transactions })
+        // );
+        setTypeOfTransaction("signAllTransctions");
+        setTransactionInstructions(transactions);
+        bottomSheetModalRef?.current?.present();
+
+        break;
+      }
+      case "signMessage": {
+        // Payload should be the transaction
+        console.log("SIGN MESSAGE:", data);
+        bottomSheetModalRef?.current?.present();
+        setTypeOfTransaction("signMessage");
+        setTransactionInstructions([]);
 
         break;
       }
@@ -59,10 +124,6 @@ export default function WebViewScreen({ route }: any) {
       Linking.openURL(navState.url);
     }
   };
-
-  const gilderTreasuryWallet = "BprvFKeDRoJLPUjyd8s1SVBNCmHGzsyXFWzy9y7u2yac";
-  // myw allet
-  // const publicKey = "EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i";
 
   const phantomTest = `
   try{
@@ -83,33 +144,140 @@ export default function WebViewScreen({ route }: any) {
       });
     }
 
-    const phantom = { 
+    const walletAdapter = {
+      isGlow: true,
       isPhantom: true,
-      isConnected: true,
-      publicKey: { toBytes: () => { return "${walletId}" } },
-      on: (event, callback) => { console.log("on", event, callback) } , 
-      off: (event, callback) => { console.log("off", event, callback) },
-      signTransaction: async () => {},
-      connect: async () => {
+      isConnected: false,
+
+      publicKey: {
+        toBytes: () => {
+          return "${walletId}";
+        },
+        publicKey: "${walletId}",
+        toString: () => {
+          return "${walletId}";
+        },
+      },
+      on: (event, callback) => {
+        console.log("on", event, callback);
+      },
+      off: (event, callback) => {
+        console.log("off", event, callback);
+      },
+      signTransaction: async (transaction) => {
+        console.log("signTransaction", transaction);
         window.ReactNativeWebView.postMessage(
           JSON.stringify({
-            message: 'connect',
+            message: "signTransaction",
+            payload: {
+              transaction,
+              info: {
+                title: document.title,
+                host: window.location.host,
+              },
+            },
+          })
+        );
+        return communicate("signTransaction");
+      },
+      signAllTransactions: async (transaction) => {
+        console.log("signAllTransactions", transaction);
+        window.ReactNativeWebView.postMessage(
+          JSON.stringify({
+            message: "signAllTransactions",
+            payload: {
+              transaction,
+              info: {
+                title: document.title,
+                host: window.location.host,
+              },
+            },
+          })
+        );
+        return communicate("signAllTransactions");
+      },
+      signAndSendTransaction: async (transaction, options) => {
+        console.log("signAndSendTransaction", transaction);
+        window.ReactNativeWebView.postMessage(
+          JSON.stringify({
+            message: "signAndSendTransaction",
+            payload: {
+              transaction,
+              options,
+              info: {
+                title: document.title,
+                host: window.location.host,
+              },
+            },
+          })
+        );
+        return communicate("signAndSendTransaction");
+      },
+      signMessage: async (message) => {
+        console.log("signMessage", message);
+        window.ReactNativeWebView.postMessage(
+          JSON.stringify({
+            message: "signMessage",
+            payload: {
+              messageToSign: message,
+              info: {
+                title: document.title,
+                host: window.location.host,
+              },
+            },
+          })
+        );
+        return communicate("signAllTransactions");
+      },
+      connect: async () => {
+        console.log('trying to connect');
+        window.phantom.solana.isConnected = true;
+        window.solana.isConnected = true;
+        window.glowSolana.solana.isConnected = true;
+        window.phantom.isConnected = true;
+        window.glowSolana.isConnected = true;
+
+        window.ReactNativeWebView.postMessage(
+          JSON.stringify({
+            message: "connect",
             payload: {
               info: {
-                title: document.title, 
-                host: window.location.host
-              }
-            }
-          }),
+                title: document.title,
+                host: window.location.host,
+              },
+            },
+          })
         );
       },
-    }
-    window.phantom = phantom;
-    window.phantom.solana = phantom;
-    window.solana = phantom;
+     
+      disconnect: async () => {
+        console.log('trying to disconnect');
 
+        window.solana.isConnected = false;
+        window.phantom.solana.isConnected = false;
+        window.glowSolana.solana.isConnected = false;
+        window.phantom.isConnected = false;
+        window.glowSolana.isConnected = false;
 
-    document = "something";
+        window.ReactNativeWebView.postMessage(
+          JSON.stringify({
+            message: "disconnect",
+            payload: {
+              info: {
+                title: document.title,
+                host: window.location.host,
+              },
+            },
+          })
+        );
+      },
+    };
+    window.phantom = walletAdapter;
+    window.phantom.solana = walletAdapter;
+    window.solana = walletAdapter;
+    window.glowSolana = walletAdapter;
+    window.glowSolana.solana = walletAdapter;
+
     } catch(e) {
       alert(e)
     }
@@ -120,21 +288,34 @@ export default function WebViewScreen({ route }: any) {
     <Container>
       <SafeAreaView style={styles.container}>
         <WebView
-          // can connect
-          // source={{ uri: "https://trade.mango.markets" }}
+          // working dapps so far
+          source={{
+            uri: url,
+          }}
+          // source={{ uri: "https://marinade.finance/app/staking/" }}
+          // source={{ uri: "https://solend.fi/dashboard" }}
           // source={{ uri: "https://friktion.fi/" }}
-          // source={{ uri: "https://dialect.to" }}
-          // source={{ uri: "https://solanart.io/" }}
+          // apps that the tranasction errors out
+
+          // source={{ uri: "https://hyperspace.xyz/collection/bdlc_genesis" }}
+          // source={{ uri: "https://orca.so" }}
+          // source={{ uri: "https://jup.ag" }}
+          // apps that are in testing
+          // source={{ uri: "https://app.streamflow.finance/dashboard" }}
+          // source={{ uri: "https://app.meanfi.com/" }}
+          // apps that I can't connect with wallet or other misc issue
+          // source={{ uri: "https://rent.cardinal.so/miniroyale" }}
+          // source={{ uri: "https://www.tensor.trade/" }}
+          // source={{ uri: "https://rent.cardinal.so/miniroyale" }}
+          // source={{ uri: "https://trade.mango.markets" }}
+          // source={{ uri: "https://v3.squads.so" }}
           // source={{
           //   uri: "https://app.castle.finance/vaults/3tBqjyYtf9Utb1NNsx4o7AV1qtzHoxsMXgkmat3rZ3y6",
           // }}
-
-          source={{ uri: "https://orca.so" }}
           // source={{
-          //   uri: "https://app.dispatch.forum/forum/2gPb8UPw5n5gpUpnRD4h9nG254dY5JdVxmkYJxsZPbDr",
+          //   uri: "https://app.dispatch.forum/",
           // }}
           // source={{ uri: "https://app.realms.today" }}
-          // source={{ uri: "https://solend.fi/dashboard" }}
           javaScriptEnabled={true}
           ref={webviewRef}
           // handle cors
@@ -155,6 +336,12 @@ export default function WebViewScreen({ route }: any) {
             // Keep track of going back navigation within component
             setNavState(navState);
           }}
+          startInLoadingState={true}
+          renderLoading={() => (
+            <LoadingContainer>
+              <ActivityIndicator />
+            </LoadingContainer>
+          )}
         />
         <WebViewActionContainer>
           <IconButton
@@ -190,6 +377,12 @@ export default function WebViewScreen({ route }: any) {
             <FontAwesomeIcon icon={faGlobe} size={20} color={theme.gray[300]} />
           </IconButton>
         </WebViewActionContainer>
+        <CreateProposalTransactionModal
+          bottomSheetModalRef={bottomSheetModalRef}
+          walletId={walletId}
+          transactionInstructions={transactionInstructions}
+          navState={navState}
+        />
       </SafeAreaView>
     </Container>
   );
@@ -218,3 +411,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#131313",
   },
 });
+
+const LoadingContainer = styled.View`
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  background-color: ${(props) => props.theme.gray[900]};
+`;

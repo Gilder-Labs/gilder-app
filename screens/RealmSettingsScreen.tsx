@@ -32,12 +32,13 @@ export default function RealmSettingsScreen({
 
   useEffect(() => {
     if (notificationSettings && selectedRealm) {
-      const isSubscribed = notificationSettings[selectedRealm.pubKey];
+      const isSubscribed = notificationSettings[selectedRealm.pubKey]?.isActive;
       setNotifyOnCreate(isSubscribed);
     }
   }, [notificationSettings]);
 
   const onCreateChange = (value: boolean) => {
+    console.log("changing notification to", value);
     dispatch(
       subscribeToNotifications({
         pushToken: pushToken,
