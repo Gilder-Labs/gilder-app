@@ -407,7 +407,7 @@ CreateProposalTransactionModalProps) => {
                   textAlign="center"
                   shade="400"
                 />
-                <Loading minHeight={true} />
+                <Loading collapseHeight={true} />
 
                 <Typography
                   // add 2 for creating proposal + signing off
