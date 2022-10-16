@@ -336,7 +336,7 @@ export default function CreateProposalScreen({ route }: any) {
             />
           </ProposalCreationButton>
         </ProposalCreationButtonOuter>
-        <ProposalCreationButtonOuter>
+        {/* <ProposalCreationButtonOuter>
           <ProposalCreationButton onPress={handleSolanaPay}>
             <DappIcon
               source={{
@@ -351,7 +351,7 @@ export default function CreateProposalScreen({ route }: any) {
               shade="100"
             />
           </ProposalCreationButton>
-        </ProposalCreationButtonOuter>
+        </ProposalCreationButtonOuter> */}
       </Row>
 
       {/* <Typography
