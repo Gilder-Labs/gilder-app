@@ -3,6 +3,7 @@ import "react-native-get-random-values";
 import "react-native-gesture-handler";
 import "text-encoding-polyfill";
 import "./global";
+
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { ThemeProvider } from "./utils/styled-components";
