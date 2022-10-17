@@ -280,7 +280,7 @@ export default function CreateProposalScreen({ route }: any) {
         <ProposalCreationButtonOuter>
           <ProposalCreationButton
             onPress={() => handleOpenBrowser("https://solend.fi/dashboard")}
-            disabled={true}
+            // disabled={true}
           >
             <DappIcon
               source={{

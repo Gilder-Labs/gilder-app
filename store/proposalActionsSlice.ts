@@ -14,6 +14,7 @@ import {
   Transaction,
   TransactionInstruction,
   sendAndConfirmTransaction,
+  sendAndConfirmRawTransaction,
 } from "@solana/web3.js";
 import { RPC_CONNECTION } from "../constants/Solana";
 
@@ -76,7 +77,6 @@ export const createProposalAttempt = createAsyncThunk(
         throw Error();
       }
       const walletKeypair = Keypair.fromSecretKey(bs58.decode(privateKey));
-      const recentBlock = await connection.getLatestBlockhash();
       // transaction.recentBlockhash = recentBlock.blockhash;
 
       // transaction.sign(walletKeypair);
@@ -93,9 +93,13 @@ export const createProposalAttempt = createAsyncThunk(
 
         // temp work around to make sure stuff happens sequentially and doesn't throw program errors
         console.log("tx", tx);
-        const response = await sendAndConfirmTransaction(connection, tx, [
-          walletKeypair,
-        ]);
+        const response = await sendAndConfirmRawTransaction(
+          connection,
+          tx.serialize(),
+          {
+            skipPreflight: true,
+          }
+        );
         console.log("confirm response", response);
         index++;
         dispatch(setProgress(index));
@@ -137,6 +141,7 @@ export const proposalActionsSlice = createSlice({
       .addCase(createProposalAttempt.fulfilled, (state, action: any) => {
         state.isLoading = false;
         state.error = action.payload.error;
+        state.transactionProgress = 0;
       });
   },
 });
