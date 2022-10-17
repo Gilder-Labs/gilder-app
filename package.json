@@ -59,7 +59,7 @@
     "expo-av": "~12.0.3",
     "expo-barcode-scanner": "~11.4.0",
     "expo-clipboard": "~3.1.0",
-    "expo-constants": "~13.2.3",
+    "expo-constants": "~13.2.4",
     "expo-crypto-polyfills": "^1.1.0",
     "expo-device": "~4.3.0",
     "expo-document-picker": "~10.3.0",
