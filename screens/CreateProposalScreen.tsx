@@ -85,8 +85,8 @@ export default function CreateProposalScreen({ route }: any) {
             autoCapitalize={"none"}
             autoCorrect={false}
             value={url}
-            // disabled={true}
-            // editable={false}
+            disabled={true}
+            editable={false}
           />
           <IconContainer disabled={!url} onPress={() => setUrl("")}>
             {url ? (
