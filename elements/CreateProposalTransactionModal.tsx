@@ -304,6 +304,7 @@ CreateProposalTransactionModalProps) => {
                   />
                   <DelegateScrollView
                     horizontal={true}
+                    // something brtoken here for android
                     contentContainerStyle={{ justifyContent: "center" }}
                   >
                     {membersMap?.[publicKey] && (
@@ -407,13 +408,17 @@ CreateProposalTransactionModalProps) => {
                   textAlign="center"
                   shade="400"
                 />
-                <Loading minHeight={true} />
+                <Loading collapseHeight={true} />
 
                 <Typography
                   // add 2 for creating proposal + signing off
                   text={`Progress: ${
                     walletType === "phantom" ? progress : transactionProgress
-                  } / ${transactionInstructions.length + 2}  `}
+                  } / ${
+                    transactionInstructions?.[0]?.instructions
+                      ? transactionInstructions?.[0]?.instructions.length + 2
+                      : transactionInstructions?.length + 2
+                  }  `}
                 />
               </StatusContainer>
             ) : (

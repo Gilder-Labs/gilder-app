@@ -36,7 +36,11 @@ export default function TokenTransferScreen({ route }: any) {
   const [token, setToken] = useState<any>(null);
   const [amount, setAmount] = useState<any>(0);
   const [amountUsd, setAmountUsd] = useState<any>(0);
+  // const [recipient, setRecipient] = useState<any>(
+  //   "EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i"
+  // );
   const [recipient, setRecipient] = useState<any>("");
+
   const { tokenPriceData, vaults } = useAppSelector((state) => state.treasury);
   const { publicKey } = useAppSelector((state) => state.wallet);
 
@@ -140,17 +144,19 @@ export default function TokenTransferScreen({ route }: any) {
   const handleSetUsdAmount = (value: string) => {
     const parsedValue = parseFloat(value);
     setAmountUsd(value);
+    const coinGeckoId = token?.extensions?.coingeckoId;
+    const priceData = tokenPriceData[coinGeckoId];
+
+    let newAmount = String(
+      (parseFloat(value) / priceData.current_price).toFixed(2)
+    );
     if (isEditing === "usd" && token && parsedValue > 0) {
-      const coinGeckoId = token?.extensions?.coingeckoId;
-      const priceData = tokenPriceData[coinGeckoId];
-      setAmount(
-        String((parseFloat(value) / priceData.current_price).toFixed(2))
-      );
+      setAmount(newAmount);
     } else {
       setAmount("0");
     }
 
-    if (token.tokenAmount.uiAmount < parseFloat(value)) {
+    if (token.tokenAmount.uiAmount < parseFloat(newAmount)) {
       setTokenError(true);
     } else {
       setTokenError(false);
@@ -205,6 +211,7 @@ export default function TokenTransferScreen({ route }: any) {
                 disabled={!token}
                 editable={!!token}
                 keyboardType="numeric"
+                autoCapitalize="none"
               />
               <Typography
                 text={token?.symbol || "SOL"}
@@ -212,7 +219,7 @@ export default function TokenTransferScreen({ route }: any) {
                 marginLeft="1"
               />
             </RowInput>
-            <RowInput>
+            <RowInput style={{}}>
               <Typography
                 text={"$"}
                 bold={true}
@@ -228,7 +235,8 @@ export default function TokenTransferScreen({ route }: any) {
                 type="number"
                 disabled={!token}
                 editable={!!token}
-                keyboardType="numeric"
+                keyboardType="numeric" // decimal-pad? number-pad?
+                autoCapitalize="none"
               />
               <Typography text={"USD"} bold={true} marginLeft="1" />
             </RowInput>
@@ -317,8 +325,7 @@ const SpacedRow = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-left: -${(props) => props.theme.spacing[1]};
-  margin-right: -${(props) => props.theme.spacing[1]};
+
   margin-bottom: ${(props) => props.theme.spacing[2]};
 `;
 
