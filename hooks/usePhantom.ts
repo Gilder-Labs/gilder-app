@@ -200,7 +200,6 @@ export const usePhantom = () => {
 
         for (const tx of decodedTransactions) {
           // const latestBlockHash = await connection.getLatestBlockhash();
-          console.log("SENDING", tx);
           const signature = await sendAndConfirmRawTransaction(
             connection,
             tx.serialize(),

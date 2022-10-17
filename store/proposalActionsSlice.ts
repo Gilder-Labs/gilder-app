@@ -87,12 +87,12 @@ export const createProposalAttempt = createAsyncThunk(
       // );
 
       let index = 0;
-      console.log("able to create proposal", transactions);
+      // console.log("able to create proposal", transactions);
       for (const tx of transactions) {
         tx.sign(walletKeypair);
 
         // temp work around to make sure stuff happens sequentially and doesn't throw program errors
-        console.log("tx", tx);
+        // console.log("tx", tx);
         const response = await sendAndConfirmRawTransaction(
           connection,
           tx.serialize(),
@@ -100,7 +100,6 @@ export const createProposalAttempt = createAsyncThunk(
             skipPreflight: true,
           }
         );
-        console.log("confirm response", response);
         index++;
         dispatch(setProgress(index));
         // setTimeout(() => {
