@@ -590,7 +590,7 @@ const BadgeRow = styled.View`
 `;
 
 const StatusContainer = styled.View`
-  justify-content: cemter;
+  justify-content: center;
   align-items: center;
   margin-top: 100px;
   padding-left: 24px;
