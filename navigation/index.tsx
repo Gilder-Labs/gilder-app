@@ -342,21 +342,21 @@ export default function Navigation({}: {}) {
         onReady={() => {
           routeNameRef.current = navigationRef.getCurrentRoute().name;
         }}
-        onStateChange={async () => {
-          const previousRouteName = routeNameRef.current;
-          const currentRouteName = navigationRef.getCurrentRoute().name;
+        // onStateChange={async () => {
+        //   const previousRouteName = routeNameRef.current;
+        //   const currentRouteName = navigationRef.getCurrentRoute().name;
 
-          if (previousRouteName !== currentRouteName) {
-            console.log("ANALYTICS", currentRouteName);
-            // ampInstance.logEvent(currentRouteName);
-            // await analytics().logEvent("screenVisit", {
-            //   route: currentRouteName,
-            // });
-          }
+        //   if (previousRouteName !== currentRouteName) {
+        //     // console.log("ANALYTICS", currentRouteName);
+        //     // ampInstance.logEvent(currentRouteName);
+        //     // await analytics().logEvent("screenVisit", {
+        //     //   route: currentRouteName,
+        //     // });
+        //   }
 
-          // Save the current route name for later comparison
-          routeNameRef.current = currentRouteName;
-        }}
+        //   // Save the current route name for later comparison
+        //   routeNameRef.current = currentRouteName;
+        // }}
       >
         <Stack.Navigator
           screenOptions={{

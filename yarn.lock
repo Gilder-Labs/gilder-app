@@ -414,7 +414,7 @@
     "@babel/helper-plugin-utils" "^7.18.9"
     "@babel/plugin-syntax-export-default-from" "^7.18.6"
 
-"@babel/plugin-proposal-export-namespace-from@^7.17.12", "@babel/plugin-proposal-export-namespace-from@^7.18.9":
+"@babel/plugin-proposal-export-namespace-from@^7.18.9":
   version "7.18.9"
   resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-export-namespace-from/-/plugin-proposal-export-namespace-from-7.18.9.tgz#5f7313ab348cdb19d590145f9247540e94761203"
   integrity sha512-k1NtHyOMvlDDFeb9G5PhUXuGj8m/wiwojgQVEhJ/fsVsMCpLyOP4h0uGEjYJKrRI+EVPlb5Jk+Gt9P97lOGwtA==
@@ -2931,10 +2931,10 @@
   dependencies:
     qrcode-generator "^1.4.3"
 
-"@solana/spl-governance@^0.3.14":
-  version "0.3.14"
-  resolved "https://registry.yarnpkg.com/@solana/spl-governance/-/spl-governance-0.3.14.tgz#4bd2357702ca03e7058e79959f52b8c0eafa40b3"
-  integrity sha512-wht51cpEgr+Fa6G8B75l+HkRbhyUrOjObFpYkUxfHiS8a+U/3p3gNzaOhxlrSMlLa++TTPuGNc+IiSpKEa8x0g==
+"@solana/spl-governance@^0.3.15":
+  version "0.3.15"
+  resolved "https://registry.yarnpkg.com/@solana/spl-governance/-/spl-governance-0.3.15.tgz#4fd8b016394dbe6161009209b1521d4fe3b97791"
+  integrity sha512-VSrzmIXGq5hlCm1JHFCIJGJ2fujqH3GVstyDNTvquxMZioWckmDO5Q/X9oSDft7sziY12tkOW9FDA3Z5m45hBg==
   dependencies:
     "@solana/web3.js" "^1.22.0"
     bignumber.js "^9.0.1"
@@ -6359,10 +6359,10 @@ expo-splash-screen@~0.16.1:
     "@expo/configure-splash-screen" "^0.6.0"
     "@expo/prebuild-config" "~5.0.0"
 
-expo-standard-web-crypto@^1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/expo-standard-web-crypto/-/expo-standard-web-crypto-1.3.0.tgz#ee47a6087d8faa8a08b3b9126e34d93ecbdf337d"
-  integrity sha512-7g06s4YFTz5JJ7bBzxvrvgekSDUXZ8y50LhI7Q7o/okK8UIk26SMa1ITYPcIFyXoCHHZbB7ThG0H5eXL8J4SPw==
+expo-standard-web-crypto@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/expo-standard-web-crypto/-/expo-standard-web-crypto-1.4.0.tgz#f3f952e355a5e3a61ef91b232bd642b2ea2e12a2"
+  integrity sha512-XbYLoCLZ/BW0SgWpy2bXC7hevUEm1PiWCYlclF2SoAaS/LsTxcYcAcWzLbnJ1cbTElSjDtDqMCxSbY1JiL2JQw==
 
 expo-status-bar@~1.4.0:
   version "1.4.0"
@@ -10759,12 +10759,11 @@ react-native-pager-view@5.4.24:
   resolved "https://registry.yarnpkg.com/react-native-pager-view/-/react-native-pager-view-5.4.24.tgz#8626e757ddc55e41eca66d2f8a8a75aec54591ee"
   integrity sha512-dRMB7i3B+mu4NCeIN6gqbR/kC/rr2wzqO0gisXDdJwJr78G24sWoTNpLEDFo3G8TFHY9nTMutVl5CUvkN2dp6g==
 
-react-native-reanimated@~2.9.1:
-  version "2.9.1"
-  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-2.9.1.tgz#d9a932e312c13c05b4f919e43ebbf76d996e0bc1"
-  integrity sha512-309SIhDBwY4F1n6e5Mr5D1uPZm2ESIcmZsGXHUu8hpKX4oIOlZj2MilTk+kHhi05LjChoJkcpfkstotCJmPRPg==
+react-native-reanimated@^2.11.0:
+  version "2.11.0"
+  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-2.11.0.tgz#415ef668440d1b7d8b2b36a20342b1035432dd80"
+  integrity sha512-/QnujrXSNyXasv7v8K3eu5Z4XGRYMPRa0+x0RjNr6Z5/KEuPHwrg1Xm7UZ2YSm6jCF2b1BW6ceqP/1d626gvhQ==
   dependencies:
-    "@babel/plugin-proposal-export-namespace-from" "^7.17.12"
     "@babel/plugin-transform-object-assign" "^7.16.7"
     "@babel/preset-typescript" "^7.16.7"
     "@types/invariant" "^2.2.35"
@@ -10853,10 +10852,10 @@ react-native-text-size@4.0.0-rc.1:
   resolved "https://registry.yarnpkg.com/react-native-text-size/-/react-native-text-size-4.0.0-rc.1.tgz#1e048d345dd6a5a8e1269e0585c1a5948c478da5"
   integrity sha512-CysqjU2jK6Yc+a+kEI222pUyTY2ywcU2HqbFqf1KHymW6OPTdvBBHqbEJKL0QiLhQaFYDbqicM+h990s9TP00g==
 
-react-native-ui-lib@^6.21.0:
-  version "6.21.0"
-  resolved "https://registry.yarnpkg.com/react-native-ui-lib/-/react-native-ui-lib-6.21.0.tgz#e17ad6390e77beed646487aa37db27cbd217c52b"
-  integrity sha512-1hZ7OF7UEU0KGjE7X04dJ5WFeuk93rnBs83DqVctA6VUBRY3pUOrhhRFPn5V9QGFdV5+zDr+cFNEYHBtvCwcAA==
+react-native-ui-lib@^6.21.2:
+  version "6.21.2"
+  resolved "https://registry.yarnpkg.com/react-native-ui-lib/-/react-native-ui-lib-6.21.2.tgz#4b86823acc526963d0979e675afc85ef5fbb3084"
+  integrity sha512-nnATtJOex4/Ic67fsxiAZ306CErjfatkOFiMjmDfaM9rxixNIhcuD4R1O0T10iHmCwo/sagap9WVvibdFlLHKA==
   dependencies:
     babel-plugin-transform-inline-environment-variables "^0.0.2"
     color "^3.1.0"
