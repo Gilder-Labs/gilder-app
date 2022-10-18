@@ -2771,7 +2771,7 @@
     "@sentry/utils" "7.6.0"
     "@sentry/wizard" "1.2.17"
 
-"@sentry/react-native@^4.1.3":
+"@sentry/react-native@4.2.2":
   version "4.2.2"
   resolved "https://registry.yarnpkg.com/@sentry/react-native/-/react-native-4.2.2.tgz#613ffa2347746d2ed66200c314092411ad7aa43c"
   integrity sha512-2zSgR73/jNByr4WDciE97n78Tj81Lrhhwj1/yMRWFDd9pF802ZYiRVeIkHArEYGHER41fiQojP7wBKftvnKgew==
