@@ -9,7 +9,7 @@ import { PublicKeyTextCopy, Typography, Badge } from "../components";
 import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "styled-components";
 import { BarCodeScanner } from "expo-barcode-scanner";
-import { parseURL, TransferRequestURL } from "@solana/pay";
+import { parseURL, createTransfer, TransferRequestURL } from "@solana/pay";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { createInstructionData } from "@solana/spl-governance";
 import { CreateProposalTransactionModal } from "../elements/CreateProposalTransactionModal";
@@ -21,6 +21,7 @@ import {
 } from "@solana/web3.js";
 import { RPC_CONNECTION } from "../constants/Solana";
 import splToken from "@solana/spl-token";
+import bigInteger from "big-integer";
 
 let connection = new Connection(RPC_CONNECTION, "recent");
 
@@ -36,6 +37,7 @@ export default function SolanaPayScanScreen({ route }: any) {
   const [transactionInstructions, setTransactionInstructions] = useState<
     Array<any>
   >([]);
+  const { publicKey } = useAppSelector((state) => state.wallet);
 
   useEffect(() => {
     const getBarCodeScannerPermissions = async () => {
@@ -58,57 +60,25 @@ export default function SolanaPayScanScreen({ route }: any) {
     // message = can be undefined
     // memo = can be undefined
     const solanaPayInfo = parseURL(data);
-    let { recipient, amount, reference, label, message, memo } = parseURL(
-      data
-    ) as TransferRequestURL;
-    console.log("RECIPIENT", recipient.toBase58());
-    console.log("REFERENCE", reference?.[0].toBase58());
+    let { recipient, amount, reference, label, message, memo, splToken } =
+      parseURL(data) as TransferRequestURL;
+    console.log(JSON.stringify(solanaPayInfo));
 
-    setSolanaPayData(solanaPayInfo);
+    const tx = await createTransfer(connection, new PublicKey(publicKey), {
+      recipient,
+      amount: amount,
+      splToken: splToken,
+      reference,
+      memo,
+    });
 
-    let instruction = await createInstructionData(
-      SystemProgram.transfer({
-        fromPubkey: new PublicKey(walletId),
-        toPubkey: recipient,
-        lamports: amount * LAMPORTS_PER_SOL,
-      })
+    const instructions = tx.instructions.map((instruction) =>
+      createInstructionData(instruction)
     );
 
-    // const instruction = solanaPayInfo?.splToken
-    //   ? await splToken.Token.createTransferInstruction(
-    //       splToken.TOKEN_PROGRAM_ID,
-    //       fromTokenAccount.address,
-    //       solanaPayInfo?.recipient,
-    //       new PublicKey(walletId),
-    //       [],
-    //       solanaPayInfo?.amount
-    //     )
-    //   : await createInstructionData(
-    //       SystemProgram.transfer({
-    //         fromPubkey: new PublicKey(walletId),
-    //         toPubkey: solanaPayInfo?.recipient,
-    //         lamports: solanaPayInfo?.amount * LAMPORTS_PER_SOL,
-    //       })
-    //     );
-    console.log("instruction", instruction);
+    setTransactionInstructions(instructions);
+    setSolanaPayData(solanaPayInfo);
 
-    if (reference) {
-      if (!Array.isArray(reference)) {
-        reference = [reference];
-      }
-
-      for (const pubkey of reference) {
-        instruction?.accounts.push({
-          pubkey,
-          isWritable: false,
-          isSigner: false,
-        });
-      }
-    }
-
-    console.log("instruction", instruction);
-
-    console.log(JSON.stringify(solanaPayInfo));
     bottomSheetModalRef?.current?.present();
   };
 

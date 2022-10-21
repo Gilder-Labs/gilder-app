@@ -134,7 +134,9 @@ export default function CreateProposalScreen({ route }: any) {
         <ProposalCreationButtonOuter>
           <ProposalCreationButton
             onPress={() =>
-              handleOpenBrowser("https://marinade.finance/app/staking/")
+              handleOpenBrowser(
+                "https://marinade.finance/app/staking/?referralCode=CkatZPRBPQGgCXvdr9FaAkTTAePQTFMjf9k34DiwqL9Z"
+              )
             }
           >
             <DappIcon
@@ -336,7 +338,7 @@ export default function CreateProposalScreen({ route }: any) {
             />
           </ProposalCreationButton>
         </ProposalCreationButtonOuter>
-        {/* <ProposalCreationButtonOuter>
+        <ProposalCreationButtonOuter>
           <ProposalCreationButton onPress={handleSolanaPay}>
             <DappIcon
               source={{
@@ -351,7 +353,7 @@ export default function CreateProposalScreen({ route }: any) {
               shade="100"
             />
           </ProposalCreationButton>
-        </ProposalCreationButtonOuter> */}
+        </ProposalCreationButtonOuter>
       </Row>
 
       {/* <Typography
