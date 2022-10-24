@@ -213,6 +213,54 @@ export default function WebViewScreen({ route }: any) {
         );
         return communicate("signAndSendTransaction");
       },
+      sendAndConfirm: async (message) => {
+        console.log("send and confirm???", message);
+        window.ReactNativeWebView.postMessage(
+          JSON.stringify({
+            message: "signMessage",
+            payload: {
+              messageToSign: message,
+              info: {
+                title: document.title,
+                host: window.location.host,
+              },
+            },
+          })
+        );
+        return communicate("sendAndConfirm");
+      },
+      send: async (message) => {
+        console.log("send send send", message);
+        window.ReactNativeWebView.postMessage(
+          JSON.stringify({
+            message: "signMessage",
+            payload: {
+              messageToSign: message,
+              info: {
+                title: document.title,
+                host: window.location.host,
+              },
+            },
+          })
+        );
+        return communicate("send");
+      },
+      sendAll: async (message) => {
+        console.log("send all???", message);
+        window.ReactNativeWebView.postMessage(
+          JSON.stringify({
+            message: "signMessage",
+            payload: {
+              messageToSign: message,
+              info: {
+                title: document.title,
+                host: window.location.host,
+              },
+            },
+          })
+        );
+        return communicate("sendAll");
+      },
       signMessage: async (message) => {
         console.log("signMessage", message);
         window.ReactNativeWebView.postMessage(

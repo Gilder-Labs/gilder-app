@@ -1,0 +1,17 @@
+<svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_2126_827)">
+<line x1="2" y1="2" x2="2" y2="78.01" stroke="white" stroke-width="4" stroke-linecap="round"/>
+<line x1="2" y1="-2" x2="78.0055" y2="-2" transform="matrix(-0.99994 -0.0109649 0.0033846 -0.999994 80 0.878906)" stroke="white" stroke-width="4" stroke-linecap="round"/>
+<line x1="398.014" y1="2.00626" x2="322.004" y2="2.24442" stroke="white" stroke-width="4" stroke-linecap="round"/>
+<line x1="2" y1="-2" x2="78.0055" y2="-2" transform="matrix(0.00783178 -0.999969 1 0.000251328 399.383 80.0039)" stroke="white" stroke-width="4" stroke-linecap="round"/>
+<line x1="397.995" y1="398.013" x2="397.792" y2="322.003" stroke="white" stroke-width="4" stroke-linecap="round"/>
+<line x1="2" y1="-2" x2="78.0055" y2="-2" transform="matrix(0.999966 0.00829759 -0.000717151 1 320 399.34)" stroke="white" stroke-width="4" stroke-linecap="round"/>
+<line x1="1.98836" y1="397.992" x2="77.9971" y2="397.551" stroke="white" stroke-width="4" stroke-linecap="round"/>
+<line x1="2" y1="-2" x2="78.0055" y2="-2" transform="matrix(-0.00516438 0.999987 -0.999997 0.00241613 0.414062 320)" stroke="white" stroke-width="4" stroke-linecap="round"/>
+</g>
+<defs>
+<clipPath id="clip0_2126_827">
+<rect width="400" height="400" fill="white"/>
+</clipPath>
+</defs>
+</svg>

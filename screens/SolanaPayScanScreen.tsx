@@ -20,8 +20,7 @@ import {
   LAMPORTS_PER_SOL,
 } from "@solana/web3.js";
 import { RPC_CONNECTION } from "../constants/Solana";
-import splToken from "@solana/spl-token";
-import bigInteger from "big-integer";
+import QRSvg from "../assets/images/qr.svg";
 
 let connection = new Connection(RPC_CONNECTION, "recent");
 
@@ -98,7 +97,15 @@ export default function SolanaPayScanScreen({ route }: any) {
           height: Dimensions.get("window").height - 24,
           width: "100%",
         }}
-      ></BarCodeScanner>
+      >
+        <BarCodeContainer>
+          <QRSvg width={200} height={200} />
+          <Typography
+            text="Scan QR to create purchase proposal"
+            marginTop="4"
+          />
+        </BarCodeContainer>
+      </BarCodeScanner>
       <CreateProposalTransactionModal
         bottomSheetModalRef={bottomSheetModalRef}
         walletId={walletId}
@@ -114,11 +121,10 @@ export default function SolanaPayScanScreen({ route }: any) {
   );
 }
 
-const Container = styled.ScrollView`
+const Container = styled.View`
   background-color: ${(props) => props.theme.gray[900]};
   /* flex: 1;
   height: 100%; */
-  background: green;
   /* flex-direction: column; */
 `;
 
@@ -135,3 +141,10 @@ const SpacedRow = styled.View`
 `;
 
 const Column = styled.View``;
+
+const BarCodeContainer = styled.View`
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding-bottom: 48px;
+`;
