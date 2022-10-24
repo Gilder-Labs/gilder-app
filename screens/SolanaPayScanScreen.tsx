@@ -64,7 +64,7 @@ export default function SolanaPayScanScreen({ route }: any) {
       parseURL(data) as TransferRequestURL;
     console.log(JSON.stringify(solanaPayInfo));
 
-    const tx = await createTransfer(connection, new PublicKey(publicKey), {
+    const tx = await createTransfer(connection, new PublicKey(walletId), {
       recipient,
       amount: amount,
       splToken: splToken,
