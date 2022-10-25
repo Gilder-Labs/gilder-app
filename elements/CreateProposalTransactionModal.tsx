@@ -27,6 +27,7 @@ import { createNewProposalTransaction } from "../utils/createProposal";
 import { Typography, PublicKeyTextCopy } from "../components";
 import { fetchVaults } from "../store/treasurySlice";
 import { usePhantom } from "../hooks/usePhantom";
+import { castVote } from "../store/walletSlice";
 
 interface CreateProposalTransactionModalProps {
   bottomSheetModalRef: any;
@@ -63,6 +64,8 @@ CreateProposalTransactionModalProps) => {
     (state) => state.proposalActions
   );
   const { delegateMap, membersMap } = useAppSelector((state) => state.members);
+  const { proposals } = useAppSelector((state) => state.proposals);
+
   const [selectedDelegate, setSelectedDelegate] = useState("");
   const [description, setDescription] = useState("");
   const [title, setTitle] = useState("");
@@ -113,9 +116,33 @@ CreateProposalTransactionModalProps) => {
           transactions,
         })
       );
-    }
 
-    setProposalState("resolved");
+      setTimeout(async () => {
+        console.log("in timeout and trying to fetch proposals");
+        await dispatch(fetchRealmProposals(selectedRealm));
+      }, 5000);
+
+      setTimeout(() => {
+        handleCastVote();
+      }, 5000);
+    }
+  };
+
+  const handleCastVote = async () => {
+    setTimeout(async () => {
+      console.log("in timeout and trying to vote", proposals[0]);
+      await dispatch(
+        castVote({
+          transactionData: {
+            proposal: proposals[0],
+            action: 0, // 0 is yes, 1 is no
+          },
+          selectedDelegate,
+          isCommunityVote,
+        })
+      );
+      setProposalState("resolved");
+    }, 5000);
   };
 
   const handleProposalCreation = async () => {
