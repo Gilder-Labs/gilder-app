@@ -28,7 +28,7 @@ export default function SolanaPayScanScreen({ route }: any) {
   const navigation = useNavigation();
   const theme = useTheme();
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-  const { walletId } = route?.params;
+  const { walletId, isSpeedMode } = route?.params;
 
   const [solanaPayData, setSolanaPayData] = useState<any>(null);
   const [hasPermission, setHasPermission] = useState(false);
@@ -100,10 +100,7 @@ export default function SolanaPayScanScreen({ route }: any) {
       >
         <BarCodeContainer>
           <QRSvg width={200} height={200} />
-          <Typography
-            text="Scan QR to create purchase proposal"
-            marginTop="4"
-          />
+          <Typography text="Scan QR to start purchase flow" marginTop="4" />
         </BarCodeContainer>
       </BarCodeScanner>
       <CreateProposalTransactionModal
@@ -116,6 +113,7 @@ export default function SolanaPayScanScreen({ route }: any) {
           label: "Token Transfer",
         }}
         isTokenTransfer={true}
+        isSpeedMode={isSpeedMode}
       />
     </Container>
   );

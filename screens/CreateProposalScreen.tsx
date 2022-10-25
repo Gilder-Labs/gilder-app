@@ -31,8 +31,12 @@ export default function CreateProposalScreen({ route }: any) {
     });
   };
 
-  const handleSolanaPay = () => {
-    navigation.navigate("SolanaPayScanScreen", { walletId });
+  const handleSolanaPay = (isSpeedMode: boolean) => {
+    // @ts-ignore
+    navigation.navigate("SolanaPayScanScreen", {
+      walletId,
+      isSpeedMode: isSpeedMode,
+    });
   };
 
   const handleTokenTransfer = () => {
@@ -339,7 +343,7 @@ export default function CreateProposalScreen({ route }: any) {
           </ProposalCreationButton>
         </ProposalCreationButtonOuter>
         <ProposalCreationButtonOuter>
-          <ProposalCreationButton onPress={handleSolanaPay}>
+          <ProposalCreationButton onPress={() => handleSolanaPay(false)}>
             <DappIcon
               source={{
                 uri: "https://pbs.twimg.com/profile_images/1472933274209107976/6u-LQfjG_400x400.jpg",
@@ -348,6 +352,22 @@ export default function CreateProposalScreen({ route }: any) {
 
             <Typography
               text={"Solana Pay"}
+              marginBottom="0"
+              size="subtitle"
+              shade="100"
+            />
+          </ProposalCreationButton>
+        </ProposalCreationButtonOuter>
+        <ProposalCreationButtonOuter>
+          <ProposalCreationButton onPress={() => handleSolanaPay(true)}>
+            <DappIcon
+              source={{
+                uri: "https://pbs.twimg.com/profile_images/1472933274209107976/6u-LQfjG_400x400.jpg",
+              }}
+            />
+
+            <Typography
+              text={"Speed Pay"}
               marginBottom="0"
               size="subtitle"
               shade="100"

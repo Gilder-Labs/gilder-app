@@ -5,12 +5,14 @@ export interface UtilityState {
   isShowingToast: boolean;
   hasCompletedOnboarding: boolean;
   isFetchingOnboarding: boolean;
+  isOnDevnet: boolean;
 }
 
 const initialState: UtilityState = {
   isShowingToast: false,
   hasCompletedOnboarding: false,
   isFetchingOnboarding: false,
+  isOnDevnet: false,
 };
 
 export const fetchOnboarding = createAsyncThunk(
