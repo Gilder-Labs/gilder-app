@@ -18,7 +18,7 @@ import { useTheme } from "styled-components";
 import { SafeAreaView, StyleSheet } from "react-native";
 import { useDispatch } from "react-redux";
 import { CreateProposalTransactionModal } from "../elements/CreateProposalTransactionModal";
-import { initialize, register } from "@gilder/standard-wallet";
+import { initialize } from "@gilder/standard-wallet";
 import { GilderWalletProvider } from "../utils/GilderWalletProvider";
 
 export default function WebViewScreen({ route }: any) {
