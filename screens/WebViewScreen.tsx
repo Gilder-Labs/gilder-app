@@ -18,6 +18,8 @@ import { useTheme } from "styled-components";
 import { SafeAreaView, StyleSheet } from "react-native";
 import { useDispatch } from "react-redux";
 import { CreateProposalTransactionModal } from "../elements/CreateProposalTransactionModal";
+import { initialize, register } from "@gilder/standard-wallet";
+import { GilderWalletProvider } from "../utils/GilderWalletProvider";
 
 export default function WebViewScreen({ route }: any) {
   const webviewRef = useRef<WebView>();
@@ -125,210 +127,26 @@ export default function WebViewScreen({ route }: any) {
     }
   };
 
+  const toBytes = new PublicKey(walletId);
+
+  const getWindowObject = () => {
+    const GilderWallet = new GilderWalletProvider({
+      publicKey: new PublicKey(walletId),
+    });
+    register(GilderWallet);
+    // Attach the reference to the window, guarding against errors.
+    try {
+      Object.defineProperty(window, "gilderWallet", { value: GilderWallet });
+    } catch (error) {
+      console.error(error);
+    }
+
+    console.log("trying to create object");
+  };
+
   const phantomTest = `
-  try{
-    const communicate = async (messageName) => {
-      return new Promise(function (resolve, reject) {
-        function eventListener(event) {
-          try {
-            let parsed = JSON.parse(event.data);
-            if (parsed.message === messageName) {
-              window.removeEventListener('message', eventListener);
-              resolve(parsed.data);
-            }
-          } catch (e) {
-            reject(e);
-          }
-        }
-        window.addEventListener('message', eventListener);
-      });
-    }
+    ${initialize(getWindowObject())}
 
-    const walletAdapter = {
-      isGlow: true,
-      isPhantom: true,
-      isConnected: false,
-
-      publicKey: {
-        toBytes: () => {
-          return "${walletId}";
-        },
-        publicKey: "${walletId}",
-        toString: () => {
-          return "${walletId}";
-        },
-      },
-      on: (event, callback) => {
-        console.log("on", event, callback);
-      },
-      off: (event, callback) => {
-        console.log("off", event, callback);
-      },
-      signTransaction: async (transaction) => {
-        console.log("signTransaction", transaction);
-        window.ReactNativeWebView.postMessage(
-          JSON.stringify({
-            message: "signTransaction",
-            payload: {
-              transaction,
-              info: {
-                title: document.title,
-                host: window.location.host,
-              },
-            },
-          })
-        );
-        return communicate("signTransaction");
-      },
-      signAllTransactions: async (transaction) => {
-        console.log("signAllTransactions", transaction);
-        window.ReactNativeWebView.postMessage(
-          JSON.stringify({
-            message: "signAllTransactions",
-            payload: {
-              transaction,
-              info: {
-                title: document.title,
-                host: window.location.host,
-              },
-            },
-          })
-        );
-        return communicate("signAllTransactions");
-      },
-      signAndSendTransaction: async (transaction, options) => {
-        console.log("signAndSendTransaction", transaction);
-        window.ReactNativeWebView.postMessage(
-          JSON.stringify({
-            message: "signAndSendTransaction",
-            payload: {
-              transaction,
-              options,
-              info: {
-                title: document.title,
-                host: window.location.host,
-              },
-            },
-          })
-        );
-        return communicate("signAndSendTransaction");
-      },
-      sendAndConfirm: async (message) => {
-        console.log("send and confirm???", message);
-        window.ReactNativeWebView.postMessage(
-          JSON.stringify({
-            message: "signMessage",
-            payload: {
-              messageToSign: message,
-              info: {
-                title: document.title,
-                host: window.location.host,
-              },
-            },
-          })
-        );
-        return communicate("sendAndConfirm");
-      },
-      send: async (message) => {
-        console.log("send send send", message);
-        window.ReactNativeWebView.postMessage(
-          JSON.stringify({
-            message: "signMessage",
-            payload: {
-              messageToSign: message,
-              info: {
-                title: document.title,
-                host: window.location.host,
-              },
-            },
-          })
-        );
-        return communicate("send");
-      },
-      sendAll: async (message) => {
-        console.log("send all???", message);
-        window.ReactNativeWebView.postMessage(
-          JSON.stringify({
-            message: "signMessage",
-            payload: {
-              messageToSign: message,
-              info: {
-                title: document.title,
-                host: window.location.host,
-              },
-            },
-          })
-        );
-        return communicate("sendAll");
-      },
-      signMessage: async (message) => {
-        console.log("signMessage", message);
-        window.ReactNativeWebView.postMessage(
-          JSON.stringify({
-            message: "signMessage",
-            payload: {
-              messageToSign: message,
-              info: {
-                title: document.title,
-                host: window.location.host,
-              },
-            },
-          })
-        );
-        return communicate("signAllTransactions");
-      },
-      connect: async () => {
-        console.log('trying to connect');
-        window.phantom.solana.isConnected = true;
-        window.solana.isConnected = true;
-        window.glowSolana.solana.isConnected = true;
-        window.phantom.isConnected = true;
-        window.glowSolana.isConnected = true;
-
-        window.ReactNativeWebView.postMessage(
-          JSON.stringify({
-            message: "connect",
-            payload: {
-              info: {
-                title: document.title,
-                host: window.location.host,
-              },
-            },
-          })
-        );
-      },
-     
-      disconnect: async () => {
-        console.log('trying to disconnect');
-
-        window.solana.isConnected = false;
-        window.phantom.solana.isConnected = false;
-        window.glowSolana.solana.isConnected = false;
-        window.phantom.isConnected = false;
-        window.glowSolana.isConnected = false;
-
-        window.ReactNativeWebView.postMessage(
-          JSON.stringify({
-            message: "disconnect",
-            payload: {
-              info: {
-                title: document.title,
-                host: window.location.host,
-              },
-            },
-          })
-        );
-      },
-    };
-    window.phantom = walletAdapter;
-    window.phantom.solana = walletAdapter;
-    window.solana = walletAdapter;
-    window.glowSolana = walletAdapter;
-    window.glowSolana.solana = walletAdapter;
-
-    } catch(e) {
-      alert(e)
-    }
     true;
     `;
 
@@ -466,3 +284,20 @@ const LoadingContainer = styled.View`
   justify-content: center;
   background-color: ${(props) => props.theme.gray[900]};
 `;
+
+const communicate = async (messageName) => {
+  return new Promise(function (resolve, reject) {
+    function eventListener(event) {
+      try {
+        let parsed = JSON.parse(event.data);
+        if (parsed.message === messageName) {
+          window.removeEventListener("message", eventListener);
+          resolve(parsed.data);
+        }
+      } catch (e) {
+        reject(e);
+      }
+    }
+    window.addEventListener("message", eventListener);
+  });
+};

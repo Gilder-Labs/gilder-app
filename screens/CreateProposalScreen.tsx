@@ -21,7 +21,9 @@ import { parseURL } from "@solana/pay";
 export default function CreateProposalScreen({ route }: any) {
   const navigation = useNavigation();
   const { walletId, tokens, nfts } = route?.params;
-  const [url, setUrl] = useState("");
+  const [url, setUrl] = useState(
+    "https://coinablepay.com/store/gilder/QWwewfYNnzzsKMUibE2g7i"
+  );
   const theme = useTheme();
 
   const handleOpenBrowser = (webUrl: string) => {
@@ -89,8 +91,8 @@ export default function CreateProposalScreen({ route }: any) {
             autoCapitalize={"none"}
             autoCorrect={false}
             value={url}
-            disabled={true}
-            editable={false}
+            // disabled={true}
+            // editable={false}
           />
           <IconContainer disabled={!url} onPress={() => setUrl("")}>
             {url ? (

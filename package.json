@@ -24,6 +24,7 @@
     "@fortawesome/pro-regular-svg-icons": "^6.1.1",
     "@fortawesome/pro-solid-svg-icons": "^6.1.1",
     "@fortawesome/react-native-fontawesome": "^0.3.0",
+    "@gilder/standard-wallet": "^0.0.3",
     "@gorhom/bottom-sheet": "^4.4.3",
     "@project-serum/anchor": "^0.24.2",
     "@react-native-async-storage/async-storage": "~1.17.3",
