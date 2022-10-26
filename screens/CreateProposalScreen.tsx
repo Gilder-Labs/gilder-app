@@ -22,7 +22,7 @@ export default function CreateProposalScreen({ route }: any) {
   const navigation = useNavigation();
   const { walletId, tokens, nfts } = route?.params;
   const [url, setUrl] = useState(
-    "https://coinablepay.com/store/gilder/QWwewfYNnzzsKMUibE2g7i"
+    "https://solana-labs.github.io/wallet-adapter/example/"
   );
   const theme = useTheme();
 
