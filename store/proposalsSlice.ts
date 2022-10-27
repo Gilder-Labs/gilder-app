@@ -42,6 +42,10 @@ const initialState: ProposalsState = {
 };
 
 let connection = new Connection(RPC_CONNECTION, "confirmed");
+const devNetConnection = new Connection(
+  "https://api.devnet.solana.com",
+  "confirmed"
+);
 
 export const fetchRealmProposals = createAsyncThunk(
   "realms/fetchRealmProposals",

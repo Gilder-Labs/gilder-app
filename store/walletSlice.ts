@@ -66,6 +66,10 @@ const initialState: WalletState = {
 };
 
 let connection = new Connection(RPC_CONNECTION, "confirmed");
+const devNetConnection = new Connection(
+  "https://api.devnet.solana.com",
+  "confirmed"
+);
 const TokensInfo = getTokensInfo();
 
 export const fetchTokens = createAsyncThunk(

@@ -54,6 +54,10 @@ const initialState: realmState = {
 };
 
 let connection = new Connection(RPC_CONNECTION, "confirmed");
+const devNetConnection = new Connection(
+  "https://api.devnet.solana.com",
+  "confirmed"
+);
 const heliusApiKey = Constants?.manifest?.extra?.heliusApiKey;
 
 // TODO: map tokenRecord -> walletid

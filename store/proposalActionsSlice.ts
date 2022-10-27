@@ -31,6 +31,10 @@ const initialState: ProposalActionsState = {
 };
 
 let connection = new Connection(RPC_CONNECTION, "recent");
+const devNetConnection = new Connection(
+  "https://api.devnet.solana.com",
+  "recent"
+);
 
 export const createProposalAttempt = createAsyncThunk(
   "proposalActions/createProposal",

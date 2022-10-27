@@ -49,71 +49,99 @@ const initialState: realmState = {
 // getMultipleAccounts - gets account info of a bunch of accounts in 1 api request
 
 const connection = new Connection(RPC_CONNECTION, "confirmed");
+const devNetConnection = new Connection(
+  "https://api.devnet.solana.com",
+  "confirmed"
+);
 
-export const fetchRealms = createAsyncThunk("realms/fetchRealms", async () => {
-  try {
-    let realms;
-    let realmsMap = {};
-    const realmsRaw = await getRealms(connection, REALM_GOVERNANCE_PKEY);
+export const fetchRealms = createAsyncThunk(
+  "realms/fetchRealms",
+  async (_, { getState }) => {
+    try {
+      let realms;
+      let realmsMap = {};
+      const { utility } = getState() as RootState;
+      const currentConnection = utility.isOnDevnet
+        ? devNetConnection
+        : connection;
 
-    // get realms with unique program id
-    let realmDataKeys = Object.keys(cleanedRealmData);
-    let uniqueRealmGovs = realmDataKeys.filter(
-      (realmId) =>
-        cleanedRealmData[realmId].programId !== REALM_GOVERNANCE_PKEY.toBase58()
-    );
-    // add them into realms list
-    let realmsWithGovs = uniqueRealmGovs.map((realmId) => {
-      const realmWithGov = cleanedRealmData[realmId];
-      const pubkey = realmWithGov?.realmId;
+      let realmsWithGovs = [];
 
-      let realmData = {
-        name: realmWithGov?.displayName || realmWithGov?.symbol,
-        governanceId: realmWithGov?.programId,
-        pubKey: pubkey,
-        realmId: pubkey,
-      };
+      const realmsRaw = await getRealms(
+        currentConnection,
+        REALM_GOVERNANCE_PKEY
+      );
 
-      // @ts-ignore
-      realmsMap[pubkey] = realmData;
-      return realmData;
-    });
+      // get realms with unique program id
+      if (!utility?.isOnDevnet) {
+        let realmDataKeys = Object.keys(cleanedRealmData);
+        let uniqueRealmGovs = realmDataKeys.filter(
+          (realmId) =>
+            cleanedRealmData[realmId].programId !==
+            REALM_GOVERNANCE_PKEY.toBase58()
+        );
+        // add them into realms list
+        realmsWithGovs = uniqueRealmGovs.map((realmId) => {
+          const realmWithGov = cleanedRealmData[realmId];
+          const pubkey = realmWithGov?.realmId;
 
-    realms = realmsRaw.map((realm) => {
-      // realm is in our realmdata from : https://github.com/solana-labs/governance-ui/blob/main/public/realms/mainnet-beta.json
-      // delete off object so we can find custom governanceId realms we need to add to realm list
-      let realmId = realm.pubkey.toBase58();
+          let realmData = {
+            name: realmWithGov?.displayName || realmWithGov?.symbol,
+            governanceId: realmWithGov?.programId,
+            pubKey: pubkey,
+            realmId: pubkey,
+          };
 
-      let realmData = {
-        name: realm.account.name,
-        pubKey: realm.pubkey.toBase58(),
-        realmId: realm.pubkey.toBase58(),
-        communityMint: realm.account.communityMint.toBase58(),
-        councilMint: realm.account?.config?.councilMint?.toBase58() || null,
-        governanceId: realm?.owner.toBase58(),
-        accountType: realm.account.accountType,
-        votingProposalCount: realm.account.votingProposalCount,
-        maxVoteWeight:
-          realm.account.config.communityMintMaxVoteWeightSource.value.toNumber(),
-        minTokensToCreateGov:
-          realm.account.config.minCommunityTokensToCreateGovernance.toString(),
-      };
-      // @ts-ignore
-      realmsMap[realmId] = realmData;
-      return realmData;
-    });
+          // @ts-ignore
+          realmsMap[pubkey] = realmData;
+          return realmData;
+        });
+      }
 
-    return { realms: [...realmsWithGovs, ...realms], realmsMap: realmsMap };
-  } catch (error) {
-    console.log("error", error);
+      realms = realmsRaw.map((realm) => {
+        // realm is in our realmdata from : https://github.com/solana-labs/governance-ui/blob/main/public/realms/mainnet-beta.json
+        // delete off object so we can find custom governanceId realms we need to add to realm list
+        let realmId = realm.pubkey.toBase58();
+
+        let realmData = {
+          name: realm.account.name,
+          pubKey: realm.pubkey.toBase58(),
+          realmId: realm.pubkey.toBase58(),
+          communityMint: realm.account.communityMint.toBase58(),
+          councilMint: realm.account?.config?.councilMint?.toBase58() || null,
+          governanceId: realm?.owner.toBase58(),
+          accountType: realm.account.accountType,
+          votingProposalCount: realm.account.votingProposalCount,
+          // maxVoteWeight:
+          //   realm.account.config.communityMintMaxVoteWeightSource.value.toNumber(),
+          minTokensToCreateGov:
+            realm.account.config.minCommunityTokensToCreateGovernance.toString(),
+        };
+        // @ts-ignore
+        realmsMap[realmId] = realmData;
+        return realmData;
+      });
+
+      return { realms: [...realmsWithGovs, ...realms], realmsMap: realmsMap };
+    } catch (error) {
+      console.log("error", error);
+    }
   }
-});
+);
 
 export const fetchRealm = createAsyncThunk(
   "realms/fetchRealm",
-  async (realmId: string) => {
+  async (realmId: string, { getState }) => {
     try {
-      const rawRealm = await getRealm(connection, new PublicKey(realmId));
+      const { utility } = getState() as RootState;
+      const currentConnection = utility.isOnDevnet
+        ? devNetConnection
+        : connection;
+
+      const rawRealm = await getRealm(
+        currentConnection,
+        new PublicKey(realmId)
+      );
       let communityMintData = null;
       let communityMintPromise;
       let councilMintData = null;

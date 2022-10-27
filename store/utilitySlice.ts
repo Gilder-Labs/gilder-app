@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { State } from "react-native-gesture-handler";
 
 export interface UtilityState {
   isShowingToast: boolean;
@@ -35,6 +36,9 @@ export const utilitySlice = createSlice({
   reducers: {
     setShowToast: (state, action) => {
       state.isShowingToast = action.payload;
+    },
+    setDevnet: (state, action) => {
+      state.isOnDevnet = action.payload;
     },
   },
   extraReducers: (builder) => {

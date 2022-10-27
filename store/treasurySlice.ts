@@ -41,6 +41,10 @@ const initialState: TreasuryState = {
 };
 
 let connection = new Connection(HEAVY_RPC_CONNECTION, "confirmed");
+const devNetConnection = new Connection(
+  "https://api.devnet.solana.com",
+  "confirmed"
+);
 
 const TokensInfo = getTokensInfo();
 
