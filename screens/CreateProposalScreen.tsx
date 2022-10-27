@@ -346,40 +346,43 @@ export default function CreateProposalScreen({ route }: any) {
           </ProposalCreationButton>
         </ProposalCreationButtonOuter>
 
-        <ProposalCreationButtonOuter>
-          <ProposalCreationButton onPress={() => handleSolanaPay(false)}>
-            <DappIcon
-              source={{
-                uri: "https://pbs.twimg.com/profile_images/1472933274209107976/6u-LQfjG_400x400.jpg",
-              }}
-            />
-
-            <Typography
-              text={"Solana Pay"}
-              marginBottom="0"
-              size="subtitle"
-              shade="100"
-            />
-          </ProposalCreationButton>
-        </ProposalCreationButtonOuter>
         {selectedRealm.realmId ===
           "6jydyMWSqV2bFHjCHydEQxa9XfXQWDwjVqAdjBEA1BXx" && (
-          <ProposalCreationButtonOuter>
-            <ProposalCreationButton onPress={() => handleSolanaPay(true)}>
-              <DappIcon
-                source={{
-                  uri: "https://pbs.twimg.com/profile_images/1472933274209107976/6u-LQfjG_400x400.jpg",
-                }}
-              />
+          <>
+            <ProposalCreationButtonOuter>
+              <ProposalCreationButton onPress={() => handleSolanaPay(false)}>
+                <DappIcon
+                  source={{
+                    uri: "https://pbs.twimg.com/profile_images/1472933274209107976/6u-LQfjG_400x400.jpg",
+                  }}
+                />
 
-              <Typography
-                text={"Speed Pay"}
-                marginBottom="0"
-                size="subtitle"
-                shade="100"
-              />
-            </ProposalCreationButton>
-          </ProposalCreationButtonOuter>
+                <Typography
+                  text={"Solana Pay"}
+                  marginBottom="0"
+                  size="subtitle"
+                  shade="100"
+                />
+              </ProposalCreationButton>
+            </ProposalCreationButtonOuter>
+
+            <ProposalCreationButtonOuter>
+              <ProposalCreationButton onPress={() => handleSolanaPay(true)}>
+                <DappIcon
+                  source={{
+                    uri: "https://pbs.twimg.com/profile_images/1472933274209107976/6u-LQfjG_400x400.jpg",
+                  }}
+                />
+
+                <Typography
+                  text={"Speed Pay"}
+                  marginBottom="0"
+                  size="subtitle"
+                  shade="100"
+                />
+              </ProposalCreationButton>
+            </ProposalCreationButtonOuter>
+          </>
         )}
       </Row>
 

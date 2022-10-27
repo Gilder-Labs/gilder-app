@@ -24,6 +24,7 @@ import {
   PublicKey,
   SystemProgram,
   LAMPORTS_PER_SOL,
+  Transaction,
 } from "@solana/web3.js";
 import { RPC_CONNECTION } from "../constants/Solana";
 import QRSvg from "../assets/images/qr.svg";
@@ -68,20 +69,30 @@ export default function SolanaPayScanScreen({ route }: any) {
       | TransferRequestURL
       | TransactionRequestURL;
 
+    // transaction request for solana pay
     if (solanaPayInfoParsed.link) {
       // https://github.com/solana-labs/solana-pay/blob/master/SPEC.md
       // transaction request
+      // start handshake
       console.log("solanaPayInfoParsed", solanaPayInfoParsed.link.href);
       let response = await axios.get(solanaPayInfoParsed.link.href);
       console.log("response", response.data);
       console.log("wallet id", walletId);
+      // get transaction instructions from merchant
       const postResponse = await axios.post(solanaPayInfoParsed.link.href, {
         account: walletId,
       });
-      console.log("post response", postResponse);
 
+      // deserialize transaction instructions
       // TODO: handle transaction here
-      // postResponse.data = { message: string, transaction: publicKeyString }
+      const base64Transaction = postResponse.data.transaction;
+      console.log("base64Transaction", base64Transaction);
+      const parsedTransaction = Buffer.from(base64Transaction, "base64");
+      console.log("post response", parsedTransaction);
+      let myTransaction = Transaction.from(parsedTransaction);
+      console.log("my transaction", myTransaction);
+
+      // TODO: set transaction instructions
     } else {
       let { recipient, amount, reference, label, message, memo, splToken } =
         solanaPayInfoParsed;
