@@ -25,6 +25,7 @@ export default function CreateProposalScreen({ route }: any) {
     "https://solana-labs.github.io/wallet-adapter/example/"
   );
   const theme = useTheme();
+  const { selectedRealm } = useAppSelector((state) => state.realms);
 
   const handleOpenBrowser = (webUrl: string) => {
     navigation.navigate("WebViewScreen", {
@@ -344,6 +345,7 @@ export default function CreateProposalScreen({ route }: any) {
             />
           </ProposalCreationButton>
         </ProposalCreationButtonOuter>
+
         <ProposalCreationButtonOuter>
           <ProposalCreationButton onPress={() => handleSolanaPay(false)}>
             <DappIcon
@@ -360,22 +362,25 @@ export default function CreateProposalScreen({ route }: any) {
             />
           </ProposalCreationButton>
         </ProposalCreationButtonOuter>
-        <ProposalCreationButtonOuter>
-          <ProposalCreationButton onPress={() => handleSolanaPay(true)}>
-            <DappIcon
-              source={{
-                uri: "https://pbs.twimg.com/profile_images/1472933274209107976/6u-LQfjG_400x400.jpg",
-              }}
-            />
+        {selectedRealm.realmId ===
+          "6jydyMWSqV2bFHjCHydEQxa9XfXQWDwjVqAdjBEA1BXx" && (
+          <ProposalCreationButtonOuter>
+            <ProposalCreationButton onPress={() => handleSolanaPay(true)}>
+              <DappIcon
+                source={{
+                  uri: "https://pbs.twimg.com/profile_images/1472933274209107976/6u-LQfjG_400x400.jpg",
+                }}
+              />
 
-            <Typography
-              text={"Speed Pay"}
-              marginBottom="0"
-              size="subtitle"
-              shade="100"
-            />
-          </ProposalCreationButton>
-        </ProposalCreationButtonOuter>
+              <Typography
+                text={"Speed Pay"}
+                marginBottom="0"
+                size="subtitle"
+                shade="100"
+              />
+            </ProposalCreationButton>
+          </ProposalCreationButtonOuter>
+        )}
       </Row>
 
       {/* <Typography

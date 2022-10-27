@@ -41,6 +41,11 @@ interface CreateProposalTransactionModalProps {
     label?: string;
   };
   isTokenTransfer: boolean;
+  solanaPayDetails: {
+    label: string;
+    message: string;
+    memo: string;
+  };
 }
 
 export const CreateProposalTransactionModal = ({
@@ -50,6 +55,7 @@ export const CreateProposalTransactionModal = ({
   navState,
   isTokenTransfer = false,
   isSpeedMode = false,
+  solanaPayDetails,
 }: // prereqInstructions,
 CreateProposalTransactionModalProps) => {
   const theme = useTheme();
@@ -78,10 +84,20 @@ CreateProposalTransactionModalProps) => {
 
   const isCommunityVote = voteType === "community"; // else its council
 
+  useEffect(() => {
+    if (solanaPayDetails?.label) {
+      setTitle(solanaPayDetails?.label);
+    }
+    if (solanaPayDetails?.message) {
+      setDescription(solanaPayDetails?.message);
+    }
+  }, [solanaPayDetails]);
+
   const closeModal = () => {
     bottomSheetModalRef.current?.close();
   };
 
+  // TEMP for hackerhouse
   const handleSpeedProposalCreation = async () => {
     const vault = vaults.find((vault) => vault.pubKey === walletId);
     setProposalState("creating");
@@ -117,32 +133,27 @@ CreateProposalTransactionModalProps) => {
         })
       );
 
-      setTimeout(async () => {
-        console.log("in timeout and trying to fetch proposals");
-        await dispatch(fetchRealmProposals(selectedRealm));
-      }, 5000);
+      const proposalData = await dispatch(
+        fetchRealmProposals({ realm: selectedRealm, isRefreshing: false })
+      );
 
-      setTimeout(() => {
-        handleCastVote();
-      }, 5000);
-    }
-  };
+      const newProposals = proposalData.payload.proposals;
 
-  const handleCastVote = async () => {
-    setTimeout(async () => {
-      console.log("in timeout and trying to vote", proposals[0]);
+      console.log("new proposals data", newProposals);
+
       await dispatch(
         castVote({
           transactionData: {
-            proposal: proposals[0],
+            proposal: newProposals[0],
             action: 0, // 0 is yes, 1 is no
           },
           selectedDelegate,
           isCommunityVote,
         })
       );
+
       setProposalState("resolved");
-    }, 5000);
+    }
   };
 
   const handleProposalCreation = async () => {

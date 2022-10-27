@@ -30,12 +30,12 @@ export default function SolanaPayScanScreen({ route }: any) {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const { walletId, isSpeedMode } = route?.params;
 
-  const [solanaPayData, setSolanaPayData] = useState<any>(null);
   const [hasPermission, setHasPermission] = useState(false);
   const [scanned, setScanned] = useState(false);
   const [transactionInstructions, setTransactionInstructions] = useState<
     Array<any>
   >([]);
+  const [solanaPayDetails, setSolanaPayDetails] = useState<any>(null);
   const { publicKey } = useAppSelector((state) => state.wallet);
 
   useEffect(() => {
@@ -59,9 +59,10 @@ export default function SolanaPayScanScreen({ route }: any) {
     // message = can be undefined
     // memo = can be undefined
     const solanaPayInfo = parseURL(data);
+    let solanaPayInfoParsed = parseURL(data) as TransferRequestURL;
     let { recipient, amount, reference, label, message, memo, splToken } =
-      parseURL(data) as TransferRequestURL;
-    console.log(JSON.stringify(solanaPayInfo));
+      solanaPayInfoParsed;
+    setSolanaPayDetails({ label, memo, message });
 
     const tx = await createTransfer(connection, new PublicKey(walletId), {
       recipient,
@@ -76,7 +77,6 @@ export default function SolanaPayScanScreen({ route }: any) {
     );
 
     setTransactionInstructions(instructions);
-    setSolanaPayData(solanaPayInfo);
 
     bottomSheetModalRef?.current?.present();
   };
@@ -114,6 +114,7 @@ export default function SolanaPayScanScreen({ route }: any) {
         }}
         isTokenTransfer={true}
         isSpeedMode={isSpeedMode}
+        solanaPayDetails={solanaPayDetails}
       />
     </Container>
   );
