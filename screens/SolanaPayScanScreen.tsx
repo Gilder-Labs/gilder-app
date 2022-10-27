@@ -9,7 +9,13 @@ import { PublicKeyTextCopy, Typography, Badge } from "../components";
 import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "styled-components";
 import { BarCodeScanner } from "expo-barcode-scanner";
-import { parseURL, createTransfer, TransferRequestURL } from "@solana/pay";
+import axios from "axios";
+import {
+  parseURL,
+  createTransfer,
+  TransferRequestURL,
+  TransactionRequestURL,
+} from "@solana/pay";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { createInstructionData } from "@solana/spl-governance";
 import { CreateProposalTransactionModal } from "../elements/CreateProposalTransactionModal";
@@ -58,25 +64,48 @@ export default function SolanaPayScanScreen({ route }: any) {
     // label = title of the transaction/vendor
     // message = can be undefined
     // memo = can be undefined
-    const solanaPayInfo = parseURL(data);
-    let solanaPayInfoParsed = parseURL(data) as TransferRequestURL;
-    let { recipient, amount, reference, label, message, memo, splToken } =
-      solanaPayInfoParsed;
-    setSolanaPayDetails({ label, memo, message });
+    let solanaPayInfoParsed = parseURL(data) as
+      | TransferRequestURL
+      | TransactionRequestURL;
 
-    const tx = await createTransfer(connection, new PublicKey(walletId), {
-      recipient,
-      amount: amount,
-      splToken: splToken,
-      reference,
-      memo,
-    });
+    if (solanaPayInfoParsed.link) {
+      // https://github.com/solana-labs/solana-pay/blob/master/SPEC.md
+      // transaction request
+      console.log("solanaPayInfoParsed", solanaPayInfoParsed.link.href);
+      let response = await axios.get(solanaPayInfoParsed.link.href);
+      console.log("response", response.data);
+      console.log("wallet id", walletId);
+      const postResponse = await axios.post(solanaPayInfoParsed.link.href, {
+        account: walletId,
+      });
+      console.log("post response", postResponse);
 
-    const instructions = tx.instructions.map((instruction) =>
-      createInstructionData(instruction)
-    );
+      // TODO: handle transaction here
+      // postResponse.data = { message: string, transaction: publicKeyString }
+    } else {
+      let { recipient, amount, reference, label, message, memo, splToken } =
+        solanaPayInfoParsed;
+      console.log("solanaPayInfoParsed", solanaPayInfoParsed);
+      console.log(
+        "solanaPayInfoParsed json",
+        JSON.stringify(solanaPayInfoParsed)
+      );
+      setSolanaPayDetails({ label, memo, message });
 
-    setTransactionInstructions(instructions);
+      const tx = await createTransfer(connection, new PublicKey(walletId), {
+        recipient,
+        amount: amount,
+        splToken: splToken,
+        reference,
+        memo,
+      });
+
+      const instructions = tx.instructions.map((instruction) =>
+        createInstructionData(instruction)
+      );
+
+      setTransactionInstructions(instructions);
+    }
 
     bottomSheetModalRef?.current?.present();
   };
