@@ -174,6 +174,7 @@ export const fetchVaults = createAsyncThunk(
 
       // formatVoteWeight(tokenAmt, decimals);
 
+      console.log(rawGovernances);
       const governancesParsed = rawGovernances.map((governance, index) => {
         let governanceId = governance.pubkey.toBase58();
         activeProposals += governance.account.votingProposalCount;
@@ -207,7 +208,7 @@ export const fetchVaults = createAsyncThunk(
           communityVoteThresholdPercentage:
             governance.account.config.communityVoteThreshold.value,
           councilVoteThresholdPercentage:
-            governance?.account?.config?.communityVoteThreshold.value,
+            governance?.account?.config?.councilVoteThreshold.value,
 
           accountType: governance.account.accountType,
           isAccountGovernance: governance.account.isAccountGovernance(),

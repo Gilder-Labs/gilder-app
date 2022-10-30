@@ -21,9 +21,7 @@ import { parseURL } from "@solana/pay";
 export default function CreateProposalScreen({ route }: any) {
   const navigation = useNavigation();
   const { walletId, tokens, nfts } = route?.params;
-  const [url, setUrl] = useState(
-    "https://solana-labs.github.io/wallet-adapter/example/"
-  );
+  const [url, setUrl] = useState("");
   const theme = useTheme();
   const { selectedRealm } = useAppSelector((state) => state.realms);
 

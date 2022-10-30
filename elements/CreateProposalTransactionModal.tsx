@@ -63,7 +63,9 @@ CreateProposalTransactionModalProps) => {
   const { publicKey } = useAppSelector((state) => state.wallet);
   const snapPoints = useMemo(() => ["25", "50%", "95%"], []);
   const dispatch = useAppDispatch();
-  const { vaults, governancesMap } = useAppSelector((state) => state.treasury);
+  const { vaults, governancesMap, governances } = useAppSelector(
+    (state) => state.treasury
+  );
   const { selectedRealm } = useAppSelector((state) => state.realms);
   const { walletType } = useAppSelector((state) => state.wallet);
   const { isLoading, error, transactionProgress } = useAppSelector(
@@ -108,6 +110,12 @@ CreateProposalTransactionModalProps) => {
       description: description,
     };
 
+    // if its the wallet of the governance, vault.governanceId is the pubkey of the governance
+    // else, if its a wallet the governance own, vaultId is the index of the governance that owns the wallet
+    const governance = vault.isGovernanceVault
+      ? governancesMap[vault.governanceId]
+      : governances[vault.vaultId];
+
     const transactions = await createNewProposalTransaction({
       selectedRealm,
       walletAddress: publicKey,
@@ -116,7 +124,7 @@ CreateProposalTransactionModalProps) => {
       selectedDelegate,
       isCommunityVote,
       vault,
-      governance: governancesMap[vault.governanceId],
+      governance: governance,
       transactionInstructions,
       isTokenTransfer,
     });
@@ -166,6 +174,12 @@ CreateProposalTransactionModalProps) => {
       description: description,
     };
 
+    // if its the wallet of the governance, vault.governanceId is the pubkey of the governance
+    // else, if its a wallet the governance own, vaultId is the index of the governance that owns the wallet
+    const governance = vault.isGovernanceVault
+      ? governancesMap[vault.governanceId]
+      : governances[vault.vaultId];
+
     const transactions = await createNewProposalTransaction({
       selectedRealm,
       walletAddress: publicKey,
@@ -174,7 +188,7 @@ CreateProposalTransactionModalProps) => {
       selectedDelegate,
       isCommunityVote,
       vault,
-      governance: governancesMap[vault.governanceId],
+      governance: governance,
       transactionInstructions,
       isTokenTransfer,
     });
