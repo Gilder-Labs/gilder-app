@@ -7,7 +7,7 @@ import { RealmIconButton } from "./RealmIconButton";
 import { RealmSelectModal } from "./RealmSelectModal";
 import { ConnectWalletButton } from "./ConnectWalletButton";
 import { useTheme } from "styled-components";
-import Logo from "../assets/images/GilderLogo.png";
+import Logo from "../assets/images/BastionLogo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faPlus } from "@fortawesome/pro-regular-svg-icons/faPlus";
 import { faGear } from "@fortawesome/pro-regular-svg-icons/faGear";
