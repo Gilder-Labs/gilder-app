@@ -22,13 +22,19 @@
   },
   {
     "symbol": "Metaplex",
+    "bannerImage": "https://dao.metaplex.com/img/bg-metaplex.svg",
     "displayName": "Metaplex DAO",
     "programId": "AEauWRrpn9Cs6GXujzdp1YhMmv2288kBt3SdEcPYEerr",
     "realmId": "DA5G7QQbFioZ6K33wQcH8fVdgFcnaDjLD7DLQkapZg5X",
+    "ogImage": "/realms/metaplex/img/black-circle.png",
+    "shortDescription": "Metaplex makes it easy to build your project in minutes and grow your community in the world’s largest NFT ecosystem.",
+    "sortRank": 3,
     "website": "https://www.metaplex.com/",
     "twitter": "@metaplex",
-    "ogImage": "/realms/metaplex/img/black-circle.png",
-    "sortRank": 3
+    "linkedin": "https://www.linkedin.com/company/metaplex-studios/",
+    "instagram": "https://www.instagram.com/metaplex/",
+    "discord": "https://discord.gg/metaplex",
+    "github": "https://github.com/metaplex-foundation/metaplex"
   },
   {
     "symbol": "GRAPE",
@@ -41,6 +47,16 @@
     "sortRank": 3
   },
   {
+    "symbol": "MDLH",
+    "displayName": "The Mysterious Death of Lord Harrington",
+    "programId": "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw",
+    "realmId": "6Fiy6ZrCKBfcMieNq3S6qSzfpgRTYKn5zPW78VL9FwjL",
+    "ogImage": "/realms/MDLH/img/MDLH.png",
+    "bannerImage": "/realms/MDLH/img/banner.jpeg",
+    "sharedWalletId": "7ifeCFVFsxoQNfqiSBF9qFfHcNSQAyoQU63GV2RmJoUi",
+    "sortRank": 3
+  },
+  {
     "symbol": "PSY",
     "displayName": "Psy Finance",
     "programId": "GovHgfDPyQ1GwazJTDY2avSVY8GGcpmCapmmCsymRaGe",
@@ -50,6 +66,18 @@
     "twitter": "@PsyOptions",
     "ogImage": "https://user-images.githubusercontent.com/32071703/149460918-3694084f-2a37-4c95-93d3-b5aaf078d444.png",
     "sortRank": 3
+  },
+  {
+    "symbol": "Dialect",
+    "displayName": "Dialect",
+    "programId": "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw",
+    "realmId": "7s5QZmpit4uu1y2bkByXerE2mv3XBHtiNQ4JkDdmKRiQ",
+    "bannerImage": "/realms/Dialect/img/banner-dialect.png",
+    "ogImage": "/realms/Dialect/img/avatar-dialect.png",
+    "website": "https://www.dialect.to/",
+    "twitter": "@saydialect",
+    "sortRank": 3,
+    "shortDescription": "Dialect is the first protocol for smart messaging — dynamic, composable dapp notifications and wallet-to-wallet chat"
   },
   {
     "symbol": "MangoLiquidityDAO",
@@ -494,7 +522,7 @@
     "displayName": "Bears Reloaded",
     "programId": "Ghope52FuF6HU3AAhJuAAyS2fiqbVhkAotb7YprL5tdS",
     "realmId": "8x3bs2CUu7FZCw9zoTz29eBNwKjfJiCHjWz4T53NWLbJ",
-    "ogImage": "https://pbs.twimg.com/profile_images/1565126259671179264/qvQa3Pkn_400x400.jpg"
+    "ogImage": "/realms/Bears/img/bearlogo.png"
   },
   {
     "symbol": "SlattsDAO",
@@ -973,7 +1001,7 @@
     "realmId": "DCdCsuUjg6MnULfEmBUmvg1heggnLrKSFdp5uTRSKuwR",
     "website": "https://epics.dev/",
     "twitter": "@EpicsDAO",
-    "ogImage": "/realms/Epics/Epics-logo.svg"
+    "ogImage": "https://firebasestorage.googleapis.com/v0/b/gilder-e1b6e.appspot.com/o/Epics-logo.png?alt=media&token=81b620d5-45aa-4507-b2e9-91bcd19fdbe3"
   },
   {
     "symbol": "OPANZ",
@@ -1021,5 +1049,32 @@
     "ogImage": "/realms/eleusance/eleusance_logo_spl.png",
     "website": "https://eleusance.io/",
     "twitter": "@eleusanceIO"
+  },
+  {
+    "symbol": "J-JFI",
+    "displayName": "Jungle DeFi Community DAO",
+    "programId": "jdaoDN37BrVRvxuXSeyR7xE5Z9CAoQApexGrQJbnj6V",
+    "realmId": "5g94Ver64ruf9CGBL3k2oQGdKCUt4QKjN7NQojSrHAwH",
+    "ogImage": "/realms/jungle-defi/jungle.png",
+    "website": "https://jungledefi.io",
+    "twitter": "@jungledefi"
+  },
+  {
+    "symbol": "Blockgame",
+    "displayName": "Blockgame",
+    "programId": "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw",
+    "realmId": "3EPsh3Nm2sivjjh3pcR4qmFzsMgJ3cDGjwiJeDARuQNR",
+    "ogImage": "/realms/Blockgame/Blockgame.png",
+    "website": "https://blockgame.cz"
+  },
+  {
+    "symbol": "ALLIE",
+    "displayName": "Allie Coin DAO",
+    "programId": "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw",
+    "realmId": "BZE9AiJrMxUXXjwy9iBPzj34Wh5Zf1wLEFAM4oSSMRLi",
+    "bannerImage": "/realms/Allie Coin DAO/Allie Coin Particle Logo Compressed.png",
+    "ogImage": "/realms/Allie Coin DAO/Allie Coin Logo.png",
+    "website": "https://alliecoin.io",
+    "twitter": "@allie_coin"
   }
 ]

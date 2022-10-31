@@ -414,7 +414,7 @@
     "@babel/helper-plugin-utils" "^7.18.9"
     "@babel/plugin-syntax-export-default-from" "^7.18.6"
 
-"@babel/plugin-proposal-export-namespace-from@^7.17.12", "@babel/plugin-proposal-export-namespace-from@^7.18.9":
+"@babel/plugin-proposal-export-namespace-from@^7.18.9":
   version "7.18.9"
   resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-export-namespace-from/-/plugin-proposal-export-namespace-from-7.18.9.tgz#5f7313ab348cdb19d590145f9247540e94761203"
   integrity sha512-k1NtHyOMvlDDFeb9G5PhUXuGj8m/wiwojgQVEhJ/fsVsMCpLyOP4h0uGEjYJKrRI+EVPlb5Jk+Gt9P97lOGwtA==
@@ -1859,6 +1859,17 @@
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.3.tgz#555193ab2e3bb3b6adc3d551c9c030d9e860daf6"
   integrity sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==
 
+"@gilder/standard-wallet@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@gilder/standard-wallet/-/standard-wallet-0.0.3.tgz#6889d978aa50a91c918072ea0af28569129c5586"
+  integrity sha512-xTDJjbitkYoYxFCCy1hMQt4UHE+DYojNF0OVljEGzMcsKkcEQXFDCllUhASo2bkoiGAz/lNdDPYDkS+Zy2CeMA==
+  dependencies:
+    "@solana/wallet-standard-features" "^1.0.0-rc.7"
+    "@solana/web3.js" "^1.58.0"
+    "@wallet-standard/base" "^1.0.0-rc.5"
+    "@wallet-standard/features" "^1.0.0-rc.5"
+    bs58 "^4.0.1"
+
 "@google-cloud/firestore@^6.3.0":
   version "6.3.0"
   resolved "https://registry.yarnpkg.com/@google-cloud/firestore/-/firestore-6.3.0.tgz#0ba073f02c4ac9bda63f45b332cf73e5ebb0c04f"
@@ -2771,7 +2782,7 @@
     "@sentry/utils" "7.6.0"
     "@sentry/wizard" "1.2.17"
 
-"@sentry/react-native@^4.1.3":
+"@sentry/react-native@4.2.2":
   version "4.2.2"
   resolved "https://registry.yarnpkg.com/@sentry/react-native/-/react-native-4.2.2.tgz#613ffa2347746d2ed66200c314092411ad7aa43c"
   integrity sha512-2zSgR73/jNByr4WDciE97n78Tj81Lrhhwj1/yMRWFDd9pF802ZYiRVeIkHArEYGHER41fiQojP7wBKftvnKgew==
@@ -2931,10 +2942,10 @@
   dependencies:
     qrcode-generator "^1.4.3"
 
-"@solana/spl-governance@^0.3.14":
-  version "0.3.14"
-  resolved "https://registry.yarnpkg.com/@solana/spl-governance/-/spl-governance-0.3.14.tgz#4bd2357702ca03e7058e79959f52b8c0eafa40b3"
-  integrity sha512-wht51cpEgr+Fa6G8B75l+HkRbhyUrOjObFpYkUxfHiS8a+U/3p3gNzaOhxlrSMlLa++TTPuGNc+IiSpKEa8x0g==
+"@solana/spl-governance@^0.3.15":
+  version "0.3.15"
+  resolved "https://registry.yarnpkg.com/@solana/spl-governance/-/spl-governance-0.3.15.tgz#4fd8b016394dbe6161009209b1521d4fe3b97791"
+  integrity sha512-VSrzmIXGq5hlCm1JHFCIJGJ2fujqH3GVstyDNTvquxMZioWckmDO5Q/X9oSDft7sziY12tkOW9FDA3Z5m45hBg==
   dependencies:
     "@solana/web3.js" "^1.22.0"
     bignumber.js "^9.0.1"
@@ -2965,6 +2976,14 @@
   integrity sha512-nwzpzo3SjjsCkgN5ROQqoL7Y90j4QUlqxL17sg/qMcoYIBVfalyu87IZAfL5B06eSQ8jmtgnuQJW+91WcLo1ag==
   dependencies:
     eventemitter3 "^4.0.0"
+
+"@solana/wallet-standard-features@^1.0.0-rc.7":
+  version "1.0.0-rc.7"
+  resolved "https://registry.yarnpkg.com/@solana/wallet-standard-features/-/wallet-standard-features-1.0.0-rc.7.tgz#90304e8ece4f4fe5d9fc93d7088871dcee970884"
+  integrity sha512-PIRL1Zc7aw/h1nbTBCPE/KB+OL/G6pl9cQjQgTop8qdeWwqpKjLTrsORWSvjDRRujUkPHL5jn10Qb1eIDSY88g==
+  dependencies:
+    "@wallet-standard/base" "^1.0.0-rc.5"
+    "@wallet-standard/features" "^1.0.0-rc.5"
 
 "@solana/web3.js@1.52":
   version "1.52.0"
@@ -3011,6 +3030,27 @@
     secp256k1 "^4.0.2"
     superstruct "^0.14.2"
     tweetnacl "^1.0.0"
+
+"@solana/web3.js@^1.58.0":
+  version "1.66.2"
+  resolved "https://registry.yarnpkg.com/@solana/web3.js/-/web3.js-1.66.2.tgz#80b43c5868b846124fe3ebac7d3943930c3fa60c"
+  integrity sha512-RyaHMR2jGmaesnYP045VLeBGfR/gAW3cvZHzMFGg7bkO+WOYOYp1nEllf0/la4U4qsYGKCsO9eEevR5fhHiVHg==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    "@noble/ed25519" "^1.7.0"
+    "@noble/hashes" "^1.1.2"
+    "@noble/secp256k1" "^1.6.3"
+    "@solana/buffer-layout" "^4.0.0"
+    bigint-buffer "^1.1.5"
+    bn.js "^5.0.0"
+    borsh "^0.7.0"
+    bs58 "^4.0.1"
+    buffer "6.0.1"
+    fast-stable-stringify "^1.0.0"
+    jayson "^3.4.4"
+    node-fetch "2"
+    rpc-websockets "^7.5.0"
+    superstruct "^0.14.2"
 
 "@solana/web3.js@^1.61.0":
   version "1.62.1"
@@ -3611,6 +3651,18 @@
   dependencies:
     "@urql/core" ">=2.3.1"
     wonka "^4.0.14"
+
+"@wallet-standard/base@^1.0.0-rc.5":
+  version "1.0.0-rc.5"
+  resolved "https://registry.yarnpkg.com/@wallet-standard/base/-/base-1.0.0-rc.5.tgz#a215089a9bbbe0b494dce202dd1cee6b8430cee1"
+  integrity sha512-28FCazScjZtztvH+b4Tu30yDwe6D0oze0uKKrHXAOdzQ50O3ydqWICYuaz7jiq38Mt9TGNRiSOpePdsMC+qP8Q==
+
+"@wallet-standard/features@^1.0.0-rc.5":
+  version "1.0.0-rc.5"
+  resolved "https://registry.yarnpkg.com/@wallet-standard/features/-/features-1.0.0-rc.5.tgz#2382e9949ea16cabf87278fff48aa870868f9585"
+  integrity sha512-xO1cl8U/mc9UZVkRV5743xmKHzUdTQ3K80djycczcLD07gsHuZ12GgFg7K04PbjO3Mr4til4Mc0zsoSJg+Z5JA==
+  dependencies:
+    "@wallet-standard/base" "^1.0.0-rc.5"
 
 "@web3auth/react-native-sdk@^3.0.1":
   version "3.0.1"
@@ -6159,7 +6211,7 @@ expo-clipboard@~3.1.0:
   resolved "https://registry.yarnpkg.com/expo-clipboard/-/expo-clipboard-3.1.0.tgz#ff4b7a2a796488d3784ca8a40229a37bbcb7b65e"
   integrity sha512-0cnmySP43VnpSWONn+1yIvPT0dwJWzCaPZcOZVxuH5mLhNi4p3UDLJFZt94tu4+bnyvDKjWxCK2/LoCM0XdwwQ==
 
-expo-constants@~13.2.0, expo-constants@~13.2.2, expo-constants@~13.2.3:
+expo-constants@~13.2.0, expo-constants@~13.2.2:
   version "13.2.3"
   resolved "https://registry.yarnpkg.com/expo-constants/-/expo-constants-13.2.3.tgz#526711851d8ebec1f0b1f06d9b91271b119e4f33"
   integrity sha512-2Rrp7GtSTeW7gNz3BsZ+AWMBbBaBnymELuo1ecTQ6fga8F5IRXgj1TW5yFpTmqOTtVfCiQfS0M1QO+JZEatPCQ==
@@ -6359,10 +6411,10 @@ expo-splash-screen@~0.16.1:
     "@expo/configure-splash-screen" "^0.6.0"
     "@expo/prebuild-config" "~5.0.0"
 
-expo-standard-web-crypto@^1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/expo-standard-web-crypto/-/expo-standard-web-crypto-1.3.0.tgz#ee47a6087d8faa8a08b3b9126e34d93ecbdf337d"
-  integrity sha512-7g06s4YFTz5JJ7bBzxvrvgekSDUXZ8y50LhI7Q7o/okK8UIk26SMa1ITYPcIFyXoCHHZbB7ThG0H5eXL8J4SPw==
+expo-standard-web-crypto@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/expo-standard-web-crypto/-/expo-standard-web-crypto-1.4.0.tgz#f3f952e355a5e3a61ef91b232bd642b2ea2e12a2"
+  integrity sha512-XbYLoCLZ/BW0SgWpy2bXC7hevUEm1PiWCYlclF2SoAaS/LsTxcYcAcWzLbnJ1cbTElSjDtDqMCxSbY1JiL2JQw==
 
 expo-status-bar@~1.4.0:
   version "1.4.0"
@@ -10759,12 +10811,11 @@ react-native-pager-view@5.4.24:
   resolved "https://registry.yarnpkg.com/react-native-pager-view/-/react-native-pager-view-5.4.24.tgz#8626e757ddc55e41eca66d2f8a8a75aec54591ee"
   integrity sha512-dRMB7i3B+mu4NCeIN6gqbR/kC/rr2wzqO0gisXDdJwJr78G24sWoTNpLEDFo3G8TFHY9nTMutVl5CUvkN2dp6g==
 
-react-native-reanimated@~2.9.1:
-  version "2.9.1"
-  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-2.9.1.tgz#d9a932e312c13c05b4f919e43ebbf76d996e0bc1"
-  integrity sha512-309SIhDBwY4F1n6e5Mr5D1uPZm2ESIcmZsGXHUu8hpKX4oIOlZj2MilTk+kHhi05LjChoJkcpfkstotCJmPRPg==
+react-native-reanimated@^2.11.0:
+  version "2.11.0"
+  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-2.11.0.tgz#415ef668440d1b7d8b2b36a20342b1035432dd80"
+  integrity sha512-/QnujrXSNyXasv7v8K3eu5Z4XGRYMPRa0+x0RjNr6Z5/KEuPHwrg1Xm7UZ2YSm6jCF2b1BW6ceqP/1d626gvhQ==
   dependencies:
-    "@babel/plugin-proposal-export-namespace-from" "^7.17.12"
     "@babel/plugin-transform-object-assign" "^7.16.7"
     "@babel/preset-typescript" "^7.16.7"
     "@types/invariant" "^2.2.35"
@@ -10853,10 +10904,10 @@ react-native-text-size@4.0.0-rc.1:
   resolved "https://registry.yarnpkg.com/react-native-text-size/-/react-native-text-size-4.0.0-rc.1.tgz#1e048d345dd6a5a8e1269e0585c1a5948c478da5"
   integrity sha512-CysqjU2jK6Yc+a+kEI222pUyTY2ywcU2HqbFqf1KHymW6OPTdvBBHqbEJKL0QiLhQaFYDbqicM+h990s9TP00g==
 
-react-native-ui-lib@^6.21.0:
-  version "6.21.0"
-  resolved "https://registry.yarnpkg.com/react-native-ui-lib/-/react-native-ui-lib-6.21.0.tgz#e17ad6390e77beed646487aa37db27cbd217c52b"
-  integrity sha512-1hZ7OF7UEU0KGjE7X04dJ5WFeuk93rnBs83DqVctA6VUBRY3pUOrhhRFPn5V9QGFdV5+zDr+cFNEYHBtvCwcAA==
+react-native-ui-lib@^6.21.2:
+  version "6.21.2"
+  resolved "https://registry.yarnpkg.com/react-native-ui-lib/-/react-native-ui-lib-6.21.2.tgz#4b86823acc526963d0979e675afc85ef5fbb3084"
+  integrity sha512-nnATtJOex4/Ic67fsxiAZ306CErjfatkOFiMjmDfaM9rxixNIhcuD4R1O0T10iHmCwo/sagap9WVvibdFlLHKA==
   dependencies:
     babel-plugin-transform-inline-environment-variables "^0.0.2"
     color "^3.1.0"

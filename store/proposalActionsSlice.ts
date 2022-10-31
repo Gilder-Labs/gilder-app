@@ -31,47 +31,15 @@ const initialState: ProposalActionsState = {
 };
 
 let connection = new Connection(RPC_CONNECTION, "recent");
+const devNetConnection = new Connection(
+  "https://api.devnet.solana.com",
+  "recent"
+);
 
 export const createProposalAttempt = createAsyncThunk(
   "proposalActions/createProposal",
-  async (
-    {
-      vault,
-      transactionInstructions,
-      proposalTitle,
-      proposalDescription,
-      isCommunityVote,
-      selectedDelegate,
-      isTokenTransfer,
-    }: any,
-    { getState, dispatch }
-  ) => {
+  async ({ transactions }: any, { getState, dispatch }) => {
     try {
-      const { realms, wallet, members, treasury } = getState() as RootState;
-      const { selectedRealm } = realms;
-      const { membersMap } = members;
-      const { publicKey } = wallet;
-
-      const { governancesMap } = treasury;
-
-      const proposalData = {
-        name: proposalTitle,
-        description: proposalDescription,
-      };
-
-      const transactions = await createNewProposalTransaction({
-        selectedRealm,
-        walletAddress: publicKey,
-        proposalData,
-        membersMap,
-        selectedDelegate,
-        isCommunityVote,
-        vault,
-        governance: governancesMap[vault.governanceId],
-        transactionInstructions,
-        isTokenTransfer,
-      });
-
       const privateKey = await SecureStore.getItemAsync("privateKey");
       if (!privateKey) {
         throw Error();

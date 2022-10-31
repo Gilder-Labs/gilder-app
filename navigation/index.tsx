@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { NavigationContainer, StackActions } from "@react-navigation/native";
+import {
+  NavigationContainer,
+  useNavigationContainerRef,
+} from "@react-navigation/native";
 import * as React from "react";
 import { DrawerContentContainer } from "../components/DrawerContentContainer";
 import { createDrawerNavigator } from "@react-navigation/drawer";
@@ -46,20 +49,12 @@ import CreateProposalScreen from "../screens/CreateProposalScreen";
 import ProposalVotesScreen from "../screens/ProposalVotesScreen";
 import SolanaPayScanScreen from "../screens/SolanaPayScanScreen";
 
-import { chatApiKey } from "../constants/Chat";
-import { StreamChat } from "stream-chat";
-import { Chat } from "stream-chat-expo"; // Or stream-chat-expo
-import ThreadScreen from "../screens/ThreadScreen";
-import ChannelScreen from "../screens/ChannelScreen";
-
 import { faBuildingColumns } from "@fortawesome/pro-regular-svg-icons/faBuildingColumns";
 import { faUserGroup } from "@fortawesome/pro-solid-svg-icons/faUserGroup";
 import { faTreasureChest } from "@fortawesome/pro-solid-svg-icons/faTreasureChest";
 import { faListUl } from "@fortawesome/pro-regular-svg-icons/faListUl";
 import { faInfoCircle } from "@fortawesome/pro-regular-svg-icons/faInfoCircle";
 import TokenTransferScreen from "../screens/TokenTransferScreen";
-
-const chatClient = StreamChat.getInstance(chatApiKey);
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -255,6 +250,9 @@ export default function Navigation({}: {}) {
   const { isShowingToast, hasCompletedOnboarding, isFetchingOnboarding } =
     useAppSelector((state) => state.utility);
 
+  const navigationRef = useNavigationContainerRef();
+  const routeNameRef = useRef();
+
   useEffect(() => {
     dispatch(fetchRealms());
     dispatch(fetchStorage());
@@ -340,6 +338,25 @@ export default function Navigation({}: {}) {
       <NavigationContainer
         linking={LinkingConfiguration}
         theme={NavigationTheme}
+        ref={navigationRef}
+        onReady={() => {
+          routeNameRef.current = navigationRef.getCurrentRoute().name;
+        }}
+        // onStateChange={async () => {
+        //   const previousRouteName = routeNameRef.current;
+        //   const currentRouteName = navigationRef.getCurrentRoute().name;
+
+        //   if (previousRouteName !== currentRouteName) {
+        //     // console.log("ANALYTICS", currentRouteName);
+        //     // ampInstance.logEvent(currentRouteName);
+        //     // await analytics().logEvent("screenVisit", {
+        //     //   route: currentRouteName,
+        //     // });
+        //   }
+
+        //   // Save the current route name for later comparison
+        //   routeNameRef.current = currentRouteName;
+        // }}
       >
         <Stack.Navigator
           screenOptions={{
@@ -380,13 +397,13 @@ export default function Navigation({}: {}) {
               title: "Proposal Details",
             })}
           />
-          <Stack.Screen
+          {/* <Stack.Screen
             name="ThreadScreen"
             component={ThreadScreen}
             options={({ route }) => ({
               title: "Thread",
             })}
-          />
+          /> */}
           <Stack.Screen
             name="Discover"
             component={DiscoverScreen}

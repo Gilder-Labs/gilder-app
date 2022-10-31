@@ -36,6 +36,7 @@ export default function TokenTransferScreen({ route }: any) {
   const [token, setToken] = useState<any>(null);
   const [amount, setAmount] = useState<any>(0);
   const [amountUsd, setAmountUsd] = useState<any>(0);
+  const [disableUSD, setDisableUSD] = useState<any>(false);
   // const [recipient, setRecipient] = useState<any>(
   //   "EVa7c7XBXeRqLnuisfkvpXSw5VtTNVM8MNVJjaSgWm4i"
   // );
@@ -123,7 +124,7 @@ export default function TokenTransferScreen({ route }: any) {
   const handleSetTokenAmount = (value: string) => {
     const parsedValue = parseFloat(value);
     setAmount(value);
-    if (isEditing === "token" && token && parsedValue > 0) {
+    if (isEditing === "token" && token && parsedValue > 0 && !disableUSD) {
       const coinGeckoId = token?.extensions?.coingeckoId;
       const priceData = tokenPriceData[coinGeckoId];
       console.log("priceData", priceData);
@@ -131,7 +132,7 @@ export default function TokenTransferScreen({ route }: any) {
         String((parseFloat(value) * priceData.current_price).toFixed(2))
       );
     } else {
-      setAmountUsd("0");
+      setAmountUsd("");
     }
 
     if (token.tokenAmount.uiAmount < parseFloat(value)) {
@@ -165,10 +166,19 @@ export default function TokenTransferScreen({ route }: any) {
 
   const handleTokenSelect = (token: any, tokenPriceData: any) => {
     console.log("selecting", token);
+
     setAmountUsd("");
     setAmount("");
     const coinGeckoId = token?.extensions?.coingeckoId;
     const priceData = tokenPriceData[coinGeckoId];
+
+    if (!priceData) {
+      console.log("disabled usd");
+      setDisableUSD(true);
+    } else {
+      setDisableUSD(false);
+    }
+
     setToken(token);
   };
 
@@ -227,14 +237,14 @@ export default function TokenTransferScreen({ route }: any) {
                 shade={amountUsd ? "500" : "700"}
               />
               <TextInput
-                placeholder="0.00"
+                placeholder={disableUSD ? "N/A" : "0.00"}
                 placeholderTextColor={theme.gray[700]}
                 onFocus={() => setIsEditing("usd")}
                 onChangeText={handleSetUsdAmount}
                 value={amountUsd}
                 type="number"
-                disabled={!token}
-                editable={!!token}
+                disabled={!token || disableUSD}
+                editable={!!token && !disableUSD}
                 keyboardType="numeric" // decimal-pad? number-pad?
                 autoCapitalize="none"
               />

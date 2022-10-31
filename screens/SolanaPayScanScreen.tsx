@@ -9,7 +9,13 @@ import { PublicKeyTextCopy, Typography, Badge } from "../components";
 import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "styled-components";
 import { BarCodeScanner } from "expo-barcode-scanner";
-import { parseURL, TransferRequestURL } from "@solana/pay";
+import axios from "axios";
+import {
+  parseURL,
+  createTransfer,
+  TransferRequestURL,
+  TransactionRequestURL,
+} from "@solana/pay";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { createInstructionData } from "@solana/spl-governance";
 import { CreateProposalTransactionModal } from "../elements/CreateProposalTransactionModal";
@@ -18,9 +24,10 @@ import {
   PublicKey,
   SystemProgram,
   LAMPORTS_PER_SOL,
+  Transaction,
 } from "@solana/web3.js";
 import { RPC_CONNECTION } from "../constants/Solana";
-import splToken from "@solana/spl-token";
+import QRSvg from "../assets/images/qr.svg";
 
 let connection = new Connection(RPC_CONNECTION, "recent");
 
@@ -28,14 +35,15 @@ export default function SolanaPayScanScreen({ route }: any) {
   const navigation = useNavigation();
   const theme = useTheme();
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-  const { walletId } = route?.params;
+  const { walletId, isSpeedMode } = route?.params;
 
-  const [solanaPayData, setSolanaPayData] = useState<any>(null);
   const [hasPermission, setHasPermission] = useState(false);
   const [scanned, setScanned] = useState(false);
   const [transactionInstructions, setTransactionInstructions] = useState<
     Array<any>
   >([]);
+  const [solanaPayDetails, setSolanaPayDetails] = useState<any>(null);
+  const { publicKey } = useAppSelector((state) => state.wallet);
 
   useEffect(() => {
     const getBarCodeScannerPermissions = async () => {
@@ -57,58 +65,59 @@ export default function SolanaPayScanScreen({ route }: any) {
     // label = title of the transaction/vendor
     // message = can be undefined
     // memo = can be undefined
-    const solanaPayInfo = parseURL(data);
-    let { recipient, amount, reference, label, message, memo } = parseURL(
-      data
-    ) as TransferRequestURL;
-    console.log("RECIPIENT", recipient.toBase58());
-    console.log("REFERENCE", reference?.[0].toBase58());
+    let solanaPayInfoParsed = parseURL(data) as
+      | TransferRequestURL
+      | TransactionRequestURL;
 
-    setSolanaPayData(solanaPayInfo);
+    // transaction request for solana pay
+    if (solanaPayInfoParsed.link) {
+      // https://github.com/solana-labs/solana-pay/blob/master/SPEC.md
+      // transaction request
+      // start handshake
+      console.log("solanaPayInfoParsed", solanaPayInfoParsed.link.href);
+      let response = await axios.get(solanaPayInfoParsed.link.href);
+      console.log("response", response.data);
+      console.log("wallet id", walletId);
+      // get transaction instructions from merchant
+      const postResponse = await axios.post(solanaPayInfoParsed.link.href, {
+        account: walletId,
+      });
 
-    let instruction = await createInstructionData(
-      SystemProgram.transfer({
-        fromPubkey: new PublicKey(walletId),
-        toPubkey: recipient,
-        lamports: amount * LAMPORTS_PER_SOL,
-      })
-    );
+      // deserialize transaction instructions
+      // TODO: handle transaction here
+      const base64Transaction = postResponse.data.transaction;
+      console.log("base64Transaction", base64Transaction);
+      const parsedTransaction = Buffer.from(base64Transaction, "base64");
+      console.log("post response", parsedTransaction);
+      let myTransaction = Transaction.from(parsedTransaction);
+      console.log("my transaction", myTransaction);
 
-    // const instruction = solanaPayInfo?.splToken
-    //   ? await splToken.Token.createTransferInstruction(
-    //       splToken.TOKEN_PROGRAM_ID,
-    //       fromTokenAccount.address,
-    //       solanaPayInfo?.recipient,
-    //       new PublicKey(walletId),
-    //       [],
-    //       solanaPayInfo?.amount
-    //     )
-    //   : await createInstructionData(
-    //       SystemProgram.transfer({
-    //         fromPubkey: new PublicKey(walletId),
-    //         toPubkey: solanaPayInfo?.recipient,
-    //         lamports: solanaPayInfo?.amount * LAMPORTS_PER_SOL,
-    //       })
-    //     );
-    console.log("instruction", instruction);
+      // TODO: set transaction instructions
+    } else {
+      let { recipient, amount, reference, label, message, memo, splToken } =
+        solanaPayInfoParsed;
+      console.log("solanaPayInfoParsed", solanaPayInfoParsed);
+      console.log(
+        "solanaPayInfoParsed json",
+        JSON.stringify(solanaPayInfoParsed)
+      );
+      setSolanaPayDetails({ label, memo, message });
 
-    if (reference) {
-      if (!Array.isArray(reference)) {
-        reference = [reference];
-      }
+      const tx = await createTransfer(connection, new PublicKey(walletId), {
+        recipient,
+        amount: amount,
+        splToken: splToken,
+        reference,
+        memo,
+      });
 
-      for (const pubkey of reference) {
-        instruction?.accounts.push({
-          pubkey,
-          isWritable: false,
-          isSigner: false,
-        });
-      }
+      const instructions = tx.instructions.map((instruction) =>
+        createInstructionData(instruction)
+      );
+
+      setTransactionInstructions(instructions);
     }
 
-    console.log("instruction", instruction);
-
-    console.log(JSON.stringify(solanaPayInfo));
     bottomSheetModalRef?.current?.present();
   };
 
@@ -128,7 +137,12 @@ export default function SolanaPayScanScreen({ route }: any) {
           height: Dimensions.get("window").height - 24,
           width: "100%",
         }}
-      ></BarCodeScanner>
+      >
+        <BarCodeContainer>
+          <QRSvg width={200} height={200} />
+          <Typography text="Scan QR to start purchase flow" marginTop="4" />
+        </BarCodeContainer>
+      </BarCodeScanner>
       <CreateProposalTransactionModal
         bottomSheetModalRef={bottomSheetModalRef}
         walletId={walletId}
@@ -139,16 +153,17 @@ export default function SolanaPayScanScreen({ route }: any) {
           label: "Token Transfer",
         }}
         isTokenTransfer={true}
+        isSpeedMode={isSpeedMode}
+        solanaPayDetails={solanaPayDetails}
       />
     </Container>
   );
 }
 
-const Container = styled.ScrollView`
+const Container = styled.View`
   background-color: ${(props) => props.theme.gray[900]};
   /* flex: 1;
   height: 100%; */
-  background: green;
   /* flex-direction: column; */
 `;
 
@@ -165,3 +180,10 @@ const SpacedRow = styled.View`
 `;
 
 const Column = styled.View``;
+
+const BarCodeContainer = styled.View`
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding-bottom: 48px;
+`;

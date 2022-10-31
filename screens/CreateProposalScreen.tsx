@@ -23,6 +23,7 @@ export default function CreateProposalScreen({ route }: any) {
   const { walletId, tokens, nfts } = route?.params;
   const [url, setUrl] = useState("");
   const theme = useTheme();
+  const { selectedRealm } = useAppSelector((state) => state.realms);
 
   const handleOpenBrowser = (webUrl: string) => {
     navigation.navigate("WebViewScreen", {
@@ -31,8 +32,12 @@ export default function CreateProposalScreen({ route }: any) {
     });
   };
 
-  const handleSolanaPay = () => {
-    navigation.navigate("SolanaPayScanScreen", { walletId });
+  const handleSolanaPay = (isSpeedMode: boolean) => {
+    // @ts-ignore
+    navigation.navigate("SolanaPayScanScreen", {
+      walletId,
+      isSpeedMode: isSpeedMode,
+    });
   };
 
   const handleTokenTransfer = () => {
@@ -85,8 +90,8 @@ export default function CreateProposalScreen({ route }: any) {
             autoCapitalize={"none"}
             autoCorrect={false}
             value={url}
-            disabled={true}
-            editable={false}
+            // disabled={true}
+            // editable={false}
           />
           <IconContainer disabled={!url} onPress={() => setUrl("")}>
             {url ? (
@@ -134,7 +139,9 @@ export default function CreateProposalScreen({ route }: any) {
         <ProposalCreationButtonOuter>
           <ProposalCreationButton
             onPress={() =>
-              handleOpenBrowser("https://marinade.finance/app/staking/")
+              handleOpenBrowser(
+                "https://marinade.finance/app/staking/?referralCode=CkatZPRBPQGgCXvdr9FaAkTTAePQTFMjf9k34DiwqL9Z"
+              )
             }
           >
             <DappIcon
@@ -336,22 +343,45 @@ export default function CreateProposalScreen({ route }: any) {
             />
           </ProposalCreationButton>
         </ProposalCreationButtonOuter>
-        {/* <ProposalCreationButtonOuter>
-          <ProposalCreationButton onPress={handleSolanaPay}>
-            <DappIcon
-              source={{
-                uri: "https://pbs.twimg.com/profile_images/1472933274209107976/6u-LQfjG_400x400.jpg",
-              }}
-            />
 
-            <Typography
-              text={"Solana Pay"}
-              marginBottom="0"
-              size="subtitle"
-              shade="100"
-            />
-          </ProposalCreationButton>
-        </ProposalCreationButtonOuter> */}
+        {selectedRealm.realmId ===
+          "6jydyMWSqV2bFHjCHydEQxa9XfXQWDwjVqAdjBEA1BXx" && (
+          <>
+            <ProposalCreationButtonOuter>
+              <ProposalCreationButton onPress={() => handleSolanaPay(false)}>
+                <DappIcon
+                  source={{
+                    uri: "https://pbs.twimg.com/profile_images/1472933274209107976/6u-LQfjG_400x400.jpg",
+                  }}
+                />
+
+                <Typography
+                  text={"Solana Pay"}
+                  marginBottom="0"
+                  size="subtitle"
+                  shade="100"
+                />
+              </ProposalCreationButton>
+            </ProposalCreationButtonOuter>
+
+            <ProposalCreationButtonOuter>
+              <ProposalCreationButton onPress={() => handleSolanaPay(true)}>
+                <DappIcon
+                  source={{
+                    uri: "https://pbs.twimg.com/profile_images/1472933274209107976/6u-LQfjG_400x400.jpg",
+                  }}
+                />
+
+                <Typography
+                  text={"Speed Pay"}
+                  marginBottom="0"
+                  size="subtitle"
+                  shade="100"
+                />
+              </ProposalCreationButton>
+            </ProposalCreationButtonOuter>
+          </>
+        )}
       </Row>
 
       {/* <Typography

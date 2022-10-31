@@ -18,6 +18,8 @@ import { useTheme } from "styled-components";
 import { SafeAreaView, StyleSheet } from "react-native";
 import { useDispatch } from "react-redux";
 import { CreateProposalTransactionModal } from "../elements/CreateProposalTransactionModal";
+import { initialize } from "@gilder/standard-wallet";
+import { GilderWalletProvider } from "../utils/GilderWalletProvider";
 
 export default function WebViewScreen({ route }: any) {
   const webviewRef = useRef<WebView>();
@@ -124,6 +126,8 @@ export default function WebViewScreen({ route }: any) {
       Linking.openURL(navState.url);
     }
   };
+
+  const toBytes = new PublicKey(walletId).toBytes();
 
   const phantomTest = `
   try{
@@ -418,3 +422,20 @@ const LoadingContainer = styled.View`
   justify-content: center;
   background-color: ${(props) => props.theme.gray[900]};
 `;
+
+const communicate = async (messageName) => {
+  return new Promise(function (resolve, reject) {
+    function eventListener(event) {
+      try {
+        let parsed = JSON.parse(event.data);
+        if (parsed.message === messageName) {
+          window.removeEventListener("message", eventListener);
+          resolve(parsed.data);
+        }
+      } catch (e) {
+        reject(e);
+      }
+    }
+    window.addEventListener("message", eventListener);
+  });
+};

@@ -15,3 +15,4 @@ settings.json
 # macOS
 .DS_Store
 gilder-android-google-key.json
+GoogleService-Info.plist

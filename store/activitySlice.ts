@@ -3,6 +3,7 @@ import { PublicKey, Connection } from "@solana/web3.js";
 
 import { RPC_CONNECTION } from "../constants/Solana";
 import { extractLogInfo } from "../utils";
+import { RootState } from ".";
 
 export interface ActivityState {
   isLoadingActivities: boolean;
@@ -17,21 +18,31 @@ const initialState: ActivityState = {
 };
 
 let connection = new Connection(RPC_CONNECTION, "confirmed");
+const devNetConnection = new Connection(
+  "https://api.devnet.solana.com",
+  "confirmed"
+);
 
 export const fetchRealmActivity = createAsyncThunk(
   "realms/fetchRealmActivity",
-  async ({ realm, fetchAfterSignature }: any) => {
+  async ({ realm, fetchAfterSignature }: any, { getState }) => {
     let rawTransactionsFilled;
     let activitiesParsed = [];
 
+    const { utility } = getState() as RootState;
+    const currentConnection = utility.isOnDevnet
+      ? devNetConnection
+      : connection;
+
     try {
-      let transactions = await connection.getConfirmedSignaturesForAddress2(
-        new PublicKey(realm?.pubKey),
-        {
-          limit: 20,
-          before: fetchAfterSignature ? fetchAfterSignature : undefined,
-        }
-      );
+      let transactions =
+        await currentConnection.getConfirmedSignaturesForAddress2(
+          new PublicKey(realm?.pubKey),
+          {
+            limit: 20,
+            before: fetchAfterSignature ? fetchAfterSignature : undefined,
+          }
+        );
 
       transactions = transactions?.sort(
         // @ts-ignore
@@ -42,7 +53,7 @@ export const fetchRealmActivity = createAsyncThunk(
         return transaction.signature;
       });
 
-      rawTransactionsFilled = await connection.getParsedTransactions(
+      rawTransactionsFilled = await currentConnection.getParsedTransactions(
         signatures
       );
 
