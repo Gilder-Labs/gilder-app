@@ -55,6 +55,19 @@ import { faTreasureChest } from "@fortawesome/pro-solid-svg-icons/faTreasureChes
 import { faListUl } from "@fortawesome/pro-regular-svg-icons/faListUl";
 import { faInfoCircle } from "@fortawesome/pro-regular-svg-icons/faInfoCircle";
 import TokenTransferScreen from "../screens/TokenTransferScreen";
+import { SEGMENT_KEY } from "../constants/Segment";
+import {
+  createClient,
+  AnalyticsProvider,
+} from "@segment/analytics-react-native";
+import { MixpanelPlugin } from "@segment/analytics-react-native-plugin-mixpanel";
+
+const segmentClient = createClient({
+  writeKey: SEGMENT_KEY,
+  trackAppLifecycleEvents: true,
+});
+
+segmentClient.add({ plugin: new MixpanelPlugin() });
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -312,193 +325,205 @@ export default function Navigation({}: {}) {
   }
 
   return (
-    <RootContainer>
-      <Toast
-        visible={isShowingToast}
-        position={"bottom"}
-        preset="success"
-        message="Public key copied."
-        onDismiss={handleDismiss}
-        autoDismiss={1000}
-        backgroundColor={theme.gray[1000]}
-        zIndex={100000}
-        containerStyle={{
-          width: 240,
-          marginLeft: "auto",
-          marginRight: "auto",
-        }}
-        messageStyle={{
-          color: theme?.gray[400],
-        }}
-        elevation={0}
-        centerMessage={true}
-      />
-      <WalletTransactionModal />
-      {/* <Chat client={chatClient}> */}
-      <NavigationContainer
-        linking={LinkingConfiguration}
-        theme={NavigationTheme}
-        ref={navigationRef}
-        onReady={() => {
-          routeNameRef.current = navigationRef.getCurrentRoute().name;
-        }}
-        // onStateChange={async () => {
-        //   const previousRouteName = routeNameRef.current;
-        //   const currentRouteName = navigationRef.getCurrentRoute().name;
-
-        //   if (previousRouteName !== currentRouteName) {
-        //     // console.log("ANALYTICS", currentRouteName);
-        //     // ampInstance.logEvent(currentRouteName);
-        //     // await analytics().logEvent("screenVisit", {
-        //     //   route: currentRouteName,
-        //     // });
-        //   }
-
-        //   // Save the current route name for later comparison
-        //   routeNameRef.current = currentRouteName;
-        // }}
-      >
-        <Stack.Navigator
-          screenOptions={{
-            fullScreenGestureEnabled: true,
-            headerTintColor: "#f4f4f5", //Set Header text color
+    <AnalyticsProvider client={segmentClient}>
+      <RootContainer>
+        <Toast
+          visible={isShowingToast}
+          position={"bottom"}
+          preset="success"
+          message="Public key copied."
+          onDismiss={handleDismiss}
+          autoDismiss={1000}
+          backgroundColor={theme.gray[1000]}
+          zIndex={100000}
+          containerStyle={{
+            width: 240,
+            marginLeft: "auto",
+            marginRight: "auto",
           }}
-          initialRouteName={hasCompletedOnboarding ? "Root" : "Onboarding"}
+          messageStyle={{
+            color: theme?.gray[400],
+          }}
+          elevation={0}
+          centerMessage={true}
+        />
+        <WalletTransactionModal />
+        {/* <Chat client={chatClient}> */}
+        <NavigationContainer
+          linking={LinkingConfiguration}
+          theme={NavigationTheme}
+          ref={navigationRef}
+          onReady={() => {
+            routeNameRef.current = navigationRef.getCurrentRoute().name;
+          }}
+          onStateChange={() => {
+            const previousRouteName = routeNameRef.current;
+            const currentRouteName =
+              navigationRef.current?.getCurrentRoute().name;
+
+            if (previousRouteName !== currentRouteName) {
+              segmentClient.screen(currentRouteName);
+              routeNameRef.current = currentRouteName;
+            }
+          }}
+          // onStateChange={async () => {
+          //   const previousRouteName = routeNameRef.current;
+          //   const currentRouteName = navigationRef.getCurrentRoute().name;
+
+          //   if (previousRouteName !== currentRouteName) {
+          //     // console.log("ANALYTICS", currentRouteName);
+          //     // ampInstance.logEvent(currentRouteName);
+          //     // await analytics().logEvent("screenVisit", {
+          //     //   route: currentRouteName,
+          //     // });
+          //   }
+
+          //   // Save the current route name for later comparison
+          //   routeNameRef.current = currentRouteName;
+          // }}
         >
-          <Stack.Screen
-            name="Onboarding"
-            component={OnboardingScreen}
-            options={{ headerShown: false, headerTransparent: true }}
-          />
-          <Stack.Screen
-            name="Root"
-            component={DrawerScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="MemberDetails"
-            component={MemberProfileScreen}
-            // options={{ headerShown: false }}
-            options={({ route }) => ({
-              title: "Profile",
-            })}
-          />
-          <Stack.Screen
-            name="RealmSettings"
-            component={RealmSettingsScreen}
-            options={({ route }) => ({
-              title: "Realm Settings", // update to realm name
-            })}
-          />
-          <Stack.Screen
-            name="ProposalDetail"
-            component={ProposalDetailScreen}
-            options={({ route }) => ({
-              title: "Proposal Details",
-            })}
-          />
-          {/* <Stack.Screen
+          <Stack.Navigator
+            screenOptions={{
+              fullScreenGestureEnabled: true,
+              headerTintColor: "#f4f4f5", //Set Header text color
+            }}
+            initialRouteName={hasCompletedOnboarding ? "Root" : "Onboarding"}
+          >
+            <Stack.Screen
+              name="Onboarding"
+              component={OnboardingScreen}
+              options={{ headerShown: false, headerTransparent: true }}
+            />
+            <Stack.Screen
+              name="Root"
+              component={DrawerScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="MemberDetails"
+              component={MemberProfileScreen}
+              // options={{ headerShown: false }}
+              options={({ route }) => ({
+                title: "Profile",
+              })}
+            />
+            <Stack.Screen
+              name="RealmSettings"
+              component={RealmSettingsScreen}
+              options={({ route }) => ({
+                title: "Realm Settings", // update to realm name
+              })}
+            />
+            <Stack.Screen
+              name="ProposalDetail"
+              component={ProposalDetailScreen}
+              options={({ route }) => ({
+                title: "Proposal Details",
+              })}
+            />
+            {/* <Stack.Screen
             name="ThreadScreen"
             component={ThreadScreen}
             options={({ route }) => ({
               title: "Thread",
             })}
           /> */}
-          <Stack.Screen
-            name="Discover"
-            component={DiscoverScreen}
-            options={({ route, navigation }) => ({
-              title: "Discover",
-              headerRight: () => {
-                return (
-                  <InfoButton onPress={() => navigation.push("InfoScreen")}>
-                    <FontAwesomeIcon
-                      icon={faInfoCircle}
-                      size={16}
-                      color={theme?.gray[300]}
-                    />
-                  </InfoButton>
-                );
-              },
-            })}
-          />
-          <Stack.Screen
-            name="DiscoverDetails"
-            component={DiscoverDetailsScreen}
-            options={({ route }) => ({
-              title: "",
-              headerBackTitle: "Back",
-              presentation: "modal",
-              headerTransparent: true,
-            })}
-          />
-          <Stack.Screen
-            name="WalletModal"
-            component={WalletModal}
-            options={({ route }) => ({
-              title: "",
-              presentation: "modal",
-              headerTransparent: true,
-              headerShown: false,
-            })}
-          />
-          <Stack.Screen
-            name="InfoScreen"
-            component={InfoModalScreen}
-            options={({ route }) => ({
-              title: "",
-              presentation: "modal",
-              headerTransparent: true,
-              headerShown: false,
-              contentStyle: {
-                height: "50%",
-                maxHeight: "50%",
-                marginTop: "100%",
-                backgroundColor: "red",
-                borderTopEndRadius: 16,
-                borderTopLeftRadius: 16,
-              },
-            })}
-          />
-          <Stack.Screen
-            name="WebViewScreen"
-            component={WebViewScreen}
-            options={({ route }) => ({
-              title: "Browser",
-            })}
-          />
-          <Stack.Screen
-            name="CreateProposalScreen"
-            component={CreateProposalScreen}
-            options={({ route }) => ({
-              title: "Builder",
-            })}
-          />
-          <Stack.Screen
-            name="ProposalVotesScreen"
-            component={ProposalVotesScreen}
-            options={({ route }) => ({
-              title: "Votes",
-            })}
-          />
-          <Stack.Screen
-            name="SolanaPayScanScreen"
-            component={SolanaPayScanScreen}
-            options={({ route }) => ({
-              title: "Solana Pay",
-            })}
-          />
-          <Stack.Screen
-            name="TokenTransferScreen"
-            component={TokenTransferScreen}
-            options={({ route }) => ({
-              title: "Token Transfer",
-            })}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-      {/* </Chat> */}
-    </RootContainer>
+            <Stack.Screen
+              name="Discover"
+              component={DiscoverScreen}
+              options={({ route, navigation }) => ({
+                title: "Discover",
+                headerRight: () => {
+                  return (
+                    <InfoButton onPress={() => navigation.push("InfoScreen")}>
+                      <FontAwesomeIcon
+                        icon={faInfoCircle}
+                        size={16}
+                        color={theme?.gray[300]}
+                      />
+                    </InfoButton>
+                  );
+                },
+              })}
+            />
+            <Stack.Screen
+              name="DiscoverDetails"
+              component={DiscoverDetailsScreen}
+              options={({ route }) => ({
+                title: "",
+                headerBackTitle: "Back",
+                presentation: "modal",
+                headerTransparent: true,
+              })}
+            />
+            <Stack.Screen
+              name="WalletModal"
+              component={WalletModal}
+              options={({ route }) => ({
+                title: "",
+                presentation: "modal",
+                headerTransparent: true,
+                headerShown: false,
+              })}
+            />
+            <Stack.Screen
+              name="InfoScreen"
+              component={InfoModalScreen}
+              options={({ route }) => ({
+                title: "",
+                presentation: "modal",
+                headerTransparent: true,
+                headerShown: false,
+                contentStyle: {
+                  height: "50%",
+                  maxHeight: "50%",
+                  marginTop: "100%",
+                  backgroundColor: "red",
+                  borderTopEndRadius: 16,
+                  borderTopLeftRadius: 16,
+                },
+              })}
+            />
+            <Stack.Screen
+              name="WebViewScreen"
+              component={WebViewScreen}
+              options={({ route }) => ({
+                title: "Browser",
+              })}
+            />
+            <Stack.Screen
+              name="CreateProposalScreen"
+              component={CreateProposalScreen}
+              options={({ route }) => ({
+                title: "Builder",
+              })}
+            />
+            <Stack.Screen
+              name="ProposalVotesScreen"
+              component={ProposalVotesScreen}
+              options={({ route }) => ({
+                title: "Votes",
+              })}
+            />
+            <Stack.Screen
+              name="SolanaPayScanScreen"
+              component={SolanaPayScanScreen}
+              options={({ route }) => ({
+                title: "Solana Pay",
+              })}
+            />
+            <Stack.Screen
+              name="TokenTransferScreen"
+              component={TokenTransferScreen}
+              options={({ route }) => ({
+                title: "Token Transfer",
+              })}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+        {/* </Chat> */}
+      </RootContainer>
+    </AnalyticsProvider>
   );
 }
 
