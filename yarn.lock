@@ -1859,6 +1859,22 @@
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.3.tgz#555193ab2e3bb3b6adc3d551c9c030d9e860daf6"
   integrity sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==
 
+"@gilder/gql-client@^1.0.13":
+  version "1.0.13"
+  resolved "https://registry.yarnpkg.com/@gilder/gql-client/-/gql-client-1.0.13.tgz#fbb23e26aecaece914b947b28e3b022e4237bd43"
+  integrity sha512-SuAylQWQHotJdk0qt6hZb1zby6/3UMx0IYfsrlDX/Jh/LYEEhKbItjlwe8ii0YoCGXBzcOQsHbiiZMla9NcG4Q==
+  dependencies:
+    bigint-buffer "^1.1.5"
+    bn.js "^5.2.1"
+    cross-fetch "^3.1.5"
+    graphql "^16.6.0"
+    graphql-tag "^2.12.6"
+
+"@gilder/types@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@gilder/types/-/types-1.0.4.tgz#e30d294bcfb79dcf4eb5f008dec36dc217ddc543"
+  integrity sha512-4ptA7Rrq+qBuW3hLnSDVFt/uQq8ZD8X52C6wADJ2zK9sguYEK0JoYFIbB3po9N5ZiA9RTFSxCgK5KxBV34jcbw==
+
 "@google-cloud/firestore@^6.3.0":
   version "6.3.0"
   resolved "https://registry.yarnpkg.com/@google-cloud/firestore/-/firestore-6.3.0.tgz#0ba073f02c4ac9bda63f45b332cf73e5ebb0c04f"
@@ -7220,6 +7236,11 @@ graphql@^16.3.0:
   version "16.5.0"
   resolved "https://registry.yarnpkg.com/graphql/-/graphql-16.5.0.tgz#41b5c1182eaac7f3d47164fb247f61e4dfb69c85"
   integrity sha512-qbHgh8Ix+j/qY+a/ZcJnFQ+j8ezakqPiHwPiZhV/3PgGlgf96QMBB5/f2rkiC9sgLoy/xvT6TSiaf2nTHJh5iA==
+
+graphql@^16.6.0:
+  version "16.6.0"
+  resolved "https://registry.yarnpkg.com/graphql/-/graphql-16.6.0.tgz#c2dcffa4649db149f6282af726c8c83f1c7c5fdb"
+  integrity sha512-KPIBPDlW7NxrbT/eh4qPXz5FiFdL5UbaA0XUNz2Rp3Z3hqBSkbj0GVjwFDztsWVauZUWsbKHgMg++sk8UX0bkw==
 
 growl@1.10.5:
   version "1.10.5"

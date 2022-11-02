@@ -1,16 +1,20 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { PublicKey, Connection } from "@solana/web3.js";
-import { getRealms, getRealm, tryGetRealmConfig } from "@solana/spl-governance";
-
 import {
   SPL_PUBLIC_KEY,
   REALM_GOVERNANCE_PKEY,
   RPC_CONNECTION,
   HEAVY_RPC_CONNECTION,
 } from "../constants/Solana";
-import { cleanRealmData, getTokensInfo, extractLogInfo } from "../utils";
+import {
+  cleanRealmData,
+  getTokensInfo,
+  extractLogInfo,
+  gqlClient,
+} from "../utils";
 import { RootState } from ".";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getAllRealms, getRealm } from "@gilder/gql-client";
 
 export interface realmState {
   realms: Array<any>;
@@ -54,7 +58,8 @@ export const fetchRealms = createAsyncThunk("realms/fetchRealms", async () => {
   try {
     let realms;
     let realmsMap = {};
-    const realmsRaw = await getRealms(connection, REALM_GOVERNANCE_PKEY);
+    const realmsRaw = await getAllRealms(gqlClient);
+    // const realmsRaw = await getRealms(connection, REALM_GOVERNANCE_PKEY);
 
     // get realms with unique program id
     let realmDataKeys = Object.keys(cleanedRealmData);
@@ -82,21 +87,20 @@ export const fetchRealms = createAsyncThunk("realms/fetchRealms", async () => {
     realms = realmsRaw.map((realm) => {
       // realm is in our realmdata from : https://github.com/solana-labs/governance-ui/blob/main/public/realms/mainnet-beta.json
       // delete off object so we can find custom governanceId realms we need to add to realm list
-      let realmId = realm.pubkey.toBase58();
+      let realmId = realm.realmPk.toBase58();
 
       let realmData = {
-        name: realm.account.name,
-        pubKey: realm.pubkey.toBase58(),
-        realmId: realm.pubkey.toBase58(),
-        communityMint: realm.account.communityMint.toBase58(),
-        councilMint: realm.account?.config?.councilMint?.toBase58() || null,
-        governanceId: realm?.owner.toBase58(),
-        accountType: realm.account.accountType,
-        votingProposalCount: realm.account.votingProposalCount,
+        name: realm.name,
+        pubKey: realmId,
+        realmId: realmId,
+        communityMint: realm.communityMintPk.toBase58(),
+        councilMint: realm.config?.councilMintPk?.toBase58() || null,
+        governanceId: realm.programPk.toBase58(),
+        votingProposalCount: realm.votingProposalCount,
         maxVoteWeight:
-          realm.account.config.communityMintMaxVoteWeightSource.value.toNumber(),
+          realm.config.communityMintMaxVoteWeightSource.value.toNumber(),
         minTokensToCreateGov:
-          realm.account.config.minCommunityTokensToCreateGovernance.toString(),
+          realm.config.minCommunityTokensToCreateGovernance.toString(),
       };
       // @ts-ignore
       realmsMap[realmId] = realmData;
@@ -113,28 +117,28 @@ export const fetchRealm = createAsyncThunk(
   "realms/fetchRealm",
   async (realmId: string) => {
     try {
-      const rawRealm = await getRealm(connection, new PublicKey(realmId));
+      const rawRealm = await getRealm({ realmPk: realmId }, gqlClient);
       let communityMintData = null;
       let communityMintPromise;
       let councilMintData = null;
       let councilMintPromise;
 
-      if (rawRealm.account.communityMint) {
+      if (rawRealm.communityMintPk) {
         communityMintPromise = connection.getParsedAccountInfo(
-          new PublicKey(rawRealm.account.communityMint)
+          new PublicKey(rawRealm.communityMintPk)
         );
       }
-      if (rawRealm.account.config.councilMint) {
+      if (rawRealm.config.councilMintPk) {
         councilMintPromise = connection.getParsedAccountInfo(
-          new PublicKey(rawRealm.account.config.councilMint)
+          new PublicKey(rawRealm.config.councilMintPk)
         );
       }
 
-      if (rawRealm.account.communityMint) {
+      if (rawRealm.communityMintPk) {
         communityMintData = await communityMintPromise;
         // console.log("community mint data", communityMintData);
       }
-      if (rawRealm.account.config.councilMint) {
+      if (rawRealm.config.councilMintPk) {
         councilMintData = await councilMintPromise;
         // console.log("council mint data", councilMintData);
       }
@@ -148,38 +152,39 @@ export const fetchRealm = createAsyncThunk(
       // );
       // console.log("realm config", realmConfig);
 
+      console.log(rawRealm);
+
       const selectedRealmData = {
-        name: rawRealm.account.name,
-        pubKey: rawRealm.pubkey.toBase58(),
-        realmId: rawRealm.pubkey.toBase58(),
-        communityMint: rawRealm.account.communityMint.toBase58(),
+        name: rawRealm.name,
+        pubKey: rawRealm.realmPk.toBase58(),
+        realmId: rawRealm.realmPk.toBase58(),
+        communityMint: rawRealm.communityMintPk.toBase58(),
         communityMintDecimals: communityMintData
           ? communityMintData.value?.data?.parsed?.info?.decimals
           : null,
         communityMintSupply: communityMintData
           ? communityMintData.value?.data?.parsed?.info?.supply
           : null,
-        councilMint: rawRealm.account?.config?.councilMint?.toBase58() || null,
+        councilMint: rawRealm?.config?.councilMintPk?.toBase58() || null,
         councilMintDecimals: councilMintData
           ? councilMintData.value?.data?.parsed?.info?.decimals
           : null,
         councilMintSupply: councilMintData
           ? councilMintData.value?.data?.parsed?.info?.supply
           : null,
-        governanceId: rawRealm?.owner.toBase58(),
-        accountType: rawRealm.account.accountType,
-        votingProposalCount: rawRealm.account.votingProposalCount,
+        governanceId: rawRealm?.programPk.toBase58(),
+        votingProposalCount: rawRealm.votingProposalCount,
         maxVoteWeight:
-          rawRealm.account.config.communityMintMaxVoteWeightSource.value.toNumber(),
+          rawRealm.config.communityMintMaxVoteWeightSource.value.toNumber(),
         minTokensToCreateGov:
-          rawRealm.account.config.minCommunityTokensToCreateGovernance.toString(),
+          rawRealm.config.minCommunityTokensToCreateGovernance.toString(),
         fmtSupplyFraction:
-          rawRealm.account.config.communityMintMaxVoteWeightSource.fmtSupplyFractionPercentage(),
-        supplyFraction: rawRealm.account.config.communityMintMaxVoteWeightSource
+          rawRealm.config.communityMintMaxVoteWeightSource.fmtSupplyFractionPercentage(),
+        supplyFraction: rawRealm.config.communityMintMaxVoteWeightSource
           .getSupplyFraction()
           .toNumber(),
         isFullSupply:
-          rawRealm.account.config.communityMintMaxVoteWeightSource.isFullSupply(),
+          rawRealm.config.communityMintMaxVoteWeightSource.isFullSupply(),
       };
 
       await AsyncStorage.setItem(
