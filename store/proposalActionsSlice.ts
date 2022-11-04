@@ -123,6 +123,8 @@ export const executeInstructions = createAsyncThunk(
       );
 
       const tx = new Transaction().add(...instructions);
+      let recentBlock = await connection.getLatestBlockhash();
+      tx.recentBlockhash = recentBlock.blockhash;
       tx.sign(walletKeypair);
 
       const response = await sendAndConfirmRawTransaction(

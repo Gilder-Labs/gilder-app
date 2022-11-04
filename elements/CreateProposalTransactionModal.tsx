@@ -175,10 +175,10 @@ CreateProposalTransactionModalProps) => {
 
       await dispatch(
         executeInstructions({
-          proposalInstructions: instructions,
+          proposalInstructions: instructions.payload,
           programId: selectedRealm.governanceId,
           programVersion: 2,
-          governanceId: newProposals[0].governanceId,
+          governanceId: governance.governanceId,
           proposalId: newProposals[0].proposalId,
         })
       );
