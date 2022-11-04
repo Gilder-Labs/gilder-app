@@ -16,6 +16,7 @@ import {
   sendAndConfirmTransaction,
   sendAndConfirmRawTransaction,
 } from "@solana/web3.js";
+import { withExecuteTransaction } from "@solana/spl-governance";
 import { RPC_CONNECTION } from "../constants/Solana";
 
 export interface ProposalActionsState {
@@ -84,6 +85,63 @@ export const createProposalAttempt = createAsyncThunk(
   }
 );
 
+// TEMP for demo
+export const executeInstructions = createAsyncThunk(
+  "proposalActions/executInstructions",
+  async (
+    {
+      proposalInstructions,
+      programId,
+      programVersion,
+      governanceId,
+      proposalId,
+    }: any,
+    { getState, dispatch }
+  ) => {
+    try {
+      const privateKey = await SecureStore.getItemAsync("privateKey");
+      const instructions: TransactionInstruction[] = [];
+
+      if (!privateKey) {
+        throw Error();
+      }
+      const walletKeypair = Keypair.fromSecretKey(bs58.decode(privateKey));
+
+      await Promise.all(
+        proposalInstructions.map((instruction: any) =>
+          // withExecuteTransaction function mutate the given 'instructions' parameter
+          withExecuteTransaction(
+            instructions,
+            new PublicKey(programId),
+            programVersion, // program version, hard coded for now
+            new PublicKey(governanceId),
+            new PublicKey(proposalId),
+            instruction.pubkey,
+            [instruction.account.getSingleInstruction()]
+          )
+        )
+      );
+
+      const tx = new Transaction().add(...instructions);
+      tx.sign(walletKeypair);
+
+      const response = await sendAndConfirmRawTransaction(
+        connection,
+        tx.serialize(),
+        {
+          skipPreflight: true,
+        }
+      );
+
+      console.log("Successfully created and executed proposal!!!");
+      return { error: false };
+    } catch (error) {
+      console.log("transaction error", error);
+      return { error: true };
+    }
+  }
+);
+
 export const proposalActionsSlice = createSlice({
   name: "proposalActions",
   initialState,
@@ -106,6 +164,19 @@ export const proposalActionsSlice = createSlice({
         state.error = true;
       })
       .addCase(createProposalAttempt.fulfilled, (state, action: any) => {
+        state.isLoading = false;
+        state.error = action.payload.error;
+        state.transactionProgress = 0;
+      })
+      .addCase(executeInstructions.pending, (state, action) => {
+        state.isLoading = true;
+        state.error = false;
+      })
+      .addCase(executeInstructions.rejected, (state, action: any) => {
+        state.isLoading = false;
+        state.error = true;
+      })
+      .addCase(executeInstructions.fulfilled, (state, action: any) => {
         state.isLoading = false;
         state.error = action.payload.error;
         state.transactionProgress = 0;
