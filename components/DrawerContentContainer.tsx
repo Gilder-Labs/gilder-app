@@ -7,7 +7,7 @@ import { RealmIconButton } from "./RealmIconButton";
 import { RealmSelectModal } from "./RealmSelectModal";
 import { ConnectWalletButton } from "./ConnectWalletButton";
 import { useTheme } from "styled-components";
-import Logo from "../assets/images/BastionLogo.png";
+import Logo from "../assets/images/GilderLogo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faPlus } from "@fortawesome/pro-regular-svg-icons/faPlus";
 import { faGear } from "@fortawesome/pro-regular-svg-icons/faGear";
@@ -19,7 +19,6 @@ import { fetchOwnVotes } from "../store/memberSlice";
 import { Typography } from "./Typography";
 import { useNavigation } from "@react-navigation/native";
 import * as Haptics from "expo-haptics";
-import { ChatRoomList } from "../elements";
 
 export function DrawerContentContainer(props: any) {
   const theme = useTheme();
