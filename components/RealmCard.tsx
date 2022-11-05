@@ -143,7 +143,7 @@ const SelectedContainer = styled.View`
   justify-content: center;
   align-items: center;
   position: absolute;
-  right: 8;
+  right: 8px;
   padding: 4px;
 
   top: 8px;
