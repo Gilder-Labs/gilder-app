@@ -146,7 +146,7 @@ const ChannelItemButton = styled.TouchableOpacity<{ isSelected: boolean }>`
   padding-top: ${(props: any) => props.theme.spacing[1]};
   padding-bottom: ${(props: any) => props.theme.spacing[1]};
   min-height: 20px;
-  border-radius: 4;
+  border-radius: 4px;
   margin-left: ${(props: any) => props.theme.spacing[3]};
   margin-right: ${(props: any) => props.theme.spacing[3]};
   background-color: ${(props: any) =>

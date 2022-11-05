@@ -38,7 +38,7 @@ Sentry.init({
   },
 });
 
-LogBox.ignoreAllLogs();
+// LogBox.ignoreAllLogs();
 
 // Appolo client for cyberconnect data
 const client = new ApolloClient({

@@ -45,7 +45,7 @@ export const WalletTransactionModal = ({}: WalletTransactionModalProps) => {
       onRequestClose={handleClose}
       onDismiss={handleClose}
       presentationStyle="pageSheet" // overFullScreen
-      transparent={true}
+      // transparent={true}
     >
       <Container>
         {Platform.OS === "ios" && (

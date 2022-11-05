@@ -56,7 +56,7 @@ export default function SolanaPayScanScreen({ route }: any) {
 
   const handleBarCodeScanned = async ({ type, data }) => {
     setScanned(true);
-    console.log("scanned", data);
+    console.log("PARSING DATA", data);
 
     // recipent = who we are sending to
     // ammount of the token we are sending
