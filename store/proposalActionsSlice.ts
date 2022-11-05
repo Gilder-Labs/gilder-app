@@ -122,14 +122,17 @@ export const executeInstructions = createAsyncThunk(
         )
       );
 
-      const tx = new Transaction().add(...instructions);
-      let recentBlock = await connection.getLatestBlockhash();
-      tx.recentBlockhash = recentBlock.blockhash;
-      tx.sign(walletKeypair);
+      // uh don't change this variable name to "tx" or it will break android builds lol.i
+      const transaction = new Transaction().add(...instructions);
+
+      transaction.sign(walletKeypair);
+
+      const recentBlock = await connection.getLatestBlockhash();
+      transaction.recentBlockhash = recentBlock.blockhash;
 
       const response = await sendAndConfirmRawTransaction(
         connection,
-        tx.serialize(),
+        transaction.serialize(),
         {
           skipPreflight: true,
         }
