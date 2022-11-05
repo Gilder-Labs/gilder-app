@@ -28,9 +28,8 @@ global.atob = global.atob || require("base-64").decode;
 
 global.Buffer = require("buffer").Buffer;
 global.Buffer.TYPED_ARRAY_SUPPORT = false;
-if (typeof BigInt === "undefined") {
-  global.BigInt = require("big-integer");
-}
+if (typeof BigInt === "undefined") global.BigInt = require("big-integer");
+
 global.process = require("process");
 global.process.env.NODE_ENV = __DEV__ ? "development" : "production";
 global.process.version = "v9.40";
