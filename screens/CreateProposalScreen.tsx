@@ -373,7 +373,7 @@ export default function CreateProposalScreen({ route }: any) {
                 />
 
                 <Typography
-                  text={"Speed Pay"}
+                  text={"Instant Pay"}
                   marginBottom="0"
                   size="subtitle"
                   shade="100"

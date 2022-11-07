@@ -25,7 +25,7 @@ interface VoteCardProps {
 // When the vote was cast
 
 const proposalStatusKey = {
-  Succeeded: "success",
+  Succeeded: "pending",
   Completed: "success",
   Cancelled: "gray",
   Draft: "warning",

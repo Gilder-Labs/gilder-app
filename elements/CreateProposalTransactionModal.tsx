@@ -7,7 +7,10 @@ import * as Haptics from "expo-haptics";
 import { useNavigation } from "@react-navigation/native";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { Button, DelegateButton, Loading } from "../components";
-import { fetchRealmProposals } from "../store/proposalsSlice";
+import {
+  fetchRealmProposals,
+  fetchProposalInstructions,
+} from "../store/proposalsSlice";
 
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faCheck } from "@fortawesome/pro-solid-svg-icons/faCheck";
@@ -20,6 +23,7 @@ import {
 import CustomBackdrop from "../components/FadeBackdropModal";
 import {
   createProposalAttempt,
+  executeInstructions,
   setProgress,
 } from "../store/proposalActionsSlice";
 import { createNewProposalTransaction } from "../utils/createProposal";
@@ -157,6 +161,25 @@ CreateProposalTransactionModalProps) => {
           },
           selectedDelegate,
           isCommunityVote,
+        })
+      );
+
+      const instructions = await dispatch(
+        fetchProposalInstructions({
+          proposalId: newProposals[0].proposalId,
+          programId: selectedRealm.governanceId,
+        })
+      );
+
+      console.log("instructions", instructions);
+
+      await dispatch(
+        executeInstructions({
+          proposalInstructions: instructions.payload,
+          programId: selectedRealm.governanceId,
+          programVersion: 2,
+          governanceId: governance.governanceId,
+          proposalId: newProposals[0].proposalId,
         })
       );
 
