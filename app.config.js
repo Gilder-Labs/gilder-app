@@ -4,13 +4,13 @@ export default {
   expo: {
     name: "Gilder",
     slug: "gilder-app",
-    version: "1.0.61",
+    version: "1.0.63",
     orientation: "portrait",
     icon: "./assets/images/DarkIcon.png",
     scheme: "gilder",
     userInterfaceStyle: "automatic",
     plugins: ["sentry-expo"],
-    jsEngine: "hermes",
+    // jsEngine: "hermes",
     splash: {
       image: "./assets/images/GilderSplash.png",
       resizeMode: "contain",
@@ -24,14 +24,14 @@ export default {
     ios: {
       supportsTablet: true,
       bundleIdentifier: "com.dawggydawg.gilderapp",
-      buildNumber: "30",
+      buildNumber: "32",
     },
     android: {
       adaptiveIcon: {
         foregroundImage: "./assets/images/DarkIconAndroid.png",
         backgroundColor: "#000000",
       },
-      versionCode: 30,
+      versionCode: 32,
       googleServicesFile: "./google-services.json",
       package: "com.dawggydawg.gilderapp",
     },

@@ -399,7 +399,7 @@ const SearchBarContainer = styled.View`
 const SortButton = styled.TouchableOpacity`
   background: ${(props) => props.theme.gray[800]};
   padding: ${(props) => props.theme.spacing[3]};
-  border-radius: 8;
+  border-radius: 8px;
   margin-left: ${(props: any) => props.theme.spacing[2]};
 `;
 

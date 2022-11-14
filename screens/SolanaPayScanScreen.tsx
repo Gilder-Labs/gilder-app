@@ -54,9 +54,9 @@ export default function SolanaPayScanScreen({ route }: any) {
     getBarCodeScannerPermissions();
   }, []);
 
-  const handleBarCodeScanned = async ({ type, data }) => {
+  const handleBarCodeScanned = async ({ type, data }: any) => {
     setScanned(true);
-    console.log("scanned", data);
+    console.log("PARSING DATA", data);
 
     // recipent = who we are sending to
     // ammount of the token we are sending
@@ -94,9 +94,9 @@ export default function SolanaPayScanScreen({ route }: any) {
 
       // TODO: set transaction instructions
     } else {
+      console.log("solanaPayInfoParsed", solanaPayInfoParsed);
       let { recipient, amount, reference, label, message, memo, splToken } =
         solanaPayInfoParsed;
-      console.log("solanaPayInfoParsed", solanaPayInfoParsed);
       console.log(
         "solanaPayInfoParsed json",
         JSON.stringify(solanaPayInfoParsed)

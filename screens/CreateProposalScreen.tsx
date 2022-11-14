@@ -16,8 +16,6 @@ import { PublicKeyTextCopy, Typography, Badge } from "../components";
 import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "styled-components";
 
-import { parseURL } from "@solana/pay";
-
 export default function CreateProposalScreen({ route }: any) {
   const navigation = useNavigation();
   const { walletId, tokens, nfts } = route?.params;
@@ -503,7 +501,7 @@ const SearchButton = styled.TouchableOpacity<{ disabled?: boolean }>`
   padding-left: ${(props) => props.theme.spacing[4]};
   padding-right: ${(props) => props.theme.spacing[4]};
 
-  border-radius: 8;
+  border-radius: 8px;
   margin-left: ${(props: any) => props.theme.spacing[1]};
 `;
 

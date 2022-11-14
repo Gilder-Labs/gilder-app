@@ -413,7 +413,7 @@ const IconContainer = styled.TouchableOpacity`
 const SortButton = styled.TouchableOpacity`
   background: ${(props) => props.theme.gray[800]};
   padding: ${(props) => props.theme.spacing[3]};
-  border-radius: 8;
+  border-radius: 8px;
   margin-left: ${(props: any) => props.theme.spacing[2]};
 `;
 
@@ -432,7 +432,7 @@ const FilterBadge = styled.TouchableOpacity<{ isSelected: boolean }>`
   background: ${(props: any) =>
     props.isSelected ? props.theme.secondary[600] : props.theme.gray[900]}55;
   margin-right: ${(props: any) => props.theme.spacing[2]};
-  border-radius: 8;
+  border-radius: 8px;
   margin-bottom: ${(props: any) => props.theme.spacing[1]};
   border: 1px solid
     ${(props: any) =>
