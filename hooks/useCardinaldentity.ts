@@ -46,7 +46,7 @@ export const useCardinalIdentity = (walletId: string) => {
         const description = response?.data?.data?.[0]?.description;
         const twitterImage = response?.data?.data?.[0]?.profile_image_url;
         cache[walletId] = {
-          twitterURL: twitterImage.replace("normal", "400x400"),
+          twitterURL: twitterImage?.replace("normal", "400x400"),
           twitterHandle: handleFormatted,
           twitterDescription: description || "",
         };

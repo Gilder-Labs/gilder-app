@@ -1023,6 +1023,12 @@
     "ogImage": "/realms/MEAN/logo.svg"
   },
   {
+    "displayName": "Sicreto",
+    "programId": "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw",
+    "realmId": "JCH9bbNqWD1CihXeWK4qDGDdzNNPJyHfoL2AyttY6Xnf",
+    "ogImage": "https://cdn.discordapp.com/attachments/892855554614100104/1040735929565974528/IMG_2810.png"
+  },
+  {
     "symbol": "ANTLERDAO",
     "displayName": "AntlerDAO",
     "programId": "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw",
