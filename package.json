@@ -41,7 +41,7 @@
     "@solana/spl-token": "^0.3.5",
     "@solana/spl-token-registry": "^0.2.4574",
     "@solana/wallet-adapter-base": "^0.9.16",
-    "@solana/web3.js": "1.52",
+    "@solana/web3.js": "^1.66.2",
     "@toruslabs/openlogin": "^2.3.0",
     "@toruslabs/openlogin-ed25519": "^2.0.0",
     "@types/styled-components": "^5.1.20",
