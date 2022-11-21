@@ -20,6 +20,7 @@ import { fetchRealmProposals } from "../store/proposalsSlice";
 import { fetchRealmActivity } from "../store/activitySlice";
 import { fetchVaults } from "../store/treasurySlice";
 import { setShowToast, fetchOnboarding } from "../store/utilitySlice";
+import { useAnalytics } from "../hooks/useAnalytics";
 import { fetchWalletInfo } from "../store/walletSlice";
 import {
   fetchNotificationSettings,
@@ -273,6 +274,7 @@ export default function Navigation({}: {}) {
 
   const navigationRef = useNavigationContainerRef();
   const routeNameRef = useRef();
+  const { logEvent } = useAnalytics();
 
   useEffect(() => {
     dispatch(fetchRealms());
@@ -363,21 +365,20 @@ export default function Navigation({}: {}) {
         onReady={() => {
           routeNameRef.current = navigationRef.getCurrentRoute().name;
         }}
-        // onStateChange={async () => {
-        //   const previousRouteName = routeNameRef.current;
-        //   const currentRouteName = navigationRef.getCurrentRoute().name;
+        onStateChange={async () => {
+          const previousRouteName = routeNameRef.current;
+          const currentRouteName = navigationRef.getCurrentRoute().name;
 
-        //   if (previousRouteName !== currentRouteName) {
-        //     // console.log("ANALYTICS", currentRouteName);
-        //     // ampInstance.logEvent(currentRouteName);
-        //     // await analytics().logEvent("screenVisit", {
-        //     //   route: currentRouteName,
-        //     // });
-        //   }
+          if (previousRouteName !== currentRouteName) {
+            logEvent("screen_view_nav_change", {
+              previous_screen: previousRouteName,
+              current_screen: currentRouteName,
+            });
+          }
 
-        //   // Save the current route name for later comparison
-        //   routeNameRef.current = currentRouteName;
-        // }}
+          // Save the current route name for later comparison
+          routeNameRef.current = currentRouteName;
+        }}
       >
         <Stack.Navigator
           screenOptions={{

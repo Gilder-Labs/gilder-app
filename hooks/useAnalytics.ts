@@ -18,6 +18,7 @@ if (
     trackAutomaticEvents
   );
   mixpanelInstance.init();
+  mixpanelInstance.setLoggingEnabled(true);
 }
 
 export const useAnalytics = () => {
@@ -25,7 +26,7 @@ export const useAnalytics = () => {
 
   const logEvent = (
     eventName: string = "Default Event",
-    eventProperties: any = {}
+    eventProperties: any = null
   ) => {
     if (process.env.NODE_ENV !== "development") {
       mixpanelInstance.track(eventName, eventProperties);
