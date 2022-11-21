@@ -85,6 +85,7 @@ export const VoteOnProposalTransaction = ({}: VoteOnProposalTransaction) => {
       realmId: selectedRealm.realmId,
       realm_name: selectedRealm.name,
       proposalId: proposal.proposalId,
+      walletId: publicKey,
     });
 
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);

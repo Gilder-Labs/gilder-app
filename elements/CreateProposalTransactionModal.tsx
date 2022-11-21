@@ -32,6 +32,7 @@ import { Typography, PublicKeyTextCopy } from "../components";
 import { fetchVaults } from "../store/treasurySlice";
 import { usePhantom } from "../hooks/usePhantom";
 import { castVote } from "../store/walletSlice";
+import { useAnalytics } from "../hooks/useAnalytics";
 
 interface CreateProposalTransactionModalProps {
   bottomSheetModalRef: any;
@@ -64,14 +65,13 @@ export const CreateProposalTransactionModal = ({
 CreateProposalTransactionModalProps) => {
   const theme = useTheme();
   const navigation = useNavigation();
-  const { publicKey } = useAppSelector((state) => state.wallet);
   const snapPoints = useMemo(() => ["25", "50%", "95%"], []);
   const dispatch = useAppDispatch();
   const { vaults, governancesMap, governances } = useAppSelector(
     (state) => state.treasury
   );
   const { selectedRealm } = useAppSelector((state) => state.realms);
-  const { walletType } = useAppSelector((state) => state.wallet);
+  const { walletType, publicKey } = useAppSelector((state) => state.wallet);
   const { isLoading, error, transactionProgress } = useAppSelector(
     (state) => state.proposalActions
   );
@@ -87,6 +87,8 @@ CreateProposalTransactionModalProps) => {
   >("pending");
   const { signAllTransactions, isSendingTransactions, progress } = usePhantom();
   const [loadingPhantom, setLoadingPhantom] = useState(false);
+
+  const { logEvent } = useAnalytics();
 
   const isCommunityVote = voteType === "community"; // else its council
 
@@ -229,6 +231,11 @@ CreateProposalTransactionModalProps) => {
       );
     }
 
+    logEvent("create_proposal", {
+      proposal_type: isCommunityVote ? "community" : "council",
+      realmId: selectedRealm?.realmId,
+      walletId: publicKey,
+    });
     setProposalState("resolved");
   };
 
