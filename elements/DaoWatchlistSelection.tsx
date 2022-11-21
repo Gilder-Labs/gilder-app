@@ -24,6 +24,7 @@ import { toggleRealmInWatchlist, fetchRealm } from "../store/realmSlice";
 import { subscribeToNotifications } from "../store/notificationSlice";
 import DiscoverData from "../assets/Discover.json";
 import { LinearGradient } from "expo-linear-gradient";
+import { useAnalytics } from "../hooks/useAnalytics";
 
 interface DaoWatchlistSelection {
   isOnboarding?: boolean;
@@ -41,6 +42,7 @@ export const DaoWatchlistSelection = ({
   const dispatch = useAppDispatch();
   const { pushToken } = useAppSelector((state) => state.notifications);
   const { featured } = DiscoverData;
+  const { logEvent } = useAnalytics();
 
   const handleFinishOnboarding = () => {
     AsyncStorage.setItem("@hasCompletedOnboarding", "true");
@@ -88,6 +90,12 @@ export const DaoWatchlistSelection = ({
   const handleRealmToggle = (realmId: string, isSubscribing: boolean) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     dispatch(toggleRealmInWatchlist(realmId));
+
+    logEvent("toggle_realm_watchlist", {
+      realmId,
+      isSubscribing,
+    });
+
     if (pushToken) {
       dispatch(
         subscribeToNotifications({

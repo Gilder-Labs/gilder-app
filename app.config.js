@@ -57,6 +57,7 @@ export default {
       heavyRPC: process.env.HEAVY_RPC || "https://ssc-dao.genesysgo.net/",
       streamApiKey: process.env.STREAM_API_KEY,
       heliusApiKey: process.env.HELIUS_API_KEY,
+      mixPanelApiKey: process.env.MIXPANEL_API_KEY,
       eas: {
         projectId: "d43ad13f-8eb8-4f37-9f5b-dca8e8f129c1",
       },

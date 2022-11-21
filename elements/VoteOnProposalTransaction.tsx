@@ -24,6 +24,7 @@ import * as Haptics from "expo-haptics";
 import { DelegateButton } from "../components";
 import { usePhantom } from "../hooks/usePhantom";
 import { createCastVoteTransaction } from "../utils/castVote";
+import { useAnalytics } from "../hooks/useAnalytics";
 
 interface VoteOnProposalTransaction {}
 
@@ -46,6 +47,7 @@ export const VoteOnProposalTransaction = ({}: VoteOnProposalTransaction) => {
   const isCommunityVote =
     selectedRealm?.communityMint === proposal?.governingTokenMint;
   const { signAndSendTransaction } = usePhantom();
+  const { logEvent } = useAnalytics();
 
   useEffect(() => {
     // refresh proposals after attempting to vote
@@ -78,6 +80,12 @@ export const VoteOnProposalTransaction = ({}: VoteOnProposalTransaction) => {
         })
       );
     }
+
+    logEvent("vote_on_proposal", {
+      realmId: selectedRealm.realmId,
+      realm_name: selectedRealm.name,
+      proposalId: proposal.proposalId,
+    });
 
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
   };

@@ -48,11 +48,14 @@ import WebViewScreen from "../screens/WebViewScreen";
 import CreateProposalScreen from "../screens/CreateProposalScreen";
 import ProposalVotesScreen from "../screens/ProposalVotesScreen";
 import SolanaPayScanScreen from "../screens/SolanaPayScanScreen";
+import HomeScreen from "../screens/HomeScreen";
 
 import { faBuildingColumns } from "@fortawesome/pro-regular-svg-icons/faBuildingColumns";
 import { faUserGroup } from "@fortawesome/pro-solid-svg-icons/faUserGroup";
 import { faTreasureChest } from "@fortawesome/pro-solid-svg-icons/faTreasureChest";
 import { faListUl } from "@fortawesome/pro-regular-svg-icons/faListUl";
+import { faHouse } from "@fortawesome/pro-solid-svg-icons/faHouse";
+
 import { faInfoCircle } from "@fortawesome/pro-regular-svg-icons/faInfoCircle";
 import TokenTransferScreen from "../screens/TokenTransferScreen";
 
@@ -147,6 +150,24 @@ function DrawerScreen() {
       //   drawerType: Layout.window.width >= 768 ? "permanent" : "front",
       // }}
     >
+      <Drawer.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          drawerLabel: ({ focused, color }) => (
+            <DrawerTabText color={color} focused={focused}>
+              Home
+            </DrawerTabText>
+          ),
+          drawerIcon: ({ focused, color, size }) => (
+            <FontAwesomeIcon
+              icon={faHouse}
+              size={20}
+              color={theme?.gray[500]}
+            />
+          ),
+        }}
+      />
       <Drawer.Screen
         name="Treasury"
         component={TreasuryScreen}
