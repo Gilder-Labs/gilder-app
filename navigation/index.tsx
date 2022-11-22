@@ -37,6 +37,8 @@ import { MemberProfileScreen } from "../screens/MemberProfileScreen";
 import { ProposalDetailScreen } from "../screens/ProposalDetailScreen";
 import { WalletModal } from "../components/WalletModal";
 import { SplashScreen } from "../components";
+import * as SplashScreenLib from "expo-splash-screen";
+
 import { WalletTransactionModal } from "../components/WalletTransactionModal";
 import RealmSettingsScreen from "../screens/RealmSettingsScreen";
 import { Incubator } from "react-native-ui-lib";
@@ -282,6 +284,12 @@ export default function Navigation({}: {}) {
     dispatch(fetchWalletInfo());
     dispatch(fetchOnboarding());
   }, []);
+
+  useEffect(() => {
+    if (!isFetchingOnboarding) {
+      SplashScreenLib.hideAsync();
+    }
+  }, [isFetchingOnboarding]);
 
   // Run immediately if we have communityMint/councilMint, otherwies for custom daos we wait till we get a response
   useEffect(() => {

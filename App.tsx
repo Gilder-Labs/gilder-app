@@ -17,6 +17,7 @@ import { LogBox } from "react-native";
 import { OverlayProvider } from "stream-chat-expo";
 import { defaultTheme as ChatTheme } from "./constants/ChatTheme";
 import * as Sentry from "sentry-expo";
+import * as SplashScreenLib from "expo-splash-screen";
 
 // fontawesome
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
@@ -46,26 +47,24 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
+SplashScreenLib.preventAutoHideAsync();
+
 export default function App() {
   const isLoadingComplete = useCachedResources();
-  if (!isLoadingComplete) {
-    return <SplashScreen />;
-  } else {
-    // TODO: purge store whenever there is a new version to make sure we don't have wonky data till release
-    // persistor.purge();
-    return (
-      <SafeAreaProvider style={{ backgroundColor: "black" }}>
-        <Provider store={store}>
-          <ApolloProvider client={client}>
-            <ThemeProvider theme={darkTheme}>
-              <OverlayProvider value={{ style: ChatTheme }}>
-                <StatusBar style="light" />
-                <Navigation />
-              </OverlayProvider>
-            </ThemeProvider>
-          </ApolloProvider>
-        </Provider>
-      </SafeAreaProvider>
-    );
-  }
+  // TODO: purge store whenever there is a new version to make sure we don't have wonky data till release
+  // persistor.purge();
+  return (
+    <SafeAreaProvider style={{ backgroundColor: "black" }}>
+      <Provider store={store}>
+        <ApolloProvider client={client}>
+          <ThemeProvider theme={darkTheme}>
+            <OverlayProvider value={{ style: ChatTheme }}>
+              <StatusBar style="light" />
+              <Navigation />
+            </OverlayProvider>
+          </ThemeProvider>
+        </ApolloProvider>
+      </Provider>
+    </SafeAreaProvider>
+  );
 }
