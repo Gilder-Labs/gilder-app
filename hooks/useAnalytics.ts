@@ -4,8 +4,6 @@ import React, { createContext, useEffect } from "react";
 import { Mixpanel } from "mixpanel-react-native";
 import Constants from "expo-constants";
 
-console.log("mixpanel instance", Constants?.manifest?.extra?.mixPanelApiKey);
-
 let mixpanelInstance: any = null;
 
 if (
