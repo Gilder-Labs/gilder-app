@@ -135,7 +135,7 @@ function DrawerScreen() {
 
   return (
     <Drawer.Navigator
-      initialRouteName="WebViewScreen"
+      initialRouteName="Proposals"
       drawerContent={(props) => <DrawerContentContainer {...props} />}
       screenOptions={{
         drawerActiveBackgroundColor: `${theme?.gray[800]}aa`,
@@ -153,7 +153,7 @@ function DrawerScreen() {
       //   drawerType: Layout.window.width >= 768 ? "permanent" : "front",
       // }}
     >
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name="Home"
         component={HomeScreen}
         options={{
@@ -170,7 +170,7 @@ function DrawerScreen() {
             />
           ),
         }}
-      />
+      /> */}
       <Drawer.Screen
         name="Treasury"
         component={TreasuryScreen}
@@ -285,12 +285,6 @@ export default function Navigation({}: {}) {
     dispatch(fetchOnboarding());
   }, []);
 
-  useEffect(() => {
-    if (!isFetchingOnboarding) {
-      SplashScreenLib.hideAsync();
-    }
-  }, [isFetchingOnboarding]);
-
   // Run immediately if we have communityMint/councilMint, otherwies for custom daos we wait till we get a response
   useEffect(() => {
     if (
@@ -321,6 +315,12 @@ export default function Navigation({}: {}) {
       };
     }
   }, [selectedRealm?.pubKey, selectedRealm?.communityMint, isFetchingStorage]);
+
+  useEffect(() => {
+    if (!isFetchingOnboarding && !isFetchingStorage) {
+      SplashScreenLib.hideAsync();
+    }
+  }, [isFetchingOnboarding, isFetchingStorage]);
 
   const handleDismiss = () => {
     dispatch(setShowToast(false));

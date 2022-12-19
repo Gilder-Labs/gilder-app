@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { fetchRealmActivity } from "../store/activitySlice";
 import { useTheme } from "styled-components";
 import { Typography } from "../components";
+import { PostCardList } from "../elements/PostCardList";
 
 // TWO ways to do this.
 // Each separator, check if previous item is the same day
@@ -21,6 +22,7 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
   return (
     <Container>
       <Typography text="Home" />
+      <PostCardList />
     </Container>
   );
 }
