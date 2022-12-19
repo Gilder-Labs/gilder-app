@@ -10,6 +10,20 @@ import SMSLogo from "../assets/images/SMS.png";
 import { Typography } from "./Typography";
 import { Badge } from "../components";
 
+import useAuthorization from "../hooks/useAuthorization";
+import useGuardedCallback from "../hooks/useGuardedCallback";
+import { transact } from "@solana-mobile/mobile-wallet-adapter-protocol";
+
+import {
+  Account as AuthorizedAccount,
+  AuthorizationResult,
+  AuthorizeAPI,
+  AuthToken,
+  Base64EncodedAddress,
+  DeauthorizeAPI,
+  ReauthorizeAPI,
+} from "@solana-mobile/mobile-wallet-adapter-protocol";
+
 interface ConnectWalletProps {}
 
 export const ConnectSolanaWalletAdapter = ({}: ConnectWalletProps) => {
@@ -18,14 +32,33 @@ export const ConnectSolanaWalletAdapter = ({}: ConnectWalletProps) => {
   const { publicKey } = useAppSelector((state) => state.wallet);
   const navigation = useNavigation();
 
+  const { authorizeSession } = useAuthorization();
+  const [authorizationInProgress, setAuthorizationInProgress] = useState(false);
+
   const handleOpenWallet = () => {
     // dispatch(openWallet(""));
     navigation.push("WalletModal");
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
   };
 
+  const handleConnectPress = async () => {
+    console.log("trying to authorize a session?");
+    try {
+      if (authorizationInProgress) {
+        return;
+      }
+      setAuthorizationInProgress(true);
+      await transact(async (wallet) => {
+        await authorizeSession(wallet);
+      });
+    } finally {
+      setAuthorizationInProgress(false);
+    }
+  };
+
+  console.log("rendering connect solana wallet adapter");
   return (
-    <ConnectButton onPress={() => {}} disabled={true}>
+    <ConnectButton onPress={handleConnectPress}>
       <LinearGradient
         colors={[`#9945FF`, "#5A95CC"]}
         start={{ x: 0, y: 0 }}
